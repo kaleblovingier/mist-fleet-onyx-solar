@@ -42,6 +42,7 @@ import { FirstPassMap } from "./first-pass";
 import { CollisionMap } from "./constellation";
 import { Formulary } from "./library";
 import { WashoutCard } from "./washout";
+import { PkExplorer } from "./pk";
 
 export function DeskApp() {
   const view = useDesk((s) => s.view);
@@ -255,6 +256,7 @@ export function DeskApp() {
                       Add a second drug, flip smoke, alcohol, or a non-normal metabolizer to run the map.
                     </p>
                   )}
+                  <PkExplorer drugs={hostDrugs} host={host} />
                   <FirstPassMap
                     ketamineRoute={ketamineRoute}
                     cannabisRoute={cannabisRoute}
@@ -302,6 +304,7 @@ export function DeskApp() {
                       <FindingList findings={report.findings} />
                     </>
                   )}
+                  <PkExplorer drugs={hostDrugs} host={host} />
                   {pro ? (
                     <MetaboliteCard ids={selected} />
                   ) : treesFor(selected).length > 0 ? (
@@ -391,7 +394,8 @@ function EmptyState({
         <p className="max-w-xl text-sm leading-relaxed text-muted">
           FirstPass is built around psychoactive CYP450 maps — NMDA dissociatives, 2D6 entactogens,
           psychedelics, stimulants, cannabinoids — then layers food, smoke, serotonin, and metabolizer
-          status. Two-drug collisions stay free. Browse the materia, then put a pair on the desk.
+          status. Two-drug collisions stay free, including a concentration-time sketch. Browse the
+          materia, then put a pair on the desk.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <Button variant="secondary" size="sm" onClick={() => setView("library")}>
@@ -749,6 +753,11 @@ function HowCard() {
         <li>
           <span className="text-fg">PK.</span> Strong inhibitors of sensitive or narrow-index
           substrates grade contraindicated; induction of clearance is loss of efficacy.
+        </li>
+        <li>
+          <span className="text-fg">Curve.</span> Grey is this route, normal metabolizer, no
+          perpetrators. Teal is this desk. AUCR is (F′/ke′)/(F/ke) — a one-compartment sketch, not
+          a plasma level. Two-drug AUCR stays free.
         </li>
         <li>
           <span className="text-fg">2D6.</span> Blockade of codeine or tamoxifen is lost

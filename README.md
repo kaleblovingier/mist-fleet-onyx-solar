@@ -27,6 +27,7 @@ TanStack Start + React 19 + Tailwind v4 + Zustand persist (`firstpass.desk.v7`).
 | --- | --- |
 | `src/lib/drugs/catalog.ts` | Formulary |
 | `src/lib/drugs/engine.ts` | PK + PD scoring |
+| `src/lib/drugs/pk.ts` | One-compartment DDI / phenotype / route sketch |
 | `src/lib/drugs/host.ts` | Route, smoke, alcohol, washout |
 | `src/lib/drugs/rounds.ts` | Teaching cases |
 | `src/lib/drugs/samples.ts` | Sample regimens |
