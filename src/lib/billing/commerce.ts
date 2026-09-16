@@ -31,7 +31,7 @@ export const SITE = {
   gammaCard: "https://gamma.app/docs/h9grlpif6t8ogmt",
   url:
     (import.meta.env.VITE_PUBLIC_URL as string | undefined)?.trim() ||
-    "https://kaleblovingier.github.io/mist-fleet-onyx-solar/",
+    "https://github.com/kaleblovingier/mist-fleet-onyx-solar",
 };
 
 export const TRY_THREE = [

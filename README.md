@@ -6,7 +6,8 @@ Two-drug collisions stay free. Host factors (phenotype, smoke, alcohol, route), 
 
 **Not medical advice. Not a charting system. Not TDM.**
 
-Pitch: [kaleblovingier.github.io/mist-fleet-onyx-solar](https://kaleblovingier.github.io/mist-fleet-onyx-solar/)
+Pitch: [github.com/kaleblovingier/mist-fleet-onyx-solar](https://github.com/kaleblovingier/mist-fleet-onyx-solar)
+Pages (after Settings → Pages → main `/docs`): [kaleblovingier.github.io/mist-fleet-onyx-solar](https://kaleblovingier.github.io/mist-fleet-onyx-solar/)
 Deck: [gamma.app/docs/c1sxd9i8iyv80eq](https://gamma.app/docs/c1sxd9i8iyv80eq)
 
 ## Try these three
