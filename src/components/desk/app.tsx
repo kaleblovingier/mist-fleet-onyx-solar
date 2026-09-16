@@ -756,8 +756,8 @@ function HowCard() {
         </li>
         <li>
           <span className="text-fg">Curve.</span> Grey is this route, normal metabolizer, no
-          perpetrators. Teal is this desk. AUCR is (F′/ke′)/(F/ke) — a one-compartment sketch, not
-          a plasma level. Two-drug AUCR stays free.
+          perpetrators. Teal is this desk. q8h / q12h / q24h superimpose doses (Rac). Overlay IV vs
+          oral on first-pass victims. Not a plasma level. Two-drug AUCR stays free.
         </li>
         <li>
           <span className="text-fg">2D6.</span> Blockade of codeine or tamoxifen is lost

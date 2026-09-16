@@ -331,6 +331,160 @@ const ROWS: Record<string, PkRow> = {
     activation: { enzyme: "CYP2C19", name: "Meprobamate" },
     note: "2C19 to meprobamate. PMs and CBD/fluconazole stack parent plus metabolite.",
   },
+  mxe: {
+    tHalfH: 6,
+    kaH: 1.1,
+    F: 0.2,
+    fm: { CYP2B6: 0.3, CYP3A4: 0.4 },
+    gut3A4: 0.5,
+    note: "Longer NMDA cousin. Oral 3A4/2B6 still applies.",
+  },
+  "three-meo-pcp": {
+    tHalfH: 8,
+    kaH: 1,
+    F: 0.25,
+    fm: { CYP2B6: 0.25, CYP3A4: 0.4 },
+    gut3A4: 0.45,
+    note: "Long arylcyclohexylamine. Oral first-pass is still 3A4.",
+  },
+  ibogaine: {
+    tHalfH: 7,
+    kaH: 0.9,
+    F: 0.7,
+    fm: { CYP2D6: 0.7, CYP3A4: 0.15 },
+    activation: { enzyme: "CYP2D6", name: "Noribogaine" },
+    note: "2D6 to noribogaine (long QT). PMs and strong 2D6 inhibitors stack parent. Not a treatment map.",
+  },
+  diazepam: {
+    tHalfH: 44,
+    kaH: 1.1,
+    F: 1,
+    fm: { CYP3A4: 0.4, CYP2C19: 0.4 },
+    activation: { enzyme: "CYP2C19", name: "Nordiazepam" },
+    note: "Long parent, longer nordiazepam. 2C19 PMs and inhibitors stretch both.",
+  },
+  fluoxetine: {
+    tHalfH: 96,
+    kaH: 0.5,
+    F: 0.7,
+    fm: { CYP2D6: 0.55, CYP2C9: 0.2 },
+    note: "Parent plus norfluoxetine. t½ is days — q24h accumulates, and 2D6 stays blocked for weeks.",
+  },
+  venlafaxine: {
+    tHalfH: 5,
+    kaH: 1.4,
+    F: 0.45,
+    fm: { CYP2D6: 0.8 },
+    activation: { enzyme: "CYP2D6", name: "O-desmethylvenlafaxine" },
+    note: "2D6 to ODV (desvenlafaxine). PMs stack parent; the active metabolite falls.",
+  },
+  aripiprazole: {
+    tHalfH: 75,
+    kaH: 0.6,
+    F: 0.87,
+    fm: { CYP2D6: 0.4, CYP3A4: 0.4 },
+    note: "Very long t½. q24h Rac is large. 2D6 PMs and 3A4 inhibitors both move it.",
+  },
+  amitriptyline: {
+    tHalfH: 18,
+    kaH: 1,
+    F: 0.5,
+    fm: { CYP2D6: 0.4, CYP2C19: 0.3 },
+    activation: { enzyme: "CYP2D6", name: "Nortriptyline" },
+    note: "2C19/2D6 to nortriptyline. PMs stack parent anticholinergic and QT load.",
+  },
+  nortriptyline: {
+    tHalfH: 30,
+    kaH: 0.9,
+    F: 0.6,
+    fm: { CYP2D6: 0.8 },
+    note: "Sensitive 2D6 substrate. PMs and paroxetine/fluoxetine raise parent.",
+  },
+  hydrocodone: {
+    tHalfH: 4,
+    kaH: 1.6,
+    F: 0.7,
+    fm: { CYP3A4: 0.5, CYP2D6: 0.2 },
+    activation: { enzyme: "CYP2D6", name: "Hydromorphone" },
+    note: "3A4 is the main clearance. 2D6 makes hydromorphone — UM is the louder opioid.",
+  },
+  buprenorphine: {
+    tHalfH: 32,
+    kaH: 0.8,
+    F: 0.3,
+    fm: { CYP3A4: 0.7 },
+    gut3A4: 0.25,
+    note: "3A4 victim. Strong inhibitors raise parent; inducers (efavirenz, rifampin) precipitate withdrawal.",
+  },
+  tacrolimus: {
+    tHalfH: 12,
+    kaH: 1.2,
+    F: 0.2,
+    fm: { CYP3A4: 0.9 },
+    gut3A4: 0.55,
+    note: "NTI. Grapefruit and azoles open gut 3A4; IV would barely move. Not a dose.",
+  },
+  cyclosporine: {
+    tHalfH: 8,
+    kaH: 1.1,
+    F: 0.3,
+    fm: { CYP3A4: 0.8, "P-gp": 0.15 },
+    gut3A4: 0.4,
+    note: "NTI 3A4/P-gp victim. Same first-pass neighborhood as tacrolimus.",
+  },
+  colchicine: {
+    tHalfH: 30,
+    kaH: 0.9,
+    F: 0.45,
+    fm: { CYP3A4: 0.5, "P-gp": 0.35 },
+    gut3A4: 0.3,
+    note: "NTI. Strong 3A4/P-gp inhibitors are labeled — myopathy, marrow, death in impairment.",
+  },
+  sildenafil: {
+    tHalfH: 4,
+    kaH: 1.8,
+    F: 0.4,
+    fm: { CYP3A4: 0.8 },
+    gut3A4: 0.3,
+    note: "3A4 victim. Azoles and protease inhibitors raise parent. The nitrate pair is PD, not this curve.",
+  },
+  tadalafil: {
+    tHalfH: 17.5,
+    kaH: 1.2,
+    F: 0.8,
+    fm: { CYP3A4: 0.8 },
+    note: "Longer PDE5. 3A4 inhibitors stretch it; nitrates remain a PD contraindication.",
+  },
+  atorvastatin: {
+    tHalfH: 14,
+    kaH: 1.3,
+    F: 0.14,
+    fm: { CYP3A4: 0.7 },
+    gut3A4: 0.4,
+    note: "3A4 victim, less sensitive than simvastatin. Strong inhibitors still raise myopathy risk.",
+  },
+  amlodipine: {
+    tHalfH: 40,
+    kaH: 0.7,
+    F: 0.64,
+    fm: { CYP3A4: 0.7 },
+    note: "Long t½, q24h accumulates. 3A4 inhibitors raise edema and hypotension.",
+  },
+  zolpidem: {
+    tHalfH: 2.5,
+    kaH: 2.2,
+    F: 0.7,
+    fm: { CYP3A4: 0.6, CYP2C9: 0.15 },
+    gut3A4: 0.2,
+    note: "Short 3A4 Z-hypnotic. Strong inhibitors stretch next-day impairment. q8h is not a regimen.",
+  },
+  haloperidol: {
+    tHalfH: 24,
+    kaH: 0.9,
+    F: 0.6,
+    fm: { CYP2D6: 0.4, CYP3A4: 0.3 },
+    note: "2D6/3A4. PMs and strong inhibitors raise QT-relevant exposure.",
+  },
 };
 
 export function hasPk(id: string) {
@@ -450,6 +604,7 @@ export interface PkPoint {
   base: number;
   desk: number;
   metab?: number;
+  alt?: number;
 }
 
 export interface PkModel {
@@ -467,17 +622,50 @@ export interface PkModel {
   activationName?: string;
   metabFold?: number;
   iv: boolean;
+  scale: number;
+  tauH: number;
+  rac: number;
+  racBase: number;
   points: PkPoint[];
 }
+
+export interface ModelOpts {
+  tauH?: number;
+  horizonH?: number;
+  n?: number;
+  scale?: number;
+}
+
+export const DOSE_INTERVALS = [
+  { id: 0, label: "Once" },
+  { id: 8, label: "q8h" },
+  { id: 12, label: "q12h" },
+  { id: 24, label: "q24h" },
+] as const;
 
 function ke(tHalf: number) {
   return Math.LN2 / Math.max(0.2, tHalf);
 }
 
 function conc(t: number, F: number, ka: number, kElim: number, iv: boolean) {
+  if (t < 0) return 0;
   if (iv) return F * Math.exp(-kElim * t);
   if (Math.abs(ka - kElim) < 0.02) ka = kElim + 0.05;
   return ((F * ka) / (ka - kElim)) * (Math.exp(-kElim * t) - Math.exp(-ka * t));
+}
+
+function summed(t: number, F: number, ka: number, kElim: number, iv: boolean, tau: number) {
+  if (tau <= 0) return conc(t, F, ka, kElim, iv);
+  let s = 0;
+  const nMax = Math.floor(t / tau + 1e-9);
+  for (let n = 0; n <= nMax; n++) s += conc(t - n * tau, F, ka, kElim, iv);
+  return s;
+}
+
+function racOf(kElim: number, tau: number) {
+  if (tau <= 0) return 1;
+  const x = Math.exp(-kElim * tau);
+  return 1 / Math.max(1e-6, 1 - x);
 }
 
 function tmaxOf(F: number, ka: number, kElim: number, iv: boolean, horizon: number) {
@@ -486,9 +674,35 @@ function tmaxOf(F: number, ka: number, kElim: number, iv: boolean, horizon: numb
   return Math.min(horizon, Math.max(0, t));
 }
 
-export function modelPk(victim: Drug, others: Drug[], host: HostContext): PkModel | null {
+/** Other first-pass route for the ghost overlay — same milligram, different input. */
+export function otherRoute(
+  id: string,
+  host: HostContext,
+): { host: HostContext; label: string } | null {
+  if ((FIRST_PASS_NMDA as readonly string[]).includes(id) && ROWS[id]) {
+    if (host.ketamineRoute === "oral") {
+      return { host: { ...host, ketamineRoute: "iv" }, label: "If IV" };
+    }
+    return { host: { ...host, ketamineRoute: "oral" }, label: "If oral" };
+  }
+  if (id === "dronabinol") {
+    if (host.cannabisRoute === "oral") {
+      return { host: { ...host, cannabisRoute: "smoked" }, label: "If smoked" };
+    }
+    return { host: { ...host, cannabisRoute: "oral" }, label: "If edible" };
+  }
+  return null;
+}
+
+export function modelPk(
+  victim: Drug,
+  others: Drug[],
+  host: HostContext,
+  opts: ModelOpts = {},
+): PkModel | null {
   const spec = specFor(victim.id, host);
   if (!spec) return null;
+  const tau = Math.max(0, opts.tauH ?? 0);
   const mono: HostContext = {
     ...DEFAULT_HOST,
     ketamineRoute: host.ketamineRoute,
@@ -528,28 +742,44 @@ export function modelPk(victim: Drug, others: Drug[], host: HostContext): PkMode
   }
   const uniqueDrivers = [...new Set(drivers)];
   const tHalfDesk = Math.LN2 / ke1;
-  const horizon = Math.min(168, Math.max(12, 5 * Math.max(spec.tHalfH, tHalfDesk)));
-  const n = 80;
+  const horizon =
+    opts.horizonH ??
+    Math.min(
+      168,
+      Math.max(tau > 0 ? tau * 5 : 12, 5 * Math.max(spec.tHalfH, tHalfDesk), tau > 0 ? tau * 4 : 0),
+    );
+  const n = opts.n ?? (tau > 0 ? 140 : 80);
   const act = spec.activation;
   const act0 = act ? enzymeCl(act.enzyme, [], mono, "hep").cl : 1;
   const act1 = act ? enzymeCl(act.enzyme, perps, host, "hep").cl : 1;
+  const iv = Boolean(spec.iv);
+
+  let maxBaseSingle = 0;
+  const probeH = Math.max(8, 5 * spec.tHalfH);
+  const probeN = 50;
+  for (let i = 0; i <= probeN; i++) {
+    const t = (probeH * i) / probeN;
+    maxBaseSingle = Math.max(maxBaseSingle, conc(t, F0, spec.kaH, ke0, iv));
+  }
+  const scale = opts.scale ?? (maxBaseSingle > 0 ? 1 / maxBaseSingle : 1);
+
   const raw: { t: number; base: number; desk: number; met0: number; met1: number }[] = [];
-  let maxBase = 0;
   let aucBase = 0;
   let aucDesk = 0;
+  const aucH = Math.min(horizon, Math.max(12, 5 * Math.max(spec.tHalfH, tHalfDesk)));
   for (let i = 0; i <= n; i++) {
     const t = (horizon * i) / n;
-    const base = Math.max(0, conc(t, F0, spec.kaH, ke0, Boolean(spec.iv)));
-    const desk = Math.max(0, conc(t, F1, spec.kaH, ke1, Boolean(spec.iv)));
-    maxBase = Math.max(maxBase, base);
+    const base1 = Math.max(0, conc(t, F0, spec.kaH, ke0, iv));
+    const desk1 = Math.max(0, conc(t, F1, spec.kaH, ke1, iv));
+    const base = Math.max(0, summed(t, F0, spec.kaH, ke0, iv, tau));
+    const desk = Math.max(0, summed(t, F1, spec.kaH, ke1, iv, tau));
     raw.push({ t, base, desk, met0: base * act0, met1: desk * act1 });
-    if (i > 0) {
+    if (i > 0 && t <= aucH + horizon / n) {
       const dt = horizon / n;
-      aucBase += ((raw[i - 1].base + base) / 2) * dt;
-      aucDesk += ((raw[i - 1].desk + desk) / 2) * dt;
+      aucBase += ((conc(raw[i - 1].t, F0, spec.kaH, ke0, iv) + base1) / 2) * dt;
+      aucDesk += ((conc(raw[i - 1].t, F1, spec.kaH, ke1, iv) + desk1) / 2) * dt;
     }
   }
-  const scale = maxBase > 0 ? 1 / maxBase : 1;
   const maxMet0 = Math.max(...raw.map((p) => p.met0), 1e-9);
   const points: PkPoint[] = raw.map((p) => ({
     t: p.t,
@@ -560,31 +790,36 @@ export function modelPk(victim: Drug, others: Drug[], host: HostContext): PkMode
   const aucr = aucBase > 0 ? aucDesk / aucBase : 1;
   const metabFold = act ? (act1 / Math.max(act0, 0.05)) * aucr : undefined;
   const maxDesk = Math.max(...raw.map((p) => p.desk));
+  const maxBase = Math.max(...raw.map((p) => p.base), 1e-9);
   return {
     id: victim.id,
     name: victim.name,
     note: spec.note,
     drivers: uniqueDrivers,
     aucr,
-    cmaxFold: maxBase > 0 ? maxDesk / maxBase : 1,
+    cmaxFold: maxDesk / maxBase,
     tHalfBase: spec.tHalfH,
     tHalfDesk,
-    tmaxBase: tmaxOf(F0, spec.kaH, ke0, Boolean(spec.iv), horizon),
-    tmaxDesk: tmaxOf(F1, spec.kaH, ke1, Boolean(spec.iv), horizon),
+    tmaxBase: tmaxOf(F0, spec.kaH, ke0, iv, horizon),
+    tmaxDesk: tmaxOf(F1, spec.kaH, ke1, iv, horizon),
     horizonH: horizon,
     activationName: act?.name,
     metabFold,
-    iv: Boolean(spec.iv),
+    iv,
+    scale,
+    tauH: tau,
+    rac: racOf(ke1, tau),
+    racBase: racOf(ke0, tau),
     points,
   };
 }
 
-export function modelsFor(drugs: Drug[], host: HostContext): PkModel[] {
+export function modelsFor(drugs: Drug[], host: HostContext, opts: ModelOpts = {}): PkModel[] {
   const real = drugs.filter((d) => !isVirtual(d.id) && ROWS[d.id] && DRUG_BY_ID[d.id]);
   const out: PkModel[] = [];
   for (const v of real) {
     const others = drugs.filter((d) => d.id !== v.id && !isVirtual(d.id));
-    const m = modelPk(v, others, host);
+    const m = modelPk(v, others, host, opts);
     if (m) out.push(m);
   }
   out.sort((a, b) => Math.abs(Math.log(b.aucr)) - Math.abs(Math.log(a.aucr)));

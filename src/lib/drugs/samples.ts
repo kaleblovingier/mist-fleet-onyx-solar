@@ -187,6 +187,13 @@ export const SAMPLE_REGIMENS: SampleRegimen[] = [
     lane: "food",
   },
   {
+    id: "tacrolimus-gf",
+    title: "Tacrolimus + grapefruit",
+    blurb: "NTI 3A4 victim × intestinal knockout — F rises, t½ does not",
+    drugIds: ["tacrolimus", "grapefruit"],
+    lane: "food",
+  },
+  {
     id: "tyramine-maoi",
     title: "Tyramine foods + phenelzine",
     blurb: "Aged cheese / tap beer × irreversible MAOI",
