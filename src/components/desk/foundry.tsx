@@ -16,6 +16,7 @@ import { useDesk } from "@/lib/drugs/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { HuntDesk } from "./hunt";
+import { LaunchDesk } from "./launch";
 import { Plate } from "./plate";
 
 type Issued = { key: string; plan: string; at: string; soldTo: string };
@@ -51,7 +52,7 @@ export function Foundry() {
   const [issued, setIssued] = useState<Issued[]>([]);
   const [payNote, setPayNote] = useState("");
   const [soldTo, setSoldTo] = useState("");
-  const [tab, setTab] = useState<"hunt" | "close">("hunt");
+  const [tab, setTab] = useState<"hunt" | "launch" | "close">("hunt");
   useEffect(() => {
     setIssued(loadIssued());
     setPayNote(localStorage.getItem(PAY_NOTE_KEY) || OPERATOR.payLine);
@@ -114,15 +115,16 @@ export function Foundry() {
           <Plate src="/plates/hero.jpg" alt="" className="h-36 w-full sm:h-full min-h-36" />
           <div className="px-5 py-5 sm:px-6">
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Operator desk</p>
-            <h1 className="mt-2 font-serif text-3xl tracking-tight text-fg">Find buyers. Sell keys.</h1>
+            <h1 className="mt-2 font-serif text-3xl tracking-tight text-fg">Find buyers. Post. Sell keys.</h1>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
-              This week’s hunt is five real WA shops. Copy the DM, take payment however you already
-              get paid, mint a signed key. Hidden from the public nav.
+              This week’s hunt is five real WA shops. Launch copy is ready to post yourself.
+              Take payment however you already get paid, mint a signed key. Hidden from the public nav.
             </p>
             <div className="mt-4 flex flex-wrap gap-1">
               {(
                 [
                   ["hunt", "Hunt"],
+                  ["launch", "Launch"],
                   ["close", "Close"],
                 ] as const
               ).map(([id, label]) => (
@@ -149,6 +151,8 @@ export function Foundry() {
 
       {tab === "hunt" ? (
         <HuntDesk />
+      ) : tab === "launch" ? (
+        <LaunchDesk />
       ) : (
         <CloseDesk
           pin={pin}

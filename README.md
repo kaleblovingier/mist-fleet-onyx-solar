@@ -1,8 +1,19 @@
 # FirstPass
 
-Educational CYP450 / PD interaction desk. Scholarly apothecary: paper `#efece4`, teal `#2f5d56`, Newsreader + IBM Plex. **Not medical advice, not a charting system.**
+Educational CYP450 / PD collision desk for ketamine clinics, MAT, harm-reduction staff, and pharmacy students.
 
-Two-drug collisions stay free. Host factors (phenotype, smoke, alcohol, route), enzyme atlas, metabolites, and export are licensed. Founding license is **$79 once**.
+Two-drug collisions stay free. Host factors (phenotype, smoke, alcohol, route), the enzyme atlas, metabolites, and export are licensed. Founding license is **$79 once**.
+
+**Not medical advice. Not a charting system. Not TDM.**
+
+Pitch: [kaleblovingier.github.io/mist-fleet-onyx-solar](https://kaleblovingier.github.io/mist-fleet-onyx-solar/)
+Deck: [gamma.app/docs/c1sxd9i8iyv80eq](https://gamma.app/docs/c1sxd9i8iyv80eq)
+
+## Try these three
+
+1. **Oral ketamine × grapefruit** — F rises. Half-life does not. Overlay IV: the ghost is untouched.
+2. **DXM in a 2D6 poor metabolizer, q8h** — accumulation Rac ~2.7×. Dextrorphan falls.
+3. **Tacrolimus × grapefruit** — kitchen collision. Bioavailability up, t½ still 12 h (gut 3A4, not hepatic).
 
 ## Pay / write
 
@@ -13,15 +24,26 @@ Two-drug collisions stay free. Host factors (phenotype, smoke, alcohol, route), 
 - kaleblovingier@gmail.com · 360-707-8923
 - @badbird · @kaleblovingier
 
-Do not put a home address on the UI.
+Pay $79, write when it clears, redeem the signed key under Pro. There is no fake checkout.
 
-Licenses are HMAC-signed keys (`FP-LIFE-…`). There is no fake checkout. The operator desk (Hunt / mint) is hidden: seven taps on the teal mark. The PIN lives in `src/lib/billing/license.server.ts` only.
+## Who it's for
 
-## Stack
+| Buyer | Why they open it |
+| --- | --- |
+| Ketamine / esketamine clinics | Oral vs IV first-pass, benzo airway stacks, 2B6 phenotype |
+| MAT / street-supply desks | Xylazine, nitazenes, designer benzos, naltrexone / loperamide |
+| Pharmacy students | A teaching desk they will actually open. JSON/CSV for the lab book |
+| Harm-reduction and psych NPs | MDMA × SSRI, DXM in 2D6 PMs, grapefruit × oral ketamine |
 
-TanStack Start + React 19 + Tailwind v4 + Zustand persist (`firstpass.desk.v7`). Auth and database are **off**. Optional `VITE_PAY_URL` overrides the Venmo button.
+## License
 
-## Map
+HMAC-signed keys (`FP-LIFE-…`). Two-drug stays free. Founding lifetime is $79.
+
+---
+
+## Map (for the other LLM)
+
+Scholarly apothecary: paper `#efece4`, teal `#2f5d56`, Newsreader + IBM Plex. Auth and database **off**. Persist `firstpass.desk.v7`. Optional `VITE_PAY_URL`, `VITE_PUBLIC_URL`.
 
 | Path | What |
 | --- | --- |
@@ -31,8 +53,9 @@ TanStack Start + React 19 + Tailwind v4 + Zustand persist (`firstpass.desk.v7`).
 | `src/lib/drugs/host.ts` | Route, smoke, alcohol, washout |
 | `src/lib/drugs/rounds.ts` | Teaching cases |
 | `src/lib/drugs/samples.ts` | Sample regimens |
-| `src/lib/billing/commerce.ts` | Pay rails, DMs, invoices |
-| `src/lib/billing/hunts.ts` | WA/PNW buyer directory |
+| `src/lib/billing/commerce.ts` | Pay rails, DMs, launch posts, invoices |
+| `src/lib/billing/hunts.ts` | WA/PNW buyer directory (public orgs, websites) |
 | `src/components/desk/` | UI |
+| `docs/index.html` | Public pitch page (GitHub Pages) |
 
-`npm run dev` on `0.0.0.0:8080`. `npm run typecheck` and `npm run build` must pass.
+Do not put a home address on the UI. Do not cold-email the Hunt directory. Educational disclaimer stays visible.
