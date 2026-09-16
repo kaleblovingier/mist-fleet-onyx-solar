@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Newsreader", "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-bg: #efece4;
+  --color-bg-sunken: #e4dfd4;
+  --color-surface: #f7f5ef;
+  --color-surface-2: #fffcf7;
+  --color-ink: #1c1915;
+  --color-fg: #1c1915;
+  --color-muted: #6b6560;
+  --color-subtle: #8a847c;
+  --color-border: #d5cfc2;
+  --color-border-strong: #c4bdb0;
+  --color-accent: #2f5d56;
+  --color-accent-fg: #f7f5ef;
+  --color-accent-soft: #dce8e5;
+  --color-danger: #8f2d2d;
+  --color-danger-soft: #f3e4e0;
+  --color-warn: #8a5a1e;
+  --color-warn-soft: #f3ead8;
+  --color-ok: #2f6b4a;
+  --color-ok-soft: #dce8df;
+  --color-info: #3d5c6b;
+  --color-info-soft: #dde6ea;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --shadow-border:
+    0px 0px 0px 1px rgba(28, 25, 21, 0.06),
+    0px 1px 2px -1px rgba(28, 25, 21, 0.06),
+    0px 2px 6px 0px rgba(28, 25, 21, 0.04);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100%;
+    background: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: var(--color-accent-soft);
+    color: var(--color-ink);
+  }
+
+  img {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.paper-rule {
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(100% - 1px),
+    color-mix(in oklab, var(--color-fg) 8%, transparent) calc(100% - 1px)
+  );
+}

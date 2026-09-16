@@ -1,0 +1,582 @@
+
+> preview
+> node scripts/with-app-env.mjs vite preview
+
+
+ ╭────────── [Build Info] ─────────────╮
+ │                                     │
+ │  - Build Directory: .vercel/output  │
+ │  - Date: 9/13/2026, 8:30:18 PM      │
+ │  - Nitro Version: 3.0.260610-beta   │
+ │  - Nitro Preset: vercel             │
+ │                                     │
+ ╰─────────────────────────────────────╯
+
+  ➜  Local:   http://127.0.0.1:8081/
+
+> preview
+> node scripts/with-app-env.mjs vite preview
+
+
+ ╭────────── [Build Info] ─────────────╮
+ │                                     │
+ │  - Build Directory: .vercel/output  │
+ │  - Date: 9/13/2026, 8:33:03 PM      │
+ │  - Nitro Version: 3.0.260610-beta   │
+ │  - Nitro Preset: vercel             │
+ │                                     │
+ ╰─────────────────────────────────────╯
+
+  ➜  Local:   http://127.0.0.1:8081/
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+Error in renderToReadableStream: TypeError: Cannot read properties of undefined (reading 'hasHydrated')
+    at file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:83
+    at useReducer (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11633:80)
+    at Object.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:11766:11)
+    at exports.useState (file:///workspace/.vercel/output/functions/__server.func/_libs/@radix-ui/react-compose-refs+%5B...%5D.mjs:367:33)
+    at DeskApp (file:///workspace/.vercel/output/functions/__server.func/_ssr/routes-F3gD7Xlf.mjs:4400:60)
+    at renderWithHooks (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12287:18)
+    at renderElement (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12351:11)
+    at retryNode (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12715:12)
+    at renderNodeDestructive (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12613:235)
+    at finishFunctionComponent (file:///workspace/.vercel/output/functions/__server.func/_libs/@tanstack/react-router+%5B...%5D.mjs:12303:232) { componentStack: [Getter] }
+
+> preview
+> node scripts/with-app-env.mjs vite preview
+
+
+ ╭────────── [Build Info] ─────────────╮
+ │                                     │
+ │  - Build Directory: .vercel/output  │
+ │  - Date: 9/13/2026, 8:33:48 PM      │
+ │  - Nitro Version: 3.0.260610-beta   │
+ │  - Nitro Preset: vercel             │
+ │                                     │
+ ╰─────────────────────────────────────╯
+
+  ➜  Local:   http://127.0.0.1:8081/
+
+> preview
+> node scripts/with-app-env.mjs vite preview
+
+
+ ╭────────── [Build Info] ─────────────╮
+ │                                     │
+ │  - Build Directory: .vercel/output  │
+ │  - Date: 9/14/2026, 11:45:27 PM     │
+ │  - Nitro Version: 3.0.260610-beta   │
+ │  - Nitro Preset: vercel             │
+ │                                     │
+ ╰─────────────────────────────────────╯
+
+  ➜  Local:   http://127.0.0.1:8081/
+
+> preview
+> node scripts/with-app-env.mjs vite preview
+
+
+ ╭────────── [Build Info] ─────────────╮
+ │                                     │
+ │  - Build Directory: .vercel/output  │
+ │  - Date: 9/15/2026, 5:47:56 PM      │
+ │  - Nitro Version: 3.0.260610-beta   │
+ │  - Nitro Preset: vercel             │
+ │                                     │
+ ╰─────────────────────────────────────╯
+
+  ➜  Local:   http://127.0.0.1:8081/
+
+> preview
+> node scripts/with-app-env.mjs vite preview
+
+
+ ╭────────── [Build Info] ─────────────╮
+ │                                     │
+ │  - Build Directory: .vercel/output  │
+ │  - Date: 9/15/2026, 10:36:04 PM     │
+ │  - Nitro Version: 3.0.260610-beta   │
+ │  - Nitro Preset: vercel             │
+ │                                     │
+ ╰─────────────────────────────────────╯
+
+  ➜  Local:   http://127.0.0.1:8081/
+
+> preview
+> node scripts/with-app-env.mjs vite preview
+
+
+ ╭────────── [Build Info] ─────────────╮
+ │                                     │
+ │  - Build Directory: .vercel/output  │
+ │  - Date: 9/15/2026, 10:36:04 PM     │
+ │  - Nitro Version: 3.0.260610-beta   │
+ │  - Nitro Preset: vercel             │
+ │                                     │
+ ╰─────────────────────────────────────╯
+
+  ➜  Local:   http://127.0.0.1:8081/
+
+> preview
+> node scripts/with-app-env.mjs vite preview
+
+
+ ╭────────── [Build Info] ─────────────╮
+ │                                     │
+ │  - Build Directory: .vercel/output  │
+ │  - Date: 9/16/2026, 6:16:48 PM      │
+ │  - Nitro Version: 3.0.260610-beta   │
+ │  - Nitro Preset: vercel             │
+ │                                     │
+ ╰─────────────────────────────────────╯
+
+  ➜  Local:   http://127.0.0.1:8081/

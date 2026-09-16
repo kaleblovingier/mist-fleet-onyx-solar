@@ -1,0 +1,313 @@
+import { useState } from "react";
+import { Check, Loader2, X } from "lucide-react";
+import { BUYERS, COMMERCE, OPERATOR, requestLicense } from "@/lib/billing/commerce";
+import { redeemLicense } from "@/lib/billing/license";
+import { PLANS, priceFor, type Interval } from "@/lib/billing/plans";
+import { useDesk, usePlan } from "@/lib/drugs/store";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plate } from "./plate";
+import { OperatorCard } from "./operator";
+
+export function PlansPage() {
+  const current = usePlan();
+  const license = useDesk((s) => s.license);
+  const lifetime = useDesk((s) => s.lifetime);
+  const previewUntil = useDesk((s) => s.previewUntil);
+  const interval = useDesk((s) => s.checkout.interval);
+  const setInterval = useDesk((s) => s.setCheckoutInterval);
+  const openCheckout = useDesk((s) => s.openCheckout);
+  const startPreview = useDesk((s) => s.startPreview);
+  const downgrade = useDesk((s) => s.downgrade);
+  const previewing = Boolean(previewUntil && Date.now() < previewUntil && current === "pro");
+
+  return (
+    <div className="mx-auto max-w-5xl space-y-8">
+      <section className="overflow-hidden rounded-xl bg-surface shadow-[var(--shadow-border)]">
+        <div className="grid lg:grid-cols-[240px_minmax(0,1fr)]">
+          <Plate src="/plates/heme.jpg" alt="" className="h-40 w-full lg:h-full min-h-40" />
+          <div className="px-5 py-6 sm:px-8">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Licenses</p>
+            <h1 className="mt-3 font-serif text-3xl tracking-tight text-fg sm:text-4xl">
+              ${COMMERCE.founding} once. The desk is yours.
+            </h1>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">{COMMERCE.pitch}</p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <Button onClick={() => openCheckout("lab", "Founding lifetime — Pro plus export.")}>
+                Buy founding · ${COMMERCE.founding}
+              </Button>
+              {current === "free" ? (
+                <Button variant="secondary" onClick={startPreview}>
+                  7-day preview
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="flex flex-wrap items-center gap-2">
+        {(["life", "year", "month"] as Interval[]).map((i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => setInterval(i)}
+            className={cn(
+              "h-10 rounded-full px-4 text-sm font-medium",
+              interval === i ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+            )}
+          >
+            {i === "life" ? "Lifetime" : i === "year" ? "Yearly" : "Monthly"}
+          </button>
+        ))}
+      </div>
+
+      {current !== "free" ? (
+        <p className="rounded-lg bg-ok-soft px-4 py-3 text-sm text-ok">
+          {previewing
+            ? "Pro preview is active on this desk."
+            : lifetime
+              ? "Founding lifetime is live."
+              : `${current === "lab" ? "Lab" : "Pro"} is live.`}
+          {license ? ` ${license}.` : ""}{" "}
+          <button type="button" className="underline" onClick={downgrade}>
+            Return to free
+          </button>
+        </p>
+      ) : null}
+
+      <ul className="grid gap-4 lg:grid-cols-3">
+        {PLANS.map((p) => {
+          const price = priceFor(p.id, p.id === "free" ? "month" : interval);
+          const on = current === p.id || (p.id === "pro" && previewing);
+          const cta =
+            p.id === "free"
+              ? current === "free"
+                ? "Current desk"
+                : "Use free desk"
+              : interval === "life"
+                ? `Founding · $${priceFor(p.id === "pro" ? "pro" : "lab", "life")}`
+                : `Unlock ${p.name}`;
+          return (
+            <li
+              key={p.id}
+              className={cn(
+                "flex flex-col rounded-xl bg-surface p-5 shadow-[var(--shadow-border)]",
+                p.highlighted && "ring-1 ring-accent",
+              )}
+            >
+              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">{p.name}</p>
+              <p className="mt-2 font-serif text-2xl tracking-tight text-fg">{p.tagline}</p>
+              <p className="mt-4 font-mono text-3xl tabular-nums text-fg">
+                {p.id === "free" ? "—" : `$${price}`}
+                <span className="ml-1 text-sm text-muted">
+                  {p.id === "free" ? "free" : interval === "life" ? " once" : interval === "year" ? "/yr" : "/mo"}
+                </span>
+              </p>
+              <ul className="mt-5 flex-1 space-y-2">
+                {p.features.map((f) => (
+                  <li key={f} className="flex gap-2 text-sm text-muted">
+                    <Check className="mt-0.5 size-3.5 shrink-0 text-accent" />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6">
+                {p.id === "free" ? (
+                  <Button variant="secondary" className="w-full" disabled={current === "free"} onClick={downgrade}>
+                    {cta}
+                  </Button>
+                ) : on && !previewing && !(interval === "life" && !lifetime) ? (
+                  <Button variant="secondary" className="w-full" disabled>
+                    Current license
+                  </Button>
+                ) : (
+                  <Button
+                    className="w-full"
+                    onClick={() =>
+                      openCheckout(interval === "life" ? "lab" : p.id, interval === "life" ? "Founding lifetime." : p.name)
+                    }
+                  >
+                    {cta}
+                  </Button>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+
+      <section>
+        <h2 className="font-serif text-xl tracking-tight text-fg">Who this is for</h2>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+          {BUYERS.map((b) => (
+            <li key={b.who} className="rounded-xl bg-surface px-4 py-4 shadow-[var(--shadow-border)]">
+              <p className="text-sm font-medium text-fg">{b.who}</p>
+              <p className="mt-1 text-xs leading-relaxed text-muted">{b.why}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <OperatorCard />
+
+      <p className="text-center text-sm text-muted">
+        Already have a key?{" "}
+        <button
+          type="button"
+          className="font-medium text-accent hover:underline"
+          onClick={() => openCheckout("lab", "Paste the key you were sent.")}
+        >
+          Redeem it here
+        </button>
+        .
+      </p>
+    </div>
+  );
+}
+
+export function CheckoutDrawer() {
+  const checkout = useDesk((s) => s.checkout);
+  const close = useDesk((s) => s.closeCheckout);
+  const activate = useDesk((s) => s.activateLicense);
+  const startPreview = useDesk((s) => s.startPreview);
+  const setInterval = useDesk((s) => s.setCheckoutInterval);
+  const [busy, setBusy] = useState(false);
+  const [key, setKey] = useState("");
+  const [err, setErr] = useState("");
+  const [copied, setCopied] = useState(false);
+  if (!checkout.open) return null;
+  const life = checkout.interval === "life" || checkout.plan === "lab";
+  const amount = priceFor(checkout.plan === "free" ? "pro" : checkout.plan, checkout.interval);
+  const name = checkout.interval === "life" ? "Founding" : checkout.plan === "lab" ? "Lab" : "Pro";
+
+  async function redeem() {
+    setBusy(true);
+    setErr("");
+    try {
+      const res = await redeemLicense({ data: { key } });
+      if (!res.ok) {
+        setErr(res.reason ?? "Key did not verify.");
+        return;
+      }
+      activate({ plan: res.plan, license: res.license, lifetime: res.lifetime });
+    } catch {
+      setErr("Could not reach the license desk.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function copyRequest() {
+    try {
+      await navigator.clipboard.writeText(requestLicense());
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      /* clipboard */
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-0 sm:items-center sm:p-4">
+      <div
+        role="dialog"
+        aria-labelledby="checkout-title"
+        className="max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-t-xl bg-surface p-5 shadow-[var(--shadow-border)] sm:rounded-xl"
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Checkout</p>
+            <h2 id="checkout-title" className="mt-1 font-serif text-2xl tracking-tight text-fg">
+              FirstPass {name}
+            </h2>
+          </div>
+          <button
+            type="button"
+            className="flex size-10 items-center justify-center rounded-sm text-muted hover:bg-bg-sunken hover:text-fg"
+            onClick={close}
+            aria-label="Close checkout"
+          >
+            <X className="size-4" />
+          </button>
+        </div>
+        {checkout.reason ? <p className="mt-3 text-sm leading-relaxed text-muted">{checkout.reason}</p> : null}
+
+        <p className="mt-4 text-sm leading-relaxed text-muted">
+          Licenses are signed keys. After payment you receive{" "}
+          <span className="font-mono text-fg">FP-LIFE-…</span> and paste it here. Preview is free for
+          a week.
+        </p>
+
+        <div className="mt-4 grid grid-cols-3 gap-1">
+          {(["life", "year", "month"] as Interval[]).map((i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setInterval(i)}
+              className={cn(
+                "h-11 rounded-sm text-xs font-medium sm:text-sm",
+                checkout.interval === i ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+              )}
+            >
+              {i === "life"
+                ? `$${priceFor("lab", "life")} once`
+                : i === "year"
+                  ? `$${priceFor(checkout.plan === "lab" ? "lab" : "pro", "year")}/yr`
+                  : `$${priceFor(checkout.plan === "lab" ? "lab" : "pro", "month")}/mo`}
+            </button>
+          ))}
+        </div>
+
+        {COMMERCE.payUrl ? (
+          <Button className="mt-5 w-full" asChild>
+            <a href={COMMERCE.payUrl} target="_blank" rel="noreferrer">
+              Pay ${amount} on Venmo
+            </a>
+          </Button>
+        ) : null}
+        <p className="mt-3 rounded-md bg-bg-sunken px-3 py-3 text-sm leading-relaxed text-muted">
+          {life
+            ? `Founding is $${COMMERCE.founding} once. Venmo @${OPERATOR.venmo}, then paste the key ${OPERATOR.name} sends.`
+            : `Pay $${amount} on Venmo @${OPERATOR.venmo}, then redeem the key you are sent.`}{" "}
+          {OPERATOR.email} · {OPERATOR.phone}
+          <span className="mt-1 block text-xs">{OPERATOR.social.join(" · ")}</span>
+        </p>
+
+        <Button variant="secondary" className="mt-3 w-full" onClick={() => void copyRequest()}>
+          {copied ? "Request copied" : "Copy a license request"}
+        </Button>
+
+        <label className="mt-5 block text-xs font-medium text-muted" htmlFor="license-key">
+          License key
+        </label>
+        <div className="mt-1.5 flex gap-2">
+          <Input
+            id="license-key"
+            value={key}
+            autoCapitalize="characters"
+            autoCorrect="off"
+            spellCheck={false}
+            placeholder="FP-LIFE-…"
+            onChange={(e) => setKey(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") void redeem();
+            }}
+          />
+          <Button onClick={() => void redeem()} disabled={busy || !key.trim()} className="shrink-0">
+            {busy ? <Loader2 className="size-4 animate-spin" /> : null}
+            Redeem
+          </Button>
+        </div>
+        {err ? <p className="mt-2 text-sm text-danger">{err}</p> : null}
+
+        {checkout.plan !== "lab" || checkout.interval === "life" ? (
+          <button type="button" className="mt-3 h-10 w-full text-sm text-muted hover:text-fg" onClick={startPreview}>
+            Start 7-day Pro preview instead
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+}

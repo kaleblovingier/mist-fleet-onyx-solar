@@ -1,0 +1,307 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { DRUG_BY_ID } from "./catalog";
+import { maxDrugs, type Interval, type PlanId } from "@/lib/billing/plans";
+import {
+  DEFAULT_HOST,
+  DEFAULT_PHENOTYPES,
+  type AlcoholPattern,
+  type CannabisRoute,
+  type HostContext,
+  type KetamineRoute,
+  type Metabolizer,
+  type PhenotypeEnzyme,
+  type PhenotypeMap,
+} from "./types";
+
+type View = "desk" | "atlas" | "plans" | "library" | "foundry";
+
+export interface LoadExtras {
+  phenotypes?: Partial<PhenotypeMap>;
+  smoking?: boolean;
+  ketamineRoute?: KetamineRoute;
+  cannabisRoute?: CannabisRoute;
+  alcohol?: AlcoholPattern;
+}
+
+interface DeskState {
+  selected: string[];
+  view: View;
+  atlasEnzyme: string | null;
+  phenotypes: PhenotypeMap;
+  smoking: boolean;
+  ketamineRoute: KetamineRoute;
+  cannabisRoute: CannabisRoute;
+  alcohol: AlcoholPattern;
+  plan: PlanId;
+  license: string | null;
+  lifetime: boolean;
+  previewUntil: number | null;
+  justActivated: boolean;
+  checkout: { open: boolean; plan: PlanId; interval: Interval; reason: string };
+  add: (id: string) => boolean;
+  remove: (id: string) => void;
+  clear: () => void;
+  load: (ids: string[], extras?: LoadExtras) => boolean;
+  setView: (view: View) => void;
+  setAtlasEnzyme: (id: string | null) => void;
+  setPhenotype: (enzyme: PhenotypeEnzyme, value: Metabolizer) => void;
+  setSmoking: (smoking: boolean) => void;
+  setKetamineRoute: (route: KetamineRoute) => void;
+  setCannabisRoute: (route: CannabisRoute) => void;
+  setAlcohol: (alcohol: AlcoholPattern) => void;
+  resetPhenotypes: () => void;
+  openCheckout: (plan: PlanId, reason?: string) => void;
+  closeCheckout: () => void;
+  setCheckoutInterval: (interval: Interval) => void;
+  startPreview: () => void;
+  activateLicense: (opts: { plan: PlanId; license: string; lifetime: boolean }) => void;
+  dismissActivated: () => void;
+  downgrade: () => void;
+}
+
+function activePlan(s: { plan: PlanId; previewUntil: number | null }): PlanId {
+  if (s.plan === "pro" || s.plan === "lab") return s.plan;
+  if (s.previewUntil && Date.now() < s.previewUntil) return "pro";
+  return "free";
+}
+
+export const useDesk = create<DeskState>()(
+  persist(
+    (set, get) => ({
+      selected: [],
+      view: "desk",
+      atlasEnzyme: null,
+      phenotypes: { ...DEFAULT_PHENOTYPES },
+      smoking: false,
+      ketamineRoute: "iv",
+      cannabisRoute: "smoked",
+      alcohol: "off",
+      plan: "free",
+      license: null,
+      lifetime: false,
+      previewUntil: null,
+      justActivated: false,
+      checkout: { open: false, plan: "pro", interval: "life", reason: "" },
+      add: (id) => {
+        if (!DRUG_BY_ID[id] || id.startsWith("__")) return false;
+        const cur = get().selected;
+        if (cur.includes(id)) return true;
+        const cap = maxDrugs(activePlan(get()));
+        if (cur.length >= cap) {
+          set({
+            checkout: {
+              open: true,
+              plan: "pro",
+              interval: get().checkout.interval,
+              reason: `Free desks hold ${cap} drugs. Pro opens eight.`,
+            },
+          });
+          return false;
+        }
+        set({ selected: [...cur, id], view: "desk" });
+        return true;
+      },
+      remove: (id) => set({ selected: get().selected.filter((x) => x !== id) }),
+      clear: () =>
+        set({
+          selected: [],
+          phenotypes: { ...DEFAULT_PHENOTYPES },
+          smoking: false,
+          ketamineRoute: "iv",
+          cannabisRoute: "smoked",
+          alcohol: "off",
+        }),
+      load: (ids, extras) => {
+        const cap = maxDrugs(activePlan(get()));
+        const next = ids.filter((id) => DRUG_BY_ID[id] && !id.startsWith("__")).slice(0, cap);
+        const wantsHost = Boolean(
+          extras?.phenotypes ||
+            extras?.smoking ||
+            extras?.alcohol ||
+            extras?.cannabisRoute ||
+            (extras?.ketamineRoute && extras.ketamineRoute !== "iv"),
+        );
+        if (wantsHost && activePlan(get()) === "free") {
+          set({
+            checkout: {
+              open: true,
+              plan: "pro",
+              interval: get().checkout.interval,
+              reason: "That sample uses host factors — phenotype, route, smoke, or alcohol pattern.",
+            },
+            selected: next,
+            view: "desk",
+            phenotypes: { ...DEFAULT_PHENOTYPES },
+            smoking: false,
+            ketamineRoute: "iv",
+            cannabisRoute: "smoked",
+            alcohol: "off",
+          });
+          return false;
+        }
+        set({
+          selected: next,
+          view: "desk",
+          phenotypes: { ...DEFAULT_PHENOTYPES, ...extras?.phenotypes },
+          smoking: extras?.smoking ?? false,
+          ketamineRoute: extras?.ketamineRoute ?? "iv",
+          cannabisRoute: extras?.cannabisRoute ?? "smoked",
+          alcohol: extras?.alcohol ?? "off",
+        });
+        return true;
+      },
+      setView: (view) => {
+        if (view === "atlas" && activePlan(get()) === "free") {
+          set({
+            view: "plans",
+            checkout: {
+              open: true,
+              plan: "pro",
+              interval: get().checkout.interval,
+              reason: "The enzyme atlas is a Pro surface.",
+            },
+          });
+          return;
+        }
+        set({ view });
+      },
+      setAtlasEnzyme: (atlasEnzyme) => {
+        if (activePlan(get()) === "free") {
+          get().setView("atlas");
+          return;
+        }
+        set({ atlasEnzyme, view: "atlas" });
+      },
+      setPhenotype: (enzyme, value) => {
+        if (activePlan(get()) === "free") {
+          get().openCheckout("pro", "Metabolizer status is a Pro host factor.");
+          return;
+        }
+        set({ phenotypes: { ...get().phenotypes, [enzyme]: value } });
+      },
+      setSmoking: (smoking) => {
+        if (activePlan(get()) === "free") {
+          get().openCheckout("pro", "Smoke induction is a Pro host factor.");
+          return;
+        }
+        set({ smoking });
+      },
+      setKetamineRoute: (ketamineRoute) => {
+        if (activePlan(get()) === "free") {
+          get().openCheckout("pro", "Ketamine route (IV vs oral first-pass) is Pro.");
+          return;
+        }
+        set({ ketamineRoute });
+      },
+      setCannabisRoute: (cannabisRoute) => {
+        if (activePlan(get()) === "free") {
+          get().openCheckout("pro", "Edible vs smoked THC is Pro.");
+          return;
+        }
+        set({ cannabisRoute });
+      },
+      setAlcohol: (alcohol) => {
+        if (activePlan(get()) === "free") {
+          get().openCheckout("pro", "Alcohol pattern (acute vs chronic 2E1) is Pro.");
+          return;
+        }
+        set({ alcohol });
+      },
+      resetPhenotypes: () =>
+        set({
+          phenotypes: { ...DEFAULT_PHENOTYPES },
+          smoking: false,
+          ketamineRoute: "iv",
+          cannabisRoute: "smoked",
+          alcohol: "off",
+        }),
+      openCheckout: (plan, reason = "") =>
+        set({
+          view: "plans",
+          checkout: { open: true, plan: plan === "free" ? "pro" : plan, interval: get().checkout.interval, reason },
+        }),
+      closeCheckout: () => set({ checkout: { ...get().checkout, open: false } }),
+      setCheckoutInterval: (interval) => set({ checkout: { ...get().checkout, interval } }),
+      startPreview: () =>
+        set({
+          previewUntil: Date.now() + 7 * 24 * 60 * 60 * 1000,
+          checkout: { ...get().checkout, open: false },
+          view: "desk",
+          justActivated: false,
+        }),
+      activateLicense: ({ plan, license, lifetime }) =>
+        set({
+          plan: plan === "lab" ? "lab" : "pro",
+          license,
+          lifetime,
+          previewUntil: null,
+          justActivated: true,
+          checkout: { ...get().checkout, open: false },
+          view: "desk",
+        }),
+      dismissActivated: () => set({ justActivated: false }),
+      downgrade: () =>
+        set({
+          plan: "free",
+          license: null,
+          lifetime: false,
+          previewUntil: null,
+          justActivated: false,
+          selected: get().selected.slice(0, 2),
+        }),
+    }),
+    {
+      name: "firstpass.desk.v7",
+      skipHydration: true,
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<DeskState>;
+        return {
+          ...current,
+          ...p,
+          phenotypes: { ...DEFAULT_PHENOTYPES, ...p.phenotypes },
+          lifetime: Boolean(p.lifetime),
+          justActivated: false,
+        };
+      },
+      partialize: (s) => ({
+        selected: s.selected,
+        phenotypes: s.phenotypes,
+        smoking: s.smoking,
+        ketamineRoute: s.ketamineRoute,
+        cannabisRoute: s.cannabisRoute,
+        alcohol: s.alcohol,
+        plan: s.plan,
+        license: s.license,
+        lifetime: s.lifetime,
+        previewUntil: s.previewUntil,
+      }),
+    },
+  ),
+);
+
+export function currentPlan(): PlanId {
+  return activePlan(useDesk.getState());
+}
+
+export function usePlan(): PlanId {
+  const plan = useDesk((s) => s.plan);
+  const previewUntil = useDesk((s) => s.previewUntil);
+  if (plan === "pro" || plan === "lab") return plan;
+  if (previewUntil && Date.now() < previewUntil) return "pro";
+  return "free";
+}
+
+export function hostFromState(
+  s: Pick<DeskState, "phenotypes" | "smoking" | "ketamineRoute" | "cannabisRoute" | "alcohol">,
+): HostContext {
+  return {
+    phenotypes: s.phenotypes,
+    smoking: s.smoking,
+    ketamineRoute: s.ketamineRoute,
+    cannabisRoute: s.cannabisRoute,
+    alcohol: s.alcohol,
+  };
+}
+
+export { DEFAULT_HOST };

@@ -1,0 +1,825 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Copy, Check, RotateCcw, Download, Share2 } from "lucide-react";
+import { DRUG_BY_ID, DRUGS } from "@/lib/drugs/catalog";
+import { analyze } from "@/lib/drugs/engine";
+import { applyHost, FIRST_PASS_NMDA } from "@/lib/drugs/host";
+import { treesFor } from "@/lib/drugs/metabolites";
+import { SAMPLE_LANES, SAMPLE_REGIMENS, sampleNeedsPro, type SampleLane } from "@/lib/drugs/samples";
+import { CLASS_TILES, PLATES, plateForDrug, plateForSample } from "@/lib/drugs/visuals";
+import {
+  ALCOHOL_LABEL,
+  CANNABIS_ROUTE_LABEL,
+  KETAMINE_ROUTE_LABEL,
+  METABOLIZER_LABEL,
+  PHENOTYPE_ENZYMES,
+  SEVERITY_LABEL,
+  type Enzyme,
+  type HostContext,
+} from "@/lib/drugs/types";
+import { useDesk, usePlan, type LoadExtras } from "@/lib/drugs/store";
+import { PLAN_BY_ID } from "@/lib/billing/plans";
+import { OPERATOR, tweetFor } from "@/lib/billing/commerce";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { DrugSearch } from "./search";
+import { FindingList } from "./findings";
+import { CypHeatmap } from "./heatmap";
+import { EnzymeAtlas } from "./atlas";
+import { HemeMark } from "./mark";
+import { PhenotypeCard } from "./phenotype";
+import { StackMeters } from "./stacks";
+import { MetaboliteCard } from "./metabolites";
+import { Paywall } from "./paywall";
+import { CheckoutDrawer, PlansPage } from "./plans";
+import { Foundry } from "./foundry";
+import { DeskFooter } from "./operator";
+import { severitySurface } from "./severity";
+import { Plate } from "./plate";
+import { FirstPassMap } from "./first-pass";
+import { CollisionMap } from "./constellation";
+import { Formulary } from "./library";
+import { WashoutCard } from "./washout";
+
+export function DeskApp() {
+  const view = useDesk((s) => s.view);
+  const setView = useDesk((s) => s.setView);
+  const selectedRaw = useDesk((s) => s.selected);
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    let live = true;
+    const done = () => {
+      if (live) setHydrated(true);
+    };
+    void Promise.resolve(useDesk.persist.rehydrate()).then(done, done);
+    const t = window.setTimeout(done, 300);
+    return () => {
+      live = false;
+      window.clearTimeout(t);
+    };
+  }, []);
+  const selected = hydrated ? selectedRaw : [];
+  const remove = useDesk((s) => s.remove);
+  const clear = useDesk((s) => s.clear);
+  const load = useDesk((s) => s.load);
+  const phenotypes = useDesk((s) => s.phenotypes);
+  const smoking = useDesk((s) => s.smoking);
+  const ketamineRoute = useDesk((s) => s.ketamineRoute);
+  const cannabisRoute = useDesk((s) => s.cannabisRoute);
+  const alcohol = useDesk((s) => s.alcohol);
+  const host = useMemo<HostContext>(
+    () => ({ phenotypes, smoking, ketamineRoute, cannabisRoute, alcohol }),
+    [phenotypes, smoking, ketamineRoute, cannabisRoute, alcohol],
+  );
+  const report = useMemo(() => analyze(selected, host), [selected, host]);
+  const hostDrugs = useMemo(
+    () => applyHost(selected.map((id) => DRUG_BY_ID[id]).filter(Boolean), host),
+    [selected, host],
+  );
+  const colliding = useMemo(
+    () => new Set(report.burden.filter((b) => b.collisions > 0).map((b) => b.enzyme as Enzyme)),
+    [report],
+  );
+  const plan = usePlan();
+  const pro = plan !== "free";
+  const license = useDesk((s) => s.license);
+  const lifetime = useDesk((s) => s.lifetime);
+  const previewUntil = useDesk((s) => s.previewUntil);
+  const justActivated = useDesk((s) => s.justActivated);
+  const dismissActivated = useDesk((s) => s.dismissActivated);
+  const openCheckout = useDesk((s) => s.openCheckout);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view, justActivated]);
+
+  const secretTaps = useRef(0);
+  const secretTimer = useRef(0);
+  function openFoundry() {
+    secretTaps.current += 1;
+    window.clearTimeout(secretTimer.current);
+    secretTimer.current = window.setTimeout(() => {
+      secretTaps.current = 0;
+    }, 4000);
+    if (secretTaps.current >= 7) {
+      secretTaps.current = 0;
+      setView("foundry");
+    }
+  }
+
+  return (
+    <div className="min-h-dvh bg-bg text-fg">
+      <header className="border-b border-border">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <div className="flex items-center gap-3">
+            <button type="button" className="shrink-0" onClick={openFoundry} aria-label="FirstPass">
+              <HemeMark className="size-8" />
+            </button>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-serif text-lg leading-none tracking-tight">FirstPass</span>
+                {hydrated && plan !== "free" ? (
+                  <span className="rounded-full bg-accent px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-accent-fg">
+                    {lifetime ? "founding" : plan}
+                  </span>
+                ) : null}
+              </div>
+              <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
+                CYP450 desk
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <nav className="flex items-center gap-1 rounded-full bg-bg-sunken p-1">
+              {(
+                [
+                  ["desk", "Desk"],
+                  ["library", "Materia"],
+                  ["atlas", "Atlas"],
+                  ["plans", "Pro"],
+                ] as const
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setView(id)}
+                  className={cn(
+                    "h-9 rounded-full px-2.5 text-xs font-medium sm:px-4 sm:text-sm",
+                    view === id ? "bg-surface-2 text-fg shadow-[var(--shadow-border)]" : "text-muted hover:text-fg",
+                  )}
+                >
+                  {label}
+                </button>
+              ))}
+            </nav>
+            {hydrated && !pro ? (
+              <Button size="sm" className="hidden sm:inline-flex" onClick={() => openCheckout("lab", "Founding lifetime.")}>
+                Unlock
+              </Button>
+            ) : null}
+          </div>
+        </div>
+      </header>
+
+      {justActivated ? (
+        <div className="border-b border-border bg-ok-soft">
+          <div className="mx-auto flex max-w-6xl items-start justify-between gap-3 px-4 py-3 sm:items-center sm:px-6">
+            <p className="text-sm leading-relaxed text-ok">
+              Founding license is live on this desk. Host factors, atlas, and export are open.
+            </p>
+            <button type="button" className="shrink-0 text-sm text-ok underline" onClick={dismissActivated}>
+              Dismiss
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      <main className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6">
+        {view === "plans" ? (
+          <PlansPage />
+        ) : view === "foundry" ? (
+          <Foundry />
+        ) : view === "atlas" ? (
+          <EnzymeAtlas />
+        ) : view === "library" ? (
+          <Formulary />
+        ) : (
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_260px]">
+            <div className="space-y-4">
+              <DrugSearch />
+              {selected.length > 0 ? (
+                <div className="flex flex-wrap items-center gap-2">
+                  {selected.map((id) => {
+                    const drug = DRUG_BY_ID[id];
+                    if (!drug) return null;
+                    return (
+                      <button
+                        key={id}
+                        type="button"
+                        onClick={() => remove(id)}
+                        className="group flex h-10 items-center gap-2 rounded-full bg-surface pl-3 pr-2 text-sm shadow-[var(--shadow-border)] hover:bg-danger-soft"
+                        title="Remove from regimen"
+                      >
+                        <span className="font-medium">{drug.name}</span>
+                        {drug.kind !== "drug" ? (
+                          <span className="font-mono text-[10px] uppercase tracking-wide text-muted">
+                            {drug.kind}
+                          </span>
+                        ) : null}
+                        <span className="flex size-6 items-center justify-center rounded-full text-subtle group-hover:text-danger">
+                          ×
+                        </span>
+                      </button>
+                    );
+                  })}
+                  <Button variant="ghost" size="sm" onClick={clear} className="text-muted">
+                    <RotateCcw className="size-3.5" />
+                    Clear
+                  </Button>
+                </div>
+              ) : null}
+
+              {selected.length === 0 ? (
+                <EmptyState onLoad={load} ready={hydrated} />
+              ) : selected.length === 1 ? (
+                <>
+                  <SingleDrug id={selected[0]} />
+                  {report.findings.length > 0 ? (
+                    <>
+                      <RiskBanner report={report} selected={selected} host={host} plan={plan} />
+                      {pro ? (
+                        <StackMeters stacks={report.stacks} />
+                      ) : report.stacks.some((s) => s.score > 0) ? (
+                        <Paywall
+                          title="Stack load is Pro"
+                          blurb="Serotonin, CNS, QT, pressor, and NMDA meters come with the host license."
+                        >
+                          <StackMeters stacks={report.stacks} />
+                        </Paywall>
+                      ) : null}
+                      <FindingList findings={report.findings} />
+                    </>
+                  ) : (
+                    <p className="text-sm text-muted">
+                      Add a second drug, flip smoke, alcohol, or a non-normal metabolizer to run the map.
+                    </p>
+                  )}
+                  <FirstPassMap
+                    ketamineRoute={ketamineRoute}
+                    cannabisRoute={cannabisRoute}
+                    showKetamine={selected.some((id) =>
+                      (FIRST_PASS_NMDA as readonly string[]).includes(id),
+                    )}
+                    showCannabis={selected.some((id) =>
+                      ["dronabinol", "cannabidiol"].includes(id),
+                    )}
+                  />
+                  {pro ? (
+                    <MetaboliteCard ids={selected} />
+                  ) : treesFor(selected).length > 0 ? (
+                    <Paywall
+                      title="Metabolite maps are Pro"
+                      blurb="Norketamine, 11-OH-THC, morphine, dextrorphan — the parent is only half the story."
+                    >
+                      <MetaboliteCard ids={selected} />
+                    </Paywall>
+                  ) : null}
+                  <CypHeatmap drugs={hostDrugs} colliding={colliding} />
+                </>
+              ) : (
+                <>
+                  <RiskBanner report={report} selected={selected} host={host} plan={plan} />
+                  {pro ? (
+                    <StackMeters stacks={report.stacks} />
+                  ) : report.stacks.some((s) => s.score > 0) ? (
+                    <Paywall
+                      title="Stack load is Pro"
+                      blurb="Serotonin, CNS, QT, pressor, and NMDA meters come with the host license."
+                    >
+                      <StackMeters stacks={report.stacks} />
+                    </Paywall>
+                  ) : null}
+                  {report.findings.length === 0 ? (
+                    <div className="rounded-xl bg-ok-soft px-5 py-6 text-sm text-ok shadow-[var(--shadow-border)]">
+                      No mapped CYP collision, phenotype hit, or pharmacodynamic synergy. Absence is not
+                      proof of safety — transporters, UGT, plasma protein, and unlisted pathways still
+                      apply.
+                    </div>
+                  ) : (
+                    <>
+                      <CollisionMap selected={selected} findings={report.findings} />
+                      <FindingList findings={report.findings} />
+                    </>
+                  )}
+                  {pro ? (
+                    <MetaboliteCard ids={selected} />
+                  ) : treesFor(selected).length > 0 ? (
+                    <Paywall
+                      title="Metabolite maps are Pro"
+                      blurb="Norketamine, 11-OH-THC, morphine, dextrorphan — the parent is only half the story."
+                    >
+                      <MetaboliteCard ids={selected} />
+                    </Paywall>
+                  ) : null}
+                  <FirstPassMap
+                    ketamineRoute={ketamineRoute}
+                    cannabisRoute={cannabisRoute}
+                    showKetamine={selected.some((id) =>
+                      (FIRST_PASS_NMDA as readonly string[]).includes(id),
+                    )}
+                    showCannabis={selected.some((id) =>
+                      ["dronabinol", "cannabidiol"].includes(id),
+                    )}
+                  />
+                  <CypHeatmap drugs={hostDrugs} colliding={colliding} />
+                </>
+              )}
+            </div>
+
+            <aside className="space-y-4 lg:pt-0">
+              <StatsCard
+                drugs={DRUGS.length}
+                selected={selected.length}
+                findings={report.findings.length}
+                highest={report.highest}
+                plan={plan}
+                license={license}
+                lifetime={lifetime}
+                previewUntil={previewUntil}
+                cap={pro ? 8 : 2}
+              />
+              {pro ? (
+                <PhenotypeCard />
+              ) : (
+                <Paywall
+                  title="Host factors are Pro"
+                  blurb="Phenotype, smoke, alcohol pattern, and route change the score. Two-drug PK stays free."
+                >
+                  <PhenotypeCard />
+                </Paywall>
+              )}
+              {selected.length > 0 ? <WashoutCard selected={selected} /> : null}
+              {selected.length >= 2 ? <BurdenCard burden={report.burden} /> : <HowCard />}
+              <Disclaimer />
+            </aside>
+          </div>
+        )}
+      </main>
+      <DeskFooter />
+      <CheckoutDrawer />
+    </div>
+  );
+}
+
+function EmptyState({
+  onLoad,
+  ready,
+}: {
+  onLoad: (ids: string[], extras?: LoadExtras) => void;
+  ready: boolean;
+}) {
+  const [lane, setLane] = useState<SampleLane | "all">("all");
+  const plan = usePlan();
+  const setView = useDesk((s) => s.setView);
+  const shown = SAMPLE_REGIMENS.filter((s) => lane === "all" || s.lane === lane);
+  return (
+    <section className="overflow-hidden rounded-xl bg-surface shadow-[var(--shadow-border)]">
+      <div className="relative">
+        <Plate src={PLATES.hero} alt="" className="h-48 w-full sm:h-64" />
+        <div className="absolute inset-x-0 bottom-0 bg-ink px-5 py-4 sm:px-8 sm:py-5">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-fg/70">
+            Psychoactive interaction desk
+          </p>
+          <h1 className="mt-2 max-w-xl font-serif text-3xl leading-tight tracking-tight text-accent-fg sm:text-4xl">
+            Map ketamine, entactogens, and the rest of the stack.
+          </h1>
+        </div>
+      </div>
+      <div className="px-5 py-6 sm:px-8 sm:py-8">
+        <p className="max-w-xl text-sm leading-relaxed text-muted">
+          FirstPass is built around psychoactive CYP450 maps — NMDA dissociatives, 2D6 entactogens,
+          psychedelics, stimulants, cannabinoids — then layers food, smoke, serotonin, and metabolizer
+          status. Two-drug collisions stay free. Browse the materia, then put a pair on the desk.
+        </p>
+        <div className="mt-4">
+          <Button variant="secondary" size="sm" onClick={() => setView("library")}>
+            Browse the materia
+          </Button>
+        </div>
+        <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {CLASS_TILES.map((tile) => (
+            <button
+              key={tile.id}
+              type="button"
+              onClick={() => setLane(tile.id)}
+              className={cn(
+                "overflow-hidden rounded-lg text-left shadow-[var(--shadow-border)] transition-transform duration-150 hover:-translate-y-px",
+                lane === tile.id ? "ring-2 ring-accent" : "",
+              )}
+            >
+              <Plate src={tile.plate} alt="" className="h-20 w-full" />
+              <span className="block bg-bg px-3 py-2">
+                <span className="block text-sm font-medium text-fg">{tile.label}</span>
+                <span className="block text-[11px] text-muted">{tile.hint}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+        <div className="mt-6 flex flex-wrap gap-1">
+          {SAMPLE_LANES.map((l) => (
+            <button
+              key={l.id}
+              type="button"
+              onClick={() => setLane(l.id)}
+              className={cn(
+                "h-10 rounded-full px-3 text-xs font-medium",
+                lane === l.id ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+              )}
+            >
+              {l.label}
+            </button>
+          ))}
+        </div>
+        <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+          {shown.map((s) => (
+            <li key={s.id}>
+              <button
+                type="button"
+                disabled={!ready}
+                onClick={() =>
+                  onLoad(s.drugIds, {
+                    phenotypes: s.phenotypes,
+                    smoking: s.smoking,
+                    ketamineRoute: s.ketamineRoute,
+                    cannabisRoute: s.cannabisRoute,
+                    alcohol: s.alcohol,
+                  })
+                }
+                className="flex h-full w-full overflow-hidden rounded-lg bg-bg text-left shadow-[var(--shadow-border)] transition-transform duration-150 hover:-translate-y-px disabled:opacity-60"
+              >
+                <Plate src={plateForSample(s)} alt="" className="h-full w-20 shrink-0 min-h-24" />
+                <span className="flex min-w-0 flex-1 flex-col justify-center px-4 py-3">
+                  <span className="flex items-center gap-2 text-sm font-medium text-fg">
+                    {s.title}
+                    {plan === "free" && sampleNeedsPro(s) ? (
+                      <span className="font-mono text-[10px] uppercase tracking-wide text-accent">Pro</span>
+                    ) : null}
+                  </span>
+                  <span className="mt-1 text-xs text-muted">{s.blurb}</span>
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+function SingleDrug({ id }: { id: string }) {
+  const drug = DRUG_BY_ID[id];
+  const route = useDesk((s) => s.ketamineRoute);
+  const cannabisRoute = useDesk((s) => s.cannabisRoute);
+  if (!drug) return null;
+  const subs = drug.enzymes.filter((e) => e.kind === "substrate");
+  const inhs = drug.enzymes.filter((e) => e.kind === "inhibitor");
+  const inds = drug.enzymes.filter((e) => e.kind === "inducer");
+  const nmda = (FIRST_PASS_NMDA as readonly string[]).includes(id);
+  const thc = id === "dronabinol";
+  return (
+    <section className="overflow-hidden rounded-xl bg-surface shadow-[var(--shadow-border)]">
+      <div className="grid sm:grid-cols-[220px_minmax(0,1fr)]">
+        <Plate src={plateForDrug(drug)} alt="" className="h-40 w-full sm:h-full min-h-40" />
+        <div className="px-5 py-6">
+      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Monograph</p>
+      <h2 className="mt-2 font-serif text-2xl tracking-tight text-fg">{drug.name}</h2>
+      <p className="mt-1 text-sm text-muted">
+        {drug.cls}
+        {drug.brands.length ? ` · ${drug.brands.join(", ")}` : ""}
+        {nmda ? ` · ${KETAMINE_ROUTE_LABEL[route]}` : ""}
+        {thc ? ` · ${CANNABIS_ROUTE_LABEL[cannabisRoute]}` : ""}
+      </p>
+      {drug.note ? <p className="mt-3 text-sm leading-relaxed text-fg">{drug.note}</p> : null}
+      <div className="mt-5 grid gap-4 sm:grid-cols-3">
+        <RoleList title="Substrate of" rows={subs} empty="No mapped CYP substrate" />
+        <RoleList title="Inhibits" rows={inhs} empty="Not a mapped inhibitor" />
+        <RoleList title="Induces" rows={inds} empty="Not a mapped inducer" />
+      </div>
+      {drug.pd.length > 0 ? (
+        <div className="mt-5 flex flex-wrap gap-1.5">
+          {drug.pd.map((p) => (
+            <Badge key={p} tone="info">
+              {p.replace(/-/g, " ")}
+            </Badge>
+          ))}
+        </div>
+      ) : null}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function RoleList({
+  title,
+  rows,
+  empty,
+}: {
+  title: string;
+  rows: { enzyme: string; kind: string; strength?: string; sensitivity?: string; pathway?: string; nti?: boolean }[];
+  empty: string;
+}) {
+  return (
+    <div>
+      <h3 className="text-xs font-medium uppercase tracking-wide text-muted">{title}</h3>
+      {rows.length === 0 ? (
+        <p className="mt-2 text-sm text-subtle">{empty}</p>
+      ) : (
+        <ul className="mt-2 space-y-1">
+          {rows.map((r) => (
+            <li key={r.enzyme + r.kind} className="font-mono text-sm text-fg">
+              {r.enzyme}
+              <span className="ml-2 font-sans text-xs text-muted">
+                {"strength" in r && r.strength ? r.strength : null}
+                {"sensitivity" in r && r.sensitivity ? r.sensitivity : null}
+                {r.pathway === "activation" ? " · prodrug" : ""}
+                {r.nti ? " · NTI" : ""}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function RiskBanner({
+  report,
+  selected,
+  host,
+  plan,
+}: {
+  report: ReturnType<typeof analyze>;
+  selected: string[];
+  host: HostContext;
+  plan: ReturnType<typeof usePlan>;
+}) {
+  const [copied, setCopied] = useState<"full" | "share" | null>(null);
+  const openCheckout = useDesk((s) => s.openCheckout);
+  const license = useDesk((s) => s.license);
+  const highest = report.highest;
+  const phenoLine = PHENOTYPE_ENZYMES.map(
+    (e) => `${e} ${host.phenotypes[e]} (${METABOLIZER_LABEL[host.phenotypes[e]]})`,
+  ).join(", ");
+  const names = selected.map((id) => DRUG_BY_ID[id]?.name).filter(Boolean).join(" + ");
+
+  async function write(kind: "full" | "share", text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(kind);
+      window.setTimeout(() => setCopied(null), 1600);
+    } catch {
+      /* clipboard may be blocked */
+    }
+  }
+
+  async function copySummary() {
+    if (plan === "free") {
+      openCheckout("lab", "The full collision report is a licensed surface. Founding is $79 once.");
+      return;
+    }
+    const lines = [
+      `FirstPass regimen: ${names}`,
+      `Metabolizer status: ${phenoLine}`,
+      `Tobacco smoke: ${host.smoking ? "daily (CYP1A2 induction)" : "off"}`,
+      `Alcohol pattern: ${ALCOHOL_LABEL[host.alcohol]}`,
+      `Ketamine route: ${KETAMINE_ROUTE_LABEL[host.ketamineRoute]}`,
+      `Cannabis route: ${CANNABIS_ROUTE_LABEL[host.cannabisRoute]}`,
+      `Highest severity: ${SEVERITY_LABEL[highest]}`,
+      "",
+      ...report.findings.map(
+        (f) => `• ${SEVERITY_LABEL[f.severity]} — ${f.headline}: ${f.mechanism}. ${f.clinical}`,
+      ),
+      "",
+      "Educational model. Not a substitute for clinical decision support.",
+    ];
+    await write("full", lines.join("\n"));
+  }
+
+  async function shareLine() {
+    const top = report.findings[0];
+    await write(
+      "share",
+      tweetFor(names, SEVERITY_LABEL[highest], top ? `${top.headline}: ${top.mechanism}` : ""),
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-3 rounded-xl bg-surface p-3 shadow-[var(--shadow-border)] sm:flex-row sm:items-center sm:justify-between sm:p-4">
+      <div className="flex items-center gap-3">
+        <span
+          className={cn(
+            "inline-flex min-w-28 items-center justify-center rounded-md px-2.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-wider",
+            severitySurface(highest),
+          )}
+        >
+          {SEVERITY_LABEL[highest]}
+        </span>
+        <div>
+          <div className="text-sm font-medium text-fg">
+            {report.findings.length} collision{report.findings.length === 1 ? "" : "s"} across{" "}
+            {selected.length} drug{selected.length === 1 ? "" : "s"}
+          </div>
+          <div className="text-xs text-muted">
+            {report.counts.contraindicated} contra · {report.counts.major} major ·{" "}
+            {report.counts.moderate} moderate · {report.counts.minor} minor
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-2">
+      <Button variant="secondary" size="sm" onClick={() => void shareLine()} className="h-10 min-w-24 shrink-0">
+        {copied === "share" ? <Check className="size-3.5" /> : <Share2 className="size-3.5" />}
+        {copied === "share" ? "Copied" : "Share"}
+      </Button>
+      <Button variant="secondary" size="sm" onClick={() => void copySummary()} className="h-10 min-w-24 shrink-0">
+        {copied === "full" ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+        {copied === "full" ? "Copied" : plan === "free" ? "Report · Pro" : "Report"}
+      </Button>
+      {plan === "lab" ? (
+        <Button
+          variant="secondary"
+          size="sm"
+          className="h-10 shrink-0"
+          onClick={() => exportDesk(report, selected, host, license)}
+        >
+          <Download className="size-3.5" />
+          JSON
+        </Button>
+      ) : null}
+      {plan === "lab" ? (
+        <Button
+          variant="secondary"
+          size="sm"
+          className="h-10 shrink-0"
+          onClick={() => exportCsv(report, selected)}
+        >
+          <Download className="size-3.5" />
+          CSV
+        </Button>
+      ) : null}
+      </div>
+    </div>
+  );
+}
+
+function StatsCard({
+  drugs,
+  selected,
+  findings,
+  highest,
+  plan,
+  license,
+  lifetime,
+  previewUntil,
+  cap,
+}: {
+  drugs: number;
+  selected: number;
+  findings: number;
+  highest: string;
+  plan: ReturnType<typeof usePlan>;
+  license: string | null;
+  lifetime: boolean;
+  previewUntil: number | null;
+  cap: number;
+}) {
+  const previewing = Boolean(previewUntil && Date.now() < previewUntil && plan === "pro" && !license);
+  const previewDays = previewUntil ? Math.max(0, Math.ceil((previewUntil - Date.now()) / 86_400_000)) : 0;
+  const licenseLabel = lifetime
+    ? "Founding"
+    : previewing
+      ? `Preview · ${previewDays}d`
+      : PLAN_BY_ID[plan].name;
+  return (
+    <div className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)]">
+      <h2 className="text-xs font-medium uppercase tracking-wide text-muted">Desk</h2>
+      <dl className="mt-3 grid grid-cols-2 gap-3">
+        <Stat k="Formulary" v={String(drugs)} />
+        <Stat k="On desk" v={`${selected}/${cap}`} />
+        <Stat k="Findings" v={String(findings)} />
+        <Stat k="License" v={licenseLabel} />
+      </dl>
+      <div className="mt-3 text-[11px] text-muted">
+        Ceiling {highest === "none" ? "—" : SEVERITY_LABEL[highest as never] ?? highest}
+        {license ? ` · ${license}` : plan === "free" ? ` · founding $79 · Venmo @${OPERATOR.venmo}` : previewing ? " · buy before it lapses" : ""}
+      </div>
+    </div>
+  );
+}
+
+function Stat({ k, v }: { k: string; v: string }) {
+  return (
+    <div>
+      <dt className="text-[11px] text-muted">{k}</dt>
+      <dd className="font-mono text-sm tabular-nums text-fg">{v}</dd>
+    </div>
+  );
+}
+
+function BurdenCard({ burden }: { burden: ReturnType<typeof analyze>["burden"] }) {
+  const hot = [...burden].sort((a, b) => b.collisions - a.collisions);
+  return (
+    <div className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)]">
+      <h2 className="text-xs font-medium uppercase tracking-wide text-muted">Pathway load</h2>
+      <ul className="mt-3 space-y-2">
+        {hot.map((b) => (
+          <li key={b.enzyme} className="flex items-center justify-between gap-2 text-sm">
+            <span className="font-mono text-xs text-fg">{b.enzyme}</span>
+            <span className={cn("text-xs", b.collisions > 0 ? "text-danger" : "text-muted")}>
+              {b.substrates.length}S {b.inhibitors.length}I {b.inducers.length}D
+              {b.collisions > 0 ? ` · ${b.collisions} hit` : ""}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function HowCard() {
+  return (
+    <div className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)]">
+      <h2 className="text-xs font-medium uppercase tracking-wide text-muted">How it scores</h2>
+      <ul className="mt-3 space-y-2 text-sm leading-relaxed text-muted">
+        <li>
+          <span className="text-fg">PK.</span> Strong inhibitors of sensitive or narrow-index
+          substrates grade contraindicated; induction of clearance is loss of efficacy.
+        </li>
+        <li>
+          <span className="text-fg">2D6.</span> Blockade of codeine or tamoxifen is lost
+          activation; of DXM or MDMA it is stacked parent plus serotonin.
+        </li>
+        <li>
+          <span className="text-fg">Phenotype.</span> Flip CYP2D6 / 2C19 / 2C9 / 2B6 to poor or
+          ultrarapid — a PM scores like a strong inhibitor of that isoform. 2C9 PMs make warfarin
+          and edible THC hotter.
+        </li>
+        <li>
+          <span className="text-fg">Host.</span> Daily smoke induces CYP1A2. Chronic alcohol induces
+          CYP2E1 (NAPQI from acetaminophen). Oral ketamine and edible THC are first-pass victims; IV
+          and smoked mostly skip it.
+        </li>
+        <li>
+          <span className="text-fg">Food.</span> Grapefruit knocks out intestinal 3A4. Tyramine
+          plus an MAOI is a pressor crisis. Piperine and pomegranate are quieter 3A4 hits. Licorice
+          drops potassium. Fat meals raise oral THC/CBD. Salt and urine pH move lithium and
+          amphetamine.
+        </li>
+      </ul>
+    </div>
+  );
+}
+
+function Disclaimer() {
+  return (
+    <p className="px-1 text-[11px] leading-relaxed text-subtle">
+      Educational model of published CYP maps, food effects, and pharmacodynamic patterns, including
+      ketamine, entactogens, psychedelics, and diet. Not a clinician, not a complete database, and
+      not guidance for non-medical use. Always verify with primary references.
+    </p>
+  );
+}
+
+function exportDesk(
+  report: ReturnType<typeof analyze>,
+  selected: string[],
+  host: HostContext,
+  license: string | null,
+) {
+  const body = {
+    license,
+    generated: new Date().toISOString(),
+    regimen: selected.map((id) => DRUG_BY_ID[id]?.name).filter(Boolean),
+    host,
+    highest: report.highest,
+    findings: report.findings,
+  };
+  const blob = new Blob([JSON.stringify(body, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "firstpass-desk.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportCsv(report: ReturnType<typeof analyze>, selected: string[]) {
+  const rows = [
+    ["severity", "kind", "headline", "mechanism", "effect", "clinical", "enzymes", "drugs"].join(","),
+    ...report.findings.map((f) =>
+      [
+        f.severity,
+        f.kind,
+        csv(f.headline),
+        csv(f.mechanism),
+        csv(f.effect),
+        csv(f.clinical),
+        csv(f.enzymes.join("|")),
+        csv(f.drugIds.map((id) => DRUG_BY_ID[id]?.name ?? id).join("|")),
+      ].join(","),
+    ),
+  ];
+  const blob = new Blob([`# FirstPass ${selected.map((id) => DRUG_BY_ID[id]?.name ?? id).join(" + ")}\n${rows.join("\n")}`], {
+    type: "text/csv",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "firstpass-desk.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function csv(s: string) {
+  const t = s.replace(/"/g, '""');
+  return `"${t}"`;
+}
