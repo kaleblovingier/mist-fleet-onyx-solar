@@ -1,4 +1,4 @@
-import { COMMERCE, OPERATOR } from "./commerce";
+import { COMMERCE, OPERATOR, payClose } from "./commerce";
 
 export type Prey = "clinic" | "mat" | "school" | "harm" | "assoc";
 export type Range = "whatcom" | "puget" | "eastwa" | "pnw" | "us";
@@ -535,7 +535,7 @@ export function targetDm(t: Pick<Target, "name" | "city" | "hook">, price = COMM
     "",
     "Two-drug collisions stay free so you can kick the tires.",
     `Founding license is $${price} once: host factors, metabolites, enzyme atlas, JSON/CSV export.`,
-    `Pay $${price} on Venmo @${OPERATOR.venmo}. I send a signed key when it clears.`,
+    payClose(price),
     `${OPERATOR.email} · ${OPERATOR.phone}`,
     "",
     "Educational model — not a clinical system of record.",

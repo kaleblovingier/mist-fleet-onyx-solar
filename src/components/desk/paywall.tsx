@@ -1,5 +1,5 @@
 import { Lock } from "lucide-react";
-import { OPERATOR } from "@/lib/billing/commerce";
+import { PAY_RAILS } from "@/lib/billing/commerce";
 import { useDesk } from "@/lib/drugs/store";
 import { Button } from "@/components/ui/button";
 
@@ -32,7 +32,7 @@ export function Paywall({
           </Button>
         </div>
         <p className="text-[11px] text-muted">
-          Venmo @{OPERATOR.venmo} · {OPERATOR.email}
+          {PAY_RAILS.map((r) => `${r.label} ${r.handle}`).join(" · ")}
         </p>
       </div>
     </div>

@@ -136,6 +136,24 @@ export const WASHOUT: Array<{ ids: string[]; days: number; label: string }> = [
     label:
       "Amiodarone inhibition (2C9, 3A4, 2D6, 1A2, P-gp) lingers for weeks after the last dose. The half-life is measured in tens of days.",
   },
+  {
+    ids: ["rifampin", "carbamazepine", "phenobarbital", "primidone", "st-johns-wort"],
+    days: 14,
+    label:
+      "Strong inducers take 1–2 weeks to wash in and about as long to wash out. Stopping yesterday does not restore oral ketamine, OCPs, or methadone.",
+  },
+  {
+    ids: ["efavirenz"],
+    days: 14,
+    label:
+      "Efavirenz 3A4/2B6 induction is not gone the morning after the last dose. Methadone withdrawal can lag a week either direction.",
+  },
+  {
+    ids: ["bupropion"],
+    days: 7,
+    label:
+      "Bupropion and hydroxybupropion keep CYP2D6 blocked for about a week after the last dose.",
+  },
 ];
 
 export function washoutsFor(ids: string[]) {

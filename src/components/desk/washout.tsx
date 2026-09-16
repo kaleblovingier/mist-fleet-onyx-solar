@@ -15,11 +15,15 @@ export function WashoutCard({ selected }: { selected: string[] }) {
           const names = w.ids
             .filter((id) => selected.includes(id))
             .map((id) => DRUG_BY_ID[id]?.name ?? id);
+          const pct = Math.min(100, Math.round((w.days / 42) * 100));
           return (
             <li key={w.ids.join("-")} className="rounded-md bg-bg-sunken px-3 py-3">
               <div className="flex items-baseline justify-between gap-2">
                 <span className="text-sm font-medium text-fg">{names.join(", ")}</span>
                 <span className="font-mono text-[11px] tabular-nums text-accent">{w.days}d</span>
+              </div>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-bg">
+                <div className="h-full rounded-full bg-accent" style={{ width: `${pct}%` }} />
               </div>
               <p className="mt-1 text-xs leading-relaxed text-muted">{w.label}</p>
             </li>

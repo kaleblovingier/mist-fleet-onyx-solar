@@ -33,6 +33,8 @@ import { MetaboliteCard } from "./metabolites";
 import { Paywall } from "./paywall";
 import { CheckoutDrawer, PlansPage } from "./plans";
 import { Foundry } from "./foundry";
+import { RoundsPage } from "./rounds";
+import { HostDelta } from "./delta";
 import { DeskFooter } from "./operator";
 import { severitySurface } from "./severity";
 import { Plate } from "./plate";
@@ -109,8 +111,9 @@ export function DeskApp() {
   return (
     <div className="min-h-dvh bg-bg text-fg">
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
             <button type="button" className="shrink-0" onClick={openFoundry} aria-label="FirstPass">
               <HemeMark className="size-8" />
             </button>
@@ -127,14 +130,21 @@ export function DeskApp() {
                 CYP450 desk
               </div>
             </div>
+            </div>
+            {hydrated && !pro ? (
+              <Button size="sm" className="sm:hidden" onClick={() => openCheckout("lab", "Founding lifetime.")}>
+                Unlock
+              </Button>
+            ) : null}
           </div>
-          <div className="flex items-center gap-2">
-            <nav className="flex items-center gap-1 rounded-full bg-bg-sunken p-1">
+          <div className="flex min-w-0 items-center gap-2">
+            <nav className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto rounded-full bg-bg-sunken p-1 sm:flex-none">
               {(
                 [
                   ["desk", "Desk"],
                   ["library", "Materia"],
                   ["atlas", "Atlas"],
+                  ["rounds", "Rounds"],
                   ["plans", "Pro"],
                 ] as const
               ).map(([id, label]) => (
@@ -143,7 +153,7 @@ export function DeskApp() {
                   type="button"
                   onClick={() => setView(id)}
                   className={cn(
-                    "h-9 rounded-full px-2.5 text-xs font-medium sm:px-4 sm:text-sm",
+                    "h-9 shrink-0 rounded-full px-2.5 text-xs font-medium sm:px-4 sm:text-sm",
                     view === id ? "bg-surface-2 text-fg shadow-[var(--shadow-border)]" : "text-muted hover:text-fg",
                   )}
                 >
@@ -178,6 +188,8 @@ export function DeskApp() {
           <PlansPage />
         ) : view === "foundry" ? (
           <Foundry />
+        ) : view === "rounds" ? (
+          <RoundsPage />
         ) : view === "atlas" ? (
           <EnzymeAtlas />
         ) : view === "library" ? (
@@ -337,6 +349,7 @@ export function DeskApp() {
                   <PhenotypeCard />
                 </Paywall>
               )}
+              {pro && selected.length > 0 ? <HostDelta selected={selected} host={host} report={report} /> : null}
               {selected.length > 0 ? <WashoutCard selected={selected} /> : null}
               {selected.length >= 2 ? <BurdenCard burden={report.burden} /> : <HowCard />}
               <Disclaimer />
@@ -380,9 +393,12 @@ function EmptyState({
           psychedelics, stimulants, cannabinoids — then layers food, smoke, serotonin, and metabolizer
           status. Two-drug collisions stay free. Browse the materia, then put a pair on the desk.
         </p>
-        <div className="mt-4">
+        <div className="mt-4 flex flex-wrap gap-2">
           <Button variant="secondary" size="sm" onClick={() => setView("library")}>
             Browse the materia
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => setView("rounds")}>
+            Teaching rounds
           </Button>
         </div>
         <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -690,7 +706,7 @@ function StatsCard({
       </dl>
       <div className="mt-3 text-[11px] text-muted">
         Ceiling {highest === "none" ? "—" : SEVERITY_LABEL[highest as never] ?? highest}
-        {license ? ` · ${license}` : plan === "free" ? ` · founding $79 · Venmo @${OPERATOR.venmo}` : previewing ? " · buy before it lapses" : ""}
+        {license ? ` · ${license}` : plan === "free" ? ` · founding $79 · ${OPERATOR.payLine}` : previewing ? " · buy before it lapses" : ""}
       </div>
     </div>
   );

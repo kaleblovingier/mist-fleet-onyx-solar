@@ -8,8 +8,20 @@ export const OPERATOR = {
   phoneHref: "tel:+13607078923",
   social: ["@badbird", "@kaleblovingier"] as const,
   venmoUrl: "https://venmo.com/u/kaleblovingier",
-  payLine: "Venmo @kaleblovingier",
+  cashApp: "kaleblovingier7",
+  cashAppUrl: "https://cash.app/$kaleblovingier7",
+  paypal: "kaleblovingier@gmail.com",
+  paypalUrl:
+    "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=kaleblovingier%40gmail.com&item_name=FirstPass%20founding&amount=79&currency_code=USD",
+  payLine:
+    "Venmo @kaleblovingier · Cash App $kaleblovingier7 · PayPal kaleblovingier@gmail.com",
 };
+
+export const PAY_RAILS = [
+  { id: "venmo", label: "Venmo", handle: `@${OPERATOR.venmo}`, href: OPERATOR.venmoUrl },
+  { id: "cashapp", label: "Cash App", handle: `$${OPERATOR.cashApp}`, href: OPERATOR.cashAppUrl },
+  { id: "paypal", label: "PayPal", handle: OPERATOR.paypal, href: OPERATOR.paypalUrl },
+] as const;
 
 export const COMMERCE = {
   founding: 79,
@@ -42,8 +54,8 @@ export const BUYERS = [
   },
 ] as const;
 
-function payClose(price = COMMERCE.founding) {
-  return `Pay $${price} on Venmo @${OPERATOR.venmo}. I send a signed key when it clears.`;
+export function payClose(price = COMMERCE.founding) {
+  return `Pay $${price} — Venmo @${OPERATOR.venmo}, Cash App $${OPERATOR.cashApp}, or PayPal ${OPERATOR.email}. I send a signed key when it clears.`;
 }
 
 export function salesDm(price = COMMERCE.founding) {
@@ -82,14 +94,14 @@ export function launchTweet(price = COMMERCE.founding) {
     "",
     "Two-drug collisions stay free.",
     `Founding license $${price} once — host factors, enzyme atlas, export.`,
-    `Venmo @${OPERATOR.venmo}`,
+    `Venmo @${OPERATOR.venmo} · Cash App $${OPERATOR.cashApp} · PayPal ${OPERATOR.email}`,
     "",
     "Educational model. Not a charting system.",
   ].join("\n");
 }
 
 export function requestLicense(price = COMMERCE.founding) {
-  return `I'd like a FirstPass founding license ($${price} once). I'll Venmo @${OPERATOR.venmo}. Send the key when it clears.`;
+  return `I'd like a FirstPass founding license ($${price} once). I'll pay Venmo @${OPERATOR.venmo}, Cash App $${OPERATOR.cashApp}, or PayPal ${OPERATOR.email}. Send the key when it clears.`;
 }
 
 export function fulfillKey(opts: { key: string; soldTo?: string }) {

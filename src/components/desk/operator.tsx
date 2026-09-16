@@ -1,4 +1,4 @@
-import { OPERATOR } from "@/lib/billing/commerce";
+import { OPERATOR, PAY_RAILS } from "@/lib/billing/commerce";
 
 export function OperatorCard() {
   return (
@@ -21,7 +21,7 @@ export function DeskFooter() {
         </div>
         <p className="max-w-sm text-[11px] leading-relaxed text-subtle">
           Educational CYP450 / PD map. Not a clinician and not a charting system. Founding license
-          is $79 once — Venmo @{OPERATOR.venmo}, then redeem the key on Pro.
+          is $79 once — Venmo, Cash App, or PayPal, then redeem the key on Pro.
         </p>
       </div>
     </footer>
@@ -31,17 +31,19 @@ export function DeskFooter() {
 function OperatorLines({ className }: { className?: string }) {
   return (
     <ul className={className}>
-      <li>
-        <a
-          href={OPERATOR.venmoUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex min-h-10 items-center font-medium text-accent hover:underline"
-        >
-          Venmo @{OPERATOR.venmo}
-        </a>
-        <span className="text-muted"> · $79</span>
-      </li>
+      {PAY_RAILS.map((rail) => (
+        <li key={rail.id}>
+          <a
+            href={rail.href}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-10 items-center font-medium text-accent hover:underline"
+          >
+            {rail.label} {rail.handle}
+          </a>
+          {rail.id === "venmo" ? <span className="text-muted"> · $79</span> : null}
+        </li>
+      ))}
       <li>
         <a
           href={`mailto:${OPERATOR.email}`}

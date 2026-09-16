@@ -526,6 +526,20 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
     );
   }
 
+  if ((has(a, "alpha-blocker") && has(b, "alcohol")) || (has(b, "alpha-blocker") && has(a, "alcohol"))) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-alpha-etoh",
+        severity: "moderate",
+        effect: "orthostatic hypotension",
+        mechanism: "alpha blocker × alcohol",
+        clinical:
+          "Prazosin and other α1-blockers drop standing blood pressure. Alcohol stacks the orthostasis — first-dose syncope, not a CYP row.",
+        tags: ["hypotension", "alcohol"],
+      }),
+    );
+  }
+
   if ((has(a, "statin") && has(b, "fibrate")) || (has(b, "statin") && has(a, "fibrate"))) {
     const simLova =
       a.id === "simvastatin" ||

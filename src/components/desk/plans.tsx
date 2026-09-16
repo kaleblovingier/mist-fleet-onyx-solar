@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Check, Loader2, X } from "lucide-react";
-import { BUYERS, COMMERCE, OPERATOR, requestLicense } from "@/lib/billing/commerce";
+import { BUYERS, COMMERCE, OPERATOR, PAY_RAILS, requestLicense } from "@/lib/billing/commerce";
 import { redeemLicense } from "@/lib/billing/license";
 import { PLANS, priceFor, type Interval } from "@/lib/billing/plans";
 import { useDesk, usePlan } from "@/lib/drugs/store";
@@ -267,10 +267,19 @@ export function CheckoutDrawer() {
             </a>
           </Button>
         ) : null}
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          {PAY_RAILS.filter((r) => r.id !== "venmo").map((rail) => (
+            <Button key={rail.id} variant="secondary" className="w-full" asChild>
+              <a href={rail.href} target="_blank" rel="noreferrer">
+                {rail.label}
+              </a>
+            </Button>
+          ))}
+        </div>
         <p className="mt-3 rounded-md bg-bg-sunken px-3 py-3 text-sm leading-relaxed text-muted">
           {life
-            ? `Founding is $${COMMERCE.founding} once. Venmo @${OPERATOR.venmo}, then paste the key ${OPERATOR.name} sends.`
-            : `Pay $${amount} on Venmo @${OPERATOR.venmo}, then redeem the key you are sent.`}{" "}
+            ? `Founding is $${COMMERCE.founding} once. Pay ${OPERATOR.payLine}, then paste the key ${OPERATOR.name} sends.`
+            : `Pay $${amount} via ${OPERATOR.payLine}, then redeem the key you are sent.`}{" "}
           {OPERATOR.email} · {OPERATOR.phone}
           <span className="mt-1 block text-xs">{OPERATOR.social.join(" · ")}</span>
         </p>

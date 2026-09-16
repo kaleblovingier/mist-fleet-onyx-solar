@@ -1246,13 +1246,113 @@ const raw: Drug[] = [
       aliases: ["broccoli", "brussels sprouts", "cabbage", "kale", "indole-3-carbinol"],
       note: "Same PAH/AhR neighborhood as smoke, much weaker. A kale phase is not smoking a pack, but 1A2 victims can drift.",
     }),
+
+  // —— Clinic / MAT / street additions ——————————————
+  d("dexmedetomidine", "Dexmedetomidine", ["Precedex", "Igalmi"], "Central α2-agonist (IV anesthetic adjunct)",
+    [],
+    ["alpha2-agonist", "cns-depressant", "bradycardic"],
+    "Sedation naloxone will not reverse; bradycardia, stacked airway risk with opioids",
+    {
+      aliases: ["precedex", "dexmed"],
+      note: "Clinical cousin of xylazine and medetomidine. Same α2 map: naloxone reverses the opioid, not the α2. Ketamine-clinic recovery stacks.",
+    }),
+  d("propofol", "Propofol", ["Diprivan"], "IV anesthetic",
+    [sub("CYP2B6", "minor")],
+    ["cns-depressant"],
+    "Apnea, hypotension; stacked CNS depression with benzos, opioids, ketamine",
+    {
+      aliases: ["diprivan", "milk of amnesia"],
+      note: "Mostly UGT. The CYP row is quiet. PD with midazolam, fentanyl, and ketamine is the airway story.",
+    }),
+  d("prazosin", "Prazosin", ["Minipress"], "Alpha-1 blocker",
+    [],
+    ["alpha-blocker"],
+    "First-dose syncope; orthostasis with alcohol or PDE5 inhibitors",
+    {
+      aliases: ["minipress"],
+      note: "PTSD-nightmare dose still drops standing blood pressure. Alcohol and sildenafil stack the orthostasis, not a CYP row.",
+    }),
+  d("seven-oh", "7-Hydroxymitragynine", [], "Kratom μ-agonist (7-OH)",
+    [sub("CYP3A4", "major")],
+    ["opioid", "cns-depressant"],
+    "Respiratory depression; 3A4 victim; benzo/alcohol/xylazine airway stack",
+    {
+      aliases: ["7-oh", "7oh", "7-hydroxymitragynine", "7-oh-mitragynine"],
+      note: "Much hotter μ-agonist than mitragynine. Street 7-OH tablets are an opioid map, not a tea map. 3A4 inhibitors raise exposure.",
+    }),
+  d("nalbuphine", "Nalbuphine", ["Nubain"], "Mixed opioid agonist–antagonist",
+    [],
+    ["opioid", "cns-depressant", "opioid-antagonist"],
+    "Respiratory depression; precipitated withdrawal in full-agonist dependence",
+    {
+      aliases: ["nubain"],
+      note: "Kappa agonist / mu antagonist. Can precipitate withdrawal in a methadone or fentanyl-dependent patient, and still stack CNS depression.",
+    }),
+  d("guanfacine", "Guanfacine", ["Intuniv", "Tenex"], "Central α2-agonist",
+    [sub("CYP3A4", "major")],
+    ["alpha2-agonist", "cns-depressant", "bradycardic"],
+    "Sedation and bradycardia; 3A4 victim; stacked airway risk with opioids",
+    {
+      aliases: ["intuniv", "tenex"],
+      note: "ADHD α2 agonist. Strong 3A4 inhibitors raise levels. Same naloxone-will-not-reverse family as clonidine and xylazine.",
+    }),
+  d("primidone", "Primidone", ["Mysoline"], "Barbiturate anticonvulsant (prodrug)",
+    [sub("CYP2C19", "major", "activation"), ind("CYP3A4", "strong"), ind("CYP2C9", "strong"), ind("CYP2C19", "moderate"), ind("P-gp", "moderate")],
+    ["cns-depressant", "seizure-lowering"],
+    "Loss of victim-drug efficacy (OCPs, DOACs, ketamine); stacked sedation",
+    {
+      aliases: ["mysoline"],
+      note: "Activated to phenobarbital. Pan-CYP induction after days to weeks. Same OCP-failure map as carbamazepine.",
+    }),
+  d("etonitazene", "Etonitazene", [], "Benzimidazole opioid (nitazene)",
+    [sub("CYP3A4", "major")],
+    ["opioid", "cns-depressant"],
+    "High-potency μ-agonist respiratory arrest; 3A4 victim toxicity",
+    { aliases: ["etazene", "nitazene"] }),
+  d("diclazepam", "Diclazepam", [], "Designer benzodiazepine",
+    [sub("CYP3A4", "major")],
+    ["benzo-zdrug", "cns-depressant", "seizure-lowering"],
+    "Long-acting RC benzo; opioid airway stack, delayed withdrawal",
+    {
+      aliases: ["chlorodiazepam"],
+      note: "Metabolizes toward delorazepam / lorazepam / lormetazepam. Long tail. Treat as a 3A4 benzo next to opioids.",
+    }),
+  d("vilazodone", "Vilazodone", ["Viibryd"], "SPAR antidepressant",
+    [sub("CYP3A4", "major")],
+    ["serotonergic", "ssri-snri"],
+    "Serotonin syndrome; 3A4 victim",
+    { aliases: ["viibryd"], note: "SSRI plus 5-HT1A partial agonist. Strong 3A4 inhibitors raise exposure. MAOIs remain contraindicated." }),
+  d("aprepitant", "Aprepitant", ["Emend"], "NK1 antagonist (antiemetic)",
+    [sub("CYP3A4", "major"), inh("CYP3A4", "moderate"), ind("CYP2C9", "weak")],
+    [],
+    "Raised 3A4-victim levels (oral midazolam, ketamine); modest 2C9 induction (warfarin)",
+    {
+      aliases: ["emend", "fosaprepitant"],
+      note: "Moderate 3A4 inhibitor for a few days around a dose, then a weak 2C9 inducer. Check INR after a course next to warfarin.",
+    }),
+  d("famotidine", "Famotidine", ["Pepcid"], "H2 blocker",
+    [],
+    [],
+    "Not a CYP perpetrator — the switch when cimetidine is the problem",
+    {
+      aliases: ["pepcid"],
+      note: "Unlike cimetidine, famotidine does not meaningfully inhibit 1A2/2D6/3A4. Put both on the materia when someone asks 'which H2 is safe next to tizanidine.'",
+    }),
+  d("oxymorphone", "Oxymorphone", ["Opana"], "Opioid analgesic",
+    [],
+    ["opioid", "cns-depressant"],
+    "Respiratory depression, sedation",
+    {
+      aliases: ["opana"],
+      note: "Mostly UGT, not CYP. PD with benzos, alcohol, GHB, and α2-agonists still applies. Alcohol dumps ER oxymorphone.",
+    }),
 ];
 
 export const DRUGS: Drug[] = raw;
 export const DRUG_BY_ID: Record<string, Drug> = Object.fromEntries(raw.map((x) => [x.id, x]));
 
 const PSYCH_CLS =
-  /SSRI|SNRI|MAOI|antipsychotic|antidepressant|Benzodiazepine|Opioid|Gabapentinoid|Mood stabilizer|NMDA|Dissociative|Psychedelic|Entactogen|Stimulant|Cannabinoid|Alcohol|GHB|Z-hypnotic|Anxiolytic|ADHD|NRI|Nicotine|Methylxanthine|Tricyclic|NaSSA|SARI|NDRI|hypnotic|orexin|Melatonin|kratom|GABA|MAT|Wake-promoting|Pineal|Partial opioid|Opioid antagonist|Atypical opioid|aldehyde|NMDA \/ GABA|nicotinic|Anticonvulsant|Central muscle|AChE|α2-agonist|Nitazene|Designer benzodiazepine|Thienodiazepine|Cathinone|Arylcyclohexylamine|GHB prodrug|Alkyl nitrite|Antidiarrheal|Sedating antihistamine|Veterinary|Barbiturate|NNRTI|NBOMe|Salvinorin|Tropane|H2 blocker|Carbamate|oneirogen|pyrovalerone|NRI analgesic/i;
+  /SSRI|SNRI|MAOI|antipsychotic|antidepressant|Benzodiazepine|Opioid|Gabapentinoid|Mood stabilizer|NMDA|Dissociative|Psychedelic|Entactogen|Stimulant|Cannabinoid|Alcohol|GHB|Z-hypnotic|Anxiolytic|ADHD|NRI|Nicotine|Methylxanthine|Tricyclic|NaSSA|SARI|NDRI|hypnotic|orexin|Melatonin|kratom|GABA|MAT|Wake-promoting|Pineal|Partial opioid|Opioid antagonist|Atypical opioid|aldehyde|NMDA \/ GABA|nicotinic|Anticonvulsant|Central muscle|AChE|α2-agonist|Nitazene|Designer benzodiazepine|Thienodiazepine|Cathinone|Arylcyclohexylamine|GHB prodrug|Alkyl nitrite|Antidiarrheal|Sedating antihistamine|Veterinary|Barbiturate|NNRTI|NBOMe|Salvinorin|Tropane|H2 blocker|Carbamate|oneirogen|pyrovalerone|NRI analgesic|IV anesthetic|NK1|SPAR|mixed opioid|7-OH/i;
 
 export function isPsych(drug: Drug): boolean {
   if (PSYCH_CLS.test(drug.cls)) return true;

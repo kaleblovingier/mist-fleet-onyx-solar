@@ -14,7 +14,7 @@ import {
   type PhenotypeMap,
 } from "./types";
 
-type View = "desk" | "atlas" | "plans" | "library" | "foundry";
+type View = "desk" | "atlas" | "plans" | "library" | "foundry" | "rounds";
 
 export interface LoadExtras {
   phenotypes?: Partial<PhenotypeMap>;

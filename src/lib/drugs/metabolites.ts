@@ -249,6 +249,51 @@ export const METABOLITE_TREES: Record<string, MetaboliteTree> = {
       { name: "H3G", via: "UGT2B7", note: "Neuroexcitatory in renal failure", toxic: true },
     ],
   },
+  kratom: {
+    id: "kratom",
+    blurb: "CYP3A4 turns mitragynine into 7-hydroxymitragynine — the hotter μ-agonist. Street 7-OH skips that step.",
+    nodes: [
+      { name: "7-Hydroxymitragynine", via: "CYP3A4", note: "Much hotter μ-agonist than parent", active: true, toxic: true },
+    ],
+  },
+  "seven-oh": {
+    id: "seven-oh",
+    blurb: "The μ-agonist itself. 3A4 still clears it; inhibitors raise the opioid load.",
+    nodes: [
+      { name: "Further oxidation / conjugation", via: "CYP3A4", note: "Parent is already the hot species", active: true },
+    ],
+  },
+  primidone: {
+    id: "primidone",
+    blurb: "Activated to phenobarbital. After 1–2 weeks you have a pan-CYP inducer on board.",
+    nodes: [
+      { name: "Phenobarbital", via: "CYP2C19 · oxidation", note: "The inducing barbiturate", active: true },
+      { name: "PEMA", via: "oxidation", note: "Active anticonvulsant metabolite", active: true },
+    ],
+  },
+  clopidogrel: {
+    id: "clopidogrel",
+    blurb: "Prodrug. CYP2C19 (with 3A4/2B6/1A2) to the thiol. 2C19 PMs and omeprazole blunt antiplatelet effect.",
+    nodes: [
+      { name: "Thiol active metabolite", via: "CYP2C19", note: "Irreversible P2Y12 block", active: true },
+    ],
+  },
+  tamoxifen: {
+    id: "tamoxifen",
+    blurb: "Endoxifen is the workhorse. CYP2D6 PMs and strong 2D6 inhibitors lose activation.",
+    nodes: [
+      { name: "Endoxifen", via: "CYP2D6", note: "Potent anti-estrogen", active: true },
+      { name: "N-desmethyl-tamoxifen", via: "CYP3A4", note: "Then 2D6 to endoxifen" },
+    ],
+  },
+  diclazepam: {
+    id: "diclazepam",
+    blurb: "Long RC benzo. Sequential dealkylation toward delorazepam, lorazepam, and lormetazepam.",
+    nodes: [
+      { name: "Delorazepam", via: "CYP3A4", note: "Long-acting active benzo", active: true },
+      { name: "Lorazepam", via: "further metabolism", note: "Then UGT", active: true },
+    ],
+  },
 };
 
 export function treesFor(ids: string[]): MetaboliteTree[] {
