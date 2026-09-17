@@ -19,13 +19,14 @@ Deck: [gamma.app/docs/c1sxd9i8iyv80eq](https://gamma.app/docs/c1sxd9i8iyv80eq)
 ## Pay / write
 
 - Kaleb Lovingier
+- Card on Stripe (primary)
 - Venmo [@kaleblovingier](https://venmo.com/u/kaleblovingier)
 - Cash App [$kaleblovingier7](https://cash.app/$kaleblovingier7)
 - PayPal kaleblovingier@gmail.com
 - kaleblovingier@gmail.com · 360-707-8923
 - @badbird · @kaleblovingier
 
-Pay $79, write when it clears, redeem the signed key under Pro. There is no fake checkout.
+Pay $79 with card on the desk (Stripe), or Venmo / Cash App / PayPal. A signed key is minted only after payment clears. There is no fake checkout.
 
 ## Who it's for
 
@@ -44,7 +45,7 @@ HMAC-signed keys (`FP-LIFE-…`). Two-drug stays free. Founding lifetime is $79.
 
 ## Map (for the other LLM)
 
-Scholarly apothecary: paper `#efece4`, teal `#2f5d56`, Newsreader + IBM Plex. Auth and database **off**. Persist `firstpass.desk.v7`. Optional `VITE_PAY_URL`, `VITE_PUBLIC_URL`.
+Scholarly apothecary: paper `#efece4`, teal `#2f5d56`, Newsreader + IBM Plex. Auth and database **off**. Persist `firstpass.desk.v7`. Optional `VITE_PAY_URL`, `VITE_PUBLIC_URL`. Stripe: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (server only — never a `.env` in the repo).
 
 | Path | What |
 | --- | --- |
@@ -55,6 +56,7 @@ Scholarly apothecary: paper `#efece4`, teal `#2f5d56`, Newsreader + IBM Plex. Au
 | `src/lib/drugs/rounds.ts` | Teaching cases |
 | `src/lib/drugs/samples.ts` | Sample regimens |
 | `src/lib/billing/commerce.ts` | Pay rails, DMs, launch posts, invoices |
+| `src/lib/billing/stripe.server.ts` | Stripe Checkout session + paid-session key mint |
 | `src/lib/billing/hunts.ts` | WA/PNW buyer directory (public orgs, websites) |
 | `src/components/desk/` | UI |
 | `docs/index.html` | Public pitch page (GitHub Pages) |

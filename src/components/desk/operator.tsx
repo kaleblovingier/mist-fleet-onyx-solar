@@ -21,7 +21,8 @@ export function DeskFooter() {
         </div>
         <p className="max-w-sm text-[11px] leading-relaxed text-subtle">
           Educational CYP450 / PD map. Not a clinician and not a charting system. Founding license
-          is $79 once — Venmo, Cash App, or PayPal, then redeem the key on Pro.
+          is $79 once — card on Stripe, or Venmo / Cash App / PayPal. A signed key is minted only
+          after payment clears.
         </p>
       </div>
     </footer>

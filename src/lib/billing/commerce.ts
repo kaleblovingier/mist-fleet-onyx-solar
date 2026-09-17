@@ -84,7 +84,7 @@ export const BUYERS = [
 ] as const;
 
 export function payClose(price = COMMERCE.founding) {
-  return `Pay $${price} — Venmo @${OPERATOR.venmo}, Cash App $${OPERATOR.cashApp}, or PayPal ${OPERATOR.email}. I send a signed key when it clears.`;
+  return `Pay $${price} with card on the desk, or Venmo @${OPERATOR.venmo}, Cash App $${OPERATOR.cashApp}, or PayPal ${OPERATOR.email}. Stripe mints a signed key when the charge clears.`;
 }
 
 export function salesDm(price = COMMERCE.founding) {
@@ -128,7 +128,7 @@ export function launchTweet(price = COMMERCE.founding) {
     "Two-drug collisions stay free.",
     `Founding license $${price} once — host factors, enzyme atlas, export.`,
     SITE.url,
-    `Venmo @${OPERATOR.venmo} · Cash App $${OPERATOR.cashApp} · PayPal ${OPERATOR.email}`,
+    "Pay with card on the desk, or Venmo / Cash App / PayPal.",
     "",
     "Educational model. Not a charting system.",
   ].join("\n");

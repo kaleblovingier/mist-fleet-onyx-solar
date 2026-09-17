@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Check, Loader2, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Check, CreditCard, Loader2, X } from "lucide-react";
 import { BUYERS, COMMERCE, OPERATOR, PAY_RAILS, requestLicense } from "@/lib/billing/commerce";
 import { redeemLicense } from "@/lib/billing/license";
+import { startStripeCheckout, stripeStatus } from "@/lib/billing/stripe";
 import { PLANS, priceFor, type Interval } from "@/lib/billing/plans";
 import { useDesk, usePlan } from "@/lib/drugs/store";
 import { cn } from "@/lib/utils";
@@ -174,13 +175,30 @@ export function CheckoutDrawer() {
   const startPreview = useDesk((s) => s.startPreview);
   const setInterval = useDesk((s) => s.setCheckoutInterval);
   const [busy, setBusy] = useState(false);
+  const [cardBusy, setCardBusy] = useState(false);
   const [key, setKey] = useState("");
   const [err, setErr] = useState("");
   const [copied, setCopied] = useState(false);
+  const [stripeMode, setStripeMode] = useState<"off" | "test" | "live" | null>(null);
+  useEffect(() => {
+    if (!checkout.open) return;
+    let live = true;
+    void stripeStatus()
+      .then((s) => {
+        if (live) setStripeMode(s.mode);
+      })
+      .catch(() => {
+        if (live) setStripeMode("off");
+      });
+    return () => {
+      live = false;
+    };
+  }, [checkout.open]);
   if (!checkout.open) return null;
   const life = checkout.interval === "life" || checkout.plan === "lab";
   const amount = priceFor(checkout.plan === "free" ? "pro" : checkout.plan, checkout.interval);
   const name = checkout.interval === "life" ? "Founding" : checkout.plan === "lab" ? "Lab" : "Pro";
+  const cardLive = stripeMode === "live" || stripeMode === "test";
 
   async function redeem() {
     setBusy(true);
@@ -196,6 +214,28 @@ export function CheckoutDrawer() {
       setErr("Could not reach the license desk.");
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function payCard() {
+    setCardBusy(true);
+    setErr("");
+    try {
+      const res = await startStripeCheckout({
+        data: {
+          plan: checkout.plan === "lab" ? "lab" : "pro",
+          interval: checkout.interval,
+        },
+      });
+      if (!res.ok) {
+        setErr(res.reason);
+        return;
+      }
+      window.location.assign(res.url);
+    } catch {
+      setErr("Could not open Stripe.");
+    } finally {
+      setCardBusy(false);
     }
   }
 
@@ -235,9 +275,8 @@ export function CheckoutDrawer() {
         {checkout.reason ? <p className="mt-3 text-sm leading-relaxed text-muted">{checkout.reason}</p> : null}
 
         <p className="mt-4 text-sm leading-relaxed text-muted">
-          Licenses are signed keys. After payment you receive{" "}
-          <span className="font-mono text-fg">FP-LIFE-…</span> and paste it here. Preview is free for
-          a week.
+          Pay with card on Stripe. A signed key is minted only after Stripe says paid — there is no
+          fake checkout. Venmo, Cash App, and PayPal still work if you would rather write.
         </p>
 
         <div className="mt-4 grid grid-cols-3 gap-1">
@@ -260,15 +299,26 @@ export function CheckoutDrawer() {
           ))}
         </div>
 
-        {COMMERCE.payUrl ? (
-          <Button className="mt-5 w-full" asChild>
-            <a href={COMMERCE.payUrl} target="_blank" rel="noreferrer">
-              Pay ${amount} on Venmo
-            </a>
-          </Button>
+        <Button className="mt-5 w-full" onClick={() => void payCard()} disabled={cardBusy}>
+          {cardBusy ? <Loader2 className="size-4 animate-spin" /> : <CreditCard className="size-4" />}
+          Pay ${amount} with card
+        </Button>
+        {stripeMode === "test" ? (
+          <p className="mt-2 text-xs text-warn">Stripe is in test mode. No live charge.</p>
         ) : null}
-        <div className="mt-2 grid grid-cols-2 gap-2">
-          {PAY_RAILS.filter((r) => r.id !== "venmo").map((rail) => (
+        {stripeMode === "off" ? (
+          <p className="mt-2 text-xs text-muted">
+            Card is not live on this desk yet. Venmo, Cash App, or PayPal still close a sale — then
+            redeem the key below.
+          </p>
+        ) : cardLive ? (
+          <p className="mt-2 text-xs text-ok">
+            Stripe mints a signed key only after the charge clears. You land back on this desk.
+          </p>
+        ) : null}
+
+        <div className="mt-3 grid grid-cols-3 gap-2">
+          {PAY_RAILS.map((rail) => (
             <Button key={rail.id} variant="secondary" className="w-full" asChild>
               <a href={rail.href} target="_blank" rel="noreferrer">
                 {rail.label}
@@ -278,8 +328,8 @@ export function CheckoutDrawer() {
         </div>
         <p className="mt-3 rounded-md bg-bg-sunken px-3 py-3 text-sm leading-relaxed text-muted">
           {life
-            ? `Founding is $${COMMERCE.founding} once. Pay ${OPERATOR.payLine}, then paste the key ${OPERATOR.name} sends.`
-            : `Pay $${amount} via ${OPERATOR.payLine}, then redeem the key you are sent.`}{" "}
+            ? `Founding is $${COMMERCE.founding} once. Card is the default. ${OPERATOR.payLine} if you would rather write.`
+            : `Pay $${amount} with card, or ${OPERATOR.payLine}.`}{" "}
           {OPERATOR.email} · {OPERATOR.phone}
           <span className="mt-1 block text-xs">{OPERATOR.social.join(" · ")}</span>
         </p>

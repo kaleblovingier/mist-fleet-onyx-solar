@@ -32,6 +32,18 @@ export function mintKey(plan: IssuedPlan): string {
   return `FP-${tag}-${body}-${sig}`;
 }
 
+/** Deterministic key for a paid Stripe session — claiming twice yields the same string. */
+export function mintKeyFromPaid(plan: IssuedPlan, sessionId: string): string {
+  const body = createHmac("sha256", PEPPER)
+    .update(`stripe:${sessionId.trim()}`)
+    .digest("hex")
+    .slice(0, 8)
+    .toUpperCase();
+  const tag = plan.toUpperCase();
+  const sig = hmac(`${tag}:${body}`);
+  return `FP-${tag}-${body}-${sig}`;
+}
+
 export function verifyKey(raw: string): {
   ok: boolean;
   plan: "pro" | "lab";

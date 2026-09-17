@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { HuntDesk } from "./hunt";
 import { LaunchDesk } from "./launch";
 import { Plate } from "./plate";
+import { stripeStatus } from "@/lib/billing/stripe";
 
 type Issued = { key: string; plan: string; at: string; soldTo: string };
 
@@ -262,11 +263,12 @@ function CloseDesk({
 
       <section className="rounded-xl bg-surface p-5 shadow-[var(--shadow-border)]">
         <h2 className="font-serif text-xl tracking-tight text-fg">How a sale closes</h2>
+        <StripeLiveCard />
         <ol className="mt-4 grid gap-3 sm:grid-cols-3">
           {[
             ["1. Pitch", "Send the buyer DM. Founding is $79 once — cheaper to say yes than $12/mo."],
-            ["2. Collect", `${OPERATOR.payLine}. Email or text if they need a receipt.`],
-            ["3. Fulfill", "Mint LIFE. Copy fulfillment. They redeem under Pro."],
+            ["2. Collect", `Card on the desk, or ${OPERATOR.payLine}. Email or text if they need a receipt.`],
+            ["3. Fulfill", "Stripe mints the key after the charge. For Venmo, mint LIFE and copy fulfillment."],
           ].map(([t, d]) => (
             <li key={t} className="rounded-md bg-bg-sunken px-3 py-3">
               <p className="font-mono text-[11px] uppercase tracking-wide text-accent">{t}</p>
@@ -399,5 +401,40 @@ function CloseDesk({
         </section>
       ) : null}
     </>
+  );
+}
+
+function StripeLiveCard() {
+  const [mode, setMode] = useState<"off" | "test" | "live" | null>(null);
+  useEffect(() => {
+    let live = true;
+    void stripeStatus()
+      .then((s) => {
+        if (live) setMode(s.mode);
+      })
+      .catch(() => {
+        if (live) setMode("off");
+      });
+    return () => {
+      live = false;
+    };
+  }, []);
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  return (
+    <p className="mt-3 text-sm leading-relaxed text-muted">
+      {mode === "live"
+        ? "Stripe card checkout is live. Paid sessions mint a signed key on return."
+        : mode === "test"
+          ? "Stripe is in test mode. Use a test card — no live charge."
+          : mode === "off"
+            ? "Stripe is not live. Set STRIPE_SECRET_KEY on the deploy (and STRIPE_WEBHOOK_SECRET for the webhook). Venmo still closes a sale."
+            : "Checking Stripe…"}
+      {origin ? (
+        <>
+          {" "}
+          Webhook: <span className="font-mono text-xs text-fg">{origin}/api/stripe/webhook</span>
+        </>
+      ) : null}
+    </p>
   );
 }

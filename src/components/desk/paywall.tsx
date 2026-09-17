@@ -31,9 +31,7 @@ export function Paywall({
             7-day preview
           </Button>
         </div>
-        <p className="text-[11px] text-muted">
-          {PAY_RAILS.map((r) => `${r.label} ${r.handle}`).join(" · ")}
-        </p>
+        <p className="text-[11px] text-muted">Card on Stripe · {PAY_RAILS.map((r) => `${r.label} ${r.handle}`).join(" · ")}</p>
       </div>
     </div>
   );

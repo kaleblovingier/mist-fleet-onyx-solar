@@ -43,6 +43,7 @@ import { CollisionMap } from "./constellation";
 import { Formulary } from "./library";
 import { WashoutCard } from "./washout";
 import { PkExplorer } from "./pk";
+import { StripeReturn } from "./stripe-return";
 
 export function DeskApp() {
   const view = useDesk((s) => s.view);
@@ -111,6 +112,7 @@ export function DeskApp() {
 
   return (
     <div className="min-h-dvh bg-bg text-fg">
+      <StripeReturn ready={hydrated} />
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-center justify-between gap-3">
@@ -175,7 +177,13 @@ export function DeskApp() {
         <div className="border-b border-border bg-ok-soft">
           <div className="mx-auto flex max-w-6xl items-start justify-between gap-3 px-4 py-3 sm:items-center sm:px-6">
             <p className="text-sm leading-relaxed text-ok">
-              Founding license is live on this desk. Host factors, atlas, and export are open.
+              License is live on this desk. Host factors, atlas, and export are open.
+              {license ? (
+                <>
+                  {" "}
+                  Key <span className="font-mono">{license}</span>
+                </>
+              ) : null}
             </p>
             <button type="button" className="shrink-0 text-sm text-ok underline" onClick={dismissActivated}>
               Dismiss
