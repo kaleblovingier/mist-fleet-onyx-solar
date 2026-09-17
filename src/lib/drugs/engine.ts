@@ -268,6 +268,19 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
       }),
     );
   }
+  if (aOp && bOp) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-opioid-stack",
+        severity: "major",
+        effect: "stacked μ-agonist load",
+        mechanism: "opioid × opioid",
+        clinical:
+          "Two μ-agonists are one airway, not two prescriptions. Street 'perc 30s' stamped as oxycodone are often fentanyl or a nitazene on top of whatever the buyer thought they took. Naloxone still reverses the opioid; it does not reverse xylazine.",
+        tags: ["cns", "opioid", "street"],
+      }),
+    );
+  }
   if ((has(a, "alpha2-agonist") && bOp) || (has(b, "alpha2-agonist") && aOp)) {
     out.push(
       pdPair(a, b, {
@@ -298,6 +311,7 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
     );
   } else if (
     !((has(a, "alpha2-agonist") && bOp) || (has(b, "alpha2-agonist") && aOp)) &&
+    !(aOp && bOp) &&
     ((aOp && bCns) || (bOp && aCns) || (aCns && bCns && a.id !== b.id))
   ) {
     const gabapentinoid =
@@ -627,8 +641,22 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         effect: "cocaethylene cardiotoxicity",
         mechanism: "cocaine × ethanol transesterification",
         clinical:
-          "Ethanol plus cocaine forms cocaethylene, a longer-lived metabolite with more arrhythmia, seizure, and hepatic risk than cocaine alone.",
-        tags: ["cardiac", "alcohol"],
+          "Ethanol plus cocaine forms cocaethylene, a longer-lived metabolite with more arrhythmia, seizure, and hepatic risk than cocaine alone. The mixer is not a come-down — it stretches the cardiotoxic species.",
+        tags: ["cardiac", "alcohol", "street"],
+      }),
+    );
+  }
+
+  if ((has(a, "stimulant") && bOp) || (has(b, "stimulant") && aOp)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-speedball",
+        severity: "major",
+        effect: "masked respiratory depression / arrhythmia",
+        mechanism: "stimulant × opioid (speedball / goofball)",
+        clinical:
+          "Cocaine or methamphetamine plus an opioid is a speedball (cocaine) or goofball (meth). The stimulant keeps the person looking awake while the opioid still stops them breathing — apnea often lands when the stimulant wears off. Arrhythmia and pressor load sit on top. This is not a recreational pairing map.",
+        tags: ["cns", "stimulant", "street"],
       }),
     );
   }
@@ -934,6 +962,25 @@ function multiDrugFindings(drugs: Drug[]): Finding[] {
       mechanism: "multi-drug CNS depression",
       clinical: `${names(cns.map((d) => d.id)).join(", ")} all depress the CNS. Three or more is a high-risk combination, especially with an opioid.`,
       tags: ["cns", "stack"],
+    });
+  }
+
+  const stim = drugs.filter((d) => has(d, "stimulant"));
+  const op = drugs.filter((d) => has(d, "opioid"));
+  const a2 = drugs.filter((d) => has(d, "alpha2-agonist"));
+  if (stim.length && op.length && a2.length) {
+    const mix = [...new Map([...stim, ...op, ...a2].map((d) => [d.id, d])).values()];
+    out.push({
+      id: "grp-speedball-tranq-" + mix.map((d) => d.id).sort().join("-"),
+      severity: "major",
+      kind: "pd",
+      drugIds: mix.map((d) => d.id),
+      headline: "Speedball on a tranq supply",
+      enzymes: [],
+      effect: "masked apnea plus α2 that naloxone will not reverse",
+      mechanism: "stimulant × opioid × α2-agonist",
+      clinical: `${names(mix.map((d) => d.id)).join(", ")} — cocaine or meth on a fentanyl/xylazine fold. The stimulant wears off first; the μ and α2 keep the airway down. Extra naloxone will not wake an α2.`,
+      tags: ["cns", "stimulant", "alpha2", "street", "stack"],
     });
   }
 

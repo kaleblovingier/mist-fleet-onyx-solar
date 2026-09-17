@@ -81,6 +81,7 @@ export const METABOLITE_TREES: Record<string, MetaboliteTree> = {
     blurb: "Alcohol hijacks hydrolysis. Cocaethylene is longer-lived and more cardiotoxic than parent cocaine.",
     nodes: [
       { name: "Benzoylecgonine", via: "hCE1", note: "Inactive urinary metabolite" },
+      { name: "Norcocaine", via: "CYP3A4", note: "Minor hepatotoxic species", toxic: true },
       { name: "Cocaethylene", via: "hCE1 + ethanol", note: "Longer t½, more cardiotoxic", active: true, toxic: true },
     ],
   },
@@ -247,6 +248,29 @@ export const METABOLITE_TREES: Record<string, MetaboliteTree> = {
     blurb: "UGT2B7 to hydromorphone-3-glucuronide. Not a CYP victim; still an opioid for PD.",
     nodes: [
       { name: "H3G", via: "UGT2B7", note: "Neuroexcitatory in renal failure", toxic: true },
+    ],
+  },
+  oxycodone: {
+    id: "oxycodone",
+    blurb: "3A4 is the main shunt. 2D6 makes oxymorphone — the hotter μ-agonist. Percocet adds APAP on a separate 2E1 map.",
+    nodes: [
+      { name: "Noroxycodone", via: "CYP3A4", note: "Weakly active shunt" },
+      { name: "Oxymorphone", via: "CYP2D6", note: "Hotter μ-agonist", active: true },
+    ],
+  },
+  heroin: {
+    id: "heroin",
+    blurb: "Minutes to 6-MAM, then morphine. The CYP map is morphine's, not diacetylmorphine's.",
+    nodes: [
+      { name: "6-Monoacetylmorphine", via: "plasma esterases", note: "Diagnostic of heroin; still a μ-agonist", active: true },
+      { name: "Morphine", via: "esterases", note: "The durable opioid", active: true, toxic: true },
+    ],
+  },
+  "dirty-30": {
+    id: "dirty-30",
+    blurb: "Modeled as illicit fentanyl, not oxycodone. Norfentanyl is the inactive marker; the μ-agonist is parent.",
+    nodes: [
+      { name: "Norfentanyl", via: "CYP3A4", note: "Inactive; the parent is the opioid" },
     ],
   },
   kratom: {

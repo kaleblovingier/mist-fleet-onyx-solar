@@ -289,9 +289,13 @@ const raw: Drug[] = [
     [sub("CYP2D6", "major", "activation"), sub("CYP3A4", "major")],
     ["opioid", "cns-depressant", "serotonergic", "seizure-lowering"],
     "Seizures, serotonin syndrome, respiratory depression"),
-  d("oxycodone", "Oxycodone", ["OxyContin", "Percocet"], "Opioid analgesic",
+  d("oxycodone", "Oxycodone", ["OxyContin", "Percocet", "Roxicodone", "Endocet"], "Opioid analgesic",
     [sub("CYP3A4", "major"), sub("CYP2D6", "minor")],
-    ["opioid", "cns-depressant"], "Respiratory depression, sedation"),
+    ["opioid", "cns-depressant"], "Respiratory depression, sedation",
+    {
+      aliases: ["percs", "perc", "perc 30", "roxi", "oxy"],
+      note: "Percocet is oxycodone plus acetaminophen — put APAP on the desk for the 2E1/alcohol story. Street 'perc 30s' stamped M30 are often pressed fentanyl, not this row. Search dirty 30.",
+    }),
   d("hydrocodone", "Hydrocodone", ["Norco", "Vicodin"], "Opioid analgesic",
     [sub("CYP3A4", "major"), sub("CYP2D6", "minor", "activation")],
     ["opioid", "cns-depressant"], "Respiratory depression, sedation"),
@@ -503,12 +507,23 @@ const raw: Drug[] = [
     [sub("CYP2D6", "major")],
     ["stimulant", "seizure-lowering"],
     "Hypertensive crisis, hyperthermia, cardiotoxicity",
-    { aliases: ["desoxyn"] }),
+    { aliases: ["desoxyn", "meth", "crystal", "ice", "shard", "crystal meth"] }),
   d("cocaine", "Cocaine", [], "Local anesthetic / stimulant",
     [sub("CYP3A4", "minor")],
     ["stimulant", "qt-possible", "seizure-lowering", "hepatotoxic"],
     "Arrhythmia, seizure, hyperthermia, cocaethylene with ethanol",
-    { note: "Mostly CES1 hydrolysis. CYP3A4 makes norcocaine. Ethanol forms cocaethylene — longer-lived and more cardiotoxic." }),
+    {
+      aliases: ["crack", "coke", "blow", "snow", "powder"],
+      note: "Mostly CES1 hydrolysis. CYP3A4 makes norcocaine. Ethanol forms cocaethylene — longer-lived and more cardiotoxic. Smoked crack skips first-pass; the PD map (speedball, MAOI, QT) does not. Pair with an opioid for the speedball finding.",
+    }),
+  d("heroin", "Heroin", [], "Diacetylmorphine",
+    [sub("P-gp", "minor")],
+    ["opioid", "cns-depressant"],
+    "Respiratory depression, pulmonary edema",
+    {
+      aliases: ["diamorphine", "dope", "smack", "tar", "china white", "brown"],
+      note: "Rapidly deacetylated to 6-MAM then morphine. Not a CYP victim. Speedball with cocaine is PD — the stimulant masks apnea. Same μ map as morphine once it converts.",
+    }),
   d("modafinil", "Modafinil", ["Provigil"], "Wake-promoting agent",
     [sub("CYP3A4", "major"), inh("CYP2C19", "moderate"), ind("CYP3A4", "moderate")],
     ["stimulant"],
@@ -1346,13 +1361,34 @@ const raw: Drug[] = [
       aliases: ["opana"],
       note: "Mostly UGT, not CYP. PD with benzos, alcohol, GHB, and α2-agonists still applies. Alcohol dumps ER oxymorphone.",
     }),
+  d("dirty-30", "Dirty 30 (pressed M30)", [], "Street pressed opioid",
+    [sub("CYP3A4", "sensitive")],
+    ["opioid", "cns-depressant"],
+    "Respiratory arrest; contents are not oxycodone",
+    {
+      aliases: [
+        "dirty 30",
+        "dirty 30s",
+        "dirty thirty",
+        "dirty thirties",
+        "pressed 30",
+        "pressed 30s",
+        "blues",
+        "m30",
+        "m 30",
+        "fake perc 30",
+        "pressed perc",
+        "pressed oxy",
+      ],
+      note: "Street tablets stamped M30 are typically illicit fentanyl ± xylazine or a nitazene, not pharmaceutical oxycodone. This row is the tablet as sold. Pair xylazine for the α2 stack naloxone will not reverse. Percocet / percs is the real oxycodone + APAP combo.",
+    }),
 ];
 
 export const DRUGS: Drug[] = raw;
 export const DRUG_BY_ID: Record<string, Drug> = Object.fromEntries(raw.map((x) => [x.id, x]));
 
 const PSYCH_CLS =
-  /SSRI|SNRI|MAOI|antipsychotic|antidepressant|Benzodiazepine|Opioid|Gabapentinoid|Mood stabilizer|NMDA|Dissociative|Psychedelic|Entactogen|Stimulant|Cannabinoid|Alcohol|GHB|Z-hypnotic|Anxiolytic|ADHD|NRI|Nicotine|Methylxanthine|Tricyclic|NaSSA|SARI|NDRI|hypnotic|orexin|Melatonin|kratom|GABA|MAT|Wake-promoting|Pineal|Partial opioid|Opioid antagonist|Atypical opioid|aldehyde|NMDA \/ GABA|nicotinic|Anticonvulsant|Central muscle|AChE|α2-agonist|Nitazene|Designer benzodiazepine|Thienodiazepine|Cathinone|Arylcyclohexylamine|GHB prodrug|Alkyl nitrite|Antidiarrheal|Sedating antihistamine|Veterinary|Barbiturate|NNRTI|NBOMe|Salvinorin|Tropane|H2 blocker|Carbamate|oneirogen|pyrovalerone|NRI analgesic|IV anesthetic|NK1|SPAR|mixed opioid|7-OH/i;
+  /SSRI|SNRI|MAOI|antipsychotic|antidepressant|Benzodiazepine|Opioid|Gabapentinoid|Mood stabilizer|NMDA|Dissociative|Psychedelic|Entactogen|Stimulant|Cannabinoid|Alcohol|GHB|Z-hypnotic|Anxiolytic|ADHD|NRI|Nicotine|Methylxanthine|Tricyclic|NaSSA|SARI|NDRI|hypnotic|orexin|Melatonin|kratom|GABA|MAT|Wake-promoting|Pineal|Partial opioid|Opioid antagonist|Atypical opioid|aldehyde|NMDA \/ GABA|nicotinic|Anticonvulsant|Central muscle|AChE|α2-agonist|Nitazene|Designer benzodiazepine|Thienodiazepine|Cathinone|Arylcyclohexylamine|GHB prodrug|Alkyl nitrite|Antidiarrheal|Sedating antihistamine|Veterinary|Barbiturate|NNRTI|NBOMe|Salvinorin|Tropane|H2 blocker|Carbamate|oneirogen|pyrovalerone|NRI analgesic|IV anesthetic|NK1|SPAR|mixed opioid|7-OH|Diacetylmorphine|Street pressed|Local anesthetic/i;
 
 export function isPsych(drug: Drug): boolean {
   if (PSYCH_CLS.test(drug.cls)) return true;
@@ -1422,7 +1458,7 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
     return DRUGS.filter(
       (d) =>
         !excluded.has(d.id) &&
-        /nitazene|Designer|Cathinone|Arylcyclohexylamine|NBOMe|oneirogen|pyrovalerone|xylazine|kratom|tianeptine|GHB prodrug|popper|ibogaine|2C-|MXE|FDCK/i.test(
+        /nitazene|Designer|Cathinone|Arylcyclohexylamine|NBOMe|oneirogen|pyrovalerone|xylazine|kratom|tianeptine|GHB prodrug|popper|ibogaine|2C-|MXE|FDCK|cocaine|heroin|Dirty|pressed opioid|Local anesthetic|Diacetylmorphine/i.test(
           d.cls + d.name,
         ),
     ).slice(0, 16);

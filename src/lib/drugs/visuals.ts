@@ -127,6 +127,10 @@ const DRUG_PLATE: Record<string, string> = {
   oxymorphone: PLATES.poppy,
   "seven-oh": PLATES.poppy,
   etonitazene: PLATES.poppy,
+  heroin: PLATES.poppy,
+  "dirty-30": PLATES.poppy,
+  cocaine: PLATES.mdma,
+  methamphetamine: PLATES.mdma,
   propofol: PLATES.alcohol,
   diclazepam: PLATES.alcohol,
   primidone: PLATES.alcohol,
@@ -169,6 +173,6 @@ export const CLASS_TILES: { id: SampleLane; label: string; hint: string; plate: 
   { id: "mat", label: "Opioid / MAT", hint: "Fentanyl, naltrexone", plate: PLATES.poppy },
   { id: "food", label: "Food / herb", hint: "Grapefruit, tyramine", plate: PLATES.grapefruit },
   { id: "smoke", label: "Smoke / 1A2", hint: "Clozapine, PAHs", plate: PLATES.tobacco },
-  { id: "street", label: "Street", hint: "Xylazine, nitazenes", plate: PLATES.poppy },
+  { id: "street", label: "Street", hint: "Cocaine, dirty 30s, xylazine", plate: PLATES.poppy },
   { id: "phenotype", label: "Phenotype", hint: "2D6 / 2C19 / 2C9 / 2B6", plate: PLATES.heme },
 ];

@@ -209,14 +209,16 @@ const ROWS: Record<string, PkRow> = {
     kaH: 2.5,
     F: 0.5,
     fm: { CYP3A4: 0.7 },
-    note: "Norfentanyl via 3A4. Strong inhibitors raise parent and the airway risk.",
+    gut3A4: 0.35,
+    note: "Norfentanyl via 3A4. Strong inhibitors raise parent and the airway risk. Street fentanyl is the usual contents of a dirty 30.",
   },
   oxycodone: {
     tHalfH: 4,
     kaH: 1.6,
     F: 0.6,
     fm: { CYP3A4: 0.55, CYP2D6: 0.2 },
-    note: "3A4 is the main clearance. 2D6 makes oxymorphone — a smaller piece.",
+    activation: { enzyme: "CYP2D6", name: "Oxymorphone" },
+    note: "3A4 is the main clearance. 2D6 makes oxymorphone. Percocet adds APAP — that is the 2E1/alcohol row, not this curve.",
   },
   loperamide: {
     tHalfH: 11,
@@ -484,6 +486,22 @@ const ROWS: Record<string, PkRow> = {
     F: 0.6,
     fm: { CYP2D6: 0.4, CYP3A4: 0.3 },
     note: "2D6/3A4. PMs and strong inhibitors raise QT-relevant exposure.",
+  },
+  cocaine: {
+    tHalfH: 0.8,
+    kaH: 2.2,
+    F: 0.3,
+    fm: { CYP3A4: 0.15 },
+    gut3A4: 0.1,
+    note: "Mostly CES1. 3A4 makes norcocaine. Cocaethylene with ethanol is PD, not this curve. Smoked crack is closer to IV.",
+  },
+  "dirty-30": {
+    tHalfH: 3.5,
+    kaH: 1.4,
+    F: 0.3,
+    fm: { CYP3A4: 0.9 },
+    gut3A4: 0.35,
+    note: "Modeled as illicit fentanyl, not oxycodone. 3A4 inhibitors raise the μ load. Xylazine is PD, not this curve.",
   },
 };
 

@@ -787,6 +787,11 @@ function HowCard() {
           drops potassium. Fat meals raise oral THC/CBD. Salt and urine pH move lithium and
           amphetamine.
         </li>
+        <li>
+          <span className="text-fg">Street.</span> Cocaine plus ethanol is cocaethylene. Stimulant
+          plus opioid is a speedball — the stimulant masks apnea. Dirty 30s are pressed fentanyl ±
+          xylazine, not oxycodone; naloxone will not reverse the α2. Percocet is oxy + APAP.
+        </li>
       </ul>
     </div>
   );
