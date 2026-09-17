@@ -792,6 +792,12 @@ function HowCard() {
           plus opioid is a speedball — the stimulant masks apnea. Dirty 30s are pressed fentanyl ±
           xylazine, not oxycodone; naloxone will not reverse the α2. Percocet is oxy + APAP.
         </li>
+        <li>
+          <span className="text-fg">MAT.</span> Buprenorphine on a fentanyl load is precipitated
+          withdrawal, not stacked milligrams. Methadone lives on 3A4/2B6 — inducers look like a
+          stolen dose; other QT drugs and benzos are the OTP traps. Gabapentinoids are not free
+          extras on an opioid airway. Lofexidine is α2 — naloxone will not reverse it.
+        </li>
       </ul>
     </div>
   );

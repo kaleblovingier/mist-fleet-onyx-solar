@@ -99,6 +99,7 @@ export type PdFlag =
   | "maoi"
   | "cns-depressant"
   | "opioid"
+  | "partial-opioid"
   | "benzo-zdrug"
   | "qt-known"
   | "qt-possible"

@@ -255,6 +255,13 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
   const bBz = has(b, "benzo-zdrug");
   const aCns = has(a, "cns-depressant");
   const bCns = has(b, "cns-depressant");
+  const aPartial = has(a, "partial-opioid");
+  const bPartial = has(b, "partial-opioid");
+  const aAnt = has(a, "opioid-antagonist");
+  const bAnt = has(b, "opioid-antagonist");
+  const gabaA = a.id === "gabapentin" || a.id === "pregabalin";
+  const gabaB = b.id === "gabapentin" || b.id === "pregabalin";
+  const gabaOp = (gabaA && bOp) || (gabaB && aOp);
   if ((aOp && bBz) || (bOp && aBz)) {
     out.push(
       pdPair(a, b, {
@@ -263,12 +270,27 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         effect: "respiratory depression",
         mechanism: "opioid × benzodiazepine / Z-drug",
         clinical:
-          "FDA boxed warning: opioids plus benzodiazepines (or Z-drugs) cause profound sedation, respiratory depression, coma, and death. Avoid unless no alternative exists; if combined, use the lowest doses and monitor.",
-        tags: ["cns", "respiratory"],
+          "FDA boxed warning: opioids plus benzodiazepines (or Z-drugs) cause profound sedation, respiratory depression, coma, and death. Methadone and buprenorphine desks see this as a street-benzo or a sleep prescription — same airway. Avoid unless no alternative exists; if combined, use the lowest doses and monitor.",
+        tags: ["cns", "respiratory", "mat"],
       }),
     );
   }
-  if (aOp && bOp) {
+  if (
+    (aPartial && bOp && !bPartial && !bAnt) ||
+    (bPartial && aOp && !aPartial && !aAnt)
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-bup-precip",
+        severity: "major",
+        effect: "precipitated withdrawal",
+        mechanism: "partial μ-agonist × full agonist",
+        clinical:
+          "Buprenorphine is a high-affinity partial μ-agonist. On a fentanyl or methadone load it displaces the full agonist and precipitates withdrawal — the classic failed induction, not stacked milligrams. Wait, micro-dose, or use a low-dose start; this desk is not a dosing protocol.",
+        tags: ["opioid", "mat"],
+      }),
+    );
+  } else if (aOp && bOp && !aPartial && !bPartial && !aAnt && !bAnt) {
     out.push(
       pdPair(a, b, {
         suffix: "pd-opioid-stack",
@@ -276,8 +298,21 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         effect: "stacked μ-agonist load",
         mechanism: "opioid × opioid",
         clinical:
-          "Two μ-agonists are one airway, not two prescriptions. Street 'perc 30s' stamped as oxycodone are often fentanyl or a nitazene on top of whatever the buyer thought they took. Naloxone still reverses the opioid; it does not reverse xylazine.",
-        tags: ["cns", "opioid", "street"],
+          "Two μ-agonists are one airway, not two prescriptions. A methadone take-home plus illicit fentanyl is stacked μ load. Street 'perc 30s' stamped as oxycodone are often fentanyl or a nitazene. Naloxone still reverses the opioid; it does not reverse xylazine.",
+        tags: ["cns", "opioid", "street", "mat"],
+      }),
+    );
+  }
+  if (gabaOp) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-gaba-opioid",
+        severity: "major",
+        effect: "respiratory depression",
+        mechanism: "gabapentinoid × opioid",
+        clinical:
+          "Gabapentin and pregabalin add respiratory depression next to methadone or buprenorphine that is easy to miss — they are not 'just nerve pain.' FDA has a warning. This is PD, not CYP. Extra caution with a benzo on the same board.",
+        tags: ["cns", "respiratory", "mat"],
       }),
     );
   }
@@ -312,6 +347,7 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
   } else if (
     !((has(a, "alpha2-agonist") && bOp) || (has(b, "alpha2-agonist") && aOp)) &&
     !(aOp && bOp) &&
+    !gabaOp &&
     ((aOp && bCns) || (bOp && aCns) || (aCns && bCns && a.id !== b.id))
   ) {
     const gabapentinoid =
@@ -672,8 +708,8 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         effect: "precipitated withdrawal / blocked analgesia",
         mechanism: "opioid antagonist × agonist",
         clinical:
-          "Naltrexone or naloxone will displace full and partial agonists from the mu receptor. In a dependent patient that means precipitated withdrawal; in anyone it means lost opioid analgesia.",
-        tags: ["opioid"],
+          "Naltrexone or naloxone will displace full and partial agonists from the mu receptor. IM naltrexone (Vivitrol) still occupies μ for weeks — leftover fentanyl or a 'just this once' agonist is precipitated withdrawal, not a slip that didn't work. In anyone it means lost opioid analgesia.",
+        tags: ["opioid", "mat"],
       }),
     );
   }
@@ -981,6 +1017,24 @@ function multiDrugFindings(drugs: Drug[]): Finding[] {
       mechanism: "stimulant × opioid × α2-agonist",
       clinical: `${names(mix.map((d) => d.id)).join(", ")} — cocaine or meth on a fentanyl/xylazine fold. The stimulant wears off first; the μ and α2 keep the airway down. Extra naloxone will not wake an α2.`,
       tags: ["cns", "stimulant", "alpha2", "street", "stack"],
+    });
+  }
+
+  const bz = drugs.filter((d) => has(d, "benzo-zdrug"));
+  const gabaid = drugs.filter((d) => d.id === "gabapentin" || d.id === "pregabalin");
+  if (op.length && bz.length && gabaid.length) {
+    const mix = [...new Map([...op, ...bz, ...gabaid].map((d) => [d.id, d])).values()];
+    out.push({
+      id: "grp-mat-airway-" + mix.map((d) => d.id).sort().join("-"),
+      severity: "major",
+      kind: "pd",
+      drugIds: mix.map((d) => d.id),
+      headline: "MAT airway triad · opioid + benzo + gabapentinoid",
+      enzymes: [],
+      effect: "sedation / respiratory depression",
+      mechanism: "opioid × benzodiazepine × gabapentinoid",
+      clinical: `${names(mix.map((d) => d.id)).join(", ")} — methadone or buprenorphine plus a benzo plus gabapentin/pregabalin is a three-drug airway. The gabapentinoid is often 'for nerves' and still counts.`,
+      tags: ["cns", "mat", "stack"],
     });
   }
 

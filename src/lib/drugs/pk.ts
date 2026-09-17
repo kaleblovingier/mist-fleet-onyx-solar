@@ -294,6 +294,13 @@ const ROWS: Record<string, PkRow> = {
     fm: { CYP3A4: 0.8 },
     note: "ADHD α2 agonist. Strong 3A4 inhibitors raise sedation and bradycardia.",
   },
+  lofexidine: {
+    tHalfH: 11,
+    kaH: 1.2,
+    F: 0.7,
+    fm: { CYP2D6: 0.55 },
+    note: "Lucemyra. 2D6 victim — paroxetine/fluoxetine raise bradycardia. α2 × opioid is PD, not this curve.",
+  },
   "seven-oh": {
     tHalfH: 3.5,
     kaH: 1.4,
@@ -416,7 +423,7 @@ const ROWS: Record<string, PkRow> = {
     F: 0.3,
     fm: { CYP3A4: 0.7 },
     gut3A4: 0.25,
-    note: "3A4 victim. Strong inhibitors raise parent; inducers (efavirenz, rifampin) precipitate withdrawal.",
+    note: "3A4 victim. Strong inhibitors raise parent; inducers (efavirenz, rifampin) drop it and can look like withdrawal. Precipitated withdrawal with fentanyl is PD, not this curve.",
   },
   tacrolimus: {
     tHalfH: 12,
