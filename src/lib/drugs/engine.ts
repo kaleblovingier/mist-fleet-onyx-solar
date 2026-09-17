@@ -286,7 +286,7 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         effect: "precipitated withdrawal",
         mechanism: "partial μ-agonist × full agonist",
         clinical:
-          "Buprenorphine is a high-affinity partial μ-agonist. On a fentanyl or methadone load it displaces the full agonist and precipitates withdrawal — the classic failed induction, not stacked milligrams. Wait, micro-dose, or use a low-dose start; this desk is not a dosing protocol.",
+          "Buprenorphine is a high-affinity partial μ-agonist. Combined with a full agonist (fentanyl, methadone, 7-OH) you get occupancy conflict: start bup on a full-agonist load and you precipitate withdrawal — the classic failed induction; take a full agonist on stable bup and the high is blocked. This desk is not a dosing protocol.",
         tags: ["opioid", "mat"],
       }),
     );
@@ -324,7 +324,7 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         effect: "sedation not reversed by naloxone",
         mechanism: "α2-agonist × opioid",
         clinical:
-          "Xylazine, medetomidine, and related α2-agonists sedate independently of the mu receptor. Naloxone reverses the opioid but not the α2 airway loss — support ventilation, do not stack extra naloxone expecting a wake-up.",
+          "Xylazine, medetomidine, lofexidine (Lucemyra), and clonidine sedate independently of the mu receptor. Naloxone reverses the opioid but not the α2 airway loss — support ventilation, do not stack extra naloxone expecting a wake-up. On an OTP desk that is Lucemyra or clonidine next to methadone, not only street tranq.",
         tags: ["cns", "alpha2", "street"],
       }),
     );
@@ -691,7 +691,7 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         effect: "masked respiratory depression / arrhythmia",
         mechanism: "stimulant × opioid (speedball / goofball)",
         clinical:
-          "Cocaine or methamphetamine plus an opioid is a speedball (cocaine) or goofball (meth). The stimulant keeps the person looking awake while the opioid still stops them breathing — apnea often lands when the stimulant wears off. Arrhythmia and pressor load sit on top. This is not a recreational pairing map.",
+          "Cocaine or methamphetamine plus an opioid is a speedball (cocaine) or goofball (meth). The stimulant keeps the person looking awake while the opioid still stops them breathing — apnea often lands when the stimulant wears off. A methadone take-home plus cocaine is the same map, with QT on top. This is not a recreational pairing map.",
         tags: ["cns", "stimulant", "street"],
       }),
     );

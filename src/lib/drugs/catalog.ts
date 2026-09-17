@@ -87,13 +87,21 @@ const raw: Drug[] = [
     { aliases: ["bactrim", "cotrimoxazole", "sulfamethoxazole"] }),
   d("isoniazid", "Isoniazid", ["Nydrazid"], "Antimycobacterial",
     [inh("CYP2C19", "moderate"), inh("CYP3A4", "weak"), inh("CYP2D6", "weak"), inh("CYP2E1", "weak")],
-    ["hepatotoxic", "seizure-lowering"], "Hepatitis, neuropathy"),
+    ["hepatotoxic", "seizure-lowering"], "Hepatitis, neuropathy",
+    {
+      aliases: ["inh"],
+      note: "Latent TB is common on OTP boards. Weak 3A4 inhibition can nudge methadone; the louder stories are INH hepatitis next to alcohol, and rifampin (the other TB drug) dumping methadone and HCV DAAs.",
+    }),
   d("ritonavir", "Ritonavir", ["Norvir"], "HIV protease inhibitor / booster",
     [sub("CYP3A4", "major"), inh("CYP3A4", "strong"), inh("CYP2D6", "moderate"), inh("P-gp", "strong"), ind("CYP1A2", "moderate"), ind("CYP2C9", "weak")],
     [], "Victim-drug toxicity via 3A4/P-gp"),
   d("cobicistat", "Cobicistat", ["Tybost"], "PK booster",
     [inh("CYP3A4", "strong"), inh("CYP2D6", "weak"), inh("P-gp", "strong")],
-    [], "Victim-drug toxicity via 3A4"),
+    [], "Victim-drug toxicity via 3A4",
+    {
+      aliases: ["tybost", "pk booster"],
+      note: "The modern ritonavir-like booster in Genvoya, Prezcobix, Evotaz. Strong 3A4/P-gp inhibition raises buprenorphine and many 3A4 victims. Unlike ritonavir it does not induce 1A2/2C9.",
+    }),
 
   // —— Cardiovascular ———————————————————————————————
   d("warfarin", "Warfarin", ["Coumadin", "Jantoven"], "Vitamin K antagonist",
@@ -638,13 +646,13 @@ const raw: Drug[] = [
     [sub("CYP1A2", "sensitive")],
     ["cns-depressant"],
     "Sedation; 1A2 inhibitors raise exposure"),
-  d("buprenorphine", "Buprenorphine", ["Suboxone", "Subutex", "Butrans", "Sublocade", "Zubsolv"], "Partial opioid agonist",
+  d("buprenorphine", "Buprenorphine", ["Suboxone", "Subutex", "Butrans", "Sublocade", "Zubsolv", "Brixadi"], "Partial opioid agonist",
     [sub("CYP3A4", "major"), sub("CYP2C8", "minor")],
     ["opioid", "cns-depressant", "partial-opioid"],
     "Respiratory depression with benzos/alcohol; precipitated withdrawal with full agonists",
     {
-      aliases: ["suboxone", "subutex", "zubsolv", "bunavail", "belbuca", "buprenex"],
-      note: "High-affinity partial μ-agonist. On a fentanyl or methadone load it precipitates withdrawal — the classic failed induction. 3A4 inhibitors (ritonavir, azoles) raise parent. Street benzos and gabapentinoids still hit the airway. Naloxone in Suboxone is poorly absorbed under the tongue; it is not a second opioid on this desk unless injected.",
+      aliases: ["suboxone", "subutex", "zubsolv", "bunavail", "belbuca", "buprenex", "brixadi"],
+      note: "High-affinity partial μ-agonist. On a fentanyl or methadone load it precipitates withdrawal — the classic failed induction. Stable bup then a full agonist (7-OH, fentanyl) blocks the high. 3A4 inhibitors (ritonavir, cobicistat, azoles) raise parent. Street benzos and gabapentinoids still hit the airway. Naloxone in Suboxone is poorly absorbed under the tongue; it is not a second opioid on this desk unless injected.",
     }),
   d("naltrexone", "Naltrexone", ["ReVia", "Vivitrol", "Contrave"], "Opioid antagonist",
     [],
@@ -953,7 +961,10 @@ const raw: Drug[] = [
     [sub("CYP3A4", "major")],
     ["cns-depressant", "anticholinergic", "qt-possible"],
     "Additive sedation and QT with other CNS / QT drugs",
-    { aliases: ["atarax"] }),
+    {
+      aliases: ["atarax", "vistaril"],
+      note: "The OTP 'not a benzo' for anxiety still prolongs QT and sedates. Next to methadone that is a TdP and airway row, not a free extra.",
+    }),
   d("poppers", "Alkyl nitrites (poppers)", [], "Volatile nitrite vasodilator",
     [],
     ["nitrate"],
@@ -1397,6 +1408,14 @@ const raw: Drug[] = [
       ],
       note: "Street tablets stamped M30 are typically illicit fentanyl ± xylazine or a nitazene, not pharmaceutical oxycodone. This row is the tablet as sold. Pair xylazine for the α2 stack naloxone will not reverse. Percocet / percs is the real oxycodone + APAP combo.",
     }),
+  d("epclusa", "Sofosbuvir / velpatasvir", ["Epclusa"], "HCV DAA",
+    [sub("P-gp", "major"), inh("P-gp", "moderate"), sub("CYP3A4", "minor")],
+    ["hepatotoxic"],
+    "Loss of DAA exposure with strong inducers — not a methadone dump",
+    {
+      aliases: ["epclusa", "sofosbuvir", "velpatasvir", "sof/vel"],
+      note: "Pan-genotypic HCV treatment common on MAT desks. Strong inducers (rifampin, carbamazepine, St. John's wort) are labeled contraindicated — the DAA fails. Methadone exposure usually does not dump. Contrast rifampin next to methadone, which does.",
+    }),
 ];
 
 export const DRUGS: Drug[] = raw;
@@ -1478,6 +1497,32 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
         ),
     ).slice(0, 16);
   }
+  if (q === "mat" || q === "otp" || q === "oud" || q === "obots" || q === "obot") {
+    const matIds = new Set([
+      "buprenorphine",
+      "methadone",
+      "naltrexone",
+      "naloxone",
+      "lofexidine",
+      "clonidine",
+      "acamprosate",
+      "disulfiram",
+      "gabapentin",
+      "pregabalin",
+      "xylazine",
+      "epclusa",
+      "seven-oh",
+      "tianeptine",
+      "hydroxyzine",
+      "ondansetron",
+    ]);
+    return DRUGS.filter(
+      (d) =>
+        !excluded.has(d.id) &&
+        (matIds.has(d.id) ||
+          /Partial opioid|Opioid antagonist|HCV DAA|α2-agonist \(opioid/i.test(d.cls)),
+    ).slice(0, 16);
+  }
   const scored: { drug: Drug; score: number }[] = [];
   for (const drug of DRUGS) {
     if (excluded.has(drug.id)) continue;
@@ -1547,7 +1592,7 @@ export function familyOf(drug: Drug): Exclude<FamilyId, "all"> {
   )
     return "psych";
   if (
-    /Macrolide|Azole|Fluoroquinolone|HIV|Rifamycin|NNRTI|antiviral|H2 blocker|PK booster|Oxazolidinone|Sulfonamide|Antimycobacterial/i.test(
+    /Macrolide|Azole|Fluoroquinolone|HIV|Rifamycin|NNRTI|antiviral|H2 blocker|PK booster|Oxazolidinone|Sulfonamide|Antimycobacterial|HCV|DAA/i.test(
       drug.cls,
     )
   )

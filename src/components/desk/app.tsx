@@ -402,12 +402,16 @@ function EmptyState({
         <p className="max-w-xl text-sm leading-relaxed text-muted">
           FirstPass is built around psychoactive CYP450 maps — NMDA dissociatives, 2D6 entactogens,
           psychedelics, stimulants, cannabinoids — then layers food, smoke, serotonin, and metabolizer
-          status. Two-drug collisions stay free, including a concentration-time sketch. Browse the
-          materia, then put a pair on the desk.
+          status. OTP and office-based MAT sit on the same formulary: precipitated withdrawal,
+          methadone QT, leftover agonist after Vivitrol. Two-drug collisions stay free, including a
+          concentration-time sketch. Browse the materia, then put a pair on the desk.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <Button variant="secondary" size="sm" onClick={() => setView("library")}>
             Browse the materia
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => setLane("mat")}>
+            MAT / OTP board
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setView("rounds")}>
             Teaching rounds
@@ -795,8 +799,10 @@ function HowCard() {
         <li>
           <span className="text-fg">MAT.</span> Buprenorphine on a fentanyl load is precipitated
           withdrawal, not stacked milligrams. Methadone lives on 3A4/2B6 — inducers look like a
-          stolen dose; other QT drugs and benzos are the OTP traps. Gabapentinoids are not free
-          extras on an opioid airway. Lofexidine is α2 — naloxone will not reverse it.
+          stolen dose; azoles, Vistaril, and Zofran are the QT traps. Gabapentinoids are not free
+          extras on an opioid airway. Lofexidine is α2 — naloxone will not reverse it. Epclusa
+          next to methadone should stay quiet; rifampin should not. Leftover fentanyl after
+          Vivitrol is occupancy, not a failed shot.
         </li>
       </ul>
     </div>
@@ -807,8 +813,9 @@ function Disclaimer() {
   return (
     <p className="px-1 text-[11px] leading-relaxed text-subtle">
       Educational model of published CYP maps, food effects, and pharmacodynamic patterns, including
-      ketamine, entactogens, psychedelics, and diet. Not a clinician, not a complete database, and
-      not guidance for non-medical use. Always verify with primary references.
+      ketamine, MAT / OTP collisions, entactogens, psychedelics, and diet. Not a clinician, not a
+      complete database, and not guidance for non-medical use. Always verify with primary
+      references.
     </p>
   );
 }

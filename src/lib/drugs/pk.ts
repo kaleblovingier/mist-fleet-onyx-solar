@@ -202,7 +202,7 @@ const ROWS: Record<string, PkRow> = {
     kaH: 0.8,
     F: 0.8,
     fm: { CYP2B6: 0.45, CYP3A4: 0.35 },
-    note: "Inducers (efavirenz, rifampin) precipitate withdrawal. Inhibitors raise QT risk.",
+    note: "Inducers (efavirenz, rifampin, carbamazepine) look like a stolen take-home. Inhibitors (fluconazole, ritonavir) raise QT risk. q24h Rac is large even without a perpetrator.",
   },
   fentanyl: {
     tHalfH: 4,
@@ -501,6 +501,13 @@ const ROWS: Record<string, PkRow> = {
     fm: { CYP3A4: 0.15 },
     gut3A4: 0.1,
     note: "Mostly CES1. 3A4 makes norcocaine. Cocaethylene with ethanol is PD, not this curve. Smoked crack is closer to IV.",
+  },
+  epclusa: {
+    tHalfH: 15,
+    kaH: 1,
+    F: 0.3,
+    fm: { CYP3A4: 0.2, "P-gp": 0.5 },
+    note: "Velpatasvir is the P-gp piece. Rifampin dumps the DAA. Methadone usually does not move.",
   },
   "dirty-30": {
     tHalfH: 3.5,
