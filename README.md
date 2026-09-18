@@ -14,7 +14,7 @@ Deck: [gamma.app/docs/c1sxd9i8iyv80eq](https://gamma.app/docs/c1sxd9i8iyv80eq)
 
 1. **Oral ketamine × grapefruit** — F rises. Half-life does not. Overlay IV: the ghost is untouched.
 2. **DXM in a 2D6 poor metabolizer, q8h** — accumulation Rac ~2.7×. Dextrorphan falls.
-3. **Tacrolimus × grapefruit** — kitchen collision. Bioavailability up, t½ still 12 h (gut 3A4, not hepatic).
+3. **Azathioprine × allopurinol** — xanthine oxidase, not CYP. Pancytopenia. Search `clinic` or `imuran`.
 
 ## Pay / write
 
@@ -33,6 +33,7 @@ Pay $79 with card on the desk (Stripe), or Venmo / Cash App / PayPal. A signed k
 | Buyer | Why they open it |
 | --- | --- |
 | Ketamine / esketamine clinics | Oral vs IV first-pass, benzo airway stacks, 2B6 phenotype |
+| Primary care / IM / transplant | Imuran × Zyloprim, Imdur × Viagra, Flonase × ritonavir, Ozempic × SU |
 | MAT / street-supply desks | Xylazine, nitazenes, designer benzos, naltrexone / loperamide |
 | Pharmacy students | A teaching desk they will actually open. JSON/CSV for the lab book |
 | Harm-reduction and psych NPs | MDMA × SSRI, DXM in 2D6 PMs, grapefruit × oral ketamine |

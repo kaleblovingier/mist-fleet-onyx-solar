@@ -403,7 +403,8 @@ function EmptyState({
           FirstPass is built around psychoactive CYP450 maps — NMDA dissociatives, 2D6 entactogens,
           psychedelics, stimulants, cannabinoids — then layers food, smoke, serotonin, and metabolizer
           status. OTP and office-based MAT sit on the same formulary: precipitated withdrawal,
-          methadone QT, leftover agonist after Vivitrol. Two-drug collisions stay free, including a
+          methadone QT, leftover agonist after Vivitrol. Clinic staples do too: Imuran × Zyloprim,
+          Imdur × Viagra, Flonase × a booster. Two-drug collisions stay free, including a
           concentration-time sketch. Browse the materia, then put a pair on the desk.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -412,6 +413,9 @@ function EmptyState({
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setLane("mat")}>
             MAT / OTP board
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => setLane("clinic")}>
+            Clinic staples
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setView("rounds")}>
             Teaching rounds
@@ -804,6 +808,15 @@ function HowCard() {
           next to methadone should stay quiet; rifampin should not. Leftover fentanyl after
           Vivitrol is occupancy, not a failed shot.
         </li>
+        <li>
+          <span className="text-fg">Clinic.</span> Allopurinol × azathioprine is xanthine oxidase,
+          not CYP — pancytopenia. Nitrates × PDE5 are labeled hypotension. Omeprazole blunts
+          clopidogrel activation (2C19 prodrug); pantoprazole is the quieter switch. Oral
+          budesonide and swallowed fluticasone are gut 3A4 first-pass victims — azoles and
+          ritonavir make a 'local' steroid systemic. Terbinafine is a strong 2D6 inhibitor, not
+          an azole. Ozempic next to a sulfonylurea is hypoglycemia; next to metformin it should
+          stay quieter. Search clinic / primary / ozempic / imuran.
+        </li>
       </ul>
     </div>
   );
@@ -813,9 +826,9 @@ function Disclaimer() {
   return (
     <p className="px-1 text-[11px] leading-relaxed text-subtle">
       Educational model of published CYP maps, food effects, and pharmacodynamic patterns, including
-      ketamine, MAT / OTP collisions, entactogens, psychedelics, and diet. Not a clinician, not a
-      complete database, and not guidance for non-medical use. Always verify with primary
-      references.
+      ketamine, MAT / OTP collisions, clinic staples (gout, nitrates, GLP-1, PPIs), entactogens,
+      psychedelics, and diet. Not a clinician, not a complete database, and not guidance for
+      non-medical use. Always verify with primary references.
     </p>
   );
 }

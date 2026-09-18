@@ -518,6 +518,24 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
     );
   }
 
+  const glp = new Set(["semaglutide", "tirzepatide"]);
+  if (
+    (glp.has(a.id) && (has(b, "insulin-secretagogue") || b.id === "insulin-glargine")) ||
+    (glp.has(b.id) && (has(a, "insulin-secretagogue") || a.id === "insulin-glargine"))
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-glp-secretagogue",
+        severity: "moderate",
+        effect: "stacked hypoglycemia",
+        mechanism: "GLP-1 / GIP agonist × insulin or secretagogue",
+        clinical:
+          "Semaglutide and tirzepatide rarely cause hypoglycemia alone. Next to a sulfonylurea or insulin they do. Metformin on this desk should stay quieter. Not a CYP row.",
+        tags: ["glucose"],
+      }),
+    );
+  }
+
   if (has(a, "anticholinergic") && has(b, "anticholinergic")) {
     out.push(
       pdPair(a, b, {
@@ -596,10 +614,11 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
       b.id === "simvastatin" ||
       a.id === "lovastatin" ||
       b.id === "lovastatin";
+    const gem = a.id === "gemfibrozil" || b.id === "gemfibrozil";
     out.push(
       pdPair(a, b, {
         suffix: "pd-statin-fibrate",
-        severity: simLova ? "contraindicated" : "major",
+        severity: simLova && gem ? "contraindicated" : "major",
         effect: "myopathy / rhabdomyolysis",
         mechanism: "statin × fibrate",
         clinical:
@@ -635,6 +654,22 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         clinical:
           "NSAIDs and trimethoprim–sulfamethoxazole reduce methotrexate clearance and add marrow/mucosal toxicity. This pairing is a classic cause of MTX disaster.",
         tags: ["marrow"],
+      }),
+    );
+  }
+
+  const xoSub = new Set(["azathioprine", "mercaptopurine"]);
+  const xoInh = new Set(["allopurinol", "febuxostat"]);
+  if ((xoSub.has(a.id) && xoInh.has(b.id)) || (xoSub.has(b.id) && xoInh.has(a.id))) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-xo-thiopurine",
+        severity: "contraindicated",
+        effect: "life-threatening myelosuppression",
+        mechanism: "xanthine oxidase × thiopurine",
+        clinical:
+          "Allopurinol and febuxostat block xanthine oxidase, the clearance path for 6-mercaptopurine. Azathioprine/6-MP then behaves like a multiple of the prescribed dose — pancytopenia, not a gout footnote. Labeled contraindicated or a drastic dose-cut; this desk scores it contraindicated. Not a CYP isoform.",
+        tags: ["marrow", "xo"],
       }),
     );
   }
