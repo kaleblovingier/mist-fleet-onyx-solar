@@ -86,7 +86,7 @@ export function DrugSearch() {
             (e.target as HTMLInputElement).blur();
           }
         }}
-        placeholder={full ? "Regimen full · remove a drug to add another" : "Prozac, pgx, stahl…"}
+        placeholder={full ? "Regimen full · remove a drug to add another" : "Berberine, prozac, pgx…"}
         className="h-12 w-full rounded-lg bg-surface-2 pl-10 pr-10 text-sm text-fg shadow-[var(--shadow-border)] placeholder:text-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-60"
         autoComplete="off"
         spellCheck={false}

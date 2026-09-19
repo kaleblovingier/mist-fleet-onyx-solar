@@ -407,8 +407,9 @@ function EmptyState({
           psychedelics, stimulants, cannabinoids — then layers food, smoke, serotonin, and metabolizer
           status. OTP and office-based MAT sit on the same formulary: precipitated withdrawal,
           methadone QT, leftover agonist after Vivitrol. Clinic staples do too: Imuran × Zyloprim,
-          Imdur × Viagra, Flonase × a booster. Two-drug collisions stay free, including a
-          concentration-time sketch. Browse the materia, then put a pair on the desk.
+          Imdur × Viagra, Flonase × a booster. The vitamin-shop shelf is scored the same way —
+          berberine, red yeast rice, SAM-e, nattokinase, charcoal. Two-drug collisions stay free,
+          including a concentration-time sketch. Browse the materia, then put a pair on the desk.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <Button variant="secondary" size="sm" onClick={() => setView("library")}>
@@ -419,6 +420,9 @@ function EmptyState({
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setLane("clinic")}>
             Clinic staples
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => setLane("food")}>
+            Supplement shelf
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setView("rounds")}>
             Teaching rounds
@@ -799,6 +803,13 @@ function HowCard() {
           amphetamine.
         </li>
         <li>
+          <span className="text-fg">Supplement.</span> Red yeast rice is lovastatin. Berberine is a
+          3A4/P-gp bully plus a glucose drop. SAM-e and 5-HTP are serotonergic. Vitamin K dumps INR;
+          nattokinase and fish oil bleed. Calcium/iron chelate Cipro and Synthroid. Charcoal and
+          psyllium bind the morning dose. Niacin plus a statin is muscle. Search supplement /
+          vitamin / otc.
+        </li>
+        <li>
           <span className="text-fg">Street.</span> Cocaine plus ethanol is cocaethylene. Stimulant
           plus opioid is a speedball — the stimulant masks apnea. Dirty 30s are pressed fentanyl ±
           xylazine, not oxycodone; naloxone will not reverse the α2. Percocet is oxy + APAP.
@@ -835,11 +846,12 @@ function Disclaimer() {
   return (
     <p className="px-1 text-[11px] leading-relaxed text-subtle">
       Educational model of published CYP maps, food effects, and pharmacodynamic patterns, including
-      ketamine, MAT / OTP collisions, clinic staples (gout, nitrates, GLP-1, PPIs), entactogens,
-      psychedelics, and diet. DrugBank accessions and CPIC / ClinPGx paraphrases point at those
-      sources; receptor sketches use the Stahl method in original language — not a quotation of
-      Stahl's Essential Psychopharmacology. Not a clinician, not a complete database, and not
-      guidance for non-medical use. Always verify with primary references.
+      ketamine, MAT / OTP collisions, clinic staples (gout, nitrates, GLP-1, PPIs), vitamin-shop
+      extracts (berberine, red yeast, SAM-e, nattokinase), entactogens, psychedelics, and diet.
+      DrugBank accessions and CPIC / ClinPGx paraphrases point at those sources; receptor sketches
+      use the Stahl method in original language — not a quotation of Stahl's Essential
+      Psychopharmacology. Not a clinician, not a complete database, and not guidance for
+      non-medical use. Always verify with primary references.
     </p>
   );
 }

@@ -613,7 +613,9 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
       a.id === "simvastatin" ||
       b.id === "simvastatin" ||
       a.id === "lovastatin" ||
-      b.id === "lovastatin";
+      b.id === "lovastatin" ||
+      a.id === "red-yeast-rice" ||
+      b.id === "red-yeast-rice";
     const gem = a.id === "gemfibrozil" || b.id === "gemfibrozil";
     out.push(
       pdPair(a, b, {
@@ -622,7 +624,7 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         effect: "myopathy / rhabdomyolysis",
         mechanism: "statin × fibrate",
         clinical:
-          "Gemfibrozil with simvastatin or lovastatin is contraindicated. Other statin–fibrate pairs still raise rhabdomyolysis risk; prefer fenofibrate if a fibrate is required.",
+          "Gemfibrozil with simvastatin, lovastatin, or red yeast rice is contraindicated. Other statin–fibrate pairs still raise rhabdomyolysis risk; prefer fenofibrate if a fibrate is required.",
         tags: ["myopathy"],
       }),
     );
@@ -670,6 +672,171 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         clinical:
           "Allopurinol and febuxostat block xanthine oxidase, the clearance path for 6-mercaptopurine. Azathioprine/6-MP then behaves like a multiple of the prescribed dose — pancytopenia, not a gout footnote. Labeled contraindicated or a drastic dose-cut; this desk scores it contraindicated. Not a CYP isoform.",
         tags: ["marrow", "xo"],
+      }),
+    );
+  }
+
+  if (
+    (a.id === "warfarin" && b.id === "vitamin-k") ||
+    (b.id === "warfarin" && a.id === "vitamin-k")
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-vitk-warfarin",
+        severity: "major",
+        effect: "loss of anticoagulation",
+        mechanism: "vitamin K bypass of VKORC1",
+        clinical:
+          "Warfarin blocks vitamin K recycling. A K gummy, MK-7, or a kale-heavy smoothie supplies the cofactor and INR falls — the antidote in a bottle. Not a 2C9 story. Recheck INR after diet or supplement changes.",
+        tags: ["bleeding", "food"],
+      }),
+    );
+  }
+
+  if (
+    (a.id === "warfarin" && (b.id === "glucosamine" || b.id === "coq10")) ||
+    (b.id === "warfarin" && (a.id === "glucosamine" || a.id === "coq10"))
+  ) {
+    const coq = a.id === "coq10" || b.id === "coq10";
+    out.push(
+      pdPair(a, b, {
+        suffix: coq ? "pd-coq-warfarin" : "pd-glucosamine-warfarin",
+        severity: "moderate",
+        effect: coq ? "possible INR drop" : "possible INR rise",
+        mechanism: coq ? "CoQ10 vitamin-K–like structure" : "glucosamine × warfarin (hemostasis)",
+        clinical: coq
+          ? "Coenzyme Q10 resembles vitamin K. INR can fall — quieter and less consistent than a K gummy, still worth mapping."
+          : "Glucosamine (often with chondroitin) can raise INR. Formulation-dependent. Recheck after a new joint bottle.",
+        tags: ["bleeding", "food"],
+      }),
+    );
+  }
+
+  const cations = new Set(["calcium", "iron", "magnesium", "zinc"]);
+  const chelated = new Set([
+    "ciprofloxacin",
+    "levofloxacin",
+    "moxifloxacin",
+    "doxycycline",
+    "levothyroxine",
+  ]);
+  if ((cations.has(a.id) && chelated.has(b.id)) || (cations.has(b.id) && chelated.has(a.id))) {
+    const thyroid = a.id === "levothyroxine" || b.id === "levothyroxine";
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-chelation",
+        severity: "major",
+        effect: thyroid ? "lost levothyroxine absorption" : "lost antibiotic absorption",
+        mechanism: "gut chelation by divalent cations",
+        clinical: thyroid
+          ? "Calcium, iron, magnesium, and zinc bind levothyroxine in the gut. A prenatal or a Tums with the morning dose is a classic empty TSH. Separate by several hours. Not CYP."
+          : "Fluoroquinolones and tetracyclines chelate with calcium, iron, magnesium, and zinc. The course can fail. Separate by several hours. Not CYP.",
+        tags: ["absorption", "food"],
+      }),
+    );
+  }
+
+  const charcoalVictims = new Set([
+    "levothyroxine",
+    "warfarin",
+    "digoxin",
+    "carbamazepine",
+    "valproate",
+    "lamotrigine",
+    "ethinyl-estradiol",
+    "apixaban",
+    "rivaroxaban",
+  ]);
+  const gutBinders = new Set(["charcoal", "psyllium"]);
+  if (
+    (gutBinders.has(a.id) && charcoalVictims.has(b.id)) ||
+    (gutBinders.has(b.id) && charcoalVictims.has(a.id))
+  ) {
+    const fiber = a.id === "psyllium" || b.id === "psyllium";
+    out.push(
+      pdPair(a, b, {
+        suffix: fiber ? "pd-psyllium-bind" : "pd-charcoal-bind",
+        severity: "major",
+        effect: "lost oral absorption",
+        mechanism: fiber ? "viscous fiber binding" : "activated charcoal adsorption",
+        clinical: fiber
+          ? "Psyllium and other viscous fibers bind levothyroxine, digoxin, and some anticonvulsants in the gut. A Metamucil with the morning Synthroid is an empty TSH. Separate by several hours. Not CYP."
+          : "Activated charcoal binds co-administered oral drugs in the gut. Levothyroxine, warfarin, anticonvulsants, and OCPs never arrive. Separate by several hours. Not the charred-meat 1A2 row.",
+        tags: ["absorption", "food"],
+      }),
+    );
+  }
+
+  if ((a.id === "niacin" && has(b, "statin")) || (b.id === "niacin" && has(a, "statin"))) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-niacin-statin",
+        severity: "major",
+        effect: "myopathy / rhabdomyolysis",
+        mechanism: "niacin × statin",
+        clinical:
+          "Gram-dose nicotinic acid plus a statin (including red yeast rice / monacolin K) raises muscle toxicity. Flush B3 is the row — a B-complex is not.",
+        tags: ["myopathy", "food"],
+      }),
+    );
+  }
+
+  const noDonors = new Set(["arginine", "citrulline"]);
+  if ((noDonors.has(a.id) && has(b, "pde5")) || (noDonors.has(b.id) && has(a, "pde5"))) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-arginine-pde5",
+        severity: "moderate",
+        effect: "additive hypotension",
+        mechanism: "L-arginine / citrulline NO × PDE5",
+        clinical:
+          "Arginine and citrulline feed nitric oxide. PDE5 inhibitors stack the vasodilation. Quieter than a nitrate — not labeled contraindicated — still a first-dose syncope watch, especially in a pre-workout.",
+        tags: ["hypotension", "food"],
+      }),
+    );
+  }
+
+  if ((a.id === "icariin" && has(b, "nitrate")) || (b.id === "icariin" && has(a, "nitrate"))) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-icariin-nitrate",
+        severity: "major",
+        effect: "stacked hypotension",
+        mechanism: "herbal PDE5-like × nitrate",
+        clinical:
+          "Icariin is a weak herbal PDE5 hit. Next to a nitrate it is stacked NO vasodilation — not labeled like Viagra, still a first-dose syncope watch. The 'natural Viagra' bottle is the row.",
+        tags: ["hypotension", "food"],
+      }),
+    );
+  }
+
+  if ((a.id === "icariin" && has(b, "pde5")) || (b.id === "icariin" && has(a, "pde5"))) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-icariin-pde5",
+        severity: "moderate",
+        effect: "stacked PDE5 vasodilation",
+        mechanism: "icariin × PDE5 inhibitor",
+        clinical:
+          "Horny goat weed is sold as natural Viagra. Stacked with sildenafil or tadalafil it is duplicate PDE5 tone — first-dose syncope, not a free extra.",
+        tags: ["hypotension", "food"],
+      }),
+    );
+  }
+
+  if (
+    (a.id === "hawthorn" && b.id === "digoxin") ||
+    (b.id === "hawthorn" && a.id === "digoxin")
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-hawthorn-dig",
+        severity: "moderate",
+        effect: "additive inotrope / bradycardia",
+        mechanism: "hawthorn × digoxin",
+        clinical:
+          "Hawthorn has inotrope and vasodilator effects. Next to digoxin it is stacked cardiac PD, not a 3A4 row. Watch pulse and pressure.",
+        tags: ["cardiac", "food"],
       }),
     );
   }
