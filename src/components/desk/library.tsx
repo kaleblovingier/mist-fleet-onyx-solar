@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { DRUGS, FAMILIES, familyOf, type FamilyId } from "@/lib/drugs/catalog";
+import { hasPgx } from "@/lib/drugs/pgx";
+import { hasStahl } from "@/lib/drugs/stahl";
 import { plateForDrug } from "@/lib/drugs/visuals";
 import { useDesk, usePlan } from "@/lib/drugs/store";
 import { maxDrugs } from "@/lib/billing/plans";
@@ -135,6 +137,8 @@ export function Formulary() {
                         : sub
                           ? `${sub.enzyme.replace("CYP", "")} sub`
                           : "PD only"}
+                      {hasStahl(d.id) ? " · Stahl" : ""}
+                      {hasPgx(d.id) ? " · PGx" : ""}
                     </span>
                   </span>
                 </button>

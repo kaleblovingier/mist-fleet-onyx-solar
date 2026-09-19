@@ -23,6 +23,7 @@ export const PLANS: Plan[] = [
       "Search the 300+ compound formulary",
       "Two drugs on the desk",
       "PK / PD collision cards",
+      "DrugBank, CPIC / PharmGKB, Stahl receptor cards",
       "Concentration-time sketch (two-drug AUCR, q8h accumulation)",
       "CYP occupancy heatmap",
       "Share a one-line map",

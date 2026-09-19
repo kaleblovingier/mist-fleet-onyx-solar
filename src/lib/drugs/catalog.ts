@@ -1,4 +1,7 @@
 import type { Drug, Enzyme, EnzymeRole, ItemKind, PdFlag, Strength, SubstrateSensitivity } from "./types";
+import { hasDrugbank } from "./drugbank";
+import { hasPgx } from "./pgx";
+import { hasStahl } from "./stahl";
 
 function sub(
   enzyme: Enzyme,
@@ -1897,6 +1900,15 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
       .map((id) => DRUG_BY_ID[id])
       .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
       .slice(0, 16);
+  }
+  if (q === "pgx" || q === "pharmgkb" || q === "cpic" || q === "clinpgx") {
+    return DRUGS.filter((d) => !excluded.has(d.id) && hasPgx(d.id)).slice(0, 16);
+  }
+  if (q === "stahl") {
+    return DRUGS.filter((d) => !excluded.has(d.id) && hasStahl(d.id)).slice(0, 16);
+  }
+  if (q === "drugbank" || q === "db") {
+    return DRUGS.filter((d) => !excluded.has(d.id) && hasDrugbank(d.id)).slice(0, 16);
   }
   const scored: { drug: Drug; score: number }[] = [];
   for (const drug of DRUGS) {

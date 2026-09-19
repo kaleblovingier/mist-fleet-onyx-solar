@@ -44,6 +44,7 @@ import { Formulary } from "./library";
 import { WashoutCard } from "./washout";
 import { PkExplorer } from "./pk";
 import { StripeReturn } from "./stripe-return";
+import { Dossier } from "./dossier";
 
 export function DeskApp() {
   const view = useDesk((s) => s.view);
@@ -244,6 +245,7 @@ export function DeskApp() {
               ) : selected.length === 1 ? (
                 <>
                   <SingleDrug id={selected[0]} />
+                  <Dossier ids={selected} host={host} />
                   {report.findings.length > 0 ? (
                     <>
                       <RiskBanner report={report} selected={selected} host={host} plan={plan} />
@@ -312,6 +314,7 @@ export function DeskApp() {
                       <FindingList findings={report.findings} />
                     </>
                   )}
+                  <Dossier ids={selected} host={host} />
                   <PkExplorer drugs={hostDrugs} host={host} />
                   {pro ? (
                     <MetaboliteCard ids={selected} />
@@ -817,6 +820,12 @@ function HowCard() {
           an azole. Ozempic next to a sulfonylurea is hypoglycemia; next to metformin it should
           stay quieter. Search clinic / primary / ozempic / imuran.
         </li>
+        <li>
+          <span className="text-fg">Sources.</span> DrugBank is identity and targets — open the
+          accession. PharmGKB / CPIC is the gene table; flip a metabolizer on this desk and the matching
+          row highlights. Stahl is a receptor sketch (spectrum, occupancy, side effects from those
+          receptors) in original language, not a quotation of the book. Search pgx / stahl / drugbank.
+        </li>
       </ul>
     </div>
   );
@@ -827,8 +836,10 @@ function Disclaimer() {
     <p className="px-1 text-[11px] leading-relaxed text-subtle">
       Educational model of published CYP maps, food effects, and pharmacodynamic patterns, including
       ketamine, MAT / OTP collisions, clinic staples (gout, nitrates, GLP-1, PPIs), entactogens,
-      psychedelics, and diet. Not a clinician, not a complete database, and not guidance for
-      non-medical use. Always verify with primary references.
+      psychedelics, and diet. DrugBank accessions and CPIC / ClinPGx paraphrases point at those
+      sources; receptor sketches use the Stahl method in original language — not a quotation of
+      Stahl's Essential Psychopharmacology. Not a clinician, not a complete database, and not
+      guidance for non-medical use. Always verify with primary references.
     </p>
   );
 }
