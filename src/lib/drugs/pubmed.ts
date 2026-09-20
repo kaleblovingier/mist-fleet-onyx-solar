@@ -342,6 +342,18 @@ export const CITES: Cite[] = [
   c("8093639", 1993, "N Engl J Med", "Clozapine-induced agranulocytosis. Incidence and risk factors in the United States.",
     "Alvir. Why ANC, not WBC, sits on the REMS table this desk paraphrases.",
     ["clinic"], ["clozapine"]),
+  c("8549036", 1996, "Clin Pharmacol Ther", "Rifampin drastically reduces plasma concentrations and effects of oral midazolam.",
+    "Backman. 96% AUC dump. Oral midazolam is the 3A4 index victim. Open CYP → start clock.",
+    ["cyp", "clinic"], ["rifampin", "midazolam"], ["rifampin", "midazolam"]),
+  c("9591931", 1998, "Eur J Clin Pharmacol", "The area under the plasma concentration-time curve for oral midazolam is 400-fold larger during treatment with itraconazole than with rifampicin.",
+    "Backman. Switch from inhibition to induction is a 400-fold swing. Four days after rifampin, AUC is still only 13% of baseline — the stop clock.",
+    ["cyp", "clinic"], ["rifampin", "itraconazole", "midazolam"], ["rifampin", "midazolam"]),
+  c("12844322", 2003, "Clin Pharmacokinet", "Pharmacokinetic interactions with rifampicin.",
+    "Niemi. Full induction ~1 week; dissipates ~2 weeks after stop. Remember the stop — rebound is the dangerous half.",
+    ["cyp", "review"], ["rifampin", "midazolam", "simvastatin"]),
+  c("18043468", 2007, "Ther Drug Monit", "Clinically important drug interactions potentially involving mechanism-based inhibition of cytochrome P450 3A4 and the role of therapeutic drug monitoring.",
+    "Zhou. Macrolides, ritonavir, diltiazem/verapamil destroy 3A4. New enzyme, not dissociation. The TDI linger on this desk.",
+    ["cyp", "review"], ["clarithromycin", "erythromycin", "ritonavir", "diltiazem", "verapamil"]),
 ];
 
 export function pubmedUrl(pmid: string) {

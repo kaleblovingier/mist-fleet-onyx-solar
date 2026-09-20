@@ -16,7 +16,7 @@ export const INTENDED_USE =
   "FirstPass is clinical decision support software intended for use by licensed healthcare professionals to display mapped cytochrome P450 and pharmacodynamic interaction information, FDA-label excerpts (OpenFDA / DailyMed), published scale scores, and cited literature so the healthcare professional can independently review the basis of any recommendation before acting. It is not intended to diagnose, treat, mitigate, or prevent disease, to calculate or recommend a dose, or to replace the FDA-approved Prescribing Information.";
 
 export const INDICATIONS = [
-  "Displaying CYP450 substrate / inhibitor / inducer maps and pharmacodynamic collision scores for drugs and foods on a user-selected regimen.",
+  "Displaying CYP450 substrate / inhibitor / inducer maps, FDA DDI fold-change grades, start/stop safety clocks (reversible vs time-dependent inactivation vs induction lag), and pharmacodynamic collision scores for drugs and foods on a user-selected regimen.",
   "Surfacing excerpts of FDA-approved labeling (boxed warnings, contraindications, drug interactions, pregnancy) retrieved from OpenFDA and DailyMed.",
   "Displaying published clinical scales (COWS, CIWA-Ar, Hunter criteria, CDC 2022 oral MME factors, Bazett / Fridericia, Cockcroft–Gault) with the published source named.",
   "Linking CPIC / ClinPGx tables, PubMed PMIDs, DrugBank accessions, NIH RxClass, LactMed paraphrases, and ClinicalTrials.gov records for independent review.",
@@ -36,7 +36,7 @@ export const WARNINGS = [
   "Absence of a mapped collision is not proof of safety. Transporters, UGT, plasma protein, unlisted metabolites, and unpublished interactions still apply.",
   "Live OpenFDA / DailyMed excerpts are truncated. Open the full SPL before acting.",
   "Street-supply rows (xylazine, nitazenes, designer benzos) are teaching maps, not labeled products.",
-  "COWS, CIWA-Ar, Hunter, MME, and QTc are published formulas displayed for independent scoring — not a diagnosis and not a documented vital.",
+  "COWS, CIWA-Ar, Hunter, MME, QTc, and CYP start/stop clocks are published formulas and FDA-grade paraphrases displayed for independent scoring — not a diagnosis, not a hold, and not a documented vital.",
 ] as const;
 
 /** FDA CDS Guidance 2022 — four criteria for non-device CDS. */
@@ -94,6 +94,7 @@ export const HAZARDS: { id: string; hazard: string; control: string }[] = [
 export const PRIMARY_SOURCES = [
   { name: "OpenFDA drug labels", href: "https://open.fda.gov/apis/drug/label/" },
   { name: "DailyMed SPL", href: "https://dailymed.nlm.nih.gov/" },
+  { name: "FDA CYP / transporter tables", href: "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers" },
   { name: "FDA drug shortages", href: "https://www.fda.gov/drugs/drug-safety-and-availability/drug-shortages" },
   { name: "FDA enforcement reports", href: "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts" },
   { name: "NIH RxNorm / RxClass", href: "https://www.nlm.nih.gov/research/umls/rxnorm/" },

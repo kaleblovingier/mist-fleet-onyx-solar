@@ -11,6 +11,16 @@ import { reversalOnDesk } from "@/lib/drugs/reversal";
 import { ancBand, ancWanted } from "@/lib/drugs/anc";
 import { inrOnDesk } from "@/lib/drugs/inr";
 import {
+  cypWanted,
+  FDA_DDI_TABLE,
+  FDA_GRADES,
+  indexFor,
+  protocolsOnDesk,
+  SAFETY_CHECKS,
+} from "@/lib/drugs/cyp-protocol";
+import { ENZYMES, type Enzyme, type HostContext } from "@/lib/drugs/types";
+import { useDesk } from "@/lib/drugs/store";
+import {
   guessLastAgonist,
   ID_SCREENS,
   LAST_AGONISTS,
@@ -49,12 +59,11 @@ import {
   type ScaleBand,
   type ScaleItem,
 } from "@/lib/drugs/withdrawal";
-import type { HostContext } from "@/lib/drugs/types";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 
-type Tab = "otp" | "qt" | "levels" | "liver" | "pheno" | "reversal" | "mme" | "hunter" | "uds" | "bedside" | "alerts" | "anc" | "inr";
+type Tab = "otp" | "cyp" | "qt" | "levels" | "liver" | "pheno" | "reversal" | "mme" | "hunter" | "uds" | "bedside" | "alerts" | "anc" | "inr";
 
 export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext }) {
   const qt = useMemo(() => qtReport(ids, host), [ids.join("|"), host.age, host.kidney]);
@@ -67,11 +76,13 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
   const uds = useMemo(() => udsOnDesk(ids), [ids.join("|")]);
   const alerts = useMemo(() => alertsOnDesk(ids), [ids.join("|")]);
   const otp = otpWanted(ids);
+  const cypOn = cypWanted(ids);
   const ancOn = ancWanted(ids);
   const inr = useMemo(() => inrOnDesk(ids), [ids.join("|")]);
   const tabs = useMemo(() => {
     const t: { id: Tab; label: string; on: boolean }[] = [
       { id: "otp", label: "OTP", on: otp },
+      { id: "cyp", label: "CYP", on: cypOn },
       { id: "qt", label: "QT", on: Boolean(qt) },
       { id: "levels", label: "Levels", on: levels.length > 0 },
       { id: "liver", label: "LiverTox", on: liver.length > 0 },
@@ -86,7 +97,7 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
       { id: "alerts", label: "Alerts", on: alerts.length > 0 },
     ];
     return t;
-  }, [qt, levels.length, liver.length, pheno, reversal.length, mme.length, hunterOn, uds.length, alerts.length, ids, host, otp, ancOn, inr]);
+  }, [qt, levels.length, liver.length, pheno, reversal.length, mme.length, hunterOn, uds.length, alerts.length, ids, host, otp, cypOn, ancOn, inr]);
   const [tab, setTab] = useState<Tab>("otp");
   const live = tabs.some((t) => t.id === tab && t.on) ? tab : (tabs.find((t) => t.on)?.id ?? "bedside");
 
@@ -98,8 +109,9 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
         <div>
           <h2 className="font-serif text-lg tracking-tight text-fg">Clinical board</h2>
           <p className="mt-1 text-xs text-muted">
-            QT, TDM, LiverTox, phenoconversion, reversal, MME, Hunter, UDS, OTP tools, ANC, INR,
-            COWS / CIWA, bedside math. Teaching — not a protocol, not a QTc, not a dose.
+            QT, TDM, LiverTox, phenoconversion, CYP start/stop clocks, reversal, MME, Hunter, UDS,
+            OTP tools, ANC, INR, COWS / CIWA, bedside math. Teaching — not a protocol, not a QTc, not a
+            dose.
           </p>
         </div>
         <div className="flex flex-wrap gap-1">
@@ -123,6 +135,7 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
 
       <div className="mt-4">
         {live === "otp" && otp ? <OtpPanel ids={ids} qtPartner={Boolean(qt?.rows.some((r) => r.id !== "methadone"))} /> : null}
+        {live === "cyp" && cypOn ? <CypPanel ids={ids} /> : null}
         {live === "qt" && qt ? <QtPanel report={qt} /> : null}
         {live === "levels" && levels.length ? <LevelsPanel rows={levels} host={host} /> : null}
         {live === "liver" && liver.length ? <LiverPanel rows={liver} /> : null}
@@ -137,6 +150,224 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
         {live === "alerts" && alerts.length ? <AlertsPanel rows={alerts} /> : null}
       </div>
     </section>
+  );
+}
+
+function CypPanel({ ids }: { ids: string[] }) {
+  const cards = useMemo(() => protocolsOnDesk(ids), [ids.join("|")]);
+  const add = useDesk((s) => s.add);
+  const selected = useDesk((s) => s.selected);
+  const [phase, setPhase] = useState<"start" | "stop">("start");
+  const [enzyme, setEnzyme] = useState<Enzyme>("CYP3A4");
+  const [checks, setChecks] = useState<Record<string, boolean>>({});
+  const index = useMemo(() => indexFor(enzyme), [enzyme]);
+  useEffect(() => {
+    const next = protocolsOnDesk(ids)[0]?.enzymes[0];
+    if (next) setEnzyme(next);
+  }, [ids]);
+
+  return (
+    <div className="space-y-5">
+      <p className="text-sm leading-relaxed text-muted">
+        FDA DDI grades, start vs stop, TDI linger, induction lag. Huang 2007 / FDA 2020 teaching —
+        not a milligram and not a hold. The Prescribing Information is the authority.
+      </p>
+
+      <div className="flex flex-wrap gap-1">
+        {(["start", "stop"] as const).map((p) => (
+          <button
+            key={p}
+            type="button"
+            onClick={() => setPhase(p)}
+            className={cn(
+              "h-10 rounded-full px-3 text-xs font-medium",
+              phase === p ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+            )}
+          >
+            {p === "start" ? "Start clock" : "Stop clock"}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid gap-2 sm:grid-cols-3">
+        {(
+          [
+            ["inhibitor", "strong"],
+            ["inhibitor", "moderate"],
+            ["inducer", "strong"],
+          ] as const
+        ).map(([kind, strength]) => {
+          const g = FDA_GRADES[kind][strength];
+          return (
+            <div key={`${kind}-${strength}`} className="rounded-md bg-bg-sunken px-3 py-2.5">
+              <p className="text-xs font-medium text-fg">{g.label}</p>
+              <p className="mt-1 text-[11px] leading-relaxed text-muted">{g.fold}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      {cards.length ? (
+        cards.map((card) => {
+          const clock = phase === "start" ? card.start : card.stop;
+          return (
+            <article key={card.perpId} className={cn("rounded-md px-3 py-3", toneClass(card.tone))}>
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="font-serif text-lg tracking-tight text-fg">{card.name}</h3>
+                <Badge tone={card.tone === "danger" ? "danger" : card.tone === "warn" ? "warn" : "info"}>
+                  {card.grade}
+                </Badge>
+                <Badge tone="default">{card.clock === "tdi" ? "TDI" : card.clock}</Badge>
+                {card.dualHit ? <Badge tone="warn">3A4 + P-gp</Badge> : null}
+              </div>
+              <p className="mt-1 font-mono text-[11px] uppercase tracking-wide text-muted">
+                {card.enzymes.join(" · ")} · {card.fold}
+              </p>
+              <p className="mt-2 text-sm font-medium text-fg">
+                {clock.title}
+                <span className="ml-2 font-mono text-[11px] font-normal text-muted"> · {clock.days}</span>
+              </p>
+              <p className="mt-1 text-sm leading-relaxed text-fg">{clock.body}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{clock.watch}</p>
+              {card.linger && phase === "stop" ? (
+                <p className="mt-2 text-sm leading-relaxed text-fg">{card.linger}</p>
+              ) : null}
+              {card.victims.length ? (
+                <ul className="mt-3 flex flex-wrap gap-1">
+                  {card.victims.slice(0, 8).map((v) => (
+                    <li key={`${v.id}-${v.enzyme}`}>
+                      <Badge tone={v.nti ? "danger" : v.sensitivity === "sensitive" ? "warn" : "default"}>
+                        {v.name}
+                        {v.nti ? " NTI" : ""}
+                        {v.pathway === "activation" ? " prodrug" : ""}
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-3 text-xs text-muted">
+                  No mapped victim on the desk. Add a sensitive substrate from the index table below.
+                </p>
+              )}
+            </article>
+          );
+        })
+      ) : (
+        <p className="text-sm leading-relaxed text-muted">
+          Add a strong or moderate perpetrator — clarithromycin, paroxetine, fluvoxamine, rifampin,
+          ketoconazole — then a victim. The clock is the point, not a second PK row.
+        </p>
+      )}
+
+      {cards[0] ? (
+        <article className="rounded-md bg-bg-sunken px-3 py-3">
+          <h3 className="font-serif text-lg tracking-tight text-fg">Safety steps</h3>
+          <p className="mt-1 text-xs text-muted">Teaching checklist for the hottest perpetrator on this desk. Nothing is stored.</p>
+          <ul className="mt-3 space-y-1">
+            {cards[0].steps.map((s) => (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  onClick={() => setChecks((prev) => ({ ...prev, [s.id]: !prev[s.id] }))}
+                  className={cn(
+                    "flex h-auto min-h-10 w-full items-start gap-2 rounded-md px-3 py-2 text-left",
+                    checks[s.id] ? "bg-accent-soft text-fg" : "bg-surface text-muted hover:text-fg",
+                  )}
+                >
+                  <span className="mt-0.5">
+                    {checks[s.id] ? <CheckSquare className="size-4" /> : <Square className="size-4" />}
+                  </span>
+                  <span>
+                    <span className="block text-sm font-medium text-fg">{s.title}</span>
+                    <span className="block text-xs leading-relaxed text-muted">{s.body}</span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ) : (
+        <article className="rounded-md bg-bg-sunken px-3 py-3">
+          <h3 className="font-serif text-lg tracking-tight text-fg">Safety steps</h3>
+          <ul className="mt-3 space-y-2">
+            {SAFETY_CHECKS.map((s) => (
+              <li key={s.id}>
+                <p className="text-sm font-medium text-fg">{s.title}</p>
+                <p className="text-xs leading-relaxed text-muted">{s.body}</p>
+              </li>
+            ))}
+          </ul>
+        </article>
+      )}
+
+      <article className="rounded-md bg-bg-sunken px-3 py-3">
+        <h3 className="font-serif text-lg tracking-tight text-fg">FDA index table</h3>
+        <p className="mt-1 text-xs text-muted">
+          Example substrates, inhibitors, and inducers on this desk. Tap to add.{" "}
+          <a className="text-accent underline" href={FDA_DDI_TABLE} target="_blank" rel="noreferrer">
+            Open the FDA table
+          </a>
+          .
+        </p>
+        <div className="mt-3 flex flex-wrap gap-1">
+          {ENZYMES.map((e) => (
+            <button
+              key={e}
+              type="button"
+              onClick={() => setEnzyme(e)}
+              className={cn(
+                "h-10 rounded-full px-3 font-mono text-xs font-medium",
+                enzyme === e ? "bg-ink text-bg" : "bg-surface text-muted hover:text-fg",
+              )}
+            >
+              {e.replace("CYP", "")}
+            </button>
+          ))}
+        </div>
+        {(
+          [
+            ["Substrates", index.substrates],
+            ["Inhibitors", index.inhibitors],
+            ["Inducers", index.inducers],
+          ] as const
+        ).map(([label, rows]) =>
+          rows.length ? (
+            <div key={label} className="mt-3">
+              <p className="text-[11px] font-medium uppercase tracking-wide text-muted">{label}</p>
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {rows.map((r) => {
+                  const on = selected.includes(r.id);
+                  return (
+                    <button
+                      key={`${r.role}-${r.id}-${r.grade}`}
+                      type="button"
+                      disabled={on}
+                      onClick={() => add(r.id)}
+                      className={cn(
+                        "h-10 rounded-full px-3 text-xs",
+                        on ? "bg-ink/20 text-muted" : "bg-surface text-fg hover:text-accent",
+                      )}
+                    >
+                      {r.name}
+                      <span className="ml-1 text-[10px] text-muted">{r.grade}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null,
+        )}
+      </article>
+
+      <p className="text-[11px] leading-relaxed text-subtle">
+        Not FDA-cleared. Independently review the{" "}
+        <a className="text-accent underline" href={FDA_DDI_TABLE} target="_blank" rel="noreferrer">
+          FDA index table
+        </a>{" "}
+        and each victim’s Prescribing Information. FirstPass does not pick a milligram, a hold, or a
+        restart.
+      </p>
+    </div>
   );
 }
 

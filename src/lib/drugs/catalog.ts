@@ -2748,6 +2748,40 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
   if (q === "qtc" || q === "qt" || q === "torsades") {
     return DRUGS.filter((d) => !excluded.has(d.id) && (d.pd.includes("qt-known") || d.pd.includes("qt-possible"))).slice(0, 16);
   }
+  if (
+    q === "cyp" ||
+    q === "protocol" ||
+    q === "protocols" ||
+    q === "tdi" ||
+    q === "mbi" ||
+    q === "index" ||
+    q === "fda table" ||
+    q === "fda-table" ||
+    q === "clock"
+  ) {
+    const order = [
+      "clarithromycin",
+      "midazolam",
+      "rifampin",
+      "ketoconazole",
+      "itraconazole",
+      "paroxetine",
+      "fluoxetine",
+      "bupropion",
+      "fluvoxamine",
+      "ciprofloxacin",
+      "tizanidine",
+      "grapefruit",
+      "amiodarone",
+      "gemfibrozil",
+      "codeine",
+      "warfarin",
+    ];
+    return order
+      .map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 16);
+  }
   if (q === "rxnav" || q === "pubchem" || q === "trials" || q === "dailymed" || q === "shortage" || q === "shortages") {
     return DRUGS.filter((d) => !excluded.has(d.id) && d.kind === "drug" && !d.id.startsWith("__")).slice(0, 16);
   }

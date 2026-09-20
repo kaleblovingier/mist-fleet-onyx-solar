@@ -48,6 +48,9 @@ const PI: Record<string, string> = {
   "clinic-preg-caution": "Label: use in pregnancy is a specialist call. Open the PI.",
   "clinic-beers": "AGS Beers 2023. Not an FDA box. Confirm against the PI and the geriatric indication.",
   "clinic-renal": "Many labels dose-adjust on Cockcroft–Gault or eGFR. This desk flags CKD; it does not pick a dose.",
+  "cyp-clock":
+    "FDA 2020 Clinical Drug Interaction Studies / Huang CPT 2007. Strong ≥5× AUC; strong inducer ≥80% ↓ AUC. Start and stop are different clocks. Not a milligram.",
+  "cyp-dual": "FDA example inhibitors often hit both CYP3A4 and P-gp. Gut first-pass victims move more than a CYP-only row.",
 };
 
 const SCALE: Record<string, string> = {

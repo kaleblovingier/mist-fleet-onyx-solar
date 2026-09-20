@@ -39,7 +39,8 @@ export function CitesPage() {
             </h2>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
               Curated PMIDs for the collisions on this formulary — grapefruit, St. John's wort, CPIC tables,
-              methadone QT, Hunter criteria, Beers 2023, phenoconversion, UDS false-positives, COWS, MOTHER.
+              methadone QT, Hunter criteria, Beers 2023, phenoconversion, UDS false-positives, COWS, MOTHER,
+              Backman rifampin–midazolam, Zhou TDI.
               Open PubMed. Live NCBI search, PubChem, DailyMed, CPIC, ClinicalTrials.gov, and NIH RxClass sit
               on the Sources card once a pair is on the desk.
             </p>

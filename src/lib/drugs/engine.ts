@@ -3,6 +3,7 @@ import { CLINIC } from "./clinic";
 import { applyHost, isVirtual, WASHOUT } from "./host";
 import { phenoconversionFindings } from "./pheno-convert";
 import { udsFindings } from "./uds";
+import { protocolFindings } from "./cyp-protocol";
 import {
   DEFAULT_HOST,
   DEFAULT_PHENOTYPES,
@@ -1958,6 +1959,7 @@ export function analyze(drugIds: string[], host?: HostContext | PhenotypeMap): R
   if (ctx) findings.push(...alcoholHostFindings(real, ctx.alcohol));
   if (ctx) findings.push(...hostClinicFindings(real, ctx));
   findings.push(...udsFindings(real.map((d) => d.id)));
+  findings.push(...protocolFindings(real.map((d) => d.id)));
   const uniq = dedupe(findings);
   uniq.sort((a, b) => {
     const d = SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity];

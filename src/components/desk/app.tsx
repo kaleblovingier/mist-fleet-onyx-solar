@@ -904,6 +904,13 @@ function HowCard() {
           protocol.
         </li>
         <li>
+          <span className="text-fg">CYP clock.</span> Strong / moderate / weak are FDA fold-change
+          grades (Huang 2007 / 2020 guidance), not vibes. Mechanism-based inhibitors (clarithromycin,
+          grapefruit, ritonavir, paroxetine, fluoxetine) destroy the enzyme — stopping yesterday
+          does not restore it. Inducers take a week to land and two weeks to leave; the stop is
+          rebound toxicity. Open the CYP tab. Plan the stop on the start day. Not a milligram.
+        </li>
+        <li>
           <span className="text-fg">Clinic.</span> Allopurinol × azathioprine is xanthine oxidase,
           not CYP — pancytopenia. Nitrates × PDE5 are labeled hypotension. Omeprazole blunts
           clopidogrel activation (2C19 prodrug); pantoprazole is the quieter switch. Oral

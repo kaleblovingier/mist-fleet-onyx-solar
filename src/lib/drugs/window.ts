@@ -1,5 +1,6 @@
 import { DRUG_BY_ID } from "./catalog";
 import { clinicFor } from "./clinic";
+import { protocolTray } from "./cyp-protocol";
 import { SEVERITY_LABEL, type Finding, type HostContext, type Report, type Severity } from "./types";
 import { PI_FOOTER } from "@/lib/regulatory";
 
@@ -481,6 +482,30 @@ export function briefWindow(ids: string[], report: Report, host: HostContext): W
     );
   }
 
+  if (hasSuffix(findings, "cyp-clock") || hasSuffix(findings, "cyp-dual")) {
+    const tdi = findings.some((f) => f.tags.includes("tdi"));
+    const induction = findings.some((f) => f.tags.includes("induction"));
+    if (tdi) {
+      pushUnique(
+        watch,
+        "CYP TDI linger — the enzyme was destroyed, not occupied. Yesterday’s last macrolide, azole, booster, or grapefruit still raises oral victims until new CYP is made.",
+      );
+    }
+    if (induction) {
+      pushUnique(
+        watch,
+        "CYP induction clock — start looks like a stolen dose over a week; stop is rebound toxicity over two. Plan the stop on the start day.",
+      );
+    }
+    if (!tdi && !induction) {
+      pushUnique(
+        watch,
+        "CYP start/stop clock — victim climbs while the inhibitor is on and falls when it clears. Open the CYP tab.",
+      );
+    }
+    pushUnique(callBits, "Open the CYP tab for the FDA grade and the stop clock. This desk is not a milligram.");
+  }
+
   if (quiet && mat) {
     pushUnique(
       watch,
@@ -538,6 +563,9 @@ export function briefWindow(ids: string[], report: Report, host: HostContext): W
   }
   if (on("ethanol") || host.alcohol === "acute" || host.alcohol === "chronic") {
     pushUnique(tray, "CIWA-Ar");
+  }
+  for (const chip of protocolTray(ids)) {
+    pushUnique(tray, chip);
   }
   for (const id of ids) {
     for (const m of clinicFor(id)?.monitor ?? []) {

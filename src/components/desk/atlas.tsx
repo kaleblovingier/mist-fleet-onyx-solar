@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { enzymeIndex } from "@/lib/drugs/engine";
 import { DRUGS } from "@/lib/drugs/catalog";
+import { isFdaIndex } from "@/lib/drugs/cyp-protocol";
 import { ENZYMES, type Enzyme } from "@/lib/drugs/types";
 import { useDesk } from "@/lib/drugs/store";
 import { cn } from "@/lib/utils";
@@ -105,27 +106,33 @@ export function EnzymeAtlas() {
         <div className="grid gap-3 lg:grid-cols-3">
           <AtlasColumn
             title="Substrates"
-            hint="Victims of inhibition / induction"
+            hint="Victims of inhibition / induction · FDA index tagged"
             drugs={bucket.substrates}
             selected={selected}
             onAdd={add}
             kind="S"
+            enzyme={enzyme}
+            role="substrate"
           />
           <AtlasColumn
             title="Inhibitors"
-            hint="Raise victim exposure"
+            hint="Raise victim exposure · FDA index tagged"
             drugs={bucket.inhibitors}
             selected={selected}
             onAdd={add}
             kind="I"
+            enzyme={enzyme}
+            role="inhibitor"
           />
           <AtlasColumn
             title="Inducers"
-            hint="Drop victim exposure"
+            hint="Drop victim exposure · stop is rebound"
             drugs={bucket.inducers}
             selected={selected}
             onAdd={add}
             kind="D"
+            enzyme={enzyme}
+            role="inducer"
           />
         </div>
       )}
@@ -140,6 +147,8 @@ function AtlasColumn({
   selected,
   onAdd,
   kind,
+  enzyme,
+  role,
 }: {
   title: string;
   hint: string;
@@ -147,6 +156,8 @@ function AtlasColumn({
   selected: string[];
   onAdd: (id: string) => void;
   kind: string;
+  enzyme: Enzyme;
+  role: "substrate" | "inhibitor" | "inducer";
 }) {
   return (
     <section className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)]">
@@ -158,6 +169,7 @@ function AtlasColumn({
       <ul className="space-y-1">
         {drugs.map((d) => {
           const on = selected.includes(d.id);
+          const index = isFdaIndex(d.id, enzyme, role);
           return (
             <li key={d.id}>
               <button
@@ -168,9 +180,12 @@ function AtlasColumn({
               >
                 <span>
                   <span className="block text-sm text-fg">{d.name}</span>
-                  <span className="block text-[11px] text-muted">{d.cls}</span>
+                  <span className="block text-[11px] text-muted">
+                    {d.cls}
+                    {index ? " · FDA index" : ""}
+                  </span>
                 </span>
-                <span className="font-mono text-[10px] text-subtle">{kind}</span>
+                <span className="font-mono text-[10px] text-subtle">{index ? "IDX" : kind}</span>
               </button>
             </li>
           );
