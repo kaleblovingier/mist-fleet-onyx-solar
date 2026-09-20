@@ -169,6 +169,7 @@ export function PhenotypeCard() {
 
       <div className="mt-3">
         <div className="text-xs font-medium text-fg">Ketamine route</div>
+        <p className="mt-0.5 text-[10px] text-subtle">Free on this desk — oral × grapefruit is the teaching demo.</p>
         <div className="mt-1.5 grid grid-cols-3 gap-1">
           {ROUTES.map((r) => {
             const on = ketamineRoute === r;

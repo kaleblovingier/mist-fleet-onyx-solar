@@ -24,14 +24,15 @@ export const PAY_RAILS = [
 ] as const;
 
 /** Public URLs. Override the live desk with VITE_PUBLIC_URL when Vercel is linked. */
+const PAGES_URL = "https://kaleblovingier.github.io/mist-fleet-onyx-solar/";
+
 export const SITE = {
   repo: "https://github.com/kaleblovingier/mist-fleet-onyx-solar",
-  pages: "https://kaleblovingier.github.io/mist-fleet-onyx-solar/",
+  pages: PAGES_URL,
   gamma: "https://gamma.app/docs/c1sxd9i8iyv80eq",
   gammaCard: "https://gamma.app/docs/h9grlpif6t8ogmt",
-  url:
-    (import.meta.env.VITE_PUBLIC_URL as string | undefined)?.trim() ||
-    "https://github.com/kaleblovingier/mist-fleet-onyx-solar",
+  /** Live desk. Prefer VITE_PUBLIC_URL; otherwise GitHub Pages — never the bare repo. */
+  url: (import.meta.env.VITE_PUBLIC_URL as string | undefined)?.trim() || PAGES_URL,
 };
 
 export const TRY_THREE = [
@@ -84,7 +85,7 @@ export const BUYERS = [
 ] as const;
 
 export function payClose(price = COMMERCE.founding) {
-  return `Pay $${price} with card on the desk, or Venmo @${OPERATOR.venmo}, Cash App $${OPERATOR.cashApp}, or PayPal ${OPERATOR.email}. Stripe mints a signed key when the charge clears.`;
+  return `Pay $${price} via Venmo @${OPERATOR.venmo}, Cash App $${OPERATOR.cashApp}, or PayPal ${OPERATOR.email} (card on the desk when Stripe is live). After payment clears, the operator emails or texts a signed key from Foundry — paste it under Pro → Redeem.`;
 }
 
 export function salesDm(price = COMMERCE.founding) {
@@ -143,7 +144,7 @@ export interface LaunchPost {
   text: string;
 }
 
-export function launchPosts(price = COMMERCE.founding, url = SITE.url): LaunchPost[] {
+export function launchPosts(price = COMMERCE.founding, url = SITE.pages): LaunchPost[] {
   const tryLines = TRY_THREE.map((t) => `• ${t.title} — ${t.punch}`).join("\n");
   return [
     {

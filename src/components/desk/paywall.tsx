@@ -24,14 +24,16 @@ export function Paywall({
           <p className="mt-1 max-w-xs text-xs leading-relaxed text-muted">{blurb}</p>
         </div>
         <div className="flex flex-wrap justify-center gap-2">
-          <Button size="sm" onClick={() => openCheckout("lab", title)}>
+          <Button size="sm" onClick={() => openCheckout("lab", title, "life")}>
             Founding · $79
           </Button>
           <Button size="sm" variant="secondary" onClick={startPreview}>
             7-day preview
           </Button>
         </div>
-        <p className="text-[11px] text-muted">Card on Stripe · {PAY_RAILS.map((r) => `${r.label} ${r.handle}`).join(" · ")}</p>
+        <p className="text-[11px] text-muted">
+          {PAY_RAILS.map((r) => `${r.label} ${r.handle}`).join(" · ")} · card when Stripe is live
+        </p>
       </div>
     </div>
   );

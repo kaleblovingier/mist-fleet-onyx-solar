@@ -28,10 +28,10 @@ export function LaunchDesk() {
         </p>
         <ul className="mt-4 space-y-2 text-sm">
           <li>
-            <a className="font-medium text-accent hover:underline" href={SITE.url} target="_blank" rel="noreferrer">
+            <a className="font-medium text-accent hover:underline" href={SITE.pages} target="_blank" rel="noreferrer">
               Pitch page
             </a>
-            <span className="text-muted"> — {SITE.url}</span>
+            <span className="text-muted"> — {SITE.pages}</span>
           </li>
           <li>
             <a className="font-medium text-accent hover:underline" href={SITE.gamma} target="_blank" rel="noreferrer">
@@ -48,7 +48,7 @@ export function LaunchDesk() {
           <li className="text-muted">{OPERATOR.payLine}</li>
         </ul>
         <div className="mt-4 flex flex-wrap gap-2">
-          <Button size="sm" variant="secondary" onClick={() => void copy("url", SITE.url)}>
+          <Button size="sm" variant="secondary" onClick={() => void copy("url", SITE.pages)}>
             {copied === "url" ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
             {copied === "url" ? "Copied" : "Copy URL"}
           </Button>

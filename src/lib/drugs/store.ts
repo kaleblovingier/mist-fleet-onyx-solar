@@ -60,7 +60,7 @@ interface DeskState {
   setKidney: (kidney: KidneyBand) => void;
   setPreg: (preg: PregBand) => void;
   resetPhenotypes: () => void;
-  openCheckout: (plan: PlanId, reason?: string) => void;
+  openCheckout: (plan: PlanId, reason?: string, interval?: Interval) => void;
   closeCheckout: () => void;
   setCheckoutInterval: (interval: Interval) => void;
   startPreview: () => void;
@@ -130,12 +130,13 @@ export const useDesk = create<DeskState>()(
       load: (ids, extras) => {
         const cap = maxDrugs(activePlan(get()));
         const next = ids.filter((id) => DRUG_BY_ID[id] && !id.startsWith("__")).slice(0, cap);
+        // Oral/IN ketamine route is free for the teaching demo (grapefruit × oral K).
+        // Phenotype, smoke, alcohol, and cannabis route stay Pro.
         const wantsHost = Boolean(
           extras?.phenotypes ||
             extras?.smoking ||
             extras?.alcohol ||
-            extras?.cannabisRoute ||
-            (extras?.ketamineRoute && extras.ketamineRoute !== "iv"),
+            extras?.cannabisRoute,
         );
         if (wantsHost && activePlan(get()) === "free") {
           set({
@@ -143,7 +144,7 @@ export const useDesk = create<DeskState>()(
               open: true,
               plan: "pro",
               interval: get().checkout.interval,
-              reason: "That sample uses host factors — phenotype, route, smoke, or alcohol pattern.",
+              reason: "That sample uses host factors — phenotype, smoke, alcohol, or cannabis route.",
             },
             selected: next,
             view: "desk",
@@ -209,10 +210,7 @@ export const useDesk = create<DeskState>()(
         set({ smoking });
       },
       setKetamineRoute: (ketamineRoute) => {
-        if (activePlan(get()) === "free") {
-          get().openCheckout("pro", "Ketamine route (IV vs oral first-pass) is Pro.");
-          return;
-        }
+        // Free tier may flip IV/IN/oral so oral ketamine × grapefruit teaches without a key.
         set({ ketamineRoute });
       },
       setCannabisRoute: (cannabisRoute) => {
@@ -261,11 +259,16 @@ export const useDesk = create<DeskState>()(
           kidney: "ok",
           preg: "off",
         }),
-      openCheckout: (plan, reason = "") =>
+      openCheckout: (plan, reason = "", interval) => {
+        const resolved = plan === "free" ? "pro" : plan;
+        // Founding / lab CTAs always open on lifetime $79 — never month/year leftovers.
+        const nextInterval =
+          interval ?? (resolved === "lab" ? "life" : get().checkout.interval);
         set({
           view: "plans",
-          checkout: { open: true, plan: plan === "free" ? "pro" : plan, interval: get().checkout.interval, reason },
-        }),
+          checkout: { open: true, plan: resolved, interval: nextInterval, reason },
+        });
+      },
       closeCheckout: () => set({ checkout: { ...get().checkout, open: false } }),
       setCheckoutInterval: (interval) => set({ checkout: { ...get().checkout, interval } }),
       startPreview: () =>

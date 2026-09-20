@@ -141,7 +141,7 @@ export function DeskApp() {
             </div>
             </div>
             {hydrated && !pro ? (
-              <Button size="sm" className="sm:hidden" onClick={() => openCheckout("lab", "Founding lifetime.")}>
+              <Button size="sm" className="sm:hidden" onClick={() => openCheckout("lab", "Founding lifetime.", "life")}>
                 Unlock
               </Button>
             ) : null}
@@ -172,7 +172,7 @@ export function DeskApp() {
               ))}
             </nav>
             {hydrated && !pro ? (
-              <Button size="sm" className="hidden sm:inline-flex" onClick={() => openCheckout("lab", "Founding lifetime.")}>
+              <Button size="sm" className="hidden sm:inline-flex" onClick={() => openCheckout("lab", "Founding lifetime.", "life")}>
                 Unlock
               </Button>
             ) : null}
@@ -621,7 +621,7 @@ function RiskBanner({
 
   async function copySummary() {
     if (plan === "free") {
-      openCheckout("lab", "The full collision report is a licensed surface. Founding is $79 once.");
+      openCheckout("lab", "The full collision report is a licensed surface. Founding is $79 once.", "life");
       return;
     }
     const lines = [
