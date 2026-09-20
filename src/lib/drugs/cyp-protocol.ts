@@ -423,7 +423,7 @@ function stopClock(
   return {
     title: "Stop — victim levels fall",
     days: "1–3 days (inhibitor washout)",
-    body: `${name} clears, ${who} fall. Loss of effect, withdrawal, or a failed prodrug — not a new disease.`,
+    body: `${name} clears, ${who} ${many ? "fall" : "falls"}. Loss of effect, withdrawal, or a failed prodrug — not a new disease.`,
     watch: nti.length
       ? `NTI falling: ${nti.join(", ")}. A dose raised under the inhibitor is now too much to keep, too little to stop cold.`
       : "The milligram that was safe under the block may fail after it.",
