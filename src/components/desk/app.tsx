@@ -27,7 +27,7 @@ import { FindingList } from "./findings";
 import { CypHeatmap } from "./heatmap";
 import { EnzymeAtlas } from "./atlas";
 import { HemeMark } from "./mark";
-import { PhenotypeCard } from "./phenotype";
+import { KetamineRouteCard, PhenotypeCard } from "./phenotype";
 import { StackMeters } from "./stacks";
 import { MetaboliteCard } from "./metabolites";
 import { Paywall } from "./paywall";
@@ -150,7 +150,7 @@ export function DeskApp() {
             </div>
             </div>
             {hydrated && !pro ? (
-              <Button size="sm" className="sm:hidden" onClick={() => openCheckout("lab", "Founding lifetime.")}>
+              <Button size="sm" className="sm:hidden" onClick={() => openCheckout("lab", "Founding lifetime.", "life")}>
                 Unlock
               </Button>
             ) : null}
@@ -182,7 +182,7 @@ export function DeskApp() {
               ))}
             </nav>
             {hydrated && !pro ? (
-              <Button size="sm" className="hidden sm:inline-flex" onClick={() => openCheckout("lab", "Founding lifetime.")}>
+              <Button size="sm" className="hidden sm:inline-flex" onClick={() => openCheckout("lab", "Founding lifetime.", "life")}>
                 Unlock
               </Button>
             ) : null}
@@ -407,12 +407,15 @@ export function DeskApp() {
               {pro ? (
                 <PhenotypeCard />
               ) : (
-                <Paywall
-                  title="Host factors are Pro"
-                  blurb="Phenotype, smoke, alcohol pattern, route, age, kidney, and pregnancy change the score. Two-drug PK stays free."
-                >
-                  <PhenotypeCard />
-                </Paywall>
+                <>
+                  <KetamineRouteCard />
+                  <Paywall
+                    title="Host factors are Pro"
+                    blurb="Phenotype, smoke, alcohol pattern, cannabis route, age, kidney, and pregnancy change the score. Ketamine route stays free for the oral teaching demo. Two-drug PK stays free."
+                  >
+                    <PhenotypeCard hideKetamineRoute />
+                  </Paywall>
+                </>
               )}
               {pro && selected.length > 0 ? <HostDelta selected={selected} host={host} report={report} /> : null}
               {selected.length > 0 ? <WashoutCard selected={selected} /> : null}
@@ -685,7 +688,7 @@ function RiskBanner({
 
   async function copySummary() {
     if (plan === "free") {
-      openCheckout("lab", "The full collision report is a licensed surface. Founding is $79 once.");
+      openCheckout("lab", "The full collision report is a licensed surface. Founding is $79 once.", "life");
       return;
     }
     const lines = [

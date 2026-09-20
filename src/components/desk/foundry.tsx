@@ -68,6 +68,7 @@ export function Foundry() {
   const [plan, setPlan] = useState<"life" | "pro" | "lab">("life");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  const [pinWarn, setPinWarn] = useState("");
   const [last, setLast] = useState<string | null>(null);
   const [packet, setPacket] = useState("");
   const [copied, setCopied] = useState("");
@@ -212,11 +213,17 @@ export function Foundry() {
   async function mint() {
     setBusy(true);
     setErr("");
+    setPinWarn("");
     try {
       const res = await mintLicenseKey({ data: { pin, plan, soldTo } });
       if (!res.ok) {
         setErr(res.reason);
         return;
+      }
+      if ("defaultPin" in res && res.defaultPin) {
+        setPinWarn(
+          "FOUNDER_PIN is unset — you minted with the default PIN. Set FOUNDER_PIN (and LICENSE_PEPPER) in production; defaults fail closed when NODE_ENV=production or GROK_PROJECT_ID is set.",
+        );
       }
       const row: Issued = {
         key: res.key,
@@ -314,6 +321,7 @@ export function Foundry() {
           setPlan={setPlan}
           busy={busy}
           err={err}
+          pinWarn={pinWarn}
           last={last}
           copied={copied}
           issued={issued}
@@ -349,6 +357,7 @@ function CloseDesk({
   setPlan,
   busy,
   err,
+  pinWarn,
   last,
   copied,
   issued,
@@ -378,6 +387,7 @@ function CloseDesk({
   setPlan: (v: "life" | "pro" | "lab") => void;
   busy: boolean;
   err: string;
+  pinWarn: string;
   last: string | null;
   copied: string;
   issued: Issued[];
@@ -544,6 +554,7 @@ function CloseDesk({
           )}
         />
         {err ? <p className="mt-3 text-sm text-danger">{err}</p> : null}
+        {pinWarn ? <p className="mt-3 text-sm text-warn">{pinWarn}</p> : null}
         {last ? (
           <p className="mt-3 rounded-md bg-ok-soft px-3 py-2 font-mono text-sm text-ok">
             {last}

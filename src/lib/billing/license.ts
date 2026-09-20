@@ -21,18 +21,24 @@ export const mintLicenseKey = createServerFn({ method: "POST" })
     soldTo: readString(input, "soldTo"),
   }))
   .handler(async ({ data }) => {
-    const { mintKey, mintKeyFromNote, pinOk, defaultPinSet, parseIssuedPlan } = await import("./license.server");
-    if (!pinOk(data.pin)) {
-      return { ok: false as const, reason: "Operator PIN is wrong." };
+    const { mintKey, mintKeyFromNote, pinOk, defaultPinSet, defaultPepperSet, parseIssuedPlan } = await import("./license.server");
+    try {
+      if (!pinOk(data.pin)) {
+        return { ok: false as const, reason: "Operator PIN is wrong." };
+      }
+      const plan = parseIssuedPlan(data.plan);
+      const soldTo = data.soldTo.trim();
+      return {
+        ok: true as const,
+        key: soldTo ? mintKeyFromNote(plan, soldTo) : mintKey(plan),
+        plan,
+        defaultPin: defaultPinSet(),
+        defaultPepper: defaultPepperSet(),
+      };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "License secrets are not configured.";
+      return { ok: false as const, reason: msg };
     }
-    const plan = parseIssuedPlan(data.plan);
-    const soldTo = data.soldTo.trim();
-    return {
-      ok: true as const,
-      key: soldTo ? mintKeyFromNote(plan, soldTo) : mintKey(plan),
-      plan,
-      defaultPin: defaultPinSet(),
-    };
   });
 
 export const mintLicenseBatch = createServerFn({ method: "POST" })
@@ -42,21 +48,27 @@ export const mintLicenseBatch = createServerFn({ method: "POST" })
     names: readString(input, "names"),
   }))
   .handler(async ({ data }) => {
-    const { mintKeyedRows, parseIssuedPlan, parseNameList, pinOk, defaultPinSet } = await import(
+    const { mintKeyedRows, parseIssuedPlan, parseNameList, pinOk, defaultPinSet, defaultPepperSet } = await import(
       "./license.server"
     );
-    if (!pinOk(data.pin)) {
-      return { ok: false as const, reason: "Operator PIN is wrong." };
+    try {
+      if (!pinOk(data.pin)) {
+        return { ok: false as const, reason: "Operator PIN is wrong." };
+      }
+      const names = parseNameList(data.names);
+      if (!names.length) {
+        return { ok: false as const, reason: "Add at least one name — one per line." };
+      }
+      const plan = parseIssuedPlan(data.plan);
+      return {
+        ok: true as const,
+        plan,
+        keys: mintKeyedRows(plan, names),
+        defaultPin: defaultPinSet(),
+        defaultPepper: defaultPepperSet(),
+      };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "License secrets are not configured.";
+      return { ok: false as const, reason: msg };
     }
-    const names = parseNameList(data.names);
-    if (!names.length) {
-      return { ok: false as const, reason: "Add at least one name — one per line." };
-    }
-    const plan = parseIssuedPlan(data.plan);
-    return {
-      ok: true as const,
-      plan,
-      keys: mintKeyedRows(plan, names),
-      defaultPin: defaultPinSet(),
-    };
   });

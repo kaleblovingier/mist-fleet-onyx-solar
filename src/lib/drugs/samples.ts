@@ -3,13 +3,9 @@ import type { AlcoholPattern, CannabisRoute, KetamineRoute, PhenotypeMap } from 
 export type SampleLane = "nmda" | "entactogen" | "gaba" | "phenotype" | "smoke" | "mat" | "food" | "street" | "clinic";
 
 export function sampleNeedsPro(s: SampleRegimen) {
-  return Boolean(
-    s.phenotypes ||
-      s.smoking ||
-      s.alcohol ||
-      s.cannabisRoute ||
-      (s.ketamineRoute && s.ketamineRoute !== "iv"),
-  );
+  // Ketamine route (oral / IN) is free so oral × grapefruit teaching works without a key.
+  // Phenotype, smoke, alcohol, and cannabis route stay licensed.
+  return Boolean(s.phenotypes || s.smoking || s.alcohol || s.cannabisRoute);
 }
 
 export interface SampleRegimen {
