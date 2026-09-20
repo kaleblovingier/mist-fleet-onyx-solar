@@ -39,6 +39,9 @@ export const METABOLIZER_LABEL: Record<Metabolizer, string> = {
 export type KetamineRoute = "iv" | "in" | "oral";
 export type CannabisRoute = "smoked" | "oral";
 export type AlcoholPattern = "off" | "acute" | "chronic";
+export type AgeBand = "adult" | "geriatric";
+export type KidneyBand = "ok" | "ckd";
+export type PregBand = "off" | "pregnant" | "lactating";
 
 export const KETAMINE_ROUTE_LABEL: Record<KetamineRoute, string> = {
   iv: "IV / IM",
@@ -57,6 +60,22 @@ export const ALCOHOL_LABEL: Record<AlcoholPattern, string> = {
   chronic: "Chronic",
 };
 
+export const AGE_LABEL: Record<AgeBand, string> = {
+  adult: "Adult",
+  geriatric: "Geriatric",
+};
+
+export const KIDNEY_LABEL: Record<KidneyBand, string> = {
+  ok: "Usual GFR",
+  ckd: "CKD",
+};
+
+export const PREG_LABEL: Record<PregBand, string> = {
+  off: "Off",
+  pregnant: "Pregnant",
+  lactating: "Lactating",
+};
+
 export const PHENO_FREQ: Record<PhenotypeEnzyme, Partial<Record<Metabolizer, string>>> = {
   CYP2D6: { PM: "~7% EUR", UM: "~2–3% EUR" },
   CYP2C19: { PM: "~3% EUR · ~13% E. Asian", UM: "~30% EUR *17" },
@@ -70,6 +89,9 @@ export interface HostContext {
   ketamineRoute: KetamineRoute;
   cannabisRoute: CannabisRoute;
   alcohol: AlcoholPattern;
+  age?: AgeBand;
+  kidney?: KidneyBand;
+  preg?: PregBand;
 }
 
 export const DEFAULT_HOST: HostContext = {
@@ -78,6 +100,9 @@ export const DEFAULT_HOST: HostContext = {
   ketamineRoute: "iv",
   cannabisRoute: "smoked",
   alcohol: "off",
+  age: "adult",
+  kidney: "ok",
+  preg: "off",
 };
 
 export type EnzymeRole =
@@ -160,7 +185,7 @@ export interface Drug {
 export interface Finding {
   id: string;
   severity: Severity;
-  kind: "pk" | "pd" | "geno";
+  kind: "pk" | "pd" | "geno" | "clinic";
   drugIds: string[];
   headline: string;
   enzymes: Enzyme[];

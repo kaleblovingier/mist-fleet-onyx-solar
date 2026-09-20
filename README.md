@@ -18,6 +18,8 @@ Deck: [gamma.app/docs/c1sxd9i8iyv80eq](https://gamma.app/docs/c1sxd9i8iyv80eq)
 4. **Fluoxetine** — Stahl occupancy (SERT, long washout) plus DrugBank `DB00472`. Flip 2D6 PM: CPIC has no dose cut for Prozac, but it still locks 2D6 for codeine and tamoxifen. Search `stahl` / `pgx`.
 5. **Berberine × simvastatin** — the glucose capsule is a 3A4/P-gp bully, not goldenseal tea. Search `supplement` or `berberine`.
 6. **Activated charcoal × levothyroxine** — the binder. The dose never arrives. Metamucil does the same.
+7. **Valproate, then flip Pregnant** — teratogen card. Search `pubmed` or open Cites for Bailey, Mega, Krantz, Hunter.
+8. **Lorazepam, flip Geriatric** — Beers 2023. Search `beers`.
 
 ## Pay / write
 
@@ -56,7 +58,9 @@ Scholarly apothecary: paper `#efece4`, teal `#2f5d56`, Newsreader + IBM Plex. Au
 | `src/lib/drugs/catalog.ts` | Formulary |
 | `src/lib/drugs/drugbank.ts` | DrugBank accessions + targets |
 | `src/lib/drugs/pgx.ts` | CPIC / ClinPGx teaching cards |
-| `src/lib/drugs/stahl.ts` | Original Stahl-method receptor sketches |
+| `src/lib/drugs/pubmed.ts` | Curated PMIDs |
+| `src/lib/drugs/pubmed.server.ts` | NCBI E-utilities live search |
+| `src/lib/drugs/clinic.ts` | Pregnancy / Beers / renal / boxed teaching cards |
 | `src/lib/drugs/engine.ts` | PK + PD scoring |
 | `src/lib/drugs/pk.ts` | One-compartment DDI / phenotype / route / accumulation sketch |
 | `src/lib/drugs/host.ts` | Route, smoke, alcohol, washout |

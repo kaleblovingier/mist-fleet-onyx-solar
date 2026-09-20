@@ -1,6 +1,8 @@
 import type { Drug, Enzyme, EnzymeRole, ItemKind, PdFlag, Strength, SubstrateSensitivity } from "./types";
+import { CLINIC_BEERS, CLINIC_PREG_AVOID } from "./clinic";
 import { hasDrugbank } from "./drugbank";
 import { hasPgx } from "./pgx";
+import { hasCite } from "./pubmed";
 import { hasStahl } from "./stahl";
 
 function sub(
@@ -2412,6 +2414,19 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
   }
   if (q === "drugbank" || q === "db") {
     return DRUGS.filter((d) => !excluded.has(d.id) && hasDrugbank(d.id)).slice(0, 16);
+  }
+  if (q === "pubmed" || q === "pmid" || q === "cites" || q === "refs" || q === "papers") {
+    return DRUGS.filter((d) => !excluded.has(d.id) && hasCite(d.id)).slice(0, 16);
+  }
+  if (q === "beers" || q === "geriatric") {
+    return CLINIC_BEERS.map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 16);
+  }
+  if (q === "pregnancy" || q === "pregnant" || q === "lactation" || q === "teratogen") {
+    return CLINIC_PREG_AVOID.map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 16);
   }
   const scored: { drug: Drug; score: number }[] = [];
   for (const drug of DRUGS) {

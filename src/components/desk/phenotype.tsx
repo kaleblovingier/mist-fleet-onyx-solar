@@ -1,15 +1,21 @@
 import {
+  AGE_LABEL,
   ALCOHOL_LABEL,
   CANNABIS_ROUTE_LABEL,
   KETAMINE_ROUTE_LABEL,
+  KIDNEY_LABEL,
   METABOLIZER_LABEL,
   PHENO_FREQ,
   PHENOTYPE_ENZYMES,
+  PREG_LABEL,
+  type AgeBand,
   type AlcoholPattern,
   type CannabisRoute,
   type KetamineRoute,
+  type KidneyBand,
   type Metabolizer,
   type PhenotypeEnzyme,
+  type PregBand,
 } from "@/lib/drugs/types";
 import { useDesk } from "@/lib/drugs/store";
 import { cn } from "@/lib/utils";
@@ -18,6 +24,9 @@ const ORDER: Metabolizer[] = ["PM", "IM", "NM", "UM"];
 const ROUTES: KetamineRoute[] = ["iv", "in", "oral"];
 const CANNABIS: CannabisRoute[] = ["smoked", "oral"];
 const ALCOHOL: AlcoholPattern[] = ["off", "acute", "chronic"];
+const AGES: AgeBand[] = ["adult", "geriatric"];
+const KIDNEYS: KidneyBand[] = ["ok", "ckd"];
+const PREGS: PregBand[] = ["off", "pregnant", "lactating"];
 
 const HINT: Record<PhenotypeEnzyme, string> = {
   CYP2D6: "DXM, MDMA, codeine, atomoxetine",
@@ -38,12 +47,21 @@ export function PhenotypeCard() {
   const setCannabisRoute = useDesk((s) => s.setCannabisRoute);
   const alcohol = useDesk((s) => s.alcohol);
   const setAlcohol = useDesk((s) => s.setAlcohol);
+  const age = useDesk((s) => s.age);
+  const setAge = useDesk((s) => s.setAge);
+  const kidney = useDesk((s) => s.kidney);
+  const setKidney = useDesk((s) => s.setKidney);
+  const preg = useDesk((s) => s.preg);
+  const setPreg = useDesk((s) => s.setPreg);
   const dirty =
     PHENOTYPE_ENZYMES.some((e) => phenotypes[e] !== "NM") ||
     smoking ||
     ketamineRoute !== "iv" ||
     cannabisRoute !== "smoked" ||
-    alcohol !== "off";
+    alcohol !== "off" ||
+    age !== "adult" ||
+    kidney !== "ok" ||
+    preg !== "off";
 
   return (
     <div className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)]">
@@ -60,7 +78,8 @@ export function PhenotypeCard() {
         ) : null}
       </div>
       <p className="mt-1 text-[11px] leading-relaxed text-muted">
-        Poor ≈ a strong inhibitor. Smoke induces 1A2. Chronic alcohol induces 2E1. 2C9 PMs stack warfarin and edible THC.
+        Poor ≈ a strong inhibitor. Smoke induces 1A2. Chronic alcohol induces 2E1. Geriatric, CKD, and
+        pregnancy score Beers / renal / teratogen cards.
       </p>
       <ul className="mt-3 space-y-3">
         {PHENOTYPE_ENZYMES.map((enzyme) => (
@@ -188,6 +207,75 @@ export function PhenotypeCard() {
                 )}
               >
                 {CANNABIS_ROUTE_LABEL[r]}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-3">
+        <div className="text-xs font-medium text-fg">Age</div>
+        <div className="mt-1.5 grid grid-cols-2 gap-1">
+          {AGES.map((a) => {
+            const on = age === a;
+            return (
+              <button
+                key={a}
+                type="button"
+                aria-pressed={on}
+                onClick={() => setAge(a)}
+                className={cn(
+                  "h-10 rounded-sm text-[11px] font-medium",
+                  on ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+                )}
+              >
+                {AGE_LABEL[a]}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-3">
+        <div className="text-xs font-medium text-fg">Kidney</div>
+        <div className="mt-1.5 grid grid-cols-2 gap-1">
+          {KIDNEYS.map((k) => {
+            const on = kidney === k;
+            return (
+              <button
+                key={k}
+                type="button"
+                aria-pressed={on}
+                onClick={() => setKidney(k)}
+                className={cn(
+                  "h-10 rounded-sm text-[11px] font-medium",
+                  on ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+                )}
+              >
+                {KIDNEY_LABEL[k]}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-3">
+        <div className="text-xs font-medium text-fg">Pregnancy / lactation</div>
+        <div className="mt-1.5 grid grid-cols-3 gap-1">
+          {PREGS.map((p) => {
+            const on = preg === p;
+            return (
+              <button
+                key={p}
+                type="button"
+                aria-pressed={on}
+                onClick={() => setPreg(p)}
+                className={cn(
+                  "h-10 rounded-sm text-[11px] font-medium",
+                  on ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+                )}
+              >
+                {PREG_LABEL[p]}
               </button>
             );
           })}

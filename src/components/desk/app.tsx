@@ -45,6 +45,8 @@ import { WashoutCard } from "./washout";
 import { PkExplorer } from "./pk";
 import { StripeReturn } from "./stripe-return";
 import { Dossier } from "./dossier";
+import { ClinicPanel } from "./clinic";
+import { CitesPage } from "./cites";
 
 export function DeskApp() {
   const view = useDesk((s) => s.view);
@@ -72,9 +74,12 @@ export function DeskApp() {
   const ketamineRoute = useDesk((s) => s.ketamineRoute);
   const cannabisRoute = useDesk((s) => s.cannabisRoute);
   const alcohol = useDesk((s) => s.alcohol);
+  const age = useDesk((s) => s.age);
+  const kidney = useDesk((s) => s.kidney);
+  const preg = useDesk((s) => s.preg);
   const host = useMemo<HostContext>(
-    () => ({ phenotypes, smoking, ketamineRoute, cannabisRoute, alcohol }),
-    [phenotypes, smoking, ketamineRoute, cannabisRoute, alcohol],
+    () => ({ phenotypes, smoking, ketamineRoute, cannabisRoute, alcohol, age, kidney, preg }),
+    [phenotypes, smoking, ketamineRoute, cannabisRoute, alcohol, age, kidney, preg],
   );
   const report = useMemo(() => analyze(selected, host), [selected, host]);
   const hostDrugs = useMemo(
@@ -147,6 +152,7 @@ export function DeskApp() {
                 [
                   ["desk", "Desk"],
                   ["library", "Materia"],
+                  ["cites", "Cites"],
                   ["atlas", "Atlas"],
                   ["rounds", "Rounds"],
                   ["plans", "Pro"],
@@ -200,6 +206,8 @@ export function DeskApp() {
           <Foundry />
         ) : view === "rounds" ? (
           <RoundsPage />
+        ) : view === "cites" ? (
+          <CitesPage />
         ) : view === "atlas" ? (
           <EnzymeAtlas />
         ) : view === "library" ? (
@@ -245,6 +253,7 @@ export function DeskApp() {
               ) : selected.length === 1 ? (
                 <>
                   <SingleDrug id={selected[0]} />
+                  <ClinicPanel ids={selected} host={host} />
                   <Dossier ids={selected} host={host} />
                   {report.findings.length > 0 ? (
                     <>
@@ -315,6 +324,7 @@ export function DeskApp() {
                     </>
                   )}
                   <Dossier ids={selected} host={host} />
+                  <ClinicPanel ids={selected} host={host} />
                   <PkExplorer drugs={hostDrugs} host={host} />
                   {pro ? (
                     <MetaboliteCard ids={selected} />
@@ -358,7 +368,7 @@ export function DeskApp() {
               ) : (
                 <Paywall
                   title="Host factors are Pro"
-                  blurb="Phenotype, smoke, alcohol pattern, and route change the score. Two-drug PK stays free."
+                  blurb="Phenotype, smoke, alcohol pattern, route, age, kidney, and pregnancy change the score. Two-drug PK stays free."
                 >
                   <PhenotypeCard />
                 </Paywall>
@@ -408,7 +418,8 @@ function EmptyState({
           status. OTP and office-based MAT sit on the same formulary: precipitated withdrawal,
           methadone QT, leftover agonist after Vivitrol. Clinic staples do too: Imuran × Zyloprim,
           Imdur × Viagra, Flonase × a booster. The vitamin-shop shelf is scored the same way —
-          berberine, red yeast rice, SAM-e, nattokinase, charcoal. Two-drug collisions stay free,
+          berberine, red yeast rice, SAM-e, nattokinase, charcoal. Clinic cards flag pregnancy,
+          Beers, and CKD. PubMed sits on the Sources tab. Two-drug collisions stay free,
           including a concentration-time sketch. Browse the materia, then put a pair on the desk.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -423,6 +434,9 @@ function EmptyState({
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setLane("food")}>
             Supplement shelf
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => setView("cites")}>
+            PubMed shelf
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setView("rounds")}>
             Teaching rounds
@@ -832,10 +846,17 @@ function HowCard() {
           stay quieter. Search clinic / primary / ozempic / imuran.
         </li>
         <li>
+          <span className="text-fg">Host clinic.</span> Flip geriatric for Beers 2023. CKD scores
+          renally cleared NTI drugs and NSAIDs. Pregnant flags ACEI/ARB, warfarin, valproate, MTX,
+          mycophenolate. Teaching notes, not a label. Search beers / pregnant.
+        </li>
+        <li>
           <span className="text-fg">Sources.</span> DrugBank is identity and targets — open the
           accession. PharmGKB / CPIC is the gene table; flip a metabolizer on this desk and the matching
           row highlights. Stahl is a receptor sketch (spectrum, occupancy, side effects from those
-          receptors) in original language, not a quotation of the book. Search pgx / stahl / drugbank.
+          receptors) in original language, not a quotation of the book. PubMed is a curated PMID
+          shelf plus a live NCBI search for the pair on the desk. Search pgx / stahl / drugbank /
+          pubmed.
         </li>
       </ul>
     </div>
@@ -850,8 +871,10 @@ function Disclaimer() {
       extracts (berberine, red yeast, SAM-e, nattokinase), entactogens, psychedelics, and diet.
       DrugBank accessions and CPIC / ClinPGx paraphrases point at those sources; receptor sketches
       use the Stahl method in original language — not a quotation of Stahl's Essential
-      Psychopharmacology. Not a clinician, not a complete database, and not guidance for
-      non-medical use. Always verify with primary references.
+      Psychopharmacology. PubMed PMIDs are curated from NCBI and linked out; live search uses
+      E-utilities. Pregnancy, Beers, and CKD notes are teaching flags, not a prescribing label.
+      Not a clinician, not a complete database, and not guidance for non-medical use. Always
+      verify with primary references.
     </p>
   );
 }

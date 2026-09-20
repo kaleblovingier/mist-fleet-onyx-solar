@@ -8,12 +8,13 @@ import { Badge } from "@/components/ui/badge";
 import { severitySurface, severityTone } from "./severity";
 
 const SEVERITY_FILTERS: Array<Severity | "all"> = ["all", "contraindicated", "major", "moderate", "minor"];
-type KindFilter = "all" | "pk" | "pd" | "geno" | "food";
+type KindFilter = "all" | "pk" | "pd" | "geno" | "clinic" | "food";
 const KIND_FILTERS: { id: KindFilter; label: string }[] = [
   { id: "all", label: "All kinds" },
   { id: "pk", label: "PK" },
   { id: "pd", label: "PD" },
   { id: "geno", label: "Phenotype" },
+  { id: "clinic", label: "Clinic" },
   { id: "food", label: "Food" },
 ];
 
@@ -134,7 +135,9 @@ function FindingCard({ finding }: { finding: Finding }) {
                     ? "accent"
                     : finding.kind === "geno"
                       ? "warn"
-                      : "info"
+                      : finding.kind === "clinic"
+                        ? "danger"
+                        : "info"
               }
             >
               {finding.tags.includes("food")
@@ -143,7 +146,9 @@ function FindingCard({ finding }: { finding: Finding }) {
                   ? "Pharmacokinetic"
                   : finding.kind === "geno"
                     ? "Phenotype"
-                    : "Pharmacodynamic"}
+                    : finding.kind === "clinic"
+                      ? "Clinic"
+                      : "Pharmacodynamic"}
             </Badge>
             {finding.enzymes.map((e) => (
               <Badge key={e} tone="default">

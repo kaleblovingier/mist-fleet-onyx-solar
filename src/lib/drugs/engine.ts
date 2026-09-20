@@ -1,6 +1,9 @@
 import { DRUG_BY_ID } from "./catalog";
+import { CLINIC } from "./clinic";
 import { applyHost, isVirtual, WASHOUT } from "./host";
 import {
+  DEFAULT_HOST,
+  DEFAULT_PHENOTYPES,
   ENZYMES,
   METABOLIZER_LABEL,
   PHENOTYPE_ENZYMES,
@@ -1366,6 +1369,168 @@ function washoutFindings(drugs: Drug[]): Finding[] {
   return out;
 }
 
+function clinicHit(
+  drug: Drug,
+  suffix: string,
+  severity: Severity,
+  headline: string,
+  mechanism: string,
+  effect: string,
+  clinical: string,
+  tags: string[],
+): Finding {
+  return {
+    id: `${drug.id}__clinic-${suffix}`,
+    severity,
+    kind: "clinic",
+    drugIds: [drug.id],
+    headline,
+    enzymes: [],
+    effect,
+    mechanism,
+    clinical,
+    tags: ["clinic", ...tags],
+  };
+}
+
+function hostClinicFindings(drugs: Drug[], host: HostContext): Finding[] {
+  const age = host.age ?? "adult";
+  const kidney = host.kidney ?? "ok";
+  const preg = host.preg ?? "off";
+  if (age === "adult" && kidney === "ok" && preg === "off") return [];
+  const out: Finding[] = [];
+  for (const d of drugs) {
+    const card = CLINIC[d.id];
+    if (preg === "pregnant") {
+      if (card?.pregnancy === "avoid") {
+        out.push(
+          clinicHit(
+            d,
+            "preg-avoid",
+            "contraindicated",
+            `${d.name} in pregnancy`,
+            "teratogen / boxed fetal risk",
+            "avoid in pregnancy",
+            card.pregNote ??
+              `${d.name} is mapped as avoid in pregnancy on this desk. Open the primary label. Not a prescribing protocol.`,
+            ["pregnancy"],
+          ),
+        );
+      } else if (card?.pregnancy === "caution") {
+        out.push(
+          clinicHit(
+            d,
+            "preg-caution",
+            "major",
+            `${d.name} in pregnancy`,
+            "pregnancy caution",
+            "specialist call",
+            card.pregNote ?? `${d.name} is not a free pass in pregnancy. Weigh indication against fetal risk.`,
+            ["pregnancy"],
+          ),
+        );
+      } else if (has(d, "acei-arb") && !card) {
+        out.push(
+          clinicHit(
+            d,
+            "preg-acei",
+            "contraindicated",
+            `${d.name} in pregnancy`,
+            "ACEI/ARB fetal toxicity",
+            "avoid in pregnancy",
+            "ACE inhibitors and ARBs are boxed for fetal renal dysgenesis in the second and third trimester.",
+            ["pregnancy"],
+          ),
+        );
+      }
+    }
+    if (preg === "lactating" && card?.lactation === "avoid") {
+      out.push(
+        clinicHit(
+          d,
+          "lact-avoid",
+          "major",
+          `${d.name} in lactation`,
+          "lactation avoid",
+          "not compatible",
+          card.lactNote ?? `${d.name} is mapped as avoid while breastfeeding on this desk.`,
+          ["lactation"],
+        ),
+      );
+    }
+    if (kidney === "ckd") {
+      if (card?.renal === "avoid") {
+        out.push(
+          clinicHit(
+            d,
+            "ckd-avoid",
+            "major",
+            `${d.name} in CKD`,
+            "renally cleared / toxic in low GFR",
+            "avoid or specialist only",
+            card.renalNote ?? `${d.name} accumulates or injures the kidney as GFR falls.`,
+            ["renal"],
+          ),
+        );
+      } else if (card?.renal === "caution") {
+        out.push(
+          clinicHit(
+            d,
+            "ckd-caution",
+            "moderate",
+            `${d.name} in CKD`,
+            "renal dose / accumulation",
+            "adjust or monitor",
+            card.renalNote ?? `Dose-cut or monitor as GFR falls. Not a CYP collision.`,
+            ["renal"],
+          ),
+        );
+      } else if (has(d, "nsaid")) {
+        out.push(
+          clinicHit(
+            d,
+            "ckd-nsaid",
+            "major",
+            `${d.name} in CKD`,
+            "hemodynamic kidney hit",
+            "lost GFR / hyperK / volume",
+            "NSAIDs drop afferent flow. In CKD they take the remaining GFR. The ACEI + diuretic + NSAID triple is the classic.",
+            ["renal"],
+          ),
+        );
+      } else if (has(d, "nephrotoxic")) {
+        out.push(
+          clinicHit(
+            d,
+            "ckd-nephro",
+            "major",
+            `${d.name} in CKD`,
+            "stacked nephrotoxin",
+            "further GFR loss",
+            `${d.name} is already a kidney toxin. CKD is not the host for a second hit.`,
+            ["renal"],
+          ),
+        );
+      }
+    }
+    if (age === "geriatric" && card?.beers) {
+      out.push(
+        clinicHit(
+          d,
+          "beers",
+          "moderate",
+          `${d.name} · Beers`,
+          "potentially inappropriate in older adults",
+          "Beers 2023 teaching flag",
+          card.beers + " Flip off geriatric to hide this row. Not a stop list.",
+          ["beers"],
+        ),
+      );
+    }
+  }
+  return out;
+}
+
 function alcoholHostFindings(drugs: Drug[], alcohol: HostContext["alcohol"]): Finding[] {
   if (alcohol === "off") return [];
   const apap = drugs.find((d) => d.id === "acetaminophen");
@@ -1457,14 +1622,11 @@ function stackLoad(drugs: Drug[]): StackBar[] {
 export function analyze(drugIds: string[], host?: HostContext | PhenotypeMap): Report {
   const ctx: HostContext | undefined =
     host && "smoking" in (host as HostContext)
-      ? (host as HostContext)
+      ? { ...DEFAULT_HOST, ...(host as HostContext), phenotypes: { ...DEFAULT_PHENOTYPES, ...(host as HostContext).phenotypes } }
       : host && "CYP2D6" in host
         ? {
+            ...DEFAULT_HOST,
             phenotypes: host as PhenotypeMap,
-            smoking: false,
-            ketamineRoute: "iv",
-            cannabisRoute: "smoked",
-            alcohol: "off",
           }
         : undefined;
   const base = drugIds.map((id) => DRUG_BY_ID[id]).filter(Boolean);
@@ -1487,6 +1649,7 @@ export function analyze(drugIds: string[], host?: HostContext | PhenotypeMap): R
   findings.push(...washoutFindings(drugs));
   findings.push(...lingerFindings(drugs));
   if (ctx) findings.push(...alcoholHostFindings(real, ctx.alcohol));
+  if (ctx) findings.push(...hostClinicFindings(real, ctx));
   const uniq = dedupe(findings);
   uniq.sort((a, b) => {
     const d = SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity];

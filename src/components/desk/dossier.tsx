@@ -3,12 +3,15 @@ import { ExternalLink } from "lucide-react";
 import { DRUG_BY_ID } from "@/lib/drugs/catalog";
 import { DRUGBANK, drugbankSearchUrl, drugbankUrl } from "@/lib/drugs/drugbank";
 import { pgxFor, type PgxCard } from "@/lib/drugs/pgx";
+import { citesFor, pubmedSearchUrl, pubmedUrl, type Cite, type LiveCite } from "@/lib/drugs/pubmed";
+import { searchPubmed } from "@/lib/drugs/pubmed-rpc";
 import { stahlFor, type Occupancy, type StahlCard } from "@/lib/drugs/stahl";
 import { PHENOTYPE_ENZYMES, type HostContext, type PhenotypeEnzyme } from "@/lib/drugs/types";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
-type Tab = "drugbank" | "pgx" | "stahl";
+type Tab = "drugbank" | "pgx" | "stahl" | "pubmed";
 
 export function Dossier({ ids, host }: { ids: string[]; host: HostContext }) {
   const present = ids.filter((id) => DRUG_BY_ID[id]);
@@ -18,6 +21,7 @@ export function Dossier({ ids, host }: { ids: string[]; host: HostContext }) {
   const bank = id ? DRUGBANK[id] : undefined;
   const pgx = id ? pgxFor(id) : [];
   const stahl = id ? stahlFor(id) : null;
+  const curated = useMemo(() => citesFor(present), [present.join("|")]);
   const [tab, setTab] = useState<Tab>("stahl");
 
   const tabs = useMemo(() => {
@@ -25,6 +29,7 @@ export function Dossier({ ids, host }: { ids: string[]; host: HostContext }) {
       { id: "stahl", label: "Stahl", on: Boolean(stahl) },
       { id: "pgx", label: "PharmGKB", on: pgx.length > 0 },
       { id: "drugbank", label: "DrugBank", on: Boolean(bank) },
+      { id: "pubmed", label: "PubMed", on: true },
     ];
     return t;
   }, [stahl, pgx.length, bank]);
@@ -41,7 +46,7 @@ export function Dossier({ ids, host }: { ids: string[]; host: HostContext }) {
         <div>
           <h2 className="font-serif text-lg tracking-tight text-fg">Sources</h2>
           <p className="text-xs text-muted">
-            DrugBank identity, CPIC / ClinPGx, and a receptor sketch in the Stahl method.
+            DrugBank identity, CPIC / ClinPGx, a Stahl-method sketch, and PubMed.
           </p>
         </div>
         <div className="flex flex-wrap gap-1">
@@ -116,6 +121,7 @@ export function Dossier({ ids, host }: { ids: string[]; host: HostContext }) {
             </EmptySource>
           )
         ) : null}
+        {liveTab === "pubmed" ? <PubmedPanel ids={present} curated={curated} /> : null}
       </div>
     </section>
   );
@@ -250,6 +256,87 @@ function ReceptorBar({ o }: { o: Occupancy }) {
 
 function tick(n: 1 | 2 | 3 | 4) {
   return "+".repeat(n);
+}
+
+function PubmedPanel({ ids, curated }: { ids: string[]; curated: Cite[] }) {
+  const [live, setLive] = useState<LiveCite[] | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const names = ids.map((id) => DRUG_BY_ID[id]?.name).filter(Boolean);
+
+  async function runLive() {
+    setBusy(true);
+    setErr(null);
+    try {
+      const res = await searchPubmed({ data: { query: "", ids } });
+      if (!res.ok) setErr(res.reason ?? "PubMed did not answer.");
+      setLive(res.hits);
+    } catch {
+      setErr("PubMed did not answer.");
+      setLive([]);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="space-y-5">
+      {curated.length ? (
+        <ul className="space-y-3">
+          {curated.map((c) => (
+            <li key={c.pmid} className="rounded-md bg-bg-sunken px-3 py-3">
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <span className="font-mono text-[11px] text-accent">PMID {c.pmid}</span>
+                <span className="font-mono text-[11px] text-muted">
+                  {c.year} · {c.journal}
+                </span>
+              </div>
+              <p className="mt-1 text-sm font-medium leading-snug text-fg">{c.title}</p>
+              <p className="mt-1 text-sm leading-relaxed text-muted">{c.why}</p>
+              <Out href={pubmedUrl(c.pmid)}>Open {c.pmid}</Out>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <EmptySource>
+          No curated paper on this pair yet. Search PubMed live, or browse the Cites shelf.
+        </EmptySource>
+      )}
+      <div className="flex flex-wrap items-center gap-2">
+        <Button variant="secondary" size="sm" disabled={busy || ids.length === 0} onClick={() => void runLive()}>
+          {busy ? "Searching…" : "Search PubMed for this desk"}
+        </Button>
+        {names.length ? (
+          <Out href={pubmedSearchUrl(`${names.join(" ")} drug interaction`)}>Open NCBI</Out>
+        ) : null}
+      </div>
+      {err ? <p className="text-sm text-danger">{err}</p> : null}
+      {live && live.length === 0 && !err ? (
+        <p className="text-sm text-muted">NCBI returned no hits for this query.</p>
+      ) : null}
+      {live && live.length > 0 ? (
+        <ul className="space-y-3">
+          {live.map((c) => (
+            <li key={c.pmid} className="rounded-md bg-bg-sunken px-3 py-3">
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <span className="font-mono text-[11px] text-accent">PMID {c.pmid}</span>
+                <span className="font-mono text-[11px] text-muted">
+                  {c.year} · {c.journal}
+                </span>
+              </div>
+              <p className="mt-1 text-sm font-medium leading-snug text-fg">{c.title}</p>
+              {c.authors ? <p className="mt-1 text-xs text-muted">{c.authors}</p> : null}
+              <Out href={pubmedUrl(c.pmid)}>Open {c.pmid}</Out>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <p className="text-[11px] leading-relaxed text-subtle">
+        Curated titles come from NCBI esummary. Live hits are E-utilities, not a dump of MEDLINE.
+        Educational — not a complete literature search.
+      </p>
+    </div>
+  );
 }
 
 function EmptySource({ children }: { children: ReactNode }) {

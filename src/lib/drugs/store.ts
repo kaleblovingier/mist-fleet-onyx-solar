@@ -5,16 +5,19 @@ import { maxDrugs, type Interval, type PlanId } from "@/lib/billing/plans";
 import {
   DEFAULT_HOST,
   DEFAULT_PHENOTYPES,
+  type AgeBand,
   type AlcoholPattern,
   type CannabisRoute,
   type HostContext,
   type KetamineRoute,
+  type KidneyBand,
   type Metabolizer,
   type PhenotypeEnzyme,
   type PhenotypeMap,
+  type PregBand,
 } from "./types";
 
-type View = "desk" | "atlas" | "plans" | "library" | "foundry" | "rounds";
+type View = "desk" | "atlas" | "plans" | "library" | "foundry" | "rounds" | "cites";
 
 export interface LoadExtras {
   phenotypes?: Partial<PhenotypeMap>;
@@ -33,6 +36,9 @@ interface DeskState {
   ketamineRoute: KetamineRoute;
   cannabisRoute: CannabisRoute;
   alcohol: AlcoholPattern;
+  age: AgeBand;
+  kidney: KidneyBand;
+  preg: PregBand;
   plan: PlanId;
   license: string | null;
   lifetime: boolean;
@@ -50,6 +56,9 @@ interface DeskState {
   setKetamineRoute: (route: KetamineRoute) => void;
   setCannabisRoute: (route: CannabisRoute) => void;
   setAlcohol: (alcohol: AlcoholPattern) => void;
+  setAge: (age: AgeBand) => void;
+  setKidney: (kidney: KidneyBand) => void;
+  setPreg: (preg: PregBand) => void;
   resetPhenotypes: () => void;
   openCheckout: (plan: PlanId, reason?: string) => void;
   closeCheckout: () => void;
@@ -77,6 +86,9 @@ export const useDesk = create<DeskState>()(
       ketamineRoute: "iv",
       cannabisRoute: "smoked",
       alcohol: "off",
+      age: "adult",
+      kidney: "ok",
+      preg: "off",
       plan: "free",
       license: null,
       lifetime: false,
@@ -111,6 +123,9 @@ export const useDesk = create<DeskState>()(
           ketamineRoute: "iv",
           cannabisRoute: "smoked",
           alcohol: "off",
+          age: "adult",
+          kidney: "ok",
+          preg: "off",
         }),
       load: (ids, extras) => {
         const cap = maxDrugs(activePlan(get()));
@@ -137,6 +152,9 @@ export const useDesk = create<DeskState>()(
             ketamineRoute: "iv",
             cannabisRoute: "smoked",
             alcohol: "off",
+            age: "adult",
+            kidney: "ok",
+            preg: "off",
           });
           return false;
         }
@@ -148,6 +166,9 @@ export const useDesk = create<DeskState>()(
           ketamineRoute: extras?.ketamineRoute ?? "iv",
           cannabisRoute: extras?.cannabisRoute ?? "smoked",
           alcohol: extras?.alcohol ?? "off",
+          age: "adult",
+          kidney: "ok",
+          preg: "off",
         });
         return true;
       },
@@ -208,6 +229,27 @@ export const useDesk = create<DeskState>()(
         }
         set({ alcohol });
       },
+      setAge: (age) => {
+        if (activePlan(get()) === "free") {
+          get().openCheckout("pro", "Geriatric / Beers host flag is Pro.");
+          return;
+        }
+        set({ age });
+      },
+      setKidney: (kidney) => {
+        if (activePlan(get()) === "free") {
+          get().openCheckout("pro", "CKD host flag is Pro.");
+          return;
+        }
+        set({ kidney });
+      },
+      setPreg: (preg) => {
+        if (activePlan(get()) === "free") {
+          get().openCheckout("pro", "Pregnancy / lactation host flag is Pro.");
+          return;
+        }
+        set({ preg });
+      },
       resetPhenotypes: () =>
         set({
           phenotypes: { ...DEFAULT_PHENOTYPES },
@@ -215,6 +257,9 @@ export const useDesk = create<DeskState>()(
           ketamineRoute: "iv",
           cannabisRoute: "smoked",
           alcohol: "off",
+          age: "adult",
+          kidney: "ok",
+          preg: "off",
         }),
       openCheckout: (plan, reason = "") =>
         set({
@@ -260,6 +305,9 @@ export const useDesk = create<DeskState>()(
           ...current,
           ...p,
           phenotypes: { ...DEFAULT_PHENOTYPES, ...p.phenotypes },
+          age: p.age === "geriatric" ? "geriatric" : "adult",
+          kidney: p.kidney === "ckd" ? "ckd" : "ok",
+          preg: p.preg === "pregnant" || p.preg === "lactating" ? p.preg : "off",
           lifetime: Boolean(p.lifetime),
           justActivated: false,
         };
@@ -271,6 +319,9 @@ export const useDesk = create<DeskState>()(
         ketamineRoute: s.ketamineRoute,
         cannabisRoute: s.cannabisRoute,
         alcohol: s.alcohol,
+        age: s.age,
+        kidney: s.kidney,
+        preg: s.preg,
         plan: s.plan,
         license: s.license,
         lifetime: s.lifetime,
@@ -293,7 +344,7 @@ export function usePlan(): PlanId {
 }
 
 export function hostFromState(
-  s: Pick<DeskState, "phenotypes" | "smoking" | "ketamineRoute" | "cannabisRoute" | "alcohol">,
+  s: Pick<DeskState, "phenotypes" | "smoking" | "ketamineRoute" | "cannabisRoute" | "alcohol" | "age" | "kidney" | "preg">,
 ): HostContext {
   return {
     phenotypes: s.phenotypes,
@@ -301,6 +352,9 @@ export function hostFromState(
     ketamineRoute: s.ketamineRoute,
     cannabisRoute: s.cannabisRoute,
     alcohol: s.alcohol,
+    age: s.age,
+    kidney: s.kidney,
+    preg: s.preg,
   };
 }
 
