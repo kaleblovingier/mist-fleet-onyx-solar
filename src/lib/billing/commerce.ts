@@ -31,8 +31,8 @@ export const SITE = {
   pages: PAGES_URL,
   gamma: "https://gamma.app/docs/c1sxd9i8iyv80eq",
   gammaCard: "https://gamma.app/docs/h9grlpif6t8ogmt",
-  /** Live desk. Prefer VITE_PUBLIC_URL; otherwise GitHub Pages — never the bare repo. */
-  url: (import.meta.env.VITE_PUBLIC_URL as string | undefined)?.trim() || PAGES_URL,
+  /** Live desk. Prefer VITE_PUBLIC_URL; else the Vercel desk — never the bare repo. */
+  url: (import.meta.env.VITE_PUBLIC_URL as string | undefined)?.trim() || "https://firstpass-desk.vercel.app",
 };
 
 export const TRY_THREE = [
