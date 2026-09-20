@@ -20,15 +20,21 @@ export const mintLicenseKey = createServerFn({ method: "POST" })
     plan: readString(input, "plan"),
   }))
   .handler(async ({ data }) => {
-    const { mintKey, pinOk, defaultPinSet } = await import("./license.server");
-    if (!pinOk(data.pin)) {
-      return { ok: false as const, reason: "Operator PIN is wrong." };
+    const { mintKey, pinOk, defaultPinSet, defaultPepperSet } = await import("./license.server");
+    try {
+      if (!pinOk(data.pin)) {
+        return { ok: false as const, reason: "Operator PIN is wrong." };
+      }
+      const plan = data.plan === "lab" || data.plan === "life" || data.plan === "pro" ? data.plan : "life";
+      return {
+        ok: true as const,
+        key: mintKey(plan),
+        plan,
+        defaultPin: defaultPinSet(),
+        defaultPepper: defaultPepperSet(),
+      };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "License secrets are not configured.";
+      return { ok: false as const, reason: msg };
     }
-    const plan = data.plan === "lab" || data.plan === "life" || data.plan === "pro" ? data.plan : "life";
-    return {
-      ok: true as const,
-      key: mintKey(plan),
-      plan,
-      defaultPin: defaultPinSet(),
-    };
   });

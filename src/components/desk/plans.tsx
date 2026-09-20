@@ -35,7 +35,7 @@ export function PlansPage() {
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">{COMMERCE.pitch}</p>
             <div className="mt-5 flex flex-wrap gap-2">
-              <Button onClick={() => openCheckout("lab", "Founding lifetime — Pro plus export.")}>
+              <Button onClick={() => openCheckout("lab", "Founding lifetime — Pro plus export.", "life")}>
                 Buy founding · ${COMMERCE.founding}
               </Button>
               {current === "free" ? (
@@ -127,7 +127,7 @@ export function PlansPage() {
                   <Button
                     className="w-full"
                     onClick={() =>
-                      openCheckout(interval === "life" ? "lab" : p.id, interval === "life" ? "Founding lifetime." : p.name)
+                      openCheckout(interval === "life" ? "lab" : p.id, interval === "life" ? "Founding lifetime." : p.name, interval)
                     }
                   >
                     {cta}
@@ -275,8 +275,9 @@ export function CheckoutDrawer() {
         {checkout.reason ? <p className="mt-3 text-sm leading-relaxed text-muted">{checkout.reason}</p> : null}
 
         <p className="mt-4 text-sm leading-relaxed text-muted">
-          Pay with card on Stripe. A signed key is minted only after Stripe says paid — there is no
-          fake checkout. Venmo, Cash App, and PayPal still work if you would rather write.
+          {cardLive
+            ? "Pay with card on Stripe. A signed key is minted only after Stripe says paid — there is no fake checkout. Venmo, Cash App, and PayPal still work if you would rather write."
+            : "Card checkout is not live on this desk yet. Pay with Venmo, Cash App, or PayPal below. After payment clears, the operator emails or texts a signed key from Foundry — paste it under License key → Redeem. Nothing auto-appears below until you receive that key."}
         </p>
 
         <div className="mt-4 grid grid-cols-3 gap-1">
@@ -299,27 +300,36 @@ export function CheckoutDrawer() {
           ))}
         </div>
 
-        <Button className="mt-5 w-full" onClick={() => void payCard()} disabled={cardBusy}>
-          {cardBusy ? <Loader2 className="size-4 animate-spin" /> : <CreditCard className="size-4" />}
-          Pay ${amount} with card
-        </Button>
-        {stripeMode === "test" ? (
-          <p className="mt-2 text-xs text-warn">Stripe is in test mode. No live charge.</p>
-        ) : null}
-        {stripeMode === "off" ? (
-          <p className="mt-2 text-xs text-muted">
-            Card is not live on this desk yet. Venmo, Cash App, or PayPal still close a sale — then
-            redeem the key below.
+        {cardLive ? (
+          <>
+            <Button className="mt-5 w-full" onClick={() => void payCard()} disabled={cardBusy}>
+              {cardBusy ? <Loader2 className="size-4 animate-spin" /> : <CreditCard className="size-4" />}
+              Pay ${amount} with card
+            </Button>
+            {stripeMode === "test" ? (
+              <p className="mt-2 text-xs text-warn">Stripe is in test mode. No live charge.</p>
+            ) : (
+              <p className="mt-2 text-xs text-ok">
+                Stripe mints a signed key only after the charge clears. You land back on this desk.
+              </p>
+            )}
+          </>
+        ) : (
+          <p className="mt-5 rounded-md bg-bg-sunken px-3 py-2 text-xs text-muted">
+            {stripeMode === null
+              ? "Checking card checkout…"
+              : "Card button hidden until Stripe is configured. Use a pay rail below."}
           </p>
-        ) : cardLive ? (
-          <p className="mt-2 text-xs text-ok">
-            Stripe mints a signed key only after the charge clears. You land back on this desk.
-          </p>
-        ) : null}
+        )}
 
         <div className="mt-3 grid grid-cols-3 gap-2">
           {PAY_RAILS.map((rail) => (
-            <Button key={rail.id} variant="secondary" className="w-full" asChild>
+            <Button
+              key={rail.id}
+              variant={cardLive ? "secondary" : "default"}
+              className="w-full"
+              asChild
+            >
               <a href={rail.href} target="_blank" rel="noreferrer">
                 {rail.label}
               </a>
@@ -328,8 +338,12 @@ export function CheckoutDrawer() {
         </div>
         <p className="mt-3 rounded-md bg-bg-sunken px-3 py-3 text-sm leading-relaxed text-muted">
           {life
-            ? `Founding is $${COMMERCE.founding} once. Card is the default. ${OPERATOR.payLine} if you would rather write.`
-            : `Pay $${amount} with card, or ${OPERATOR.payLine}.`}{" "}
+            ? cardLive
+              ? `Founding is $${COMMERCE.founding} once. Card is the default. ${OPERATOR.payLine} if you would rather write.`
+              : `Founding is $${COMMERCE.founding} once. Pay ${OPERATOR.payLine}. After it clears, ${OPERATOR.email} or ${OPERATOR.phone} sends your key — Redeem below.`
+            : cardLive
+              ? `Pay $${amount} with card, or ${OPERATOR.payLine}.`
+              : `Pay $${amount} via ${OPERATOR.payLine}. Key is emailed/texted after it clears — Redeem below.`}{" "}
           {OPERATOR.email} · {OPERATOR.phone}
           <span className="mt-1 block text-xs">{OPERATOR.social.join(" · ")}</span>
         </p>
