@@ -20,7 +20,7 @@ export const PLANS: Plan[] = [
     monthly: 0,
     yearly: 0,
     features: [
-      "Search the 350+ compound formulary (including vitamin-shop bottles)",
+      "Search the 1,700+ compound formulary (WHO / US fills plus vitamin-shop bottles)",
       "Two drugs on the desk",
       "PK / PD collision cards",
       "DrugBank, CPIC / PharmGKB, Stahl receptor cards",

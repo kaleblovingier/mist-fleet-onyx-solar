@@ -1,5 +1,6 @@
 import type { Drug, Enzyme, EnzymeRole, ItemKind, PdFlag, Strength, SubstrateSensitivity } from "./types";
 import { CLINIC_BEERS, CLINIC_PREG_AVOID } from "./clinic";
+import { CLINIC_FORMULARY } from "./catalog-clinic";
 import { hasDrugbank } from "./drugbank";
 import { hasPgx } from "./pgx";
 import { hasCite } from "./pubmed";
@@ -2418,8 +2419,9 @@ const raw: Drug[] = [
     }),
 ];
 
-export const DRUGS: Drug[] = raw;
-export const DRUG_BY_ID: Record<string, Drug> = Object.fromEntries(raw.map((x) => [x.id, x]));
+const coreIds = new Set(raw.map((d) => d.id));
+export const DRUGS: Drug[] = [...raw, ...CLINIC_FORMULARY.filter((d) => !coreIds.has(d.id))];
+export const DRUG_BY_ID: Record<string, Drug> = Object.fromEntries(DRUGS.map((x) => [x.id, x]));
 
 const PSYCH_CLS =
   /SSRI|SNRI|MAOI|antipsychotic|antidepressant|Benzodiazepine|Opioid|Gabapentinoid|Mood stabilizer|NMDA|Dissociative|Psychedelic|Entactogen|Stimulant|Cannabinoid|Alcohol|GHB|Z-hypnotic|Anxiolytic|ADHD|NRI|Nicotine|Methylxanthine|Tricyclic|NaSSA|SARI|NDRI|hypnotic|orexin|Melatonin|kratom|GABA|MAT|Wake-promoting|Pineal|Partial opioid|Opioid antagonist|Atypical opioid|aldehyde|NMDA \/ GABA|nicotinic|Anticonvulsant|Central muscle|AChE|α2-agonist|Nitazene|Designer benzodiazepine|Thienodiazepine|Cathinone|Arylcyclohexylamine|GHB prodrug|Alkyl nitrite|Antidiarrheal|Sedating antihistamine|Veterinary|Barbiturate|NNRTI|NBOMe|Salvinorin|Tropane|H2 blocker|Carbamate|oneirogen|pyrovalerone|NRI analgesic|IV anesthetic|NK1|SPAR|mixed opioid|7-OH|Diacetylmorphine|Street pressed|Local anesthetic/i;
@@ -2595,6 +2597,25 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
         (matIds.has(d.id) ||
           /Partial opioid|Opioid antagonist|HCV DAA|α2-agonist \(opioid/i.test(d.cls)),
     ).slice(0, 16);
+  }
+  if (q === "onco" || q === "chemo" || q === "oncology" || q === "cancer") {
+    return DRUGS.filter((d) => !excluded.has(d.id) && familyOf(d) === "onco").slice(0, 24);
+  }
+  if (q === "abx" || q === "antibiotic" || q === "antibiotics") {
+    return DRUGS.filter((d) => !excluded.has(d.id) && familyOf(d) === "id").slice(0, 24);
+  }
+  if (q === "hiv" || q === "art" || q === "arv") {
+    return DRUGS.filter(
+      (d) =>
+        !excluded.has(d.id) &&
+        /HIV|INSTI|NRTI|NNRTI|protease inhibitor|capsid inhibitor|attachment inhibitor/i.test(d.cls),
+    ).slice(0, 24);
+  }
+  if (q === "insulin" || q === "insulins") {
+    return DRUGS.filter((d) => !excluded.has(d.id) && /insulin/i.test(`${d.cls} ${d.name}`)).slice(
+      0,
+      24,
+    );
   }
   if (q === "clinic" || q === "primary" || q === "common" || q === "pcp" || q === "staple" || q === "staples") {
     const clinicOrder = [
@@ -2807,7 +2828,7 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
     if (score > 0) scored.push({ drug, score });
   }
   scored.sort((a, b) => b.score - a.score || a.drug.name.localeCompare(b.drug.name));
-  return scored.slice(0, 16).map((s) => s.drug);
+  return scored.slice(0, 24).map((s) => s.drug);
 }
 
 function eKindQuery(drug: Drug, q: string): boolean {
@@ -2828,6 +2849,7 @@ export const FAMILIES = [
   { id: "psych", label: "Psych" },
   { id: "cardio", label: "Cardio" },
   { id: "id", label: "Perp / ID" },
+  { id: "onco", label: "Onco" },
   { id: "food", label: "Food / herb" },
   { id: "other", label: "Other" },
 ] as const;
@@ -2854,7 +2876,7 @@ export function familyOf(drug: Drug): Exclude<FamilyId, "all"> {
   )
     return "psych";
   if (
-    /Macrolide|Azole|Fluoroquinolone|HIV|Rifamycin|NNRTI|antiviral|H2 blocker|PK booster|Oxazolidinone|Sulfonamide|Antimycobacterial|HCV|DAA|Allylamine|Beta-lactam|Tetracycline|Cephalosporin/i.test(
+    /Macrolide|Azole|Fluoroquinolone|HIV|Rifamycin|NNRTI|NRTI|INSTI|antiviral|H2 blocker|PK booster|Oxazolidinone|Sulfonamide|Antimycobacterial|HCV|DAA|Allylamine|Beta-lactam|Tetracycline|Cephalosporin|Carbapenem|Aminoglycoside|Glycopeptide|Penicillin|Antimalarial|Echinocandin|Nitroimidazole|Lincosamide|Polymyxin|Monobactam|Protease inhibitor|Anthelmintic|Nitrofuran|Lipopeptide/i.test(
       drug.cls,
     )
   )
@@ -2864,10 +2886,16 @@ export function familyOf(drug: Drug): Exclude<FamilyId, "all"> {
     drug.pd.includes("statin") ||
     drug.pd.includes("beta-blocker") ||
     drug.pd.includes("ndhp-ccb") ||
-    /Statin|CCB|Beta|ARB|ACE|antiarrhythmic|DOAC|Vitamin K|Cardiac|diuretic|Alpha-1|Fibrate|PDE5|Nitrate|SGLT2|GLP-1|GIP|DPP-4|Antianginal|Mineralocorticoid|P2Y12|thiazide|LMWH/i.test(
+    /Statin|CCB|Beta|ARB|ACE|antiarrhythmic|DOAC|Vitamin K|Cardiac|diuretic|Alpha-1|Fibrate|PDE5|Nitrate|SGLT2|GLP-1|GIP|DPP-4|Antianginal|Mineralocorticoid|P2Y12|thiazide|LMWH|Insulin|ARNI|Heparin/i.test(
       drug.cls,
     )
   )
     return "cardio";
+  if (
+    /TKI|kinase inhibitor|Platinum|Taxane|Anthracycline|Topoisomerase|alkylator|Checkpoint|PARP|BCL-2|CDK4|BTK |EGFR |VEGF |HER2 |SERM|SERD|Aromatase|GnRH|Vinca|microtubule|Proteasome|CELMoD|\bADC\b|chemotherap|cytotoxic|Differentiating|BRAF|MEK|KRAS|PI3K|FLT3|ALK \/|NTRK|Supportive oncology|Classical chemotherapy|CYP17|Antiandrogen|Androgen receptor/i.test(
+      drug.cls,
+    )
+  )
+    return "onco";
   return "other";
 }
