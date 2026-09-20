@@ -35,7 +35,39 @@ const HINT: Record<PhenotypeEnzyme, string> = {
   CYP2B6: "Ketamine, bupropion, methadone",
 };
 
-export function PhenotypeCard() {
+export function KetamineRouteCard() {
+  const ketamineRoute = useDesk((s) => s.ketamineRoute);
+  const setKetamineRoute = useDesk((s) => s.setKetamineRoute);
+  return (
+    <div className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)]">
+      <h2 className="text-xs font-medium uppercase tracking-wide text-muted">Ketamine route</h2>
+      <p className="mt-1 text-[11px] leading-relaxed text-muted">
+        Free teaching control — oral × grapefruit is the first-pass demo. Other host factors stay Pro.
+      </p>
+      <div className="mt-3 grid grid-cols-3 gap-1">
+        {ROUTES.map((r) => {
+          const on = ketamineRoute === r;
+          return (
+            <button
+              key={r}
+              type="button"
+              aria-pressed={on}
+              onClick={() => setKetamineRoute(r)}
+              className={cn(
+                "h-10 rounded-sm text-[11px] font-medium",
+                on ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+              )}
+            >
+              {KETAMINE_ROUTE_LABEL[r]}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function PhenotypeCard({ hideKetamineRoute = false }: { hideKetamineRoute?: boolean }) {
   const phenotypes = useDesk((s) => s.phenotypes);
   const setPhenotype = useDesk((s) => s.setPhenotype);
   const resetPhenotypes = useDesk((s) => s.resetPhenotypes);
@@ -167,6 +199,7 @@ export function PhenotypeCard() {
         </div>
       </div>
 
+      {!hideKetamineRoute ? (
       <div className="mt-3">
         <div className="text-xs font-medium text-fg">Ketamine route</div>
         <p className="mt-0.5 text-[10px] text-subtle">Free on this desk — oral × grapefruit is the teaching demo.</p>
@@ -190,6 +223,7 @@ export function PhenotypeCard() {
           })}
         </div>
       </div>
+      ) : null}
 
       <div className="mt-3">
         <div className="text-xs font-medium text-fg">Cannabis route</div>

@@ -27,7 +27,7 @@ import { FindingList } from "./findings";
 import { CypHeatmap } from "./heatmap";
 import { EnzymeAtlas } from "./atlas";
 import { HemeMark } from "./mark";
-import { PhenotypeCard } from "./phenotype";
+import { KetamineRouteCard, PhenotypeCard } from "./phenotype";
 import { StackMeters } from "./stacks";
 import { MetaboliteCard } from "./metabolites";
 import { Paywall } from "./paywall";
@@ -366,12 +366,15 @@ export function DeskApp() {
               {pro ? (
                 <PhenotypeCard />
               ) : (
-                <Paywall
-                  title="Host factors are Pro"
-                  blurb="Phenotype, smoke, alcohol pattern, route, age, kidney, and pregnancy change the score. Two-drug PK stays free."
-                >
-                  <PhenotypeCard />
-                </Paywall>
+                <>
+                  <KetamineRouteCard />
+                  <Paywall
+                    title="Host factors are Pro"
+                    blurb="Phenotype, smoke, alcohol pattern, cannabis route, age, kidney, and pregnancy change the score. Ketamine route stays free for the oral teaching demo. Two-drug PK stays free."
+                  >
+                    <PhenotypeCard hideKetamineRoute />
+                  </Paywall>
+                </>
               )}
               {pro && selected.length > 0 ? <HostDelta selected={selected} host={host} report={report} /> : null}
               {selected.length > 0 ? <WashoutCard selected={selected} /> : null}
