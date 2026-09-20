@@ -30,3 +30,12 @@ export const claimStripeCheckout = createServerFn({ method: "POST" })
     if (!data.sessionId.trim()) return { ok: false as const, reason: "Missing session." };
     return claimSession(data.sessionId);
   });
+
+export const listPaidLicenses = createServerFn({ method: "POST" })
+  .validator((input: unknown) => ({ pin: readString(input, "pin") }))
+  .handler(async ({ data }) => {
+    const { pinOk } = await import("./license.server");
+    if (!pinOk(data.pin)) return { ok: false as const, reason: "Operator PIN is wrong." };
+    const { listPaidSessions } = await import("./stripe.server");
+    return listPaidSessions();
+  });

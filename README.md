@@ -1,10 +1,12 @@
 # FirstPass
 
-Educational CYP450 / PD collision desk for ketamine clinics, MAT, harm-reduction staff, and pharmacy students.
+Clinical decision support desk for licensed healthcare professionals: CYP450 / PD collisions, FDA-label excerpts, and published scales (COWS, CIWA-Ar, Hunter, MME).
 
 Two-drug collisions stay free. Host factors (phenotype, smoke, alcohol, route), the enzyme atlas, metabolites, and export are licensed. Founding license is **$79 once**.
 
-**Not medical advice. Not a charting system. Not TDM.**
+**Not FDA-cleared. Not FDA-approved. Not a dose. Not a charting system. The Prescribing Information governs.**
+
+Intended use, warnings, CDS criteria, and residual risk live on the in-app **IFU** tab.
 
 Pitch: [github.com/kaleblovingier/mist-fleet-onyx-solar](https://github.com/kaleblovingier/mist-fleet-onyx-solar)
 Pages (after Settings → Pages → main `/docs`): [kaleblovingier.github.io/mist-fleet-onyx-solar](https://kaleblovingier.github.io/mist-fleet-onyx-solar/)
@@ -20,6 +22,12 @@ Deck: [gamma.app/docs/c1sxd9i8iyv80eq](https://gamma.app/docs/c1sxd9i8iyv80eq)
 6. **Activated charcoal × levothyroxine** — the binder. The dose never arrives. Metamucil does the same.
 7. **Valproate, then flip Pregnant** — teratogen card. Search `pubmed` or open Cites for Bailey, Mega, Krantz, Hunter.
 8. **Lorazepam, flip Geriatric** — Beers 2023. Search `beers`.
+9. **Paroxetine × codeine** — 2D6 phenoconversion. NM on the lab, PM-like on the enzyme. Search `phenoconversion`.
+10. **MDMA × sertraline** — Hunter screen. Clonus, not NMS. Search `hunter`.
+11. **Methadone + oxycodone** — MME sketch plus live OpenFDA labels / NIH RxClass. Search `mme` / tap **Ask live sources**.
+12. **Methadone cup** — opiate EIA stays negative. Search `uds`. EDDP is how an OTP proves they swallowed it.
+13. **Buprenorphine + fentanyl** — precipitated withdrawal. Open Bedside for COWS. A score is not occupancy.
+14. **Wellbutrin** — amphetamine-cup false-positive. Search `uds` or `cup`.
 
 ## Pay / write
 
@@ -51,16 +59,33 @@ HMAC-signed keys (`FP-LIFE-…`). Two-drug stays free. Founding lifetime is $79.
 
 ## Map (for the other LLM)
 
-Scholarly apothecary: paper `#efece4`, teal `#2f5d56`, Newsreader + IBM Plex. Auth and database **off**. Persist `firstpass.desk.v7`. Optional `VITE_PAY_URL`, `VITE_PUBLIC_URL`. Stripe: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (server only — never a `.env` in the repo).
+Scholarly apothecary: paper `#efece4`, teal `#2f5d56`, Newsreader + IBM Plex. Auth and database **off**. Persist `firstpass.desk.v7`. Optional `VITE_PAY_URL`, `VITE_PUBLIC_URL`. Stripe: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (server only — never a `.env` in the repo). Live clinical lookups: OpenFDA (labels, FAERS, NDC, shortages, enforcement), RxNorm, PubChem, DailyMed, ClinicalTrials.gov, NCBI PubMed, NIH RxClass, CPIC API. (NLM retired the RxNav Interaction API in 2024.)
 
 | Path | What |
 | --- | --- |
+| `src/lib/regulatory.ts` | Intended use, IFU, CDS criteria, residual risk |
+| `src/lib/drugs/basis.ts` | Independent-review source for each collision |
 | `src/lib/drugs/catalog.ts` | Formulary |
 | `src/lib/drugs/drugbank.ts` | DrugBank accessions + targets |
 | `src/lib/drugs/pgx.ts` | CPIC / ClinPGx teaching cards |
 | `src/lib/drugs/pubmed.ts` | Curated PMIDs |
 | `src/lib/drugs/pubmed.server.ts` | NCBI E-utilities live search |
 | `src/lib/drugs/clinic.ts` | Pregnancy / Beers / renal / boxed teaching cards |
+| `src/lib/drugs/pheno-convert.ts` | Phenoconversion (inhibitor rewrites genotype) |
+| `src/lib/drugs/reversal.ts` | Antidote / will-not-reverse teaching map |
+| `src/lib/drugs/mme.ts` | CDC 2022 oral MME factors |
+| `src/lib/drugs/syndrome.ts` | Hunter criteria vs NMS |
+| `src/lib/drugs/bedside.ts` | Bazett / Fridericia + Cockcroft–Gault + Sheiner–Tozer |
+| `src/lib/drugs/otp.ts` | OTP tools: occupancy, Vivitrol washout, 42 CFR 8 take-homes, naloxone, ECG, ID screens |
+| `src/lib/drugs/anc.ts` | Clozapine REMS ANC bands |
+| `src/lib/drugs/inr.ts` | Warfarin INR movers on the desk |
+| `src/lib/drugs/uds.ts` | Urine immunoassay teaching map |
+| `src/lib/drugs/withdrawal.ts` | COWS / CIWA-Ar teaching scales |
+| `src/lib/drugs/lactmed.ts` | LactMed-style RID cards |
+| `src/lib/drugs/cpic.server.ts` | Live CPIC guideline API |
+| `src/lib/drugs/live.server.ts` | OpenFDA, FAERS, RxNorm, PubChem, DailyMed, shortages |
+| `src/lib/drugs/rxnav.server.ts` | NIH RxClass + OpenFDA label-pair scan |
+| `src/lib/drugs/trials.server.ts` | ClinicalTrials.gov v2 |
 | `src/lib/drugs/engine.ts` | PK + PD scoring |
 | `src/lib/drugs/pk.ts` | One-compartment DDI / phenotype / route / accumulation sketch |
 | `src/lib/drugs/host.ts` | Route, smoke, alcohol, washout |

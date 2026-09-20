@@ -17,7 +17,7 @@ import {
   type PregBand,
 } from "./types";
 
-type View = "desk" | "atlas" | "plans" | "library" | "foundry" | "rounds" | "cites";
+type View = "desk" | "atlas" | "plans" | "library" | "foundry" | "rounds" | "cites" | "label";
 
 export interface LoadExtras {
   phenotypes?: Partial<PhenotypeMap>;
@@ -44,6 +44,7 @@ interface DeskState {
   lifetime: boolean;
   previewUntil: number | null;
   justActivated: boolean;
+  hcpAck: boolean;
   checkout: { open: boolean; plan: PlanId; interval: Interval; reason: string };
   add: (id: string) => boolean;
   remove: (id: string) => void;
@@ -66,6 +67,7 @@ interface DeskState {
   startPreview: () => void;
   activateLicense: (opts: { plan: PlanId; license: string; lifetime: boolean }) => void;
   dismissActivated: () => void;
+  ackHcp: () => void;
   downgrade: () => void;
 }
 
@@ -94,6 +96,7 @@ export const useDesk = create<DeskState>()(
       lifetime: false,
       previewUntil: null,
       justActivated: false,
+      hcpAck: false,
       checkout: { open: false, plan: "pro", interval: "life", reason: "" },
       add: (id) => {
         if (!DRUG_BY_ID[id] || id.startsWith("__")) return false;
@@ -286,6 +289,7 @@ export const useDesk = create<DeskState>()(
           view: "desk",
         }),
       dismissActivated: () => set({ justActivated: false }),
+      ackHcp: () => set({ hcpAck: true }),
       downgrade: () =>
         set({
           plan: "free",
@@ -308,8 +312,8 @@ export const useDesk = create<DeskState>()(
           age: p.age === "geriatric" ? "geriatric" : "adult",
           kidney: p.kidney === "ckd" ? "ckd" : "ok",
           preg: p.preg === "pregnant" || p.preg === "lactating" ? p.preg : "off",
-          lifetime: Boolean(p.lifetime),
           justActivated: false,
+          hcpAck: Boolean(p.hcpAck),
         };
       },
       partialize: (s) => ({
@@ -326,6 +330,7 @@ export const useDesk = create<DeskState>()(
         license: s.license,
         lifetime: s.lifetime,
         previewUntil: s.previewUntil,
+        hcpAck: s.hcpAck,
       }),
     },
   ),

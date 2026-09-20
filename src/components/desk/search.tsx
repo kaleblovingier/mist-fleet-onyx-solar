@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
 import { searchDrugs } from "@/lib/drugs/catalog";
+import { isMatDesk } from "@/lib/drugs/window";
 import { plateForDrug } from "@/lib/drugs/visuals";
 import { useDesk, usePlan } from "@/lib/drugs/store";
 import { maxDrugs } from "@/lib/billing/plans";
@@ -46,6 +47,7 @@ export function DrugSearch() {
   }, []);
 
   const full = selected.length >= cap;
+  const mat = isMatDesk(selected);
 
   function pick(id: string) {
     add(id);
@@ -86,7 +88,13 @@ export function DrugSearch() {
             (e.target as HTMLInputElement).blur();
           }
         }}
-        placeholder={full ? "Regimen full · remove a drug to add another" : "Berberine, pubmed, beers…"}
+        placeholder={
+          full
+            ? "Regimen full · remove a drug to add another"
+            : mat
+              ? "Paxlovid, Phenergan, UDS, COWS…"
+              : "Berberine, pubmed, beers…"
+        }
         className="h-12 w-full rounded-lg bg-surface-2 pl-10 pr-10 text-sm text-fg shadow-[var(--shadow-border)] placeholder:text-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-60"
         autoComplete="off"
         spellCheck={false}

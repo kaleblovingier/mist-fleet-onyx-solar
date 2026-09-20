@@ -275,8 +275,9 @@ export function CheckoutDrawer() {
         {checkout.reason ? <p className="mt-3 text-sm leading-relaxed text-muted">{checkout.reason}</p> : null}
 
         <p className="mt-4 text-sm leading-relaxed text-muted">
-          Pay with card on Stripe. A signed key is minted only after Stripe says paid — there is no
-          fake checkout. Venmo, Cash App, and PayPal still work if you would rather write.
+          Pay with card on Stripe. A signed key is minted automatically after Stripe says paid —
+          this browser is licensed on return. Venmo, Cash App, and PayPal still work if you would
+          rather write.
         </p>
 
         <div className="mt-4 grid grid-cols-3 gap-1">
@@ -313,7 +314,7 @@ export function CheckoutDrawer() {
           </p>
         ) : cardLive ? (
           <p className="mt-2 text-xs text-ok">
-            Stripe mints a signed key only after the charge clears. You land back on this desk.
+            Stripe mints the key, stamps the receipt, and licenses this browser when you land back.
           </p>
         ) : null}
 

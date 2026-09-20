@@ -202,7 +202,7 @@ const ROWS: Record<string, PkRow> = {
     kaH: 0.8,
     F: 0.8,
     fm: { CYP2B6: 0.45, CYP3A4: 0.35 },
-    note: "Inducers (efavirenz, rifampin, carbamazepine) look like a stolen take-home. Inhibitors (fluconazole, ritonavir) raise QT risk. q24h Rac is large even without a perpetrator.",
+    note: "Inducers (efavirenz, rifampin, carbamazepine, phenytoin, nevirapine) look like a stolen take-home. Fluvoxamine and fluconazole raise parent and QT. Paxlovid/ritonavir is the mixed arrow — methadone often falls. q24h Rac is large even without a perpetrator.",
   },
   fentanyl: {
     tHalfH: 4,
@@ -210,7 +210,7 @@ const ROWS: Record<string, PkRow> = {
     F: 0.5,
     fm: { CYP3A4: 0.7 },
     gut3A4: 0.35,
-    note: "Norfentanyl via 3A4. Strong inhibitors raise parent and the airway risk. Street fentanyl is the usual contents of a dirty 30.",
+    note: "Norfentanyl via 3A4. Paxlovid, ritonavir, and azoles raise parent (Olkkola: ritonavir cuts clearance 67%). Street fentanyl is the usual contents of a dirty 30. Overlay a methadone take-home — that is stacked μ, not this curve.",
   },
   oxycodone: {
     tHalfH: 4,
@@ -524,6 +524,14 @@ const ROWS: Record<string, PkRow> = {
     fm: { CYP3A4: 0.8 },
     gut3A4: 0.5,
     note: "Sensitive 3A4. Grapefruit and azoles open first-pass; amlodipine is the longer, less first-pass cousin. Not a dose.",
+  },
+  felodipine: {
+    tHalfH: 11,
+    kaH: 1.3,
+    F: 0.15,
+    fm: { CYP3A4: 0.9 },
+    gut3A4: 0.8,
+    note: "Bailey 1991. The original juice victim. Tiny F, mostly intestinal 3A4. Grapefruit raises F; t½ barely moves.",
   },
   budesonide: {
     tHalfH: 2.8,

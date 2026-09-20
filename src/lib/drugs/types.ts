@@ -165,7 +165,16 @@ export type PdFlag =
   | "urinary-alkaline"
   | "tryptophan"
   | "alpha2-agonist"
-  | "hypokalemic";
+  | "hypokalemic"
+  | "oatp-block"
+  | "protein-load"
+  | "polyphenol-drink"
+  | "histamine"
+  | "enteral"
+  | "vitk-food"
+  | "k-food"
+  | "fed-boost"
+  | "empty-stomach";
 
 export type ItemKind = "drug" | "food" | "herb";
 

@@ -18,17 +18,45 @@ export const mintLicenseKey = createServerFn({ method: "POST" })
   .validator((input: unknown) => ({
     pin: readString(input, "pin"),
     plan: readString(input, "plan"),
+    soldTo: readString(input, "soldTo"),
   }))
   .handler(async ({ data }) => {
-    const { mintKey, pinOk, defaultPinSet } = await import("./license.server");
+    const { mintKey, mintKeyFromNote, pinOk, defaultPinSet, parseIssuedPlan } = await import("./license.server");
     if (!pinOk(data.pin)) {
       return { ok: false as const, reason: "Operator PIN is wrong." };
     }
-    const plan = data.plan === "lab" || data.plan === "life" || data.plan === "pro" ? data.plan : "life";
+    const plan = parseIssuedPlan(data.plan);
+    const soldTo = data.soldTo.trim();
     return {
       ok: true as const,
-      key: mintKey(plan),
+      key: soldTo ? mintKeyFromNote(plan, soldTo) : mintKey(plan),
       plan,
+      defaultPin: defaultPinSet(),
+    };
+  });
+
+export const mintLicenseBatch = createServerFn({ method: "POST" })
+  .validator((input: unknown) => ({
+    pin: readString(input, "pin"),
+    plan: readString(input, "plan"),
+    names: readString(input, "names"),
+  }))
+  .handler(async ({ data }) => {
+    const { mintKeyedRows, parseIssuedPlan, parseNameList, pinOk, defaultPinSet } = await import(
+      "./license.server"
+    );
+    if (!pinOk(data.pin)) {
+      return { ok: false as const, reason: "Operator PIN is wrong." };
+    }
+    const names = parseNameList(data.names);
+    if (!names.length) {
+      return { ok: false as const, reason: "Add at least one name — one per line." };
+    }
+    const plan = parseIssuedPlan(data.plan);
+    return {
+      ok: true as const,
+      plan,
+      keys: mintKeyedRows(plan, names),
       defaultPin: defaultPinSet(),
     };
   });

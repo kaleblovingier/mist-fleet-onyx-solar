@@ -67,6 +67,22 @@ const DRUG_PLATE: Record<string, string> = {
   "milk-thistle": PLATES.wort,
   pomegranate: PLATES.grapefruit,
   starfruit: PLATES.grapefruit,
+  "oatp-juice": PLATES.grapefruit,
+  dairy: PLATES.cheese,
+  "leafy-greens": PLATES.grapefruit,
+  "tyramine-foods": PLATES.cheese,
+  "histamine-fish": PLATES.cheese,
+  "protein-meal": PLATES.cheese,
+  "high-k-foods": PLATES.grapefruit,
+  soy: PLATES.wort,
+  coffee: PLATES.tobacco,
+  "enteral-feed": PLATES.liver,
+  felodipine: PLATES.cyp3a4,
+  nadolol: PLATES.grapefruit,
+  aliskiren: PLATES.grapefruit,
+  levodopa: PLATES.wort,
+  alendronate: PLATES.cheese,
+  tetracycline: PLATES.cheese,
   cruciferous: PLATES.tobacco,
   mdma: PLATES.mdma,
   mda: PLATES.mdma,
@@ -74,7 +90,6 @@ const DRUG_PLATE: Record<string, string> = {
   mephedrone: PLATES.mdma,
   "three-mmc": PLATES.mdma,
   "a-pvp": PLATES.mdma,
-  "tyramine-foods": PLATES.cheese,
   ethanol: PLATES.alcohol,
   gbl: PLATES.alcohol,
   "bd-14": PLATES.alcohol,
@@ -132,6 +147,10 @@ const DRUG_PLATE: Record<string, string> = {
   "dirty-30": PLATES.poppy,
   cocaine: PLATES.mdma,
   methamphetamine: PLATES.mdma,
+  ritonavir: PLATES.liver,
+  paxlovid: PLATES.liver,
+  nevirapine: PLATES.liver,
+  cobicistat: PLATES.liver,
   epclusa: PLATES.liver,
   propofol: PLATES.alcohol,
   diclazepam: PLATES.alcohol,
@@ -165,8 +184,12 @@ export function plateForDrug(drug: Pick<Drug, "id" | "pd" | "cls" | "kind">): st
 }
 
 export function plateForSample(s: SampleRegimen): string {
-  if (s.drugIds.includes("grapefruit")) return PLATES.grapefruit;
-  if (s.drugIds.includes("tyramine-foods")) return PLATES.cheese;
+  if (s.drugIds.includes("grapefruit") || s.drugIds.includes("oatp-juice")) return PLATES.grapefruit;
+  if (s.drugIds.includes("tyramine-foods") || s.drugIds.includes("dairy") || s.drugIds.includes("histamine-fish"))
+    return PLATES.cheese;
+  if (s.drugIds.includes("leafy-greens") || s.drugIds.includes("high-k-foods")) return PLATES.grapefruit;
+  if (s.drugIds.includes("coffee") || s.drugIds.includes("charred-meat")) return PLATES.tobacco;
+  if (s.drugIds.includes("enteral-feed")) return PLATES.liver;
   if (s.drugIds.includes("st-johns-wort")) return PLATES.wort;
   if (s.drugIds.includes("psilocybin") || s.drugIds.includes("lsd") || s.drugIds.includes("twentyfive-i") || s.drugIds.includes("four-aco-dmt"))
     return PLATES.mushroom;
@@ -183,7 +206,7 @@ export const CLASS_TILES: { id: SampleLane; label: string; hint: string; plate: 
   { id: "gaba", label: "GABA", hint: "Alcohol, GHB, benzos", plate: PLATES.alcohol },
   { id: "mat", label: "Opioid / MAT", hint: "Suboxone, methadone, Vivitrol", plate: PLATES.poppy },
   { id: "clinic", label: "Clinic", hint: "Imuran, Imdur, Ozempic", plate: PLATES.heme },
-  { id: "food", label: "Food / herb", hint: "Grapefruit, red yeast, SAM-e", plate: PLATES.grapefruit },
+  { id: "food", label: "Food / herb", hint: "Grapefruit, dairy, kale, juice", plate: PLATES.grapefruit },
   { id: "smoke", label: "Smoke / 1A2", hint: "Clozapine, PAHs", plate: PLATES.tobacco },
   { id: "street", label: "Street", hint: "Cocaine, dirty 30s, xylazine", plate: PLATES.poppy },
 ];

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 import { DRUG_BY_ID } from "@/lib/drugs/catalog";
+import { basisFor } from "@/lib/drugs/basis";
 import type { Finding, Severity } from "@/lib/drugs/types";
 import { SEVERITY_LABEL } from "@/lib/drugs/types";
 import { cn } from "@/lib/utils";
@@ -126,6 +127,25 @@ function FindingCard({ finding }: { finding: Finding }) {
       {open ? (
         <div className="space-y-3 border-t border-border px-4 py-3">
           <p className="text-sm leading-relaxed text-fg">{finding.clinical}</p>
+          <div className="space-y-2 rounded-md bg-bg-sunken px-3 py-2.5">
+            <p className="font-mono text-[10px] uppercase tracking-wide text-muted">Independent review</p>
+            {basisFor(finding).map((b) => (
+              <div key={`${b.kind}-${b.label}`}>
+                <p className="text-xs font-medium text-fg">{b.label}</p>
+                <p className="mt-0.5 text-sm leading-relaxed text-muted">{b.detail}</p>
+                {b.href ? (
+                  <a
+                    href={b.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-1 inline-flex h-10 items-center gap-1 font-mono text-[11px] text-accent hover:underline"
+                  >
+                    Open source <ExternalLink className="size-3" />
+                  </a>
+                ) : null}
+              </div>
+            ))}
+          </div>
           <div className="flex flex-wrap gap-1.5">
             <Badge
               tone={

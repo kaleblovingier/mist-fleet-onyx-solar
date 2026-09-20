@@ -266,7 +266,7 @@ export function fulfillKey(opts: { key: string; soldTo?: string }) {
     "",
     opts.key,
     "",
-    "Open Pro, paste the key, Redeem. The desk is yours on that browser.",
+    "Open the desk. If you paid by card you are already licensed on the browser that returned from Stripe — keep this key for another machine. Otherwise: Pro → paste the key → Redeem.",
     "",
     SITE.url,
     "",
@@ -274,6 +274,10 @@ export function fulfillKey(opts: { key: string; soldTo?: string }) {
   ]
     .filter((l) => l !== "")
     .join("\n");
+}
+
+export function fulfillKeys(rows: Array<{ key: string; soldTo?: string }>) {
+  return rows.map((row) => fulfillKey(row)).join("\n\n———\n\n");
 }
 
 export function invoiceText(opts: {

@@ -4,7 +4,7 @@ import { DRUG_BY_ID, DRUGS } from "@/lib/drugs/catalog";
 import { analyze } from "@/lib/drugs/engine";
 import { applyHost, FIRST_PASS_NMDA } from "@/lib/drugs/host";
 import { treesFor } from "@/lib/drugs/metabolites";
-import { SAMPLE_LANES, SAMPLE_REGIMENS, sampleNeedsPro, type SampleLane } from "@/lib/drugs/samples";
+import { SAMPLE_LANES, sampleNeedsPro, samplesInLane, type SampleLane } from "@/lib/drugs/samples";
 import { CLASS_TILES, PLATES, plateForDrug, plateForSample } from "@/lib/drugs/visuals";
 import {
   ALCOHOL_LABEL,
@@ -47,6 +47,13 @@ import { StripeReturn } from "./stripe-return";
 import { Dossier } from "./dossier";
 import { ClinicPanel } from "./clinic";
 import { CitesPage } from "./cites";
+import { WindowBriefing } from "./window";
+import { WindowExtras } from "./tray";
+import { ClinicalBoard } from "./clinical";
+import { RxnavBoard } from "./rxnav";
+import { LabelPage } from "./label";
+import { PrescribingStrip } from "./pi";
+import { NOT_CLEARED, PI_FOOTER, SOFTWARE } from "@/lib/regulatory";
 
 export function DeskApp() {
   const view = useDesk((s) => s.view);
@@ -97,6 +104,8 @@ export function DeskApp() {
   const previewUntil = useDesk((s) => s.previewUntil);
   const justActivated = useDesk((s) => s.justActivated);
   const dismissActivated = useDesk((s) => s.dismissActivated);
+  const hcpAck = useDesk((s) => s.hcpAck);
+  const ackHcp = useDesk((s) => s.ackHcp);
   const openCheckout = useDesk((s) => s.openCheckout);
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -136,7 +145,7 @@ export function DeskApp() {
                 ) : null}
               </div>
               <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
-                CYP450 desk
+                CYP450 desk · not FDA-cleared
               </div>
             </div>
             </div>
@@ -155,6 +164,7 @@ export function DeskApp() {
                   ["cites", "Cites"],
                   ["atlas", "Atlas"],
                   ["rounds", "Rounds"],
+                  ["label", "IFU"],
                   ["plans", "Pro"],
                 ] as const
               ).map(([id, label]) => (
@@ -179,6 +189,26 @@ export function DeskApp() {
           </div>
         </div>
       </header>
+
+      {hydrated && !hcpAck ? (
+        <div className="border-b border-border bg-warn-soft">
+          <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <p className="text-sm leading-relaxed text-fg">
+              For licensed healthcare professionals. {SOFTWARE.name} is not FDA-cleared. The
+              Prescribing Information is the authority — independently review the basis of every
+              recommendation before acting.
+            </p>
+            <div className="flex shrink-0 flex-wrap gap-2">
+              <Button variant="secondary" size="sm" onClick={() => setView("label")}>
+                Open IFU
+              </Button>
+              <Button size="sm" onClick={ackHcp}>
+                I understand
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {justActivated ? (
         <div className="border-b border-border bg-ok-soft">
@@ -208,6 +238,8 @@ export function DeskApp() {
           <RoundsPage />
         ) : view === "cites" ? (
           <CitesPage />
+        ) : view === "label" ? (
+          <LabelPage />
         ) : view === "atlas" ? (
           <EnzymeAtlas />
         ) : view === "library" ? (
@@ -248,12 +280,17 @@ export function DeskApp() {
                 </div>
               ) : null}
 
+              {selected.length > 0 ? <WindowExtras /> : null}
+
               {selected.length === 0 ? (
                 <EmptyState onLoad={load} ready={hydrated} />
               ) : selected.length === 1 ? (
                 <>
                   <SingleDrug id={selected[0]} />
+                  <WindowBriefing ids={selected} host={host} report={report} />
+                  <PrescribingStrip ids={selected} />
                   <ClinicPanel ids={selected} host={host} />
+                  <ClinicalBoard ids={selected} host={host} />
                   <Dossier ids={selected} host={host} />
                   {report.findings.length > 0 ? (
                     <>
@@ -301,6 +338,11 @@ export function DeskApp() {
               ) : (
                 <>
                   <RiskBanner report={report} selected={selected} host={host} plan={plan} />
+                  <WindowBriefing ids={selected} host={host} report={report} />
+                  <PrescribingStrip ids={selected} />
+                  <ClinicPanel ids={selected} host={host} />
+                  <ClinicalBoard ids={selected} host={host} />
+                  <RxnavBoard ids={selected} />
                   {pro ? (
                     <StackMeters stacks={report.stacks} />
                   ) : report.stacks.some((s) => s.score > 0) ? (
@@ -324,7 +366,6 @@ export function DeskApp() {
                     </>
                   )}
                   <Dossier ids={selected} host={host} />
-                  <ClinicPanel ids={selected} host={host} />
                   <PkExplorer drugs={hostDrugs} host={host} />
                   {pro ? (
                     <MetaboliteCard ids={selected} />
@@ -397,7 +438,7 @@ function EmptyState({
   const [lane, setLane] = useState<SampleLane | "all">("all");
   const plan = usePlan();
   const setView = useDesk((s) => s.setView);
-  const shown = SAMPLE_REGIMENS.filter((s) => lane === "all" || s.lane === lane);
+  const shown = samplesInLane(lane);
   return (
     <section className="overflow-hidden rounded-xl bg-surface shadow-[var(--shadow-border)]">
       <div className="relative">
@@ -413,16 +454,39 @@ function EmptyState({
       </div>
       <div className="px-5 py-6 sm:px-8 sm:py-8">
         <p className="max-w-xl text-sm leading-relaxed text-muted">
-          FirstPass is built around psychoactive CYP450 maps — NMDA dissociatives, 2D6 entactogens,
-          psychedelics, stimulants, cannabinoids — then layers food, smoke, serotonin, and metabolizer
-          status. OTP and office-based MAT sit on the same formulary: precipitated withdrawal,
-          methadone QT, leftover agonist after Vivitrol. Clinic staples do too: Imuran × Zyloprim,
-          Imdur × Viagra, Flonase × a booster. The vitamin-shop shelf is scored the same way —
-          berberine, red yeast rice, SAM-e, nattokinase, charcoal. Clinic cards flag pregnancy,
-          Beers, and CKD. PubMed sits on the Sources tab. Two-drug collisions stay free,
-          including a concentration-time sketch. Browse the materia, then put a pair on the desk.
+          {lane === "mat"
+            ? "Built for the dosing window. Put methadone, a film, or Vivitrol on the desk, then tap today's extra. OTP tab: occupancy vs COWS, Vivitrol washout, 2024 take-homes, naloxone, ECG, ID screens. The briefing writes watch / counsel / consider. Live PI sits under it. Not a treatment order — the label wins."
+            : "FirstPass is clinical decision support for licensed healthcare professionals — CYP450 maps, FDA-label excerpts, published scales — so you can independently review the basis of a collision. It is not FDA-cleared. The Prescribing Information is the authority. Two-drug collisions stay free. Open IFU for intended use."}
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
+          {lane === "mat" ? (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={!ready}
+                onClick={() => onLoad(["methadone"])}
+              >
+                Methadone window
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={!ready}
+                onClick={() => onLoad(["buprenorphine"])}
+              >
+                Suboxone film
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={!ready}
+                onClick={() => onLoad(["naltrexone"])}
+              >
+                Vivitrol
+              </Button>
+            </>
+          ) : null}
           <Button variant="secondary" size="sm" onClick={() => setView("library")}>
             Browse the materia
           </Button>
@@ -433,7 +497,7 @@ function EmptyState({
             Clinic staples
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setLane("food")}>
-            Supplement shelf
+            Kitchen & herbs
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setView("cites")}>
             PubMed shelf
@@ -829,12 +893,15 @@ function HowCard() {
           xylazine, not oxycodone; naloxone will not reverse the α2. Percocet is oxy + APAP.
         </li>
         <li>
-          <span className="text-fg">MAT.</span> Buprenorphine on a fentanyl load is precipitated
+          <span className="text-fg">MAT.</span> Put methadone or a film on the desk, then tap
+          today's extra on the window tray. Buprenorphine on a fentanyl load is precipitated
           withdrawal, not stacked milligrams. Methadone lives on 3A4/2B6 — inducers look like a
-          stolen dose; azoles, Vistaril, and Zofran are the QT traps. Gabapentinoids are not free
-          extras on an opioid airway. Lofexidine is α2 — naloxone will not reverse it. Epclusa
-          next to methadone should stay quiet; rifampin should not. Leftover fentanyl after
-          Vivitrol is occupancy, not a failed shot.
+          stolen dose; azoles, Vistaril, and Zofran are the QT traps. Paxlovid dumps methadone
+          and raises fentanyl; cobicistat (Tybost) is the opposite arrow on methadone.
+          Gabapentinoids are not free extras on an opioid airway. Lofexidine is α2 — naloxone
+          will not reverse it. Epclusa next to methadone should stay quiet; rifampin should not.
+          The window briefing is watch / counsel / hold — copy the huddle onto a note. Not a
+          protocol.
         </li>
         <li>
           <span className="text-fg">Clinic.</span> Allopurinol × azathioprine is xanthine oxidase,
@@ -866,15 +933,11 @@ function HowCard() {
 function Disclaimer() {
   return (
     <p className="px-1 text-[11px] leading-relaxed text-subtle">
-      Educational model of published CYP maps, food effects, and pharmacodynamic patterns, including
-      ketamine, MAT / OTP collisions, clinic staples (gout, nitrates, GLP-1, PPIs), vitamin-shop
-      extracts (berberine, red yeast, SAM-e, nattokinase), entactogens, psychedelics, and diet.
-      DrugBank accessions and CPIC / ClinPGx paraphrases point at those sources; receptor sketches
-      use the Stahl method in original language — not a quotation of Stahl's Essential
-      Psychopharmacology. PubMed PMIDs are curated from NCBI and linked out; live search uses
-      E-utilities. Pregnancy, Beers, and CKD notes are teaching flags, not a prescribing label.
-      Not a clinician, not a complete database, and not guidance for non-medical use. Always
-      verify with primary references.
+      {SOFTWARE.name} {SOFTWARE.version} is clinical decision support for licensed healthcare
+      professionals. {NOT_CLEARED} The FDA-approved Prescribing Information is the authority. Every
+      collision names its basis (FDA boxed warning, PI excerpt, CPIC, PMID, or desk map) so you can
+      independently review it. Not a dose, not a chart, not TDM, not a complete database. Street-supply
+      rows are teaching maps. Always open DailyMed before acting.
     </p>
   );
 }
@@ -886,12 +949,15 @@ function exportDesk(
   license: string | null,
 ) {
   const body = {
+    software: { name: SOFTWARE.name, version: SOFTWARE.version, udi: SOFTWARE.udi, notFdaCleared: true },
+    intendedUse: "See IFU. Not a dose. Independent review of the Prescribing Information required.",
     license,
     generated: new Date().toISOString(),
     regimen: selected.map((id) => DRUG_BY_ID[id]?.name).filter(Boolean),
     host,
     highest: report.highest,
     findings: report.findings,
+    footer: PI_FOOTER,
   };
   const blob = new Blob([JSON.stringify(body, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -918,9 +984,10 @@ function exportCsv(report: ReturnType<typeof analyze>, selected: string[]) {
       ].join(","),
     ),
   ];
-  const blob = new Blob([`# FirstPass ${selected.map((id) => DRUG_BY_ID[id]?.name ?? id).join(" + ")}\n${rows.join("\n")}`], {
-    type: "text/csv",
-  });
+  const blob = new Blob(
+    [`# FirstPass ${SOFTWARE.version} ${selected.map((id) => DRUG_BY_ID[id]?.name ?? id).join(" + ")}\n# ${PI_FOOTER}\n${rows.join("\n")}`],
+    { type: "text/csv" },
+  );
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;

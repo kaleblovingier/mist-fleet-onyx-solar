@@ -1,6 +1,8 @@
 import { DRUG_BY_ID } from "./catalog";
 import { CLINIC } from "./clinic";
 import { applyHost, isVirtual, WASHOUT } from "./host";
+import { phenoconversionFindings } from "./pheno-convert";
+import { udsFindings } from "./uds";
 import {
   DEFAULT_HOST,
   DEFAULT_PHENOTYPES,
@@ -25,6 +27,26 @@ import {
 } from "./types";
 
 const STRENGTH_RANK: Record<Strength, number> = { strong: 3, moderate: 2, weak: 1 };
+
+/** Fruit juices / EGCG that cut OATP uptake. Grapefruit also knocks out gut 3A4 — that is a different row. */
+const OATP_PERP = new Set(["grapefruit", "pomegranate", "starfruit", "oatp-juice", "green-tea"]);
+const OATP_VICTIM = new Set(["fexofenadine", "atenolol", "nadolol", "aliskiren"]);
+const VITK_FOOD = new Set(["vitamin-k", "leafy-greens", "soy"]);
+const T4_POLYPHENOL = new Set(["levothyroxine", "iron", "alendronate"]);
+const ENTERAL_VICTIM = new Set(["phenytoin", "warfarin", "levothyroxine", "carbamazepine"]);
+/** Ritonavir-boosted products: 3A4 inhibit raises fentanyl; methadone often falls. */
+const RITONAVIR_BOOST = new Set(["ritonavir", "paxlovid"]);
+/** Illicit / street full agonists that stack with a methadone take-home. */
+const STREET_FULL_AGONIST = new Set([
+  "fentanyl",
+  "dirty-30",
+  "heroin",
+  "carfentanil",
+  "isotonitazene",
+  "protonitazene",
+  "metonitazene",
+  "etonitazene",
+]);
 
 function pkSeverity(
   strength: Strength,
@@ -113,6 +135,24 @@ function pkFindings(a: Drug, b: Drug): Finding[] {
         const perps = perpetratorsOf(perp, enzyme, kind);
         const subs = substratesOf(victim, enzyme);
         if (!perps.length || !subs.length) continue;
+        // Fruit juice cuts fexofenadine via OATP. Scoring that pair as P-gp inhibition (↑ parent) is the wrong arrow.
+        if (
+          enzyme === "P-gp" &&
+          kind === "inhibitor" &&
+          OATP_PERP.has(perp.id) &&
+          victim.id === "fexofenadine"
+        ) {
+          continue;
+        }
+        // Ritonavir/Paxlovid inhibit 3A4 but methadone still falls (2B6/UGT). Don't score ↑ parent.
+        if (
+          enzyme === "CYP3A4" &&
+          kind === "inhibitor" &&
+          victim.id === "methadone" &&
+          RITONAVIR_BOOST.has(perp.id)
+        ) {
+          continue;
+        }
         const strongest = perps.reduce((m, p) =>
           STRENGTH_RANK[p.strength] > STRENGTH_RANK[m.strength] ? p : m,
         );
@@ -294,14 +334,18 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
       }),
     );
   } else if (aOp && bOp && !aPartial && !bPartial && !aAnt && !bAnt) {
+    const takeHomeStreet =
+      (a.id === "methadone" && STREET_FULL_AGONIST.has(b.id)) ||
+      (b.id === "methadone" && STREET_FULL_AGONIST.has(a.id));
     out.push(
       pdPair(a, b, {
         suffix: "pd-opioid-stack",
         severity: "major",
-        effect: "stacked μ-agonist load",
-        mechanism: "opioid × opioid",
-        clinical:
-          "Two μ-agonists are one airway, not two prescriptions. A methadone take-home plus illicit fentanyl is stacked μ load. Street 'perc 30s' stamped as oxycodone are often fentanyl or a nitazene. Naloxone still reverses the opioid; it does not reverse xylazine.",
+        effect: takeHomeStreet ? "stacked μ load on a take-home" : "stacked μ-agonist load",
+        mechanism: takeHomeStreet ? "methadone take-home × illicit full agonist" : "opioid × opioid",
+        clinical: takeHomeStreet
+          ? "A methadone take-home plus illicit fentanyl (or a nitazene / dirty 30) is one airway, not two prescriptions. Naloxone still reverses the μ-agonist; it does not reverse xylazine or medetomidine. This is not a dosing protocol."
+          : "Two μ-agonists are one airway, not two prescriptions. A methadone take-home plus illicit fentanyl is stacked μ load. Street 'perc 30s' stamped as oxycodone are often fentanyl or a nitazene. Naloxone still reverses the opioid; it does not reverse xylazine.",
         tags: ["cns", "opioid", "street", "mat"],
       }),
     );
@@ -351,6 +395,7 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
     !((has(a, "alpha2-agonist") && bOp) || (has(b, "alpha2-agonist") && aOp)) &&
     !(aOp && bOp) &&
     !gabaOp &&
+    !((aOp && bBz) || (bOp && aBz)) &&
     ((aOp && bCns) || (bOp && aCns) || (aCns && bCns && a.id !== b.id))
   ) {
     const gabapentinoid =
@@ -384,14 +429,17 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
   const qtScore = (x: Drug) => (has(x, "qt-known") ? 2 : has(x, "qt-possible") ? 1 : 0);
   const qt = qtScore(a) + qtScore(b);
   if (qtScore(a) && qtScore(b)) {
+    const methadoneQt = a.id === "methadone" || b.id === "methadone";
     out.push(
       pdPair(a, b, {
         suffix: "pd-qt",
         severity: qt >= 3 ? "major" : "moderate",
         effect: "additive QT prolongation / TdP",
-        mechanism: "combined QT load",
-        clinical: `Both drugs prolong ventricular repolarization. Stacking QT risk raises torsades de pointes. Check electrolytes, avoid other QT drugs, and review ECG if the pair cannot be separated.`,
-        tags: ["qt"],
+        mechanism: methadoneQt ? "methadone QT stack" : "combined QT load",
+        clinical: methadoneQt
+          ? `Methadone is a known-QT opioid. ${a.id === "methadone" ? b.name : a.name} adds ventricular-repolarization load. Check K and Mg, pull an ECG if the pair cannot be separated, and do not treat Vistaril / Zofran / Celexa / Seroquel as free extras at the window.`
+          : `Both drugs prolong ventricular repolarization. Stacking QT risk raises torsades de pointes. Check electrolytes, avoid other QT drugs, and review ECG if the pair cannot be separated.`,
+        tags: methadoneQt ? ["qt", "mat"] : ["qt"],
       }),
     );
   }
@@ -680,17 +728,27 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
   }
 
   if (
-    (a.id === "warfarin" && b.id === "vitamin-k") ||
-    (b.id === "warfarin" && a.id === "vitamin-k")
+    (a.id === "warfarin" && VITK_FOOD.has(b.id)) ||
+    (b.id === "warfarin" && VITK_FOOD.has(a.id))
   ) {
+    const food = a.id === "warfarin" ? b : a;
+    const kale = food.id === "leafy-greens";
+    const soy = food.id === "soy";
     out.push(
       pdPair(a, b, {
-        suffix: "pd-vitk-warfarin",
+        suffix: soy ? "pd-soy-warfarin" : kale ? "pd-greens-warfarin" : "pd-vitk-warfarin",
         severity: "major",
         effect: "loss of anticoagulation",
-        mechanism: "vitamin K bypass of VKORC1",
-        clinical:
-          "Warfarin blocks vitamin K recycling. A K gummy, MK-7, or a kale-heavy smoothie supplies the cofactor and INR falls — the antidote in a bottle. Not a 2C9 story. Recheck INR after diet or supplement changes.",
+        mechanism: soy
+          ? "soy vitamin K + T4-binder overlap"
+          : kale
+            ? "dietary phylloquinone"
+            : "vitamin K bypass of VKORC1",
+        clinical: soy
+          ? "Soy protein and soy milk carry vitamin K and also bind levothyroxine. INR can fall. A splash of soy sauce is the tyramine row, not this one. Recheck INR after a soy-protein phase."
+          : kale
+            ? "Warfarin blocks vitamin K recycling. A kale-heavy smoothie supplies phylloquinone and INR falls. A consistent salad is easier to adjust around than a binge. The K gummy is a different row. Not 2C9."
+            : "Warfarin blocks vitamin K recycling. A K gummy, MK-7, or a kale-heavy smoothie supplies the cofactor and INR falls — the antidote in a bottle. Not a 2C9 story. Recheck INR after diet or supplement changes.",
         tags: ["bleeding", "food"],
       }),
     );
@@ -715,25 +773,45 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
     );
   }
 
-  const cations = new Set(["calcium", "iron", "magnesium", "zinc"]);
+  const cations = new Set(["calcium", "iron", "magnesium", "zinc", "dairy"]);
   const chelated = new Set([
     "ciprofloxacin",
     "levofloxacin",
     "moxifloxacin",
     "doxycycline",
+    "tetracycline",
     "levothyroxine",
+    "alendronate",
+    "levodopa",
   ]);
   if ((cations.has(a.id) && chelated.has(b.id)) || (cations.has(b.id) && chelated.has(a.id))) {
     const thyroid = a.id === "levothyroxine" || b.id === "levothyroxine";
+    const bone = a.id === "alendronate" || b.id === "alendronate";
+    const dopa = a.id === "levodopa" || b.id === "levodopa";
+    const milk = a.id === "dairy" || b.id === "dairy";
     out.push(
       pdPair(a, b, {
         suffix: "pd-chelation",
         severity: "major",
-        effect: thyroid ? "lost levothyroxine absorption" : "lost antibiotic absorption",
-        mechanism: "gut chelation by divalent cations",
+        effect: thyroid
+          ? "lost levothyroxine absorption"
+          : bone
+            ? "lost bisphosphonate absorption"
+            : dopa
+              ? "lost levodopa absorption"
+              : "lost antibiotic absorption",
+        mechanism: milk ? "gut chelation by dietary calcium" : "gut chelation by divalent cations",
         clinical: thyroid
-          ? "Calcium, iron, magnesium, and zinc bind levothyroxine in the gut. A prenatal or a Tums with the morning dose is a classic empty TSH. Separate by several hours. Not CYP."
-          : "Fluoroquinolones and tetracyclines chelate with calcium, iron, magnesium, and zinc. The course can fail. Separate by several hours. Not CYP.",
+          ? milk
+            ? "A glass of milk, a latte, or yogurt binds levothyroxine in the gut. Morning cereal with Synthroid is a classic empty TSH. Separate by several hours. Aged-cheese MAOI is a different row."
+            : "Calcium, iron, magnesium, and zinc bind levothyroxine in the gut. A prenatal or a Tums with the morning dose is a classic empty TSH. Separate by several hours. Not CYP."
+          : bone
+            ? "Bisphosphonates already have miserable F. Dairy, calcium, and other cations empty the dose. Thirty minutes before food, full glass of water, stay upright. Not CYP."
+            : dopa
+              ? "Iron (and to a lesser extent calcium) chelates levodopa in the gut. A protein meal is a different, LAT1 story — this row is the mineral."
+              : milk
+                ? "Fluoroquinolones and tetracyclines chelate with the calcium in milk and yogurt. The course can fail. Tetracycline is worse than doxycycline. Separate by several hours. Not CYP."
+                : "Fluoroquinolones and tetracyclines chelate with calcium, iron, magnesium, and zinc. The course can fail. Separate by several hours. Not CYP.",
         tags: ["absorption", "food"],
       }),
     );
@@ -903,6 +981,40 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
   }
 
   if (
+    (a.id === "methadone" && RITONAVIR_BOOST.has(b.id)) ||
+    (b.id === "methadone" && RITONAVIR_BOOST.has(a.id))
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-methadone-ritonavir",
+        severity: "major",
+        effect: "methadone may fall / withdrawal",
+        mechanism: "ritonavir-boosted 3A4 inhibit vs 2B6/UGT dump",
+        clinical:
+          "The 3A4 arrow is the wrong one for methadone. Acute ritonavir (Paxlovid) and steady-state ritonavir still drop methadone — watch withdrawal at the window, not nod. Fentanyl on the same booster is the opposite: parent rises, airway risk climbs. This is not a dosing protocol.",
+        tags: ["mat", "cyp"],
+      }),
+    );
+  }
+
+  if (
+    (a.id === "buprenorphine" && (RITONAVIR_BOOST.has(b.id) || b.id === "cobicistat")) ||
+    (b.id === "buprenorphine" && (RITONAVIR_BOOST.has(a.id) || a.id === "cobicistat"))
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-bup-ritonavir",
+        severity: "moderate",
+        effect: "buprenorphine parent may climb",
+        mechanism: "3A4 inhibit of a partial agonist — opposite of methadone",
+        clinical:
+          "Opposite of methadone. Ritonavir, Paxlovid, and cobicistat raise buprenorphine via 3A4 (McCance-Katz: ~50% with ritonavir) without the withdrawal map. Tolerant patients usually do not need a cut. Watch nod; do not treat it like a stolen methadone bottle. Fentanyl on the same booster is the airway climb. This is not a dosing protocol.",
+        tags: ["mat", "cyp"],
+      }),
+    );
+  }
+
+  if (
     (has(a, "opioid-antagonist") && has(b, "opioid")) ||
     (has(b, "opioid-antagonist") && has(a, "opioid"))
   ) {
@@ -1012,6 +1124,45 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
   }
 
   if (
+    (has(a, "fat-meal") && has(b, "fed-boost")) ||
+    (has(b, "fat-meal") && has(a, "fed-boost"))
+  ) {
+    const victim = has(a, "fed-boost") ? a : b;
+    const posa = victim.id === "posaconazole";
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-fed-boost",
+        severity: "moderate",
+        effect: posa ? "↑ posaconazole suspension AUC" : "↑ oral antipsychotic F",
+        mechanism: posa ? "fed-state azole absorption" : "labeled caloric requirement",
+        clinical: posa
+          ? "Posaconazole oral suspension wants a meal. Fasted F collapses. Delayed-release tablets are quieter with food — still map the suspension. This is absorption, not the 3A4-inhibitor row."
+          : victim.id === "lurasidone"
+            ? "Lurasidone is labeled with food (~350 kcal). Fasted AUC falls by about half. Grapefruit is the 3A4 row; this is calories. Not a dose from this desk."
+            : "Ziprasidone is labeled with a ~500 kcal meal. Fasted AUC can fall by half and QT risk is read against the fed curve. Not a CYP collision.",
+        tags: ["food", "absorption"],
+      }),
+    );
+  }
+
+  if (
+    (has(a, "fat-meal") && has(b, "empty-stomach")) ||
+    (has(b, "fat-meal") && has(a, "empty-stomach"))
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-food-alendronate",
+        severity: "major",
+        effect: "lost bisphosphonate absorption",
+        mechanism: "any meal collapses Fosamax F",
+        clinical:
+          "Alendronate already has miserable bioavailability. A meal, coffee, or calcium empties it. Thirty minutes before food, full glass of water, stay upright. Opposite of Latuda, which wants calories.",
+        tags: ["food", "absorption"],
+      }),
+    );
+  }
+
+  if (
     (has(a, "sodium-restriction") && b.id === "lithium") ||
     (has(b, "sodium-restriction") && a.id === "lithium")
   ) {
@@ -1072,8 +1223,163 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         effect: "↓ amphetamine duration",
         mechanism: "acid urine speeds excretion",
         clinical:
-          "Vitamin C and acidic juices ionize amphetamine and shorten its effect. Orange juice is a pH story; grapefruit is the 3A4 furanocoumarin — they are not interchangeable.",
+          "Vitamin C and acidic juices ionize amphetamine and shorten its effect. Orange juice is a pH story; grapefruit is the 3A4 furanocoumarin; apple/orange juice cutting Allegra is OATP — they are not interchangeable.",
         tags: ["food", "stimulant"],
+      }),
+    );
+  }
+
+  if (
+    (OATP_PERP.has(a.id) && OATP_VICTIM.has(b.id)) ||
+    (OATP_PERP.has(b.id) && OATP_VICTIM.has(a.id))
+  ) {
+    const victim = OATP_VICTIM.has(a.id) ? a : b;
+    const perp = OATP_PERP.has(a.id) ? a : b;
+    const allegra = victim.id === "fexofenadine";
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-oatp-juice",
+        severity: allegra ? "major" : "moderate",
+        effect: `↓ ${victim.name} absorption`,
+        mechanism: "OATP2B1 / OATP1A2 inhibition",
+        clinical: allegra
+          ? `${perp.name} blocks intestinal OATP. Fexofenadine never arrives — loss of antihistamine effect, not a CYP rise. Grapefruit also knocks out gut 3A4 for other drugs; apple and orange juice do not. Separate the juice by several hours.`
+          : `${perp.name} blocks intestinal OATP. ${victim.name} AUC falls — loss of effect, not stacked beta blockade or RAAS. Green-tea extract and apple/orange juice are the documented bullies (Misaka, Dresser). Not CYP3A4.`,
+        tags: ["food", "oatp", "absorption"],
+      }),
+    );
+  }
+
+  if (
+    (has(a, "protein-load") && b.id === "levodopa") ||
+    (has(b, "protein-load") && a.id === "levodopa")
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-protein-ldopa",
+        severity: "major",
+        effect: "lost levodopa 'on' time",
+        mechanism: "LAT1 competition (large-neutral amino acids)",
+        clinical:
+          "Leucine, phenylalanine, and tyrosine compete with levodopa at LAT1 in the gut and at the blood-brain barrier. A protein breakfast next to Sinemet is a motor fluctuation. Iron chelation is a different row. Not CYP.",
+        tags: ["food", "absorption"],
+      }),
+    );
+  }
+
+  if (
+    (has(a, "polyphenol-drink") && T4_POLYPHENOL.has(b.id)) ||
+    (has(b, "polyphenol-drink") && T4_POLYPHENOL.has(a.id))
+  ) {
+    const victim = T4_POLYPHENOL.has(a.id) ? a : b;
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-tannin-bind",
+        severity: "major",
+        effect:
+          victim.id === "iron"
+            ? "lost iron absorption"
+            : victim.id === "alendronate"
+              ? "lost bisphosphonate absorption"
+              : "lost levothyroxine absorption",
+        mechanism: "polyphenol / tannin binding",
+        clinical:
+          victim.id === "levothyroxine"
+            ? "Coffee and black tea bind levothyroxine in the gut (Benvenga). An espresso with the morning dose is an empty TSH. Caffeine-as-1A2-substrate is a different bottle. Wait 30–60 minutes."
+            : victim.id === "iron"
+              ? "Tannins in coffee and tea chelate iron. A cup with the ferrous sulfate tablet empties the dose. Not the 1A2 caffeine row."
+              : "Coffee with Fosamax is still a meal as far as the bisphosphonate is concerned. Empty stomach, water only, stay upright.",
+        tags: ["food", "absorption"],
+      }),
+    );
+  }
+
+  if (
+    (a.id === "soy" && b.id === "levothyroxine") ||
+    (b.id === "soy" && a.id === "levothyroxine")
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-soy-t4",
+        severity: "major",
+        effect: "lost levothyroxine absorption",
+        mechanism: "soy protein binding in the gut",
+        clinical:
+          "Soy formula and soy-protein shakes bind levothyroxine. A splash of soy sauce is the tyramine row, not this one. Separate by several hours. Warfarin vitamin-K overlap is a separate finding if both are on the desk.",
+        tags: ["food", "absorption"],
+      }),
+    );
+  }
+
+  if (
+    (has(a, "k-food") && (has(b, "acei-arb") || has(b, "k-sparing"))) ||
+    (has(b, "k-food") && (has(a, "acei-arb") || has(a, "k-sparing")))
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-k-food",
+        severity: "major",
+        effect: "hyperkalemia",
+        mechanism: "dietary potassium × RAAS / K-sparing",
+        clinical:
+          "Bananas, potatoes, coconut water, and salt-substitute KCl next to an ACEI/ARB or spironolactone are the hyperK triad without a Slow-K bottle. Recheck potassium after a diet change. The potassium-supplement row is separate.",
+        tags: ["food", "electrolyte"],
+      }),
+    );
+  }
+
+  if (
+    (has(a, "histamine") && (b.id === "isoniazid" || has(b, "maoi"))) ||
+    (has(b, "histamine") && (a.id === "isoniazid" || has(a, "maoi")))
+  ) {
+    const inh = a.id === "isoniazid" || b.id === "isoniazid";
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-histamine-fish",
+        severity: inh ? "major" : "moderate",
+        effect: inh ? "scombroid-like reaction" : "histamine / tyramine overlap",
+        mechanism: inh ? "isoniazid × diamine oxidase" : "histamine load × MAOI",
+        clinical: inh
+          ? "Isoniazid blocks diamine oxidase. Tuna or mackerel that would be mild scombroid in anyone becomes flushing, headache, and palpitations on INH. Not the cheese-plate MAOI row — a different amine."
+          : "Aged fish carries histamine and some tyramine. An irreversible MAOI lets both through. The cheddar plate is still the louder MAOI teaching pair.",
+        tags: ["food", "histamine"],
+      }),
+    );
+  }
+
+  if (
+    (has(a, "enteral") && ENTERAL_VICTIM.has(b.id)) ||
+    (has(b, "enteral") && ENTERAL_VICTIM.has(a.id))
+  ) {
+    const victim = ENTERAL_VICTIM.has(a.id) ? a : b;
+    const dilantin = victim.id === "phenytoin";
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-enteral-bind",
+        severity: dilantin ? "major" : "moderate",
+        effect: `lost ${victim.name} absorption`,
+        mechanism: "tube-feed binding",
+        clinical: dilantin
+          ? "Bauer 1982. Continuous NG feeds bind phenytoin — levels crash and seizures return. Hold the feed, flush, separate the dose. Not CYP2C9."
+          : `Continuous enteral nutrition binds ${victim.name} in the tube and the gut. Hold the feed, flush, separate. Not a cytochrome row.`,
+        tags: ["food", "absorption"],
+      }),
+    );
+  }
+
+  if (
+    (a.id === "caffeine" && b.id === "lithium") ||
+    (b.id === "caffeine" && a.id === "lithium")
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-caffeine-lithium",
+        severity: "moderate",
+        effect: "↑ lithium clearance while using caffeine",
+        mechanism: "caffeine diuresis / renal lithium handling",
+        clinical:
+          "Caffeine increases lithium clearance. A sudden stop (or a new energy-drink habit) moves the level without a dose change. Opposite direction from low-salt retention. Not 1A2.",
+        tags: ["food", "lithium"],
       }),
     );
   }
@@ -1646,10 +1952,12 @@ export function analyze(drugIds: string[], host?: HostContext | PhenotypeMap): R
   }
   findings.push(...multiDrugFindings(real));
   if (ctx) findings.push(...phenotypeFindings(real, ctx.phenotypes));
+  if (ctx) findings.push(...phenoconversionFindings(drugs, ctx));
   findings.push(...washoutFindings(drugs));
   findings.push(...lingerFindings(drugs));
   if (ctx) findings.push(...alcoholHostFindings(real, ctx.alcohol));
   if (ctx) findings.push(...hostClinicFindings(real, ctx));
+  findings.push(...udsFindings(real.map((d) => d.id)));
   const uniq = dedupe(findings);
   uniq.sort((a, b) => {
     const d = SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity];

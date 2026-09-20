@@ -15,7 +15,8 @@ var grokOgIdentity = { "site": {
 	"title": "FirstPass",
 	"color": "2F5D56",
 	"card": "custom",
-	"image": "/og.jpg"
+	"image": "/og.jpg",
+	"banner": "/x-banner.jpg"
 } };
 //#endregion
 //#region scripts/grok-pwa-shared.mjs

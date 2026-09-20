@@ -7,9 +7,9 @@
       "status": 200,
       "title": "FirstPass",
       "hasCanvas": false,
-      "bodyTextLen": 6888,
-      "bodyTextHash": "44dcaded736c5584100c5436ea8454cf966be18c91ff0ac031094aa290be76e6",
-      "bodyTextPrefix": "FirstPass CYP450 DESK Desk Materia Atlas Pro Search drugs / PSYC",
+      "bodyTextLen": 20648,
+      "bodyTextHash": "4ab1d680b37fb58ea056f2e6ce417444a15f7d73a4b8f26c078beb548451e7ba",
+      "bodyTextPrefix": "FirstPass CYP450 DESK · NOT FDA-CLEARED Desk Materia Cites Atlas",
       "horizontalOverflow": false,
       "consoleErrors": [],
       "pageErrors": [],
@@ -21,9 +21,9 @@
       "status": 200,
       "title": "FirstPass",
       "hasCanvas": false,
-      "bodyTextLen": 6886,
-      "bodyTextHash": "07cdbe16295ef4d5df1e1b708dc91cd2765930da6adbb64519280201504bfd51",
-      "bodyTextPrefix": "FirstPass CYP450 DESK Desk Materia Atlas Pro Search drugs PSYCHO",
+      "bodyTextLen": 20646,
+      "bodyTextHash": "58b5f96e957cb4bfe207945f0faa41cf9c6f7ab94c3b2093ad21aa99a0455433",
+      "bodyTextPrefix": "FirstPass CYP450 DESK · NOT FDA-CLEARED Desk Materia Cites Atlas",
       "horizontalOverflow": false,
       "consoleErrors": [],
       "pageErrors": [],
@@ -35,6 +35,6 @@
   "verdictFile": "/workspace/screenshots/app-builder-built.json",
   "divergesFromBaseline": true,
   "baselineReasons": [
-    "desktop: body text replaced (similar length, page start changed)"
+    "mobile: body text replaced (similar length, page start changed)"
   ]
 }

@@ -1,4 +1,5 @@
 import { DRUG_BY_ID } from "@/lib/drugs/catalog";
+import { alertsFor } from "@/lib/drugs/alerts";
 import { clinicFor, type ClinicCard, type ClinicFlag } from "@/lib/drugs/clinic";
 import type { HostContext } from "@/lib/drugs/types";
 import { cn } from "@/lib/utils";
@@ -74,6 +75,15 @@ function DrugClinic({ id, host }: { id: string; host: HostContext }) {
           {card.monitor.map((m) => (
             <li key={m}>
               <Badge tone="info">{m}</Badge>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      {alertsFor(id).length ? (
+        <ul className="mt-3 flex flex-wrap gap-1.5">
+          {alertsFor(id).map((a) => (
+            <li key={a.kind}>
+              <Badge tone={a.kind === "rems" ? "danger" : a.kind === "niosh" ? "warn" : "info"}>{a.label}</Badge>
             </li>
           ))}
         </ul>

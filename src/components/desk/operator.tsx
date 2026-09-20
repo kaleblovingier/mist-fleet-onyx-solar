@@ -1,4 +1,5 @@
 import { OPERATOR, PAY_RAILS } from "@/lib/billing/commerce";
+import { PI_FOOTER, SOFTWARE } from "@/lib/regulatory";
 
 export function OperatorCard() {
   return (
@@ -20,9 +21,7 @@ export function DeskFooter() {
           <OperatorLines className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm" />
         </div>
         <p className="max-w-sm text-[11px] leading-relaxed text-subtle">
-          Educational CYP450 / PD map. Not a clinician and not a charting system. Founding license
-          is $79 once — card on Stripe, or Venmo / Cash App / PayPal. A signed key is minted only
-          after payment clears.
+          {SOFTWARE.name} {SOFTWARE.version}. {PI_FOOTER}
         </p>
       </div>
     </footer>

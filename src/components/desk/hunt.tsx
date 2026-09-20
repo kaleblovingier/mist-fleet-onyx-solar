@@ -10,8 +10,10 @@ import {
   googleUrl,
   isoWeek,
   linkedinUrl,
+  loadPipe,
   mailDraft,
   mapsUrl,
+  savePipe,
   toPipe,
   weekTargets,
   xUrl,
@@ -24,36 +26,6 @@ import {
 } from "@/lib/billing/hunts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-const PIPE_KEY = "firstpass.pipeline.v1";
-
-function loadPipe(): PipeRow[] {
-  try {
-    const raw = localStorage.getItem(PIPE_KEY);
-    const rows = raw ? (JSON.parse(raw) as Partial<PipeRow>[]) : [];
-    return rows
-      .filter((r) => typeof r.id === "string" && typeof r.name === "string")
-      .map((r) => ({
-        id: r.id as string,
-        name: r.name as string,
-        prey: (r.prey as Prey) ?? "clinic",
-        range: (r.range as Range) ?? "puget",
-        city: typeof r.city === "string" ? r.city : "",
-        who: typeof r.who === "string" ? r.who : "",
-        site: typeof r.site === "string" ? r.site : "",
-        hook: typeof r.hook === "string" ? r.hook : "",
-        status: (r.status as PipeStatus) ?? "queued",
-        note: typeof r.note === "string" ? r.note : "",
-        added: typeof r.added === "string" ? r.added : new Date().toISOString(),
-      }));
-  } catch {
-    return [];
-  }
-}
-
-function savePipe(rows: PipeRow[]) {
-  localStorage.setItem(PIPE_KEY, JSON.stringify(rows.slice(0, 80)));
-}
 
 const STATUSES: PipeStatus[] = ["queued", "sent", "waiting", "keyed", "skip"];
 

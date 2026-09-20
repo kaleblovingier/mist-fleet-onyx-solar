@@ -4,6 +4,8 @@ import { hasDrugbank } from "./drugbank";
 import { hasPgx } from "./pgx";
 import { hasCite } from "./pubmed";
 import { hasStahl } from "./stahl";
+import { hasTdm } from "./tdm";
+import { MME_FACTOR } from "./mme";
 
 function sub(
   enzyme: Enzyme,
@@ -56,10 +58,11 @@ const raw: Drug[] = [
     ["qt-possible"], "QT prolongation"),
   d("azithromycin", "Azithromycin", ["Zithromax", "Z-Pak"], "Macrolide antibiotic",
     [], ["qt-possible"], "QT prolongation",
-    { note: "Minimal CYP3A4 inhibition unlike other macrolides." }),
+    { note: "Minimal CYP3A4 inhibition unlike other macrolides. Next to methadone it still stacks QT — not a free Z-Pak." }),
   d("ciprofloxacin", "Ciprofloxacin", ["Cipro"], "Fluoroquinolone",
     [inh("CYP1A2", "strong"), inh("CYP3A4", "weak")],
-    ["qt-possible", "seizure-lowering"], "QT, CNS stimulation, 1A2 victim toxicity"),
+    ["qt-possible", "seizure-lowering"], "QT, CNS stimulation, 1A2 victim toxicity",
+    { note: "Strong 1A2 inhibitor (tizanidine is the labeled victim). Weak 3A4 plus QT. Herrlin 2000: Cipro next to methadone caused sedation and respiratory depression — not a free UTI pill on the OTP." }),
   d("levofloxacin", "Levofloxacin", ["Levaquin"], "Fluoroquinolone",
     [], ["qt-possible", "seizure-lowering"], "QT prolongation"),
   d("moxifloxacin", "Moxifloxacin", ["Avelox"], "Fluoroquinolone",
@@ -95,17 +98,37 @@ const raw: Drug[] = [
     ["hepatotoxic", "seizure-lowering"], "Hepatitis, neuropathy",
     {
       aliases: ["inh"],
-      note: "Latent TB is common on OTP boards. Weak 3A4 inhibition can nudge methadone; the louder stories are INH hepatitis next to alcohol, and rifampin (the other TB drug) dumping methadone and HCV DAAs.",
+      note: "Latent TB is common on OTP boards. Weak 3A4 inhibition can nudge methadone; the louder stories are INH hepatitis next to alcohol, rifampin dumping methadone, and tuna/mackerel (diamine oxidase) — search histamine fish.",
     }),
   d("ritonavir", "Ritonavir", ["Norvir"], "HIV protease inhibitor / booster",
-    [sub("CYP3A4", "major"), inh("CYP3A4", "strong"), inh("CYP2D6", "moderate"), inh("P-gp", "strong"), ind("CYP1A2", "moderate"), ind("CYP2C9", "weak")],
-    [], "Victim-drug toxicity via 3A4/P-gp"),
+    [sub("CYP3A4", "major"), inh("CYP3A4", "strong"), inh("CYP2D6", "moderate"), inh("P-gp", "strong"), ind("CYP2B6", "moderate"), ind("CYP1A2", "moderate"), ind("CYP2C9", "weak")],
+    [], "Victim-drug toxicity via 3A4/P-gp; methadone may fall",
+    {
+      aliases: ["norvir"],
+      note: "Strong 3A4/P-gp inhibition raises fentanyl (Olkkola: clearance −67%). Steady-state ritonavir dumps methadone anyway (Kharasch) — watch OTP withdrawal, not nod. Paxlovid is the five-day version of this booster.",
+    }),
+  d("paxlovid", "Paxlovid (nirmatrelvir/ritonavir)", ["Paxlovid"], "COVID-19 antiviral (ritonavir-boosted)",
+    [inh("CYP3A4", "strong"), inh("P-gp", "strong"), ind("CYP2B6", "moderate")],
+    [],
+    "Fentanyl/oxycodone airway; methadone withdrawal",
+    {
+      aliases: ["nirmatrelvir", "nirmatrelvir/ritonavir", "paxlovid"],
+      note: "Five-day ritonavir boost. Fentanyl, oxycodone, and hydrocodone rise — airway. Methadone often falls (2B6/UGT) — watch withdrawal at the window, not sedation. Not a dosing protocol. Search ritonavir for the chronic HIV booster.",
+    }),
+  d("nevirapine", "Nevirapine", ["Viramune"], "NNRTI antiretroviral",
+    [sub("CYP3A4", "major"), ind("CYP3A4", "moderate"), ind("CYP2B6", "moderate")],
+    ["hepatotoxic"],
+    "Methadone withdrawal; hepatotoxicity",
+    {
+      aliases: ["viramune"],
+      note: "Classic OTP stolen-dose NNRTI, like efavirenz. 3A4/2B6 induction. Watch withdrawal 1–2 weeks in; hepatotoxicity is a separate row.",
+    }),
   d("cobicistat", "Cobicistat", ["Tybost"], "PK booster",
     [inh("CYP3A4", "strong"), inh("CYP2D6", "weak"), inh("P-gp", "strong")],
     [], "Victim-drug toxicity via 3A4",
     {
       aliases: ["tybost", "pk booster"],
-      note: "The modern ritonavir-like booster in Genvoya, Prezcobix, Evotaz. Strong 3A4/P-gp inhibition raises buprenorphine and many 3A4 victims. Unlike ritonavir it does not induce 1A2/2C9.",
+      note: "The modern ritonavir-like booster in Genvoya, Prezcobix, Evotaz. Strong 3A4/P-gp inhibition raises buprenorphine and many 3A4 victims. Unlike ritonavir it does not induce 2B6 — methadone parent climbs, it does not fall. Tybost is not Norvir on an OTP board.",
     }),
 
   // —— Cardiovascular ———————————————————————————————
@@ -205,8 +228,11 @@ const raw: Drug[] = [
     [sub("CYP2D6", "major"), inh("CYP2D6", "strong")],
     ["serotonergic", "ssri-snri", "anticholinergic"], "Serotonin syndrome, discontinuation syndrome"),
   d("fluvoxamine", "Fluvoxamine", ["Luvox"], "SSRI",
-    [sub("CYP2D6", "minor"), inh("CYP1A2", "strong"), inh("CYP2C19", "strong"), inh("CYP3A4", "moderate")],
-    ["serotonergic", "ssri-snri"], "Serotonin syndrome; marked 1A2/2C19 perpetrator"),
+    [sub("CYP2D6", "minor"), inh("CYP1A2", "strong"), inh("CYP2C19", "strong"), inh("CYP3A4", "moderate"), inh("CYP2B6", "moderate")],
+    ["serotonergic", "ssri-snri"], "Serotonin syndrome; marked 1A2/2C19 perpetrator",
+    {
+      note: "The OTP Luvox bump: 1A2/2C19/3A4/2B6 inhibition raises methadone. Stopping it looks like a stolen dose. Not the same map as fluoxetine.",
+    }),
   d("citalopram", "Citalopram", ["Celexa"], "SSRI",
     [sub("CYP2C19", "major"), sub("CYP3A4", "major"), sub("CYP2D6", "minor")],
     ["serotonergic", "ssri-snri", "qt-known"], "QT prolongation, serotonin syndrome"),
@@ -262,7 +288,10 @@ const raw: Drug[] = [
     ["cns-depressant", "qt-known", "seizure-lowering"], "EPS, TdP, NMS"),
   d("ziprasidone", "Ziprasidone", ["Geodon"], "Atypical antipsychotic",
     [sub("CYP3A4", "minor")],
-    ["cns-depressant", "qt-known"], "TdP"),
+    ["cns-depressant", "qt-known", "fed-boost"], "TdP; F collapses without a ~500 kcal meal",
+    {
+      note: "Labeled with food — about 500 kcal or AUC falls by half. High-fat meal on this desk is the perpetrator. QT is the other row. 3A4 is quiet compared with quetiapine.",
+    }),
   d("alprazolam", "Alprazolam", ["Xanax"], "Benzodiazepine",
     [sub("CYP3A4", "sensitive")],
     ["cns-depressant", "benzo-zdrug"], "Sedation, respiratory depression, falls"),
@@ -292,6 +321,14 @@ const raw: Drug[] = [
   d("selegiline", "Selegiline", ["Emsam", "Eldepryl"], "MAO-B inhibitor",
     [sub("CYP2B6", "major"), sub("CYP2C19", "minor")],
     ["maoi", "serotonergic"], "Serotonin syndrome, hypertensive crisis at higher doses"),
+  d("levodopa", "Levodopa / carbidopa", ["Sinemet", "Rytary", "Duopa"], "Dopamine precursor (Parkinson)",
+    [],
+    [],
+    "Lost 'on' time with a protein meal; iron binds it in the gut",
+    {
+      aliases: ["sinemet", "carbidopa", "l-dopa", "l dopa", "madopar", "stalevo"],
+      note: "Large-neutral amino acids compete at LAT1 in gut and brain. A steak next to the morning dose is a motor fluctuation, not CYP. Iron chelates it. Mucuna on this shelf is the same precursor in a bean.",
+    }),
 
   // —— Pain / neuro —————————————————————————————————
   d("codeine", "Codeine", [], "Opioid analgesic (prodrug)",
@@ -318,26 +355,30 @@ const raw: Drug[] = [
     { note: "UGT2B7, not CYP. PD synergies still apply." }),
   d("fentanyl", "Fentanyl", ["Duragesic", "Sublimaze"], "Opioid analgesic",
     [sub("CYP3A4", "sensitive")],
-    ["opioid", "cns-depressant", "serotonergic"], "Respiratory depression"),
+    ["opioid", "cns-depressant", "serotonergic"], "Respiratory depression",
+    {
+      aliases: ["duragesic", "actiq", "sublimaze", "china white"],
+      note: "Norfentanyl via 3A4. Paxlovid, ritonavir, azoles, and macrolides raise parent and the airway risk — the opposite of methadone, which can fall. A methadone take-home plus illicit fentanyl is stacked μ, not two prescriptions. Street tablets stamped M30 are this row ± xylazine; search dirty 30.",
+    }),
   d("methadone", "Methadone", ["Dolophine", "Methadose"], "Opioid agonist",
     [sub("CYP3A4", "major"), sub("CYP2B6", "major"), sub("CYP2C19", "minor"), sub("CYP1A2", "minor")],
     ["opioid", "cns-depressant", "qt-known", "serotonergic"], "TdP, respiratory depression",
     {
       aliases: ["methadose", "diskets"],
-      note: "Long t½ — q24h accumulates. 3A4/2B6 inducers (rifampin, carbamazepine, efavirenz) look like a stolen dose. Inhibitors and other QT drugs (citalopram, quetiapine, ondansetron) raise TdP risk. Boxed warning with benzos and gabapentinoids.",
+      note: "Long t½ — q24h accumulates. 3A4/2B6 inducers (rifampin, carbamazepine, phenytoin, efavirenz, nevirapine, St. John's wort) look like a stolen dose. Inhibitors (fluconazole, fluvoxamine, erythromycin) and other QT drugs raise TdP. Paxlovid/ritonavir is the mixed arrow: methadone often falls, fentanyl rises. Boxed with benzos and gabapentinoids. Take-home plus illicit fentanyl is stacked μ.",
     }),
   d("gabapentin", "Gabapentin", ["Neurontin"], "Gabapentinoid",
     [], ["cns-depressant"], "Sedation, respiratory depression with opioids"),
   d("pregabalin", "Pregabalin", ["Lyrica"], "Gabapentinoid",
     [], ["cns-depressant"], "Sedation, respiratory depression with opioids"),
   d("carbamazepine", "Carbamazepine", ["Tegretol"], "Anticonvulsant",
-    [sub("CYP3A4", "major"), ind("CYP3A4", "strong"), ind("CYP2C9", "moderate"), ind("CYP2C19", "moderate"), ind("CYP1A2", "moderate"), ind("P-gp", "moderate")],
+    [sub("CYP3A4", "major"), ind("CYP3A4", "strong"), ind("CYP2B6", "moderate"), ind("CYP2C9", "moderate"), ind("CYP2C19", "moderate"), ind("CYP1A2", "moderate"), ind("P-gp", "moderate")],
     ["cns-depressant", "anticholinergic", "seizure-lowering"], "Loss of victim-drug efficacy, hyponatremia, SJS",
-    { note: "Autoinducer. Strong 3A4 inducer after ~2–3 weeks." }),
+    { note: "Autoinducer. Strong 3A4 (and 2B6) induction — looks like a stolen methadone take-home in 7–10 days, same family as phenytoin and rifampin." }),
   d("phenytoin", "Phenytoin", ["Dilantin"], "Anticonvulsant",
-    [sub("CYP2C9", "sensitive", "clearance", true), sub("CYP2C19", "major"), ind("CYP3A4", "strong"), ind("CYP2C19", "moderate"), ind("P-gp", "moderate")],
+    [sub("CYP2C9", "sensitive", "clearance", true), sub("CYP2C19", "major"), ind("CYP3A4", "strong"), ind("CYP2B6", "moderate"), ind("CYP2C19", "moderate"), ind("P-gp", "moderate")],
     ["cns-depressant", "hepatotoxic"], "Phenytoin toxicity or loss of co-drug efficacy",
-    { note: "Narrow index, nonlinear kinetics." }),
+    { note: "Narrow index, nonlinear kinetics. Strong 3A4 (and 2B6) induction — Tong 1981: phenytoin looks like a stolen methadone take-home within days." }),
   d("valproate", "Valproate", ["Depakote", "Depakene"], "Anticonvulsant",
     [inh("CYP2C9", "weak")],
     ["cns-depressant", "hepatotoxic", "seizure-lowering"], "Hyperammonemia, hepatotoxicity, teratogenicity",
@@ -467,8 +508,11 @@ const raw: Drug[] = [
     { aliases: ["guarana", "caffeine pill", "no-doz", "yerba mate"] }),
   d("lurasidone", "Lurasidone", ["Latuda"], "Atypical antipsychotic",
     [sub("CYP3A4", "sensitive")],
-    ["cns-depressant"], "Sedation, akathisia",
-    { note: "Contraindicated with strong CYP3A4 inhibitors and inducers." }),
+    ["cns-depressant", "fed-boost"],
+    "Sedation, akathisia; F collapses without ~350 kcal",
+    {
+      note: "Contraindicated with strong CYP3A4 inhibitors and inducers. Also labeled with food — about 350 kcal. Put a high-fat meal on the desk; empty-stomach Latuda is a different failure than grapefruit.",
+    }),
 
   // —— Dissociatives / NMDA ————————————————————————
   d("ketamine", "Ketamine", ["Ketalar"], "NMDA dissociative anesthetic",
@@ -677,6 +721,14 @@ const raw: Drug[] = [
     ["opioid-antagonist"],
     "Precipitated opioid withdrawal",
     { aliases: ["narcan"] }),
+  d("nalmefene", "Nalmefene", ["Opvee", "Revex"], "Opioid antagonist",
+    [],
+    ["opioid-antagonist"],
+    "Precipitated opioid withdrawal; longer μ occupancy than naloxone",
+    {
+      aliases: ["opvee", "revex"],
+      note: "Nasal nalmefene (Opvee) occupies μ longer than naloxone. After a fentanyl or nitazene fold the patient can re-narcotize as nalmefene still sits — or look over-reversed for hours. Not a CYP substrate. This desk is not a field protocol.",
+    }),
   d("kratom", "Kratom (mitragynine)", [], "Atypical opioid / stimulant",
     [sub("CYP3A4", "major"), inh("CYP2D6", "weak")],
     ["opioid", "cns-depressant", "serotonergic"],
@@ -800,8 +852,8 @@ const raw: Drug[] = [
     "Higher oral cannabinoid (and some lipophilic) AUC",
     {
       kind: "food",
-      aliases: ["fatty meal", "high fat", "with food", "fed state"],
-      note: "A 50–60% fat meal can several-fold increase oral THC and CBD exposure. Take that as a PK fact, not a dosing instruction.",
+      aliases: ["fatty meal", "high fat", "with food", "fed state", "with meals", "take with food"],
+      note: "A 50–60% fat meal can several-fold increase oral THC and CBD. Lurasidone and ziprasidone are labeled with calories — F collapses fasted. Posaconazole suspension wants food; Fosamax wants none. Take that as a PK fact, not a dosing instruction.",
     }),
   d("low-salt", "Low-salt / dehydration", [], "Renal lithium trap",
     [],
@@ -837,7 +889,7 @@ const raw: Drug[] = [
     {
       kind: "food",
       aliases: ["vitamin c", "ascorbic acid", "orange juice", "cranberry"],
-      note: "Acid urine speeds amphetamine excretion. Opposite of bicarbonate. Not a 3A4 story — grapefruit is the furanocoumarin, orange juice is mostly pH.",
+      note: "Acid urine speeds amphetamine excretion. Opposite of bicarbonate. Not a 3A4 story — grapefruit is the furanocoumarin. Apple/orange juice cutting Allegra is OATP (search apple juice), not this pH row.",
     }),
   d("charred-meat", "Charred / smoked meat", [], "PAH CYP1A2 inducer",
     [ind("CYP1A2", "moderate")],
@@ -1082,7 +1134,7 @@ const raw: Drug[] = [
     "Raised victim-drug levels (theophylline, tizanidine, warfarin, oral ketamine)",
     {
       aliases: ["tagamet"],
-      note: "The original OTC cytochrome bully. Famotidine does not do this — if you need an H2 blocker next to a 1A2/3A4 victim, switch.",
+      note: "The original OTC cytochrome bully. Famotidine does not do this — if you need an H2 blocker next to a 1A2/3A4 victim, switch. On an OTP board it can nudge methadone parent (Tagamet is not a free heartburn pill next to a known-QT opioid).",
     }),
   d("meperidine", "Meperidine", ["Demerol"], "Opioid analgesic",
     [sub("CYP3A4", "major"), sub("CYP2B6", "major")],
@@ -1180,9 +1232,11 @@ const raw: Drug[] = [
     { note: "Mostly UGT. Cleaner CYP map than diazepam or alprazolam; not a clean PD map with opioids or alcohol." }),
   d("posaconazole", "Posaconazole", ["Noxafil"], "Azole antifungal",
     [inh("CYP3A4", "strong"), inh("P-gp", "moderate")],
-    ["qt-possible", "hepatotoxic"],
-    "Victim-drug toxicity via 3A4, QT",
-    { note: "Strong CYP3A4 inhibitor. Oral ketamine, quetiapine, midazolam, simvastatin, and colchicine all move." }),
+    ["qt-possible", "hepatotoxic", "fed-boost"],
+    "Victim-drug toxicity via 3A4, QT; oral suspension wants food",
+    {
+      note: "Strong CYP3A4 inhibitor. Oral ketamine, quetiapine, midazolam, simvastatin, and colchicine all move. The suspension is a fed-state absorption victim — delayed-release tablets are quieter with food. High-fat meal on this desk is that row.",
+    }),
   d("isocarboxazid", "Isocarboxazid", ["Marplan"], "Irreversible MAOI",
     [],
     ["maoi", "serotonergic"],
@@ -1209,9 +1263,12 @@ const raw: Drug[] = [
     "TCA toxicity, serotonin syndrome, seizure"),
   d("promethazine", "Promethazine", ["Phenergan"], "Sedating antihistamine",
     [sub("CYP2D6", "major")],
-    ["cns-depressant", "anticholinergic"],
+    ["cns-depressant", "anticholinergic", "qt-possible"],
     "Additive sedation, delirium, respiratory depression with opioids",
-    { aliases: ["phenergan"] }),
+    {
+      aliases: ["phenergan"],
+      note: "The window antiemetic. Next to methadone it is airway plus a possible QT drug — not a free nausea drop. Purple-drank stacks are the same map with codeine.",
+    }),
   d("doxylamine", "Doxylamine", ["Unisom"], "Sedating antihistamine",
     [],
     ["cns-depressant", "anticholinergic"],
@@ -1295,7 +1352,89 @@ const raw: Drug[] = [
     {
       kind: "food",
       aliases: ["broccoli", "brussels sprouts", "cabbage", "kale", "indole-3-carbinol"],
-      note: "Same PAH/AhR neighborhood as smoke, much weaker. A kale phase is not smoking a pack, but 1A2 victims can drift.",
+      note: "Same PAH/AhR neighborhood as smoke, much weaker. A kale phase is not smoking a pack, but 1A2 victims can drift. Kale-as-vitamin-K next to warfarin is a different row — search leafy greens.",
+    }),
+
+  d("dairy", "Dairy / milk", [], "Calcium-rich meal",
+    [],
+    [],
+    "Chelates fluoroquinolones, tetracyclines, bisphosphonates, and levothyroxine",
+    {
+      kind: "food",
+      aliases: ["milk", "yogurt", "yoghurt", "calcium meal", "cheese sandwich", "latte", "dairy"],
+      note: "The calcium in a glass of milk — not the tyramine in aged cheddar. Cipro, tetracycline, Fosamax, and Synthroid never arrive. Separate by several hours. Aged-cheese MAOI is a different row.",
+    }),
+  d("leafy-greens", "Leafy greens (vitamin K)", [], "Phylloquinone meal",
+    [],
+    ["vitk-food"],
+    "Loss of warfarin anticoagulation",
+    {
+      kind: "food",
+      aliases: ["kale", "spinach", "collards", "swiss chard", "kale smoothie", "vitamin k foods", "dark leafy"],
+      note: "Dietary phylloquinone. A kale phase dumps INR; a consistent salad is easier to warfarin-adjust around. The K gummy is a different row. Not 2C9.",
+    }),
+  d("oatp-juice", "Apple / orange juice", [], "OATP2B1 fruit juice",
+    [],
+    ["oatp-block"],
+    "Lost absorption of fexofenadine, atenolol, nadolol, aliskiren",
+    {
+      kind: "food",
+      aliases: ["apple juice", "orange juice", "oj", "fruit juice", "oatp", "tropicana"],
+      note: "OATP2B1/1A2, not CYP3A4. Apple and orange juice cut Allegra, Tenormin, Corgard, and Tekturna. Grapefruit does this AND knocks out gut 3A4 — they are not interchangeable. Acidic-juice-as-amphetamine-acidifier is a different row.",
+    }),
+  d("coffee", "Coffee / black tea", [], "Polyphenol beverage",
+    [],
+    ["polyphenol-drink"],
+    "Lost levothyroxine and iron absorption — not the 1A2 caffeine row",
+    {
+      kind: "food",
+      aliases: ["espresso", "morning coffee", "black tea", "tea with iron", "tannins", "americano", "coffee"],
+      note: "Tannins bind levothyroxine and iron in the gut. Espresso with Synthroid is an empty TSH (Benvenga). Caffeine-as-1A2-substrate is a different bottle. Green-tea extract (EGCG) is the 3A4/liver capsule, not this cup.",
+    }),
+  d("protein-meal", "High-protein meal", [], "Large-neutral amino acid load",
+    [],
+    ["protein-load"],
+    "Lost levodopa 'on' time",
+    {
+      kind: "food",
+      aliases: ["protein", "steak", "protein shake", "whey", "high protein", "amino acids"],
+      note: "Leu/Phe/Tyr compete with levodopa at LAT1 in gut and brain. A protein breakfast next to Sinemet is a motor fluctuation, not CYP. Iron chelation is a separate row.",
+    }),
+  d("soy", "Soy protein / soy milk", [], "Soy food (T4 binder / vitamin K)",
+    [],
+    ["vitk-food"],
+    "Lost levothyroxine absorption; INR drift with warfarin",
+    {
+      kind: "food",
+      aliases: ["soy milk", "soy protein", "tofu", "edamame", "soy formula", "soya", "soy"],
+      note: "Soy binds levothyroxine in the gut and carries some vitamin K. Formula and protein shakes are the row, not a splash of soy sauce (that one is tyramine). Separate from Synthroid by several hours.",
+    }),
+  d("high-k-foods", "High-potassium foods", [], "Dietary potassium load",
+    [],
+    ["k-food"],
+    "Hyperkalemia with ACEI/ARB and spironolactone",
+    {
+      kind: "food",
+      aliases: ["banana", "salt substitute", "potato", "coconut water", "high potassium", "losalt", "k foods"],
+      note: "Bananas, potatoes, salt-substitute KCl, coconut water. Next to lisinopril plus spironolactone this is the hyperK triad without a Slow-K bottle. The potassium-supplement row is separate.",
+    }),
+  d("histamine-fish", "Aged / histamine fish", [], "Scombroid / histamine meal",
+    [],
+    ["histamine"],
+    "Flushing and headache with isoniazid (and MAOIs)",
+    {
+      kind: "food",
+      aliases: ["tuna", "mackerel", "scombroid", "aged fish", "mahi", "histamine fish"],
+      note: "INH blocks diamine oxidase. Tuna or mackerel that would be mild scombroid in anyone becomes a flush-and-headache reaction on isoniazid. MAOIs add a tyramine/histamine overlap — not the cheese plate, a different amine.",
+    }),
+  d("enteral-feed", "Enteral / tube feed", [], "Continuous nutrition binding",
+    [],
+    ["enteral"],
+    "Lost phenytoin, warfarin, and levothyroxine absorption",
+    {
+      kind: "food",
+      aliases: ["tube feed", "ng feed", "osmolite", "jevity", "enteral nutrition", "tfn", "nasogastric"],
+      note: "Bauer 1982. Continuous NG feeds bind phenytoin — levels crash, seizures return. Warfarin and Synthroid also lose the dose. Hold the feed, flush, separate. Not CYP.",
     }),
 
   // —— Clinic / MAT / street additions ——————————————
@@ -1554,7 +1693,15 @@ const raw: Drug[] = [
     "Hypotension, edema — grapefruit is labeled",
     {
       aliases: ["procardia", "adalat"],
-      note: "Sensitive 3A4, more first-pass than amlodipine. Grapefruit and azoles raise parent. IR nifedipine is the old hypotension trap; ER is still a 3A4 victim.",
+      note: "Sensitive 3A4, more first-pass than amlodipine. Grapefruit and azoles raise parent. IR nifedipine is the old hypotension trap; ER is still a 3A4 victim. Felodipine is the original Lancet juice paper.",
+    }),
+  d("felodipine", "Felodipine", ["Plendil"], "Dihydropyridine CCB",
+    [sub("CYP3A4", "sensitive")],
+    [],
+    "Hypotension, edema — the original grapefruit victim",
+    {
+      aliases: ["plendil"],
+      note: "Bailey 1991. Intestinal 3A4 first-pass is the whole story. Grapefruit raises F; hepatic 3A4 (an IV map) barely moves. Amlodipine is the quieter cousin; nifedipine is on this shelf too.",
     }),
   d("glimepiride", "Glimepiride", ["Amaryl"], "Sulfonylurea",
     [sub("CYP2C9", "major")],
@@ -1657,7 +1804,7 @@ const raw: Drug[] = [
     "Loss of effect with fruit juice (OATP); raised levels with P-gp block",
     {
       aliases: ["allegra"],
-      note: "P-gp/OATP, not CYP. Apple/orange/grapefruit juice cut absorption. Verapamil and other P-gp inhibitors raise it. The one 2nd-gen antihistamine with a transporter map.",
+      note: "P-gp/OATP, not CYP. Apple/orange/grapefruit juice cut absorption (search apple juice). Verapamil and other P-gp inhibitors raise it. The one 2nd-gen antihistamine with a transporter map. Juice is loss of effect, not a CYP rise.",
     }),
   d("oxybutynin", "Oxybutynin", ["Ditropan", "Oxytrol"], "Antimuscarinic (OAB)",
     [sub("CYP3A4", "major")],
@@ -1681,7 +1828,15 @@ const raw: Drug[] = [
     "Bradycardia, heart block, hypotension",
     {
       aliases: ["tenormin"],
-      note: "Renal, not CYP2D6. The switch when metoprolol is a 2D6 victim (paroxetine, terbinafine, 2D6 PM). PD with non-DHP CCBs still applies.",
+      note: "Renal, not CYP2D6. The switch when metoprolol is a 2D6 victim (paroxetine, terbinafine, 2D6 PM). Apple/orange juice cut OATP absorption — search apple juice. PD with non-DHP CCBs still applies.",
+    }),
+  d("nadolol", "Nadolol", ["Corgard"], "Beta blocker (OATP)",
+    [],
+    ["beta-blocker", "bradycardic"],
+    "Lost effect with fruit juice and green tea (OATP)",
+    {
+      aliases: ["corgard"],
+      note: "Renal, not 2D6. OATP1A2 substrate — green tea and apple/orange juice cut AUC sharply (Misaka). Atenolol is the quieter cousin on the same transporter. Not a CYP row.",
     }),
   d("valsartan", "Valsartan", ["Diovan"], "ARB",
     [],
@@ -1689,7 +1844,15 @@ const raw: Drug[] = [
     "Hyperkalemia, acute kidney injury",
     {
       aliases: ["diovan"],
-      note: "OATP, not CYP — unlike losartan, which needs 2C9 activation. Same RAAS PD: NSAID GFR hit, K-sparing hyperkalemia, lithium.",
+      note: "OATP, not CYP — unlike losartan, which needs 2C9 activation. Same RAAS PD: NSAID GFR hit, K-sparing hyperkalemia, lithium. Fruit juice dumping aliskiren is a different OATP row.",
+    }),
+  d("aliskiren", "Aliskiren", ["Tekturna"], "Direct renin inhibitor",
+    [],
+    ["acei-arb", "nephrotoxic"],
+    "Lost absorption with fruit juice (OATP); hyperkalemia with ACEI/ARB",
+    {
+      aliases: ["tekturna", "rasilez"],
+      note: "OATP2B1. Apple, orange, and grapefruit juice dump aliskiren. Dual RAAS block with an ACEI is a different, labeled problem. Not a CYP substrate.",
     }),
   d("chlorthalidone", "Chlorthalidone", ["Thalitone"], "Thiazide-like diuretic",
     [],
@@ -1718,7 +1881,23 @@ const raw: Drug[] = [
     "Photosensitivity; chelation with cations — not a CYP perpetrator",
     {
       aliases: ["vibramycin", "doryx", "doxy"],
-      note: "Not an inducer like rifampin and not a 3A4 inhibitor like clarithromycin. Cations and isotretinoin are the labeled problems, not this cytochrome desk.",
+      note: "Not an inducer like rifampin and not a 3A4 inhibitor like clarithromycin. Cations and dairy still bind it, less brutally than tetracycline itself. Isotretinoin is the other labeled problem.",
+    }),
+  d("tetracycline", "Tetracycline", [], "Tetracycline antibiotic",
+    [],
+    [],
+    "Chelation with dairy and cations — the original milk trap",
+    {
+      aliases: ["sumycin", "achaomycin"],
+      note: "More dairy-sensitive than doxycycline. A glass of milk can empty the course. Not an inducer and not a 3A4 inhibitor. Cations are the map.",
+    }),
+  d("alendronate", "Alendronate", ["Fosamax"], "Bisphosphonate",
+    [],
+    ["empty-stomach"],
+    "Lost absorption with any food, dairy, or cations — take fasting upright",
+    {
+      aliases: ["fosamax", "bisphosphonate", "alendronic", "risedronate", "actonel"],
+      note: "Anything in the stomach kills F. Dairy, calcium, coffee, a meal. Thirty minutes before food, full glass of water, stay upright. Not a CYP substrate. Risedronate is the same empty-stomach map.",
     }),
   d("albuterol", "Albuterol", ["ProAir", "Ventolin", "Proventil"], "Short-acting beta-2 agonist",
     [],
@@ -1852,12 +2031,12 @@ const raw: Drug[] = [
     }),
   d("green-tea", "Green tea extract (EGCG)", [], "Catechin supplement",
     [inh("CYP3A4", "weak"), inh("P-gp", "weak")],
-    ["hepatotoxic", "antiplatelet"],
+    ["hepatotoxic", "antiplatelet", "oatp-block"],
     "Hepatotoxicity of concentrated extract; bleed; OATP/P-gp victims can fall",
     {
       kind: "herb",
       aliases: ["egcg", "camellia sinensis", "matcha extract", "green tea"],
-      note: "A cup of tea is not this row. Concentrated EGCG has a liver signal. Also binds nadolol/atenolol-type OATP substrates and adds a little vitamin K / antiplatelet noise next to warfarin.",
+      note: "A cup of tea is not this row — coffee/black tea on this shelf is the tannin-Synthroid map. Concentrated EGCG has a liver signal. Also an OATP bully: nadolol and atenolol fall (Misaka). Next to Corgard it is loss of beta blockade, not a CYP rise.",
     }),
   d("calcium", "Calcium supplement", [], "Divalent cation",
     [],
@@ -2295,7 +2474,10 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
     q === "diet" ||
     q === "meal" ||
     q === "herb" ||
-    q === "herbs";
+    q === "herbs" ||
+    q === "juice" ||
+    q === "dairy" ||
+    q === "kitchen";
   const psychQuery =
     q === "psych" ||
     q.includes("psychoact") ||
@@ -2304,7 +2486,44 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
     q === "stimulant" ||
     q === "stimulants";
   if (foodQuery) {
-    return DRUGS.filter((d) => !excluded.has(d.id) && isFood(d)).slice(0, 16);
+    const kitchenFirst = [
+      "grapefruit",
+      "dairy",
+      "leafy-greens",
+      "oatp-juice",
+      "tyramine-foods",
+      "high-fat-meal",
+      "coffee",
+      "protein-meal",
+      "soy",
+      "high-k-foods",
+      "histamine-fish",
+      "enteral-feed",
+      "pomegranate",
+      "starfruit",
+      "charred-meat",
+      "cruciferous",
+      "st-johns-wort",
+      "acidic-juice",
+      "alkalinizer",
+      "low-salt",
+      "high-salt",
+      "green-tea",
+    ];
+    const seen = new Set<string>();
+    const ordered: Drug[] = [];
+    for (const id of kitchenFirst) {
+      const d = DRUG_BY_ID[id];
+      if (!d || excluded.has(d.id)) continue;
+      seen.add(d.id);
+      ordered.push(d);
+    }
+    for (const d of DRUGS) {
+      if (excluded.has(d.id) || seen.has(d.id) || !isFood(d)) continue;
+      ordered.push(d);
+      if (ordered.length >= 24) break;
+    }
+    return ordered.slice(0, 24);
   }
   if (
     q === "supplement" ||
@@ -2356,6 +2575,7 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
       "methadone",
       "naltrexone",
       "naloxone",
+      "nalmefene",
       "lofexidine",
       "clonidine",
       "acamprosate",
@@ -2427,6 +2647,109 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
     return CLINIC_PREG_AVOID.map((id) => DRUG_BY_ID[id])
       .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
       .slice(0, 16);
+  }
+  if (
+    q === "pheno" ||
+    q === "phenoconversion" ||
+    q === "phenoconvert" ||
+    q === "convert"
+  ) {
+    const order = ["paroxetine", "fluoxetine", "bupropion", "quinidine", "terbinafine", "fluconazole", "fluvoxamine", "ciprofloxacin", "clarithromycin", "codeine", "dextromethorphan", "tamoxifen"];
+    return order
+      .map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 16);
+  }
+  if (q === "mme" || q === "morphine equivalent" || q === "morphine-equivalent" || q === "omed") {
+    return Object.keys(MME_FACTOR)
+      .map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 16);
+  }
+  if (q === "hunter" || q === "serotonin syndrome" || q === "nms" || q === "clonus") {
+    return DRUGS.filter(
+      (d) =>
+        !excluded.has(d.id) &&
+        (d.pd.includes("serotonergic") || d.pd.includes("ssri-snri") || d.pd.includes("maoi") || /antipsychotic/i.test(d.cls)),
+    ).slice(0, 16);
+  }
+  if (q === "reversal" || q === "antidote" || q === "naloxone" || q === "narcan" || q === "opvee") {
+    const order = ["naloxone", "nalmefene", "nac", "vitamin-k", "fentanyl", "methadone", "acetaminophen", "warfarin", "xylazine", "dabigatran", "digoxin"];
+    return order
+      .map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 16);
+  }
+  if (q === "tdm" || q === "levels" || q === "trough") {
+    return DRUGS.filter((d) => !excluded.has(d.id) && hasTdm(d.id)).slice(0, 16);
+  }
+  if (
+    q === "uds" ||
+    q === "uad" ||
+    q === "immunoassay" ||
+    q === "cup" ||
+    q === "urine" ||
+    q === "screen"
+  ) {
+    const order = [
+      "methadone",
+      "buprenorphine",
+      "fentanyl",
+      "oxycodone",
+      "quetiapine",
+      "sertraline",
+      "bupropion",
+      "dextromethorphan",
+      "rifampin",
+      "bromazolam",
+      "clonazepam",
+      "tramadol",
+    ];
+    return order
+      .map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 16);
+  }
+  if (q === "cows" || q === "ciwa" || q === "withdrawal" || q === "precipitated") {
+    const order = [
+      "buprenorphine",
+      "methadone",
+      "fentanyl",
+      "naltrexone",
+      "nalmefene",
+      "lofexidine",
+      "clonidine",
+      "ethanol",
+      "dirty-30",
+    ];
+    return order
+      .map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 16);
+  }
+  if (q === "lactmed" || q === "lactation" || q === "breastfeed" || q === "breastfeeding" || q === "milk") {
+    const order = [
+      "methadone",
+      "buprenorphine",
+      "lithium",
+      "codeine",
+      "tramadol",
+      "sertraline",
+      "fluoxetine",
+      "lamotrigine",
+      "lorazepam",
+      "warfarin",
+    ];
+    return order
+      .map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 16);
+  }
+  if (q === "qtc" || q === "qt" || q === "torsades") {
+    return DRUGS.filter((d) => !excluded.has(d.id) && (d.pd.includes("qt-known") || d.pd.includes("qt-possible"))).slice(0, 16);
+  }
+  if (q === "rxnav" || q === "pubchem" || q === "trials" || q === "dailymed" || q === "shortage" || q === "shortages") {
+    return DRUGS.filter((d) => !excluded.has(d.id) && d.kind === "drug" && !d.id.startsWith("__")).slice(0, 16);
   }
   const scored: { drug: Drug; score: number }[] = [];
   for (const drug of DRUGS) {

@@ -3,6 +3,7 @@ export {
   ConnectorType,
   GoogleCalendarTools,
   GoogleDriveTools,
+  GmailTools,
 } from "./types.ts";
 export type {
   CallToolOptions,
@@ -14,6 +15,7 @@ export {
   isConnectorPending,
   isLoginRequired,
   redirectToLoginIfRequired,
+  isFramed,
 } from "./login.ts";
 export { classifyCallToolError } from "./errors.ts";
 export type { CallToolErrorKind, CallToolErrorState } from "./errors.ts";

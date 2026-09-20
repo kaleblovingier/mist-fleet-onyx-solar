@@ -550,6 +550,38 @@ export function mailDraft(t: Target) {
   return `mailto:?subject=${encodeURIComponent(mailSubject(t))}&body=${encodeURIComponent(targetDm(t))}`;
 }
 
+export const PIPE_KEY = "firstpass.pipeline.v1";
+
+export function loadPipe(): PipeRow[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(PIPE_KEY);
+    const rows = raw ? (JSON.parse(raw) as Partial<PipeRow>[]) : [];
+    return rows
+      .filter((r) => typeof r.id === "string" && typeof r.name === "string")
+      .map((r) => ({
+        id: r.id as string,
+        name: r.name as string,
+        prey: (r.prey as Prey) ?? "clinic",
+        range: (r.range as Range) ?? "puget",
+        city: typeof r.city === "string" ? r.city : "",
+        who: typeof r.who === "string" ? r.who : "",
+        site: typeof r.site === "string" ? r.site : "",
+        hook: typeof r.hook === "string" ? r.hook : "",
+        status: (r.status as PipeStatus) ?? "queued",
+        note: typeof r.note === "string" ? r.note : "",
+        added: typeof r.added === "string" ? r.added : new Date().toISOString(),
+      }));
+  } catch {
+    return [];
+  }
+}
+
+export function savePipe(rows: PipeRow[]) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(PIPE_KEY, JSON.stringify(rows.slice(0, 80)));
+}
+
 export function toPipe(t: Target, status: PipeStatus = "queued"): PipeRow {
   return { ...t, status, note: "", added: new Date().toISOString() };
 }

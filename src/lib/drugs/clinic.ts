@@ -104,9 +104,9 @@ export const CLINIC: Record<string, ClinicCard> = {
     pregnancy: "caution",
     pregNote: "Neural-tube risk; folate. HLA-B*1502 SJS in ancestry from East/South Asia.",
     hepatic: "caution",
-    boxed: "SJS/TEN, aplastic anemia, HLA-B*1502.",
+    boxed: "SJS/TEN, aplastic anemia, HLA-B*1502. Strong 3A4/2B6 induction — stolen methadone take-home in days.",
     beers: "SIADH / hyponatremia watch in older adults.",
-    monitor: ["CBC", "Na", "LFTs", "level"],
+    monitor: ["CBC", "Na", "LFTs", "level", "withdrawal"],
   }),
   lamotrigine: card({
     pregnancy: "caution",
@@ -263,24 +263,94 @@ export const CLINIC: Record<string, ClinicCard> = {
   }),
   methadone: card({
     pregnancy: "caution",
-    pregNote: "OTP continues methadone in pregnancy. Neonatal opioid withdrawal is expected, not a reason to stop.",
-    lactation: "caution",
+    pregNote:
+      "OTP continues methadone in pregnancy. Neonatal opioid withdrawal is expected, not a reason to stop. Jones MOTHER (2010) and Suarez 2022: buprenorphine had milder NAS in those maps — still not a switch protocol.",
+    lactation: "ok",
+    lactNote:
+      "LactMed: usually compatible. Relative infant dose ~1–3% on a stable bottle. Watch infant sedation. Do not stop OTP to breastfeed.",
     hepatic: "caution",
-    boxed: "QTc prolongation, respiratory depression, addiction.",
-    beers: "Opioid + benzo is the airway boxed warning at any age.",
-    monitor: ["ECG", "K", "Mg"],
+    boxed: "QTc prolongation, respiratory depression, addiction. Opioid + benzo / gabapentinoid is boxed at any age.",
+    beers: "Opioid + benzo is the airway boxed warning at any age. QT drugs at the window are not free extras.",
+    monitor: ["ECG", "K", "Mg", "airway", "UDS", "EDDP"],
   }),
   buprenorphine: card({
     pregnancy: "caution",
-    pregNote: "Office-based and OTP both use buprenorphine in pregnancy. Precipitated withdrawal is occupancy.",
+    pregNote:
+      "Office-based and OTP both use buprenorphine in pregnancy. Precipitated withdrawal is occupancy. MOTHER / Suarez: milder NAS vs methadone in those cohorts — not a reason to destabilize a working methadone.",
+    lactation: "ok",
+    lactNote: "LactMed: low RID. Naloxone in Suboxone is poorly bioavailable via milk. Watch infant sedation.",
     boxed: "Respiratory depression with benzos / alcohol. Precipitated withdrawal with full agonists.",
-    monitor: ["airway"],
+    monitor: ["airway", "COWS", "UDS"],
   }),
   naltrexone: card({
     pregnancy: "caution",
+    lactation: "caution",
+    lactNote: "Limited milk data. Theoretical μ blockade if the infant needed opioid analgesia.",
     boxed: "Precipitated opioid withdrawal. Need a washout. Hepatotoxicity at high oral doses.",
     hepatic: "caution",
     monitor: ["LFTs"],
+  }),
+  nalmefene: card({
+    pregnancy: "caution",
+    lactation: "caution",
+    lactNote: "No useful milk data. Longer μ occupancy than naloxone is the adult row.",
+    boxed: "Precipitated opioid withdrawal. Longer occupancy than naloxone — re-narcotize vs over-reverse.",
+    monitor: ["airway"],
+  }),
+  paxlovid: card({
+    pregnancy: "caution",
+    boxed: "Ritonavir-boosted. Fentanyl / oxycodone airway; methadone often falls — watch withdrawal. Buprenorphine parent may climb; tolerant patients usually need no cut.",
+    hepatic: "caution",
+    renal: "caution",
+    renalNote: "Nirmatrelvir is renally adjusted. The DDI is the ritonavir, not the GFR cut.",
+    monitor: ["airway", "withdrawal"],
+  }),
+  nevirapine: card({
+    pregnancy: "caution",
+    hepatic: "avoid",
+    hepNote: "Hepatotoxicity, including in pregnancy. OTP stolen-dose NNRTI on top of that.",
+    boxed: "Hepatotoxicity, SJS/TEN. Dumps methadone.",
+    monitor: ["LFTs", "withdrawal"],
+  }),
+  cobicistat: card({
+    boxed: "Tybost is not Norvir. 3A4 inhibit without 2B6 induction — methadone parent climbs, it does not fall. Buprenorphine rises too.",
+    monitor: ["airway", "ECG"],
+  }),
+  fluvoxamine: card({
+    pregnancy: "caution",
+    boxed: "Serotonin syndrome with other serotonergics including methadone and fentanyl.",
+    beers: "The OTP Luvox bump is PK plus serotonin, not a free OCD pill.",
+    monitor: ["airway", "ECG"],
+  }),
+  promethazine: card({
+    pregnancy: "caution",
+    beers: "Anticholinergic, sedation. Next to methadone it is not a free antiemetic.",
+    boxed: "Respiratory depression with opioids. IV has a boxed gangrene warning.",
+    monitor: ["airway"],
+  }),
+  cyclobenzaprine: card({
+    beers: "Anticholinergic muscle relaxant. Avoid in older adults. Next to methadone / fentanyl it is still an airway drug.",
+    monitor: ["airway"],
+  }),
+  ethanol: card({
+    pregnancy: "avoid",
+    pregNote: "No safe dose in pregnancy. OTP still treats the alcohol, not with a free drink on methadone.",
+    hepatic: "caution",
+    beers: "Falls, delirium. Next to methadone or buprenorphine it is boxed airway, not a CYP row.",
+    boxed: "Respiratory depression with opioids, benzos, GHB.",
+    monitor: ["airway", "LFTs"],
+  }),
+  clarithromycin: card({
+    pregnancy: "caution",
+    hepatic: "caution",
+    beers: "QT. Strong 3A4 inhibitor — Biaxin is not a Z-Pak next to methadone.",
+    boxed: "QT. Strong 3A4 perpetrator of fentanyl, methadone, midazolam.",
+    monitor: ["ECG", "airway"],
+  }),
+  azithromycin: card({
+    pregnancy: "caution",
+    beers: "QT without much CYP3A4. Next to methadone it is still a repolarization extra.",
+    monitor: ["ECG"],
   }),
   morphine: card({
     pregnancy: "caution",
@@ -303,8 +373,9 @@ export const CLINIC: Record<string, ClinicCard> = {
   }),
   fentanyl: card({
     pregnancy: "caution",
-    boxed: "Addiction, respiratory depression, benzo combo. 3A4 inhibitors raise parent.",
-    beers: "Opioid harms. Street fentanyl ± xylazine is a different row.",
+    boxed: "Addiction, respiratory depression, benzo combo. 3A4 inhibitors (Paxlovid, ritonavir, azoles) raise parent.",
+    beers: "Opioid harms. Street fentanyl ± xylazine / medetomidine is a different row — naloxone will not finish the α2.",
+    monitor: ["airway"],
   }),
   tramadol: card({
     pregnancy: "caution",
@@ -432,7 +503,7 @@ export const CLINIC: Record<string, ClinicCard> = {
   }),
   fluoxetine: card({
     pregnancy: "caution",
-    beers: "Long washout. SIADH.",
+    beers: "Long washout. SIADH. On an OTP board this is not the Luvox methadone bump — 2D6, not 1A2/2B6.",
     monitor: ["Na"],
   }),
   paroxetine: card({
@@ -549,7 +620,7 @@ export const CLINIC: Record<string, ClinicCard> = {
     pregnancy: "caution",
     renal: "caution",
     beers: "CNS, tendon, hypoglycemia, QT. Cations bind it in the gut.",
-    boxed: "Tendon, peripheral neuropathy, CNS, myasthenia.",
+    boxed: "Tendon, peripheral neuropathy, CNS, myasthenia. Next to methadone: QT plus a 1A2/weak-3A4 nudge (Herrlin 2000).",
     monitor: ["glucose", "ECG"],
   }),
   levofloxacin: card({
@@ -667,6 +738,8 @@ export const CLINIC: Record<string, ClinicCard> = {
   }),
   cimetidine: card({
     beers: "CNS in older adults. The CYP perpetrator among H2 blockers.",
+    boxed: "Raises 1A2/3A4/2D6 victims. On an OTP board it can nudge methadone — famotidine is the switch.",
+    monitor: ["airway"],
   }),
   baclofen: card({
     renal: "caution",
@@ -677,9 +750,6 @@ export const CLINIC: Record<string, ClinicCard> = {
     hepatic: "caution",
     beers: "Hypotension, sedation. 1A2 victims go deeper (cipro, fluvoxamine).",
     monitor: ["BP", "LFTs"],
-  }),
-  cyclobenzaprine: card({
-    beers: "Anticholinergic muscle relaxant. Avoid in older adults.",
   }),
   meperidine: card({
     renal: "avoid",
@@ -708,6 +778,74 @@ export const CLINIC: Record<string, ClinicCard> = {
   }),
   budesonide: card({
     boxed: "Gut 3A4 first-pass. Azoles and boosters make it systemic.",
+  }),
+  theophylline: card({
+    pregnancy: "caution",
+    hepatic: "caution",
+    boxed: "Narrow index. Seizures and arrhythmias when the level runs hot.",
+    beers: "Not a first-line bronchodilator in older adults.",
+    monitor: ["level", "HR"],
+  }),
+  phenobarbital: card({
+    pregnancy: "caution",
+    pregNote: "Inducer — OCP failure. Sedation and withdrawal in the neonate.",
+    hepatic: "caution",
+    beers: "Avoid. Dependence, falls, cognitive load.",
+    monitor: ["level", "LFTs"],
+  }),
+  primidone: card({
+    pregnancy: "caution",
+    beers: "Barbiturate prodrug to phenobarbital. Same falls / inducer map.",
+    monitor: ["level"],
+  }),
+  ziprasidone: card({
+    pregnancy: "caution",
+    boxed: "QT. Contraindicated with known-risk QT drugs and in uncompensated HF.",
+    beers: "QT. Feed ~500 kcal or F collapses.",
+    monitor: ["ECG"],
+  }),
+  lurasidone: card({
+    pregnancy: "caution",
+    beers: "Must take with ~350 kcal. F collapses fasted — not a CYP row.",
+    monitor: ["weight", "A1c"],
+  }),
+  oxcarbazepine: card({
+    pregnancy: "caution",
+    beers: "SIADH / hyponatremia. HLA-B*15:02 rash caution like carbamazepine.",
+    monitor: ["Na"],
+  }),
+  paliperidone: card({
+    pregnancy: "caution",
+    renal: "caution",
+    renalNote: "Renally cleared 9-hydroxy-risperidone. CKD is a dose cut, not 2D6.",
+    beers: "QT possible. Prolactin.",
+    monitor: ["Cr", "prolactin"],
+  }),
+  chlorpromazine: card({
+    pregnancy: "caution",
+    hepatic: "caution",
+    hepNote: "The phenothiazine that taught cholestatic jaundice.",
+    beers: "Anticholinergic, falls, QT.",
+    monitor: ["ECG", "LFTs"],
+  }),
+  metoclopramide: card({
+    pregnancy: "caution",
+    boxed: "Tardive dyskinesia. Duration cap. Not a free nausea drug on a psych desk.",
+    beers: "Avoid. EPS, tardive.",
+  }),
+  isoniazid: card({
+    pregnancy: "caution",
+    hepatic: "avoid",
+    hepNote: "Classic INH hepatitis. Slow NAT2 acetylators. Pyridoxine does not prevent this.",
+    boxed: "Hepatitis. Peripheral neuropathy — give B6.",
+    monitor: ["LFTs"],
+  }),
+  duloxetine: card({
+    pregnancy: "caution",
+    hepatic: "avoid",
+    hepNote: "Labeled — avoid in chronic liver disease.",
+    beers: "Falls, hyponatremia, SIADH among SNRIs.",
+    monitor: ["LFTs", "BP", "Na"],
   }),
 };
 
