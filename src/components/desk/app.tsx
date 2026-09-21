@@ -196,7 +196,8 @@ export function DeskApp() {
             <p className="text-sm leading-relaxed text-fg">
               For licensed healthcare professionals. {SOFTWARE.name} is not FDA-cleared. The
               Prescribing Information is the authority — independently review the basis of every
-              recommendation before acting.
+              recommendation before acting. If local drug-checking services are available, use them
+              for purity and content testing; they are not urine testing and not a dose tool.
             </p>
             <div className="flex shrink-0 flex-wrap gap-2">
               <Button variant="secondary" size="sm" onClick={() => setView("label")}>
@@ -460,7 +461,7 @@ function EmptyState({
         <p className="max-w-xl text-sm leading-relaxed text-muted">
           {lane === "mat"
             ? "Built for the dosing window. Put methadone, a film, or Vivitrol on the desk, then tap today's extra. OTP tab: occupancy vs COWS, Vivitrol washout, 2024 take-homes, naloxone, ECG, ID screens. The briefing writes watch / counsel / consider. Live PI sits under it. Not a treatment order — the label wins."
-            : "FirstPass is clinical decision support for licensed healthcare professionals and educational harm-reduction review — CYP450 maps, FDA-label excerpts, and published scales to independently assess recreational-safety and street-supply risks. It is not FDA-cleared, not patient-directed, and not a dose or self-treatment tool. The Prescribing Information is the authority. Two-drug collisions stay free. Open IFU for intended use."}
+            : "FirstPass is clinical decision support for licensed healthcare professionals and educational harm-reduction review — CYP450 maps, FDA-label excerpts, and published scales to independently assess recreational-safety and street-supply risks. If local drug-checking services are available, use them for purity and content testing; they are not urine testing, not a dose tool, and not a substitute for the label. It is not FDA-cleared, not patient-directed, and not a dose or self-treatment tool. The Prescribing Information is the authority. Two-drug collisions stay free. Open IFU for intended use."}
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           {lane === "mat" ? (
