@@ -92,7 +92,7 @@ var HEADERS = { TSS_SHELL: "X-TSS_SHELL" };
 * the dev styles URL for route-scoped CSS collection.
 */
 async function getStartManifest(matchedRoutes) {
-	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-B-vbQhlB.mjs");
+	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-DDuU8U80.mjs");
 	const startManifest = tsrStartManifest();
 	let routes = startManifest.routes;
 	routes[rootRouteId];
@@ -114,63 +114,63 @@ async function getStartManifest(matchedRoutes) {
 var manifest = {
 	"12c28728ffb922f158c1731585a27e29a86abec7b7afc80c10a97471cd162237": {
 		functionName: "lookupCpicGuideline_createServerFn_handler",
-		importer: () => import("./live-rpc-DtfBAyMu.mjs").then((n) => n.t)
+		importer: () => import("./live-rpc-78hg3AZJ.mjs").then((n) => n.t)
 	},
 	"136f69ff59e46a1efad3665eb04abb5f1b33d58dd597235d8186a63332ae8472": {
 		functionName: "searchTrials_createServerFn_handler",
-		importer: () => import("./live-rpc-DtfBAyMu.mjs").then((n) => n.t)
+		importer: () => import("./live-rpc-78hg3AZJ.mjs").then((n) => n.t)
 	},
 	"1bff1f57d5534978f8ba9956f7d553bb0e80b27eca17219153b9da88ade84f36": {
 		functionName: "listPaidLicenses_createServerFn_handler",
-		importer: () => import("./stripe-0nNeFS4t.mjs")
+		importer: () => import("./stripe-DVMiji5f.mjs")
 	},
 	"44d8bbe640632087e1ae0c85eee1989e89f5aea9b69ea3fe55986c2c45da9af4": {
 		functionName: "redeemLicense_createServerFn_handler",
-		importer: () => import("./license-zgpp7UYM.mjs")
+		importer: () => import("./license-UCcZeI6V.mjs")
 	},
 	"59d4cf41bb5f887a079781ba2a8bb5e7d49fa10d68af065cdce9e19c33bd837a": {
 		functionName: "lookupRxnavInteractions_createServerFn_handler",
-		importer: () => import("./live-rpc-DtfBAyMu.mjs").then((n) => n.t)
+		importer: () => import("./live-rpc-78hg3AZJ.mjs").then((n) => n.t)
 	},
 	"69022fa5ec834cb344b7d8a1942c20f8240bdf6dc54600b17fb18bb31ada37e1": {
 		functionName: "mintLicenseBatch_createServerFn_handler",
-		importer: () => import("./license-zgpp7UYM.mjs")
+		importer: () => import("./license-UCcZeI6V.mjs")
 	},
 	"7b28598e8eb2bad644d0c312587b5f09ac1584adb3f466a08be60a89009342b3": {
 		functionName: "lookupLiveSources_createServerFn_handler",
-		importer: () => import("./live-rpc-DtfBAyMu.mjs").then((n) => n.t)
+		importer: () => import("./live-rpc-78hg3AZJ.mjs").then((n) => n.t)
 	},
 	"81831aa2d98bcaec1ff38c1a504d63093d8f0f5535a3090a7610523dd640ff4e": {
 		functionName: "draftCollected_createServerFn_handler",
-		importer: () => import("./collect-DwZwCom8.mjs")
+		importer: () => import("./collect-wIAMsE7m.mjs")
 	},
 	"9a94130689cbcdd872bc21b75ad6a07faed8f6939232c21d280adadc08ffd235": {
 		functionName: "searchPubmed_createServerFn_handler",
-		importer: () => import("./pubmed-rpc-unrSpc8G.mjs")
+		importer: () => import("./pubmed-rpc-_9ovIurw.mjs")
 	},
 	"ac303419f3bd6f94ee837f95e91005a600278deed4876cb96a25aa0d69185951": {
 		functionName: "getConnectorReadiness_createServerFn_handler",
-		importer: () => import("./readiness-BhMuZ12j.mjs")
+		importer: () => import("./readiness-uoNmUgeo.mjs")
 	},
 	"c4b9a08d61fce0057ad5128b30c506678321938dc4e4e2a201694c6b9199409c": {
 		functionName: "mintLicenseKey_createServerFn_handler",
-		importer: () => import("./license-zgpp7UYM.mjs")
+		importer: () => import("./license-UCcZeI6V.mjs")
 	},
 	"c4c1c686268d315fefc8fab7300663dc1b46f1dfa709dd0bb5dee178f845e24e": {
 		functionName: "collectLicenses_createServerFn_handler",
-		importer: () => import("./collect-DwZwCom8.mjs")
+		importer: () => import("./collect-wIAMsE7m.mjs")
 	},
 	"c69551bf536aa5bf57002955495abde08bd40ca864317987f6edb29bb93a15f0": {
 		functionName: "stripeStatus_createServerFn_handler",
-		importer: () => import("./stripe-0nNeFS4t.mjs")
+		importer: () => import("./stripe-DVMiji5f.mjs")
 	},
 	"c80fe63ac6022aed39946a4ec1310dbb12788f7679579baebe8d36ddfd07c509": {
 		functionName: "claimStripeCheckout_createServerFn_handler",
-		importer: () => import("./stripe-0nNeFS4t.mjs")
+		importer: () => import("./stripe-DVMiji5f.mjs")
 	},
 	"e4e9c09259e5d2421625eea94a6c09d36185c63ef8ee9a12708b7dcf7c670a0f": {
 		functionName: "startStripeCheckout_createServerFn_handler",
-		importer: () => import("./stripe-0nNeFS4t.mjs")
+		importer: () => import("./stripe-DVMiji5f.mjs")
 	}
 };
 async function getServerFnById(id, access) {
@@ -1440,7 +1440,7 @@ var getBaseManifest = getProdBaseManifest;
 var createEarlyHintsForRequest = createEarlyHintsCollector;
 async function loadEntries() {
 	const [routerEntry, startEntry, pluginAdapters] = await Promise.all([
-		import("./router-BnEMGaIc.mjs"),
+		import("./router-YG4HeNN9.mjs"),
 		import("./start-5Z2QO8AU.mjs"),
 		import("./empty-plugin-adapters-D9UWiqvJ.mjs")
 	]);

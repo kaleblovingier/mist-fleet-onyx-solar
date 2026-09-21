@@ -1,7 +1,7 @@
 import { t as createServerFn } from "./ssr.mjs";
-import { o as DRUG_BY_ID } from "./catalog-2vdmANSb.mjs";
+import { o as DRUG_BY_ID } from "./catalog-ChglGbbv.mjs";
 import { t as createServerRpc } from "./createServerRpc-A6pJPYTF.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/pubmed-rpc-unrSpc8G.js
+//#region node_modules/.nitro/vite/services/ssr/assets/pubmed-rpc-_9ovIurw.js
 function readString(input, key) {
 	if (!input || typeof input !== "object") return "";
 	const v = input[key];

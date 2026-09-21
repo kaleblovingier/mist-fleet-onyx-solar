@@ -14,7 +14,12 @@ export type CircuitSummary = {
   severe: number;
 };
 
-export function summarizeMultiCircuitFindings(findings: Pick<Finding, 'kind' | 'severity' | 'drugIds'>[]) {
+export function summarizeMultiCircuitFindings(
+  findings: Array<
+    Pick<Finding, 'kind' | 'severity' | 'drugIds'> &
+      Partial<Pick<Finding, 'id' | 'headline' | 'enzymes' | 'effect' | 'mechanism' | 'clinical' | 'tags'>>
+  >,
+) {
   const byCircuit: Record<CircuitKind, CircuitSummary> = {
     pk: { count: 0, severe: 0 },
     pd: { count: 0, severe: 0 },

@@ -3,15 +3,15 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { v as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as TSS_SERVER_FUNCTION, r as getServerFnById, t as createServerFn } from "./ssr.mjs";
 import { r as CONNECTOR_TOKEN_READY_EVENT } from "./types-DXXiBr9d.mjs";
-import { _ as priceFor, a as PLANS, b as tweetFor, c as TRY_THREE, d as fulfillKeys, f as invoiceText, g as payClose, h as maxDrugs, i as PAY_RAILS, l as buyerDm, m as launchTweet, n as COMMERCE, o as PLAN_BY_ID, p as launchPosts, r as OPERATOR, s as SITE, t as BUYERS, u as fulfillKey, v as requestLicense, y as salesDm } from "./plans-Bi1jffsv.mjs";
-import { C as searchCites, D as tdmOnDesk, E as tdmHostNote, S as pubmedUrl, T as stahlFor, _ as hasStahl, a as DRUGS, b as pgxFor, c as citesFor, d as drugbankUrl, f as familyOf, g as hasPgx, h as hasClinic, i as DRUGBANK, l as clinicFor, m as hasCite, n as CITE_TAGS, o as DRUG_BY_ID, p as fentanylPatchMme, r as CLINIC, s as FAMILIES, t as CITES, u as drugbankSearchUrl, v as methadoneFactor, w as searchDrugs, x as pubmedSearchUrl, y as mmeOnDesk } from "./catalog-2vdmANSb.mjs";
+import { _ as priceFor, a as PLANS, b as tweetFor, c as TRY_THREE, d as fulfillKeys, f as invoiceText, g as payClose, h as maxDrugs, i as PAY_RAILS, l as buyerDm, m as launchTweet, n as COMMERCE, o as PLAN_BY_ID, p as launchPosts, r as OPERATOR, s as SITE, t as BUYERS, u as fulfillKey, v as requestLicense, y as salesDm } from "./plans-BRWqRvoI.mjs";
+import { C as searchCites, D as tdmOnDesk, E as tdmHostNote, S as pubmedUrl, T as stahlFor, _ as hasStahl, a as DRUGS, b as pgxFor, c as citesFor, d as drugbankUrl, f as familyOf, g as hasPgx, h as hasClinic, i as DRUGBANK, l as clinicFor, m as hasCite, n as CITE_TAGS, o as DRUG_BY_ID, p as fentanylPatchMme, r as CLINIC, s as FAMILIES, t as CITES, u as drugbankSearchUrl, v as methadoneFactor, w as searchDrugs, x as pubmedSearchUrl, y as mmeOnDesk } from "./catalog-ChglGbbv.mjs";
 import { _ as ChevronDown, a as Share2, c as Plus, d as KeyRound, f as ExternalLink, g as ClipboardCopy, h as Copy, i as SquareCheckBig, l as Lock, m as CreditCard, o as Search, p as Download, r as Square, s as RotateCcw, t as X, u as LoaderCircle, v as Check } from "../_libs/lucide-react.mjs";
 import { n as create, t as persist } from "../_libs/zustand.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as Slot } from "../_libs/radix-ui__react-slot.mjs";
 import { a as CartesianGrid, i as Line, n as YAxis, o as ResponsiveContainer, r as XAxis, s as Tooltip, t as LineChart } from "../_libs/recharts+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DBGEiQuY.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-BJiRwXpd.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function isLoginRequired(result) {
@@ -379,7 +379,7 @@ function strongest(drugs, enzyme, kind) {
 		strength
 	}));
 }
-function victimsOf(drugs, enzyme) {
+function victimsOf$1(drugs, enzyme) {
 	const out = [];
 	for (const d of drugs) {
 		if (isVirtual(d.id)) continue;
@@ -467,7 +467,7 @@ function phenoConvertFromDrugs(drugs, host) {
 	for (const enzyme of WATCH) {
 		const inhibitors = strongest(drugs, enzyme, "inhibitor");
 		const inducers = strongest(drugs, enzyme, "inducer");
-		const victims = victimsOf(drugs, enzyme);
+		const victims = victimsOf$1(drugs, enzyme);
 		if (!inhibitors.length && !inducers.length && !victims.length) continue;
 		const genotype = enzyme === "CYP2D6" || enzyme === "CYP2C19" || enzyme === "CYP2C9" || enzyme === "CYP2B6" ? host.phenotypes[enzyme] ?? "NM" : "NM";
 		const { clinical, shifted } = clinicalOf(genotype, inhibitors[0]?.strength ?? null, inducers[0]?.strength ?? null);
@@ -594,7 +594,7 @@ var KIND_RANK = {
 	miss: 1,
 	expected: 2
 };
-function hit(assay, kind, note) {
+function hit$1(assay, kind, note) {
 	return {
 		assay,
 		kind,
@@ -605,209 +605,209 @@ var CARDS$1 = {
 	methadone: {
 		pearl: "A morphine-class opiate cup that stays negative on a methadone take-home is the assay working, not a dunked bottle. Ask for EDDP if you need to prove they swallowed it.",
 		hits: [
-			hit("opiates", "miss", "Methadone is not morphine. The opiate EIA should stay negative."),
-			hit("methadone", "expected", "Parent or EDDP. EDDP is the metabolite — dunked bottles do not make it."),
-			hit("oxycodone", "miss", "Separate cup. A pharmaceutical perc 30 is a different assay."),
-			hit("fentanyl", "miss", "Illicit fentanyl needs its own strip. This is why OTP panels added it."),
-			hit("buprenorphine", "miss", "Not a partial agonist. A positive bup cup on methadone is another drug.")
+			hit$1("opiates", "miss", "Methadone is not morphine. The opiate EIA should stay negative."),
+			hit$1("methadone", "expected", "Parent or EDDP. EDDP is the metabolite — dunked bottles do not make it."),
+			hit$1("oxycodone", "miss", "Separate cup. A pharmaceutical perc 30 is a different assay."),
+			hit$1("fentanyl", "miss", "Illicit fentanyl needs its own strip. This is why OTP panels added it."),
+			hit$1("buprenorphine", "miss", "Not a partial agonist. A positive bup cup on methadone is another drug.")
 		]
 	},
 	buprenorphine: {
 		pearl: "Suboxone does not light the opiate cup. If the buprenorphine assay is negative on a daily film, look at norbuprenorphine and the clock — not the morphine EIA.",
 		hits: [
-			hit("opiates", "miss", "Partial agonist, not morphine. Opiate EIA stays negative on a clean film."),
-			hit("buprenorphine", "expected", "Bup and norbup. Norbup lasts longer — useful when they last dosed yesterday."),
-			hit("methadone", "miss", "Different μ story. A methadone cup on Suboxone is another bottle."),
-			hit("fentanyl", "miss", "A fold on a film is occupancy, not a fentanyl strip.")
+			hit$1("opiates", "miss", "Partial agonist, not morphine. Opiate EIA stays negative on a clean film."),
+			hit$1("buprenorphine", "expected", "Bup and norbup. Norbup lasts longer — useful when they last dosed yesterday."),
+			hit$1("methadone", "miss", "Different μ story. A methadone cup on Suboxone is another bottle."),
+			hit$1("fentanyl", "miss", "A fold on a film is occupancy, not a fentanyl strip.")
 		]
 	},
 	naltrexone: {
 		pearl: "Vivitrol occupies μ. It does not light any agonist immunoassay. A leftover fold is precipitated withdrawal, not a cup that should have been positive.",
 		hits: [
-			hit("opiates", "miss", "Antagonist. No morphine epitope."),
-			hit("buprenorphine", "miss", "Not a film. A positive bup cup on Vivitrol is another drug."),
-			hit("fentanyl", "miss", "The shot does not make fentanyl appear or disappear on a strip.")
+			hit$1("opiates", "miss", "Antagonist. No morphine epitope."),
+			hit$1("buprenorphine", "miss", "Not a film. A positive bup cup on Vivitrol is another drug."),
+			hit$1("fentanyl", "miss", "The shot does not make fentanyl appear or disappear on a strip.")
 		]
 	},
 	naloxone: {
 		pearl: "Naloxone is not a cup. It is the tray. IM / IN naloxone does not explain a urine immunoassay.",
-		hits: [hit("opiates", "miss", "Antagonist. No agonist epitope on the strip.")]
+		hits: [hit$1("opiates", "miss", "Antagonist. No agonist epitope on the strip.")]
 	},
 	nalmefene: {
 		pearl: "Opvee occupies μ longer than naloxone. It still does not light an agonist cup. Re-narcotize vs over-reverse is clinical, not an immunoassay.",
-		hits: [hit("opiates", "miss", "Antagonist. Longer occupancy is not a urine finding.")]
+		hits: [hit$1("opiates", "miss", "Antagonist. Longer occupancy is not a urine finding.")]
 	},
 	fentanyl: {
 		pearl: "Fentanyl is not morphine. A negative opiate cup next to a fentanyl strip is expected. Nitazenes and carfentanil often miss even the fentanyl kit.",
 		hits: [
-			hit("opiates", "miss", "Synthetic. Morphine-class EIA does not see it."),
-			hit("fentanyl", "expected", "If the panel includes a fentanyl EIA / strip. Kit-dependent."),
-			hit("oxycodone", "miss", "Pressed 30s stamped oxycodone often fail the oxycodone cup and light fentanyl instead.")
+			hit$1("opiates", "miss", "Synthetic. Morphine-class EIA does not see it."),
+			hit$1("fentanyl", "expected", "If the panel includes a fentanyl EIA / strip. Kit-dependent."),
+			hit$1("oxycodone", "miss", "Pressed 30s stamped oxycodone often fail the oxycodone cup and light fentanyl instead.")
 		]
 	},
 	"dirty-30": {
 		pearl: "A pressed 30 is a fentanyl (or nitazene) story. The oxycodone cup staying negative is the tell, not proof they are clean.",
 		hits: [
-			hit("oxycodone", "miss", "Stamped oxycodone is not pharmaceutical oxycodone."),
-			hit("opiates", "miss", "Not morphine."),
-			hit("fentanyl", "expected", "Often the only cup that lights — when the kit includes it.")
+			hit$1("oxycodone", "miss", "Stamped oxycodone is not pharmaceutical oxycodone."),
+			hit$1("opiates", "miss", "Not morphine."),
+			hit$1("fentanyl", "expected", "Often the only cup that lights — when the kit includes it.")
 		]
 	},
 	"pressed-30": {
 		pearl: "Same as a dirty 30. The stamp is marketing. The cup is chemistry.",
-		hits: [hit("oxycodone", "miss", "Stamp is not an assay."), hit("fentanyl", "expected", "If the panel has a fentanyl strip.")]
+		hits: [hit$1("oxycodone", "miss", "Stamp is not an assay."), hit$1("fentanyl", "expected", "If the panel has a fentanyl strip.")]
 	},
 	heroin: {
 		pearl: "Heroin is a morphine-class true-positive. 6-MAM is the short-window metabolite that proves diacetylmorphine — it is not on a cheap cup.",
-		hits: [hit("opiates", "expected", "Morphine after deacetylation. Codeine may tag along from street mix."), hit("fentanyl", "miss", "Unless the bag was already fentanyl. Most 'heroin' in 2026 is.")]
+		hits: [hit$1("opiates", "expected", "Morphine after deacetylation. Codeine may tag along from street mix."), hit$1("fentanyl", "miss", "Unless the bag was already fentanyl. Most 'heroin' in 2026 is.")]
 	},
 	morphine: {
 		pearl: "The index ligand for the opiate EIA. Poppy seeds can do this too — confirm, do not prosecute a muffin.",
-		hits: [hit("opiates", "expected", "The antibody is built around morphine.")]
+		hits: [hit$1("opiates", "expected", "The antibody is built around morphine.")]
 	},
 	codeine: {
 		pearl: "Codeine lights the opiate cup. 2D6 to morphine is a phenotype story; the immunoassay does not care.",
-		hits: [hit("opiates", "expected", "Codeine and morphine both bind the morphine-class antibody.")]
+		hits: [hit$1("opiates", "expected", "Codeine and morphine both bind the morphine-class antibody.")]
 	},
 	oxycodone: {
 		pearl: "Pharmaceutical oxycodone often misses the morphine-class opiate EIA. That is why there is a separate oxycodone cup.",
-		hits: [hit("opiates", "miss", "Many kits under-detect oxycodone. A negative opiate cup is not 'they skipped the perc.'"), hit("oxycodone", "expected", "The dedicated assay. Oxymorphone tags along.")]
+		hits: [hit$1("opiates", "miss", "Many kits under-detect oxycodone. A negative opiate cup is not 'they skipped the perc.'"), hit$1("oxycodone", "expected", "The dedicated assay. Oxymorphone tags along.")]
 	},
 	hydrocodone: {
 		pearl: "Hydrocodone is variable on morphine-class kits — weakly positive or a miss. Not a methadone, not a fentanyl.",
-		hits: [hit("opiates", "expected", "Often weakly positive. Do not treat a faint line as a dunked bottle."), hit("oxycodone", "miss", "Different epitope. A perc cup staying negative is expected.")]
+		hits: [hit$1("opiates", "expected", "Often weakly positive. Do not treat a faint line as a dunked bottle."), hit$1("oxycodone", "miss", "Different epitope. A perc cup staying negative is expected.")]
 	},
 	hydromorphone: {
 		pearl: "Dilaudid is closer to morphine than oxycodone is. Still confirm; still not methadone.",
-		hits: [hit("opiates", "expected", "Usually lights the morphine-class EIA.")]
+		hits: [hit$1("opiates", "expected", "Usually lights the morphine-class EIA.")]
 	},
 	oxymorphone: {
 		pearl: "Opana lights the oxycodone family more than morphine.",
-		hits: [hit("oxycodone", "expected", "Oxymorphone is on the oxycodone antibody."), hit("opiates", "miss", "Often a miss on morphine-class kits.")]
+		hits: [hit$1("oxycodone", "expected", "Oxymorphone is on the oxycodone antibody."), hit$1("opiates", "miss", "Often a miss on morphine-class kits.")]
 	},
 	tapentadol: {
 		pearl: "Nucynta is not morphine. Dedicated assays exist; the cheap cup usually misses it.",
-		hits: [hit("opiates", "miss", "Not on the morphine antibody.")]
+		hits: [hit$1("opiates", "miss", "Not on the morphine antibody.")]
 	},
 	isotonitazene: {
 		pearl: "Nitazenes miss morphine and often miss fentanyl strips. A negative cup is not a negative patient.",
-		hits: [hit("opiates", "miss", "Benzimidazole opioid, not morphine."), hit("fentanyl", "miss", "Most fentanyl EIAs do not see isotonitazene.")]
+		hits: [hit$1("opiates", "miss", "Benzimidazole opioid, not morphine."), hit$1("fentanyl", "miss", "Most fentanyl EIAs do not see isotonitazene.")]
 	},
 	protonitazene: {
 		pearl: "Same nitazene miss. Do not treat a negative fentanyl strip as a clean bag.",
-		hits: [hit("opiates", "miss", "Not morphine."), hit("fentanyl", "miss", "Fentanyl strip is not a nitazene strip.")]
+		hits: [hit$1("opiates", "miss", "Not morphine."), hit$1("fentanyl", "miss", "Fentanyl strip is not a nitazene strip.")]
 	},
 	metonitazene: {
 		pearl: "Nitazene. Immunoassay is not the surveillance system you think it is.",
-		hits: [hit("opiates", "miss", "Not morphine."), hit("fentanyl", "miss", "Often a miss on fentanyl EIA.")]
+		hits: [hit$1("opiates", "miss", "Not morphine."), hit$1("fentanyl", "miss", "Often a miss on fentanyl EIA.")]
 	},
 	etonitazene: {
 		pearl: "Nitazene. Cups were built for a different decade.",
-		hits: [hit("opiates", "miss", "Not morphine."), hit("fentanyl", "miss", "Often a miss.")]
+		hits: [hit$1("opiates", "miss", "Not morphine."), hit$1("fentanyl", "miss", "Often a miss.")]
 	},
 	carfentanil: {
 		pearl: "Carfentanil often misses even a fentanyl strip. Naloxone still belongs on the tray.",
-		hits: [hit("opiates", "miss", "Not morphine."), hit("fentanyl", "miss", "Potency is not epitope.")]
+		hits: [hit$1("opiates", "miss", "Not morphine."), hit$1("fentanyl", "miss", "Potency is not epitope.")]
 	},
 	"seven-oh": {
 		pearl: "7-OH-mitragynine is not morphine and not buprenorphine on most cups. Kratom panels exist; the cheap board does not.",
-		hits: [hit("opiates", "miss", "Atypical opioid. Morphine EIA usually stays negative."), hit("buprenorphine", "miss", "Not a film. Do not read a negative bup cup as 'they skipped kratom.'")]
+		hits: [hit$1("opiates", "miss", "Atypical opioid. Morphine EIA usually stays negative."), hit$1("buprenorphine", "miss", "Not a film. Do not read a negative bup cup as 'they skipped kratom.'")]
 	},
 	kratom: {
 		pearl: "Mitragynine needs its own assay. A negative opiate cup on daily kratom is expected.",
-		hits: [hit("opiates", "miss", "Not morphine.")]
+		hits: [hit$1("opiates", "miss", "Not morphine.")]
 	},
 	quetiapine: {
 		pearl: "Seroquel for sleep at the window is a classic TCA-cup false-positive. Confirm before you chart an overdose or a lie.",
-		hits: [hit("tca", "false-pos", "Quetiapine cross-reacts on many TCA immunoassays. LC-MS/MS is quiet.")]
+		hits: [hit$1("tca", "false-pos", "Quetiapine cross-reacts on many TCA immunoassays. LC-MS/MS is quiet.")]
 	},
 	cyclobenzaprine: {
 		pearl: "Flexeril is a TCA-shaped molecule. The TCA cup lights; the patient is not on amitriptyline.",
-		hits: [hit("tca", "false-pos", "Tricyclic-adjacent structure. Confirm.")]
+		hits: [hit$1("tca", "false-pos", "Tricyclic-adjacent structure. Confirm.")]
 	},
 	diphenhydramine: {
 		pearl: "Benadryl fools TCA and sometimes PCP cups. An OTP night-time antihistamine is not a TCA OD.",
-		hits: [hit("tca", "false-pos", "Common OTC TCA immunoassay cross-reactant."), hit("pcp", "false-pos", "Some PCP kits. Confirm.")]
+		hits: [hit$1("tca", "false-pos", "Common OTC TCA immunoassay cross-reactant."), hit$1("pcp", "false-pos", "Some PCP kits. Confirm.")]
 	},
 	hydroxyzine: {
 		pearl: "Vistaril is a window antihistamine. Some TCA kits still twitch. Confirm; do not take the film.",
-		hits: [hit("tca", "false-pos", "Less famous than Seroquel, still reported.")]
+		hits: [hit$1("tca", "false-pos", "Less famous than Seroquel, still reported.")]
 	},
 	carbamazepine: {
 		pearl: "Tegretol can light a TCA cup and dump methadone. Two different rows — immunoassay vs 3A4/2B6.",
-		hits: [hit("tca", "false-pos", "Carbamazepine is a documented TCA EIA interferent.")]
+		hits: [hit$1("tca", "false-pos", "Carbamazepine is a documented TCA EIA interferent.")]
 	},
 	sertraline: {
 		pearl: "Zoloft can light a benzodiazepine immunoassay. A benzo cup on a patient who swears they only take Zoloft may be the antibody, not a Klonopin.",
-		hits: [hit("benzos", "false-pos", "Sertraline is a documented benzo EIA false-positive (Saitman).")]
+		hits: [hit$1("benzos", "false-pos", "Sertraline is a documented benzo EIA false-positive (Saitman).")]
 	},
 	clonazepam: {
 		pearl: "Klonopin often misses the cheap benzo cup. A negative immunoassay is not proof they skipped the tablet.",
-		hits: [hit("benzos", "miss", "Poor cross-reactivity on many nordiazepam-targeted kits. LC-MS/MS sees it.")]
+		hits: [hit$1("benzos", "miss", "Poor cross-reactivity on many nordiazepam-targeted kits. LC-MS/MS sees it.")]
 	},
 	lorazepam: {
 		pearl: "Ativan is glucuronidated and often misses the benzo EIA. Same trap as clonazepam.",
-		hits: [hit("benzos", "miss", "Many kits under-detect lorazepam.")]
+		hits: [hit$1("benzos", "miss", "Many kits under-detect lorazepam.")]
 	},
 	alprazolam: {
 		pearl: "Xanax is variable. Some kits see it; some do not. Do not treat a negative cup as adherence.",
-		hits: [hit("benzos", "expected", "Often lights, not reliably. Confirm if the answer changes the window.")]
+		hits: [hit$1("benzos", "expected", "Often lights, not reliably. Confirm if the answer changes the window.")]
 	},
 	diazepam: {
 		pearl: "Valium is the index ligand for most benzo EIAs. Nordiazepam is what the antibody was raised against.",
-		hits: [hit("benzos", "expected", "The cup was built for this family.")]
+		hits: [hit$1("benzos", "expected", "The cup was built for this family.")]
 	},
 	bromazolam: {
 		pearl: "Designer benzo. Immunoassay is a coin flip. A negative cup next to a seized bromazolam tablet is not a clean patient.",
-		hits: [hit("benzos", "miss", "Many nordiazepam kits miss bromazolam. LC-MS/MS or a designer-benzo panel.")]
+		hits: [hit$1("benzos", "miss", "Many nordiazepam kits miss bromazolam. LC-MS/MS or a designer-benzo panel.")]
 	},
 	bupropion: {
 		pearl: "Wellbutrin is the most famous amphetamine-cup false-positive in clinic. Confirm before you chart meth.",
-		hits: [hit("amphetamines", "false-pos", "Bupropion and metabolites cross-react on amphetamine EIAs.")]
+		hits: [hit$1("amphetamines", "false-pos", "Bupropion and metabolites cross-react on amphetamine EIAs.")]
 	},
 	dextromethorphan: {
 		pearl: "DXM is a classic PCP-cup false-positive and a 2D6 victim. Two different boards — immunoassay vs phenotype.",
-		hits: [hit("pcp", "false-pos", "Dextromethorphan fools many PCP EIAs. Confirm.")]
+		hits: [hit$1("pcp", "false-pos", "Dextromethorphan fools many PCP EIAs. Confirm.")]
 	},
 	lamotrigine: {
 		pearl: "Lamictal can light a PCP cup. A mood-stabilizer start is not phencyclidine.",
-		hits: [hit("pcp", "false-pos", "Documented PCP EIA interferent.")]
+		hits: [hit$1("pcp", "false-pos", "Documented PCP EIA interferent.")]
 	},
 	venlafaxine: {
 		pearl: "Effexor can light PCP. Confirm.",
-		hits: [hit("pcp", "false-pos", "Venlafaxine / O-desmethylvenlafaxine vs PCP antibody.")]
+		hits: [hit$1("pcp", "false-pos", "Venlafaxine / O-desmethylvenlafaxine vs PCP antibody.")]
 	},
 	tramadol: {
 		pearl: "Tramadol is not morphine. PCP and some buprenorphine kits still twitch. Confirm before you change the film.",
 		hits: [
-			hit("opiates", "miss", "Not morphine."),
-			hit("pcp", "false-pos", "Classic PCP EIA fool."),
-			hit("buprenorphine", "false-pos", "Some bup kits.")
+			hit$1("opiates", "miss", "Not morphine."),
+			hit$1("pcp", "false-pos", "Classic PCP EIA fool."),
+			hit$1("buprenorphine", "false-pos", "Some bup kits.")
 		]
 	},
 	rifampin: {
 		pearl: "Rifampin dumps methadone and can false-positive an opiate cup. Stolen-dose PK plus a dirty immunoassay — two rows.",
-		hits: [hit("opiates", "false-pos", "Historical opiate EIA interferent. Confirm; still watch the 3A4/2B6 dump.")]
+		hits: [hit$1("opiates", "false-pos", "Historical opiate EIA interferent. Confirm; still watch the 3A4/2B6 dump.")]
 	},
 	ciprofloxacin: {
 		pearl: "Some fluoroquinolones have been reported as opiate EIA false-positives. Cipro next to methadone is still the QT / 1A2 row first.",
-		hits: [hit("opiates", "false-pos", "Reported; kit-dependent. Confirm. Do not skip the QT board.")]
+		hits: [hit$1("opiates", "false-pos", "Reported; kit-dependent. Confirm. Do not skip the QT board.")]
 	},
 	efavirenz: {
 		pearl: "Sustiva has been reported to light THC cups and dumps methadone. Two rows: immunoassay and 3A4/2B6 induction.",
-		hits: [hit("thc", "false-pos", "Efavirenz vs some cannabinoid EIAs. Confirm.")]
+		hits: [hit$1("thc", "false-pos", "Efavirenz vs some cannabinoid EIAs. Confirm.")]
 	},
 	cocaine: {
 		pearl: "Benzoylecgonine is the specific cup. A true-positive is usually cocaine. Coca tea is the dietary footnote.",
-		hits: [hit("cocaine", "expected", "BZE. Rare dietary true-positive from coca leaf.")]
+		hits: [hit$1("cocaine", "expected", "BZE. Rare dietary true-positive from coca leaf.")]
 	},
 	dronabinol: {
 		pearl: "Marinol is THC. The cup should light. That is the prescription, not a slip.",
-		hits: [hit("thc", "expected", "Exogenous THC-COOH. Chart the prescription so the cup is not a fight.")]
+		hits: [hit$1("thc", "expected", "Exogenous THC-COOH. Chart the prescription so the cup is not a fight.")]
 	},
 	cannabidiol: {
 		pearl: "Clean CBD should not light THC. Many bottles are not clean. Hemp-derived products still carry THC-COOH.",
-		hits: [hit("thc", "expected", "If the product is dirty with THC. Pure CBD is a miss.")]
+		hits: [hit$1("thc", "expected", "If the product is dirty with THC. Pure CBD is a miss.")]
 	},
 	ethanol: {
 		pearl: "EtG / EtS are not on a cheap drugs-of-abuse cup. A standard UDS does not prove they drank — or that they did not.",
@@ -883,6 +883,633 @@ function udsFindings(ids) {
 }
 function sortHits(hits) {
 	return [...hits].sort((a, b) => KIND_RANK[a.kind] - KIND_RANK[b.kind] || a.assay.localeCompare(b.assay));
+}
+/**
+* CYP450 safety clocks — FDA DDI grades, start vs stop, TDI linger, induction lag.
+* Teaching. Not a dose, not a hold, not an order. The Prescribing Information is the authority.
+*
+* Grades paraphrase FDA Clinical Drug Interaction Studies (Jan 2020) / Huang CPT 2007.
+* Index lists paraphrase FDA Table of Substrates, Inhibitors and Inducers.
+*/
+var FDA_DDI_TABLE = "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers";
+var FDA_GRADES = {
+	inhibitor: {
+		strong: {
+			label: "Strong inhibitor",
+			fold: "≥5-fold ↑ AUC of a sensitive index substrate"
+		},
+		moderate: {
+			label: "Moderate inhibitor",
+			fold: "≥2 to <5-fold ↑ AUC"
+		},
+		weak: {
+			label: "Weak inhibitor",
+			fold: "≥1.25 to <2-fold ↑ AUC"
+		}
+	},
+	inducer: {
+		strong: {
+			label: "Strong inducer",
+			fold: "≥80% ↓ AUC of a sensitive index substrate"
+		},
+		moderate: {
+			label: "Moderate inducer",
+			fold: "≥50 to <80% ↓ AUC"
+		},
+		weak: {
+			label: "Weak inducer",
+			fold: "≥20 to <50% ↓ AUC"
+		}
+	}
+};
+/** Mechanism-based / time-dependent inactivation — new enzyme must be synthesized. */
+var TDI = {
+	clarithromycin: {
+		enzymes: ["CYP3A4"],
+		resynth: "intestinal 3A4 ~24–72 h; hepatic longer",
+		pearl: "Macrolide MIC. Stopping yesterday does not restore oral midazolam, simvastatin, or a lozenge."
+	},
+	erythromycin: {
+		enzymes: ["CYP3A4"],
+		resynth: "intestinal 3A4 ~24–72 h",
+		pearl: "Weaker than clarithromycin, still time-dependent. QT is the other card."
+	},
+	ritonavir: {
+		enzymes: ["CYP3A4"],
+		resynth: "days — booster occupancy plus inactivation",
+		pearl: "The 3A4 knockout outlasts the last Norvir. Methadone is the mixed-arrow exception."
+	},
+	paxlovid: {
+		enzymes: ["CYP3A4"],
+		resynth: "days after the five-day course",
+		pearl: "Ritonavir is the clock. Fentanyl parent climbs; methadone often falls. Two arrows, one booster."
+	},
+	grapefruit: {
+		enzymes: ["CYP3A4"],
+		resynth: "intestinal 3A4 24–72 h",
+		pearl: "Bergamottin destroys gut 3A4. Yesterday’s glass still raises oral victims. IV is largely spared."
+	},
+	paroxetine: {
+		enzymes: ["CYP2D6"],
+		resynth: "~3–7 days after the last dose",
+		pearl: "Mechanism-based 2D6 inactivation. A NM on Paxil is a phenotypic PM until the enzyme is new."
+	},
+	fluoxetine: {
+		enzymes: ["CYP2D6"],
+		resynth: "norfluoxetine ~5 weeks",
+		pearl: "Stopping Prozac yesterday does not unlock 2D6. Codeine, tamoxifen, and DXM stay phenoconverted."
+	},
+	bupropion: {
+		enzymes: ["CYP2D6"],
+		resynth: "hydroxybupropion ~1 week",
+		pearl: "Wellbutrin and its metabolite keep 2D6 blocked after the last tablet."
+	},
+	amiodarone: {
+		enzymes: [
+			"CYP2C9",
+			"CYP3A4",
+			"CYP2D6",
+			"CYP1A2",
+			"P-gp"
+		],
+		resynth: "weeks — t½ measured in tens of days",
+		pearl: "The 2C9 warfarin climb is week three, not overnight. Stopping does not clear it."
+	},
+	mdma: {
+		enzymes: ["CYP2D6"],
+		resynth: "days after a single exposure",
+		pearl: "Auto-inactivation after the first pass. The second dose is not the first."
+	},
+	gemfibrozil: {
+		enzymes: ["CYP2C8"],
+		resynth: "days — glucuronide TDI of 2C8",
+		pearl: "Lopid is the index 2C8 knockout. Repaglinide and pioglitazone are the victims."
+	},
+	diltiazem: {
+		enzymes: ["CYP3A4"],
+		resynth: "days — N-desmethyl metabolite inactivates 3A4",
+		pearl: "Moderate on paper, time-dependent in the liver. Oral 3A4 victims still climb."
+	},
+	verapamil: {
+		enzymes: ["CYP3A4"],
+		resynth: "days — norverapamil MIC",
+		pearl: "Same neighborhood as diltiazem. P-gp travels with 3A4."
+	}
+};
+var INDUCTION = {
+	washIn: "Transcriptional. Often starts day 3–5, full by ~7 days on rifampin, 1–2 weeks on many others.",
+	washOut: "Enzyme stays high ~1–2 weeks after the last dose. Victim levels rebound as induction dissipates. Stopping is the dangerous half."
+};
+var RANK = {
+	strong: 3,
+	moderate: 2,
+	weak: 1
+};
+/** FDA example / index lists — only IDs that live on this desk. */
+var INDEX = [
+	i("midazolam", "CYP3A4", "substrate", "sensitive index"),
+	i("buspirone", "CYP3A4", "substrate", "sensitive"),
+	i("simvastatin", "CYP3A4", "substrate", "sensitive"),
+	i("lovastatin", "CYP3A4", "substrate", "sensitive"),
+	i("felodipine", "CYP3A4", "substrate", "sensitive"),
+	i("budesonide", "CYP3A4", "substrate", "sensitive (oral)"),
+	i("eplerenone", "CYP3A4", "substrate", "sensitive"),
+	i("sildenafil", "CYP3A4", "substrate", "sensitive"),
+	i("clarithromycin", "CYP3A4", "inhibitor", "strong · TDI"),
+	i("ketoconazole", "CYP3A4", "inhibitor", "strong index"),
+	i("itraconazole", "CYP3A4", "inhibitor", "strong index"),
+	i("voriconazole", "CYP3A4", "inhibitor", "strong"),
+	i("ritonavir", "CYP3A4", "inhibitor", "strong · TDI"),
+	i("paxlovid", "CYP3A4", "inhibitor", "strong · TDI"),
+	i("cobicistat", "CYP3A4", "inhibitor", "strong"),
+	i("grapefruit", "CYP3A4", "inhibitor", "strong intestinal · TDI"),
+	i("erythromycin", "CYP3A4", "inhibitor", "moderate · TDI"),
+	i("fluconazole", "CYP3A4", "inhibitor", "moderate"),
+	i("diltiazem", "CYP3A4", "inhibitor", "moderate · TDI"),
+	i("verapamil", "CYP3A4", "inhibitor", "moderate · TDI"),
+	i("ciprofloxacin", "CYP3A4", "inhibitor", "weak–moderate"),
+	i("rifampin", "CYP3A4", "inducer", "strong index"),
+	i("carbamazepine", "CYP3A4", "inducer", "strong"),
+	i("phenytoin", "CYP3A4", "inducer", "strong"),
+	i("phenobarbital", "CYP3A4", "inducer", "strong"),
+	i("st-johns-wort", "CYP3A4", "inducer", "strong"),
+	i("efavirenz", "CYP3A4", "inducer", "moderate"),
+	i("dextromethorphan", "CYP2D6", "substrate", "sensitive index"),
+	i("metoprolol", "CYP2D6", "substrate", "sensitive"),
+	i("nortriptyline", "CYP2D6", "substrate", "sensitive"),
+	i("codeine", "CYP2D6", "substrate", "activation"),
+	i("tramadol", "CYP2D6", "substrate", "activation"),
+	i("tamoxifen", "CYP2D6", "substrate", "activation"),
+	i("paroxetine", "CYP2D6", "inhibitor", "strong · TDI"),
+	i("fluoxetine", "CYP2D6", "inhibitor", "strong · TDI"),
+	i("bupropion", "CYP2D6", "inhibitor", "strong"),
+	i("quinidine", "CYP2D6", "inhibitor", "strong index"),
+	i("terbinafine", "CYP2D6", "inhibitor", "strong"),
+	i("omeprazole", "CYP2C19", "substrate", "sensitive index"),
+	i("clopidogrel", "CYP2C19", "substrate", "activation"),
+	i("citalopram", "CYP2C19", "substrate", "major"),
+	i("fluvoxamine", "CYP2C19", "inhibitor", "strong"),
+	i("fluconazole", "CYP2C19", "inhibitor", "strong"),
+	i("fluoxetine", "CYP2C19", "inhibitor", "strong"),
+	i("rifampin", "CYP2C19", "inducer", "strong"),
+	i("warfarin", "CYP2C9", "substrate", "sensitive NTI"),
+	i("phenytoin", "CYP2C9", "substrate", "sensitive NTI"),
+	i("celecoxib", "CYP2C9", "substrate", "sensitive"),
+	i("fluconazole", "CYP2C9", "inhibitor", "moderate–strong"),
+	i("amiodarone", "CYP2C9", "inhibitor", "moderate · linger"),
+	i("rifampin", "CYP2C9", "inducer", "strong"),
+	i("pioglitazone", "CYP2C8", "substrate", "sensitive"),
+	i("gemfibrozil", "CYP2C8", "inhibitor", "strong · TDI"),
+	i("tizanidine", "CYP1A2", "substrate", "sensitive index"),
+	i("theophylline", "CYP1A2", "substrate", "sensitive NTI"),
+	i("clozapine", "CYP1A2", "substrate", "major NTI"),
+	i("olanzapine", "CYP1A2", "substrate", "major"),
+	i("caffeine", "CYP1A2", "substrate", "index probe"),
+	i("fluvoxamine", "CYP1A2", "inhibitor", "strong index"),
+	i("ciprofloxacin", "CYP1A2", "inhibitor", "strong"),
+	i("rifampin", "CYP1A2", "inducer", "moderate"),
+	i("bupropion", "CYP2B6", "substrate", "sensitive index"),
+	i("efavirenz", "CYP2B6", "substrate", "sensitive"),
+	i("methadone", "CYP2B6", "substrate", "major"),
+	i("rifampin", "CYP2B6", "inducer", "strong"),
+	i("efavirenz", "CYP2B6", "inducer", "moderate (auto)"),
+	i("digoxin", "P-gp", "substrate", "index"),
+	i("dabigatran", "P-gp", "substrate", "index"),
+	i("fexofenadine", "P-gp", "substrate", "probe (also OATP)"),
+	i("itraconazole", "P-gp", "inhibitor", "strong"),
+	i("clarithromycin", "P-gp", "inhibitor", "moderate"),
+	i("amiodarone", "P-gp", "inhibitor", "moderate"),
+	i("rifampin", "P-gp", "inducer", "strong"),
+	i("st-johns-wort", "P-gp", "inducer", "strong")
+];
+function i(id, enzyme, role, grade) {
+	return {
+		id,
+		name: DRUG_BY_ID[id]?.name ?? id,
+		enzyme,
+		role,
+		grade
+	};
+}
+function indexFor(enzyme) {
+	const rows = INDEX.filter((r) => r.enzyme === enzyme && DRUG_BY_ID[r.id]);
+	return {
+		substrates: rows.filter((r) => r.role === "substrate"),
+		inhibitors: rows.filter((r) => r.role === "inhibitor"),
+		inducers: rows.filter((r) => r.role === "inducer")
+	};
+}
+function perpRoles(id) {
+	const d = DRUG_BY_ID[id];
+	if (!d || isVirtual(id)) return [];
+	const hits = [];
+	for (const r of d.enzymes) {
+		if (r.kind !== "inhibitor" && r.kind !== "inducer") continue;
+		hits.push({
+			enzyme: r.enzyme,
+			kind: r.kind,
+			strength: r.strength
+		});
+	}
+	return hits;
+}
+function bestPerp(id) {
+	const roles = perpRoles(id);
+	if (!roles.length) return null;
+	const tdi = TDI[id];
+	const inducers = roles.filter((r) => r.kind === "inducer");
+	const inhibitors = roles.filter((r) => r.kind === "inhibitor");
+	const pool = inducers.length && (!inhibitors.length || RANK[inducers[0].strength] >= RANK[inhibitors[0].strength]) ? inducers : inhibitors.length ? inhibitors : roles;
+	const top = pool.reduce((m, r) => RANK[r.strength] > RANK[m.strength] ? r : m);
+	const enzymes = [...new Set(pool.filter((r) => r.kind === top.kind && RANK[r.strength] === RANK[top.strength]).map((r) => r.enzyme))];
+	const clock = top.kind === "inducer" ? "induction" : tdi ? "tdi" : "reversible";
+	return {
+		...top,
+		enzymes,
+		clock
+	};
+}
+function victimsOf(ids, enzymes) {
+	const out = [];
+	const enzymeSet = new Set(enzymes);
+	for (const id of ids) {
+		const d = DRUG_BY_ID[id];
+		if (!d || isVirtual(id)) continue;
+		for (const r of d.enzymes) {
+			if (r.kind !== "substrate" || !enzymeSet.has(r.enzyme)) continue;
+			out.push({
+				id,
+				name: d.name,
+				enzyme: r.enzyme,
+				sensitivity: r.sensitivity,
+				pathway: r.pathway,
+				nti: Boolean(r.nti)
+			});
+		}
+	}
+	const seen = /* @__PURE__ */ new Set();
+	const uniq = [];
+	for (const v of out) {
+		const k = `${v.id}:${v.enzyme}`;
+		if (seen.has(k)) continue;
+		seen.add(k);
+		uniq.push(v);
+	}
+	const sensRank = {
+		sensitive: 3,
+		major: 2,
+		minor: 1
+	};
+	uniq.sort((a, b) => {
+		if (a.nti !== b.nti) return a.nti ? -1 : 1;
+		return (sensRank[b.sensitivity] ?? 0) - (sensRank[a.sensitivity] ?? 0);
+	});
+	return uniq;
+}
+function toneOf(strength, nti, clock) {
+	if (nti && (strength === "strong" || clock === "induction")) return "danger";
+	if (strength === "strong" || clock === "tdi" || clock === "induction") return "warn";
+	return "ok";
+}
+function startClock(name, kind, clock, victims, tdi) {
+	const nti = victims.filter((v) => v.nti).map((v) => v.name);
+	const names = victims.slice(0, 4).map((v) => v.name);
+	const who = names.length ? names.join(", ") : "mapped victims";
+	const many = names.length !== 1;
+	if (kind === "inducer") return {
+		title: "Start — victim levels fall",
+		days: "day 3–5 start · full ~7–14 d",
+		body: `${name} turns transcription on. ${who} will look stolen or ineffective once induction is up. ${INDUCTION.washIn}`,
+		watch: nti.length ? `NTI on this desk: ${nti.join(", ")}. Loss of effect can present as withdrawal, seizure, clot, or a failed OCP.` : "Watch for loss of effect, not toxicity. The milligram did not change."
+	};
+	if (clock === "tdi") return {
+		title: "Start — enzyme is being destroyed",
+		days: tdi?.resynth ?? "hours to 1–2 days",
+		body: `${name} is time-dependent. ${who} ${many ? "climb" : "climbs"} as CYP is inactivated, not just occupied. ${tdi?.pearl ?? ""}`.trim(),
+		watch: nti.length ? `NTI on this desk: ${nti.join(", ")}. Toxicity is the start picture — nod, bleed, QT, rigidity.` : "Watch victim toxicity as the block lands. Reversible occupancy is the wrong mental model."
+	};
+	return {
+		title: "Start — victim exposure climbs",
+		days: "1–3 days (inhibitor steady-state)",
+		body: `${name} occupies the isoform. ${who} ${many ? "rise" : "rises"} while the inhibitor is on. Competitive, so stopping is faster than TDI.`,
+		watch: nti.length ? `NTI on this desk: ${nti.join(", ")}. Open the PI before the first overlapping day.` : "Watch victim toxicity. This desk does not pick a milligram."
+	};
+}
+function stopClock(name, kind, clock, victims, tdi) {
+	const nti = victims.filter((v) => v.nti).map((v) => v.name);
+	const names = victims.slice(0, 4).map((v) => v.name);
+	const who = names.length ? names.join(", ") : "mapped victims";
+	const many = names.length !== 1;
+	if (kind === "inducer") return {
+		title: "Stop — rebound as induction dissipates",
+		days: "~1–2 weeks after the last dose",
+		body: `${INDUCTION.washOut} ${who} ${many ? "climb" : "climbs"} back — sometimes past baseline if a dose was raised while induced. Niemi 2003: remember the stop.`,
+		watch: nti.length ? `NTI rebound: ${nti.join(", ")}. Toxicity after a 'completed' rifampin course is still this clock.` : "The forgotten half. A stable milligram on rifampin is an overdose two weeks after it stops."
+	};
+	if (clock === "tdi") return {
+		title: "Stop — enzyme must be resynthesized",
+		days: tdi?.resynth ?? "24–72 h+",
+		body: `Stopping ${name} does not restore CYP. New protein has to be made. ${who} ${many ? "stay" : "stays"} high until then. ${tdi?.pearl ?? ""}`.trim(),
+		watch: nti.length ? `NTI still hot: ${nti.join(", ")}. Yesterday’s last tablet is not a clear.` : "Do not treat the last day of a Z-Pak / azole / booster as a free victim day."
+	};
+	return {
+		title: "Stop — victim levels fall",
+		days: "1–3 days (inhibitor washout)",
+		body: `${name} clears, ${who} ${many ? "fall" : "falls"}. Loss of effect, withdrawal, or a failed prodrug — not a new disease.`,
+		watch: nti.length ? `NTI falling: ${nti.join(", ")}. A dose raised under the inhibitor is now too much to keep, too little to stop cold.` : "The milligram that was safe under the block may fail after it."
+	};
+}
+function stepsFor(card) {
+	const enz = card.enzymes.map((e) => e.replace("CYP", "")).join(" / ");
+	return [
+		{
+			id: "grade",
+			title: "Name the isoform and the FDA grade",
+			body: `${card.name} is a ${card.grade.toLowerCase()} of ${enz}. ${card.fold}. Open the FDA table if the label and this desk disagree — the label wins.`
+		},
+		{
+			id: "victims",
+			title: "List NTI and sensitive victims on this desk",
+			body: card.victims.length ? card.victims.slice(0, 6).map((v) => `${v.name} (${v.enzyme.replace("CYP", "")} ${v.sensitivity}${v.nti ? ", NTI" : ""}${v.pathway === "activation" ? ", prodrug" : ""})`).join("; ") : "No mapped victim on the desk yet. Add the substrate you are about to start or stop next to."
+		},
+		{
+			id: "clock",
+			title: "Pick the clock",
+			body: card.clock === "induction" ? "Transcriptional. Start is loss of effect over a week. Stop is rebound over two." : card.clock === "tdi" ? `Time-dependent inactivation. ${card.linger ?? "New enzyme, not dissociation."}` : "Reversible occupancy. Start and stop track the inhibitor’s own half-life."
+		},
+		{
+			id: "start",
+			title: "Start day",
+			body: `${card.start.days}. ${card.start.watch}`
+		},
+		{
+			id: "stop",
+			title: "Stop day — the forgotten half",
+			body: `${card.stop.days}. ${card.stop.watch}`
+		},
+		{
+			id: "pi",
+			title: "Open the Prescribing Information",
+			body: "This desk paraphrases FDA grades and published clocks. Independently review each victim’s PI before you hold, split, or overlap. FirstPass does not pick a milligram."
+		}
+	];
+}
+function protocolsOnDesk(ids) {
+	const real = ids.filter((id) => DRUG_BY_ID[id] && !isVirtual(id));
+	const cards = [];
+	for (const id of real) {
+		const best = bestPerp(id);
+		if (!best) continue;
+		if (best.strength === "weak" && !TDI[id] && best.kind !== "inducer") continue;
+		const d = DRUG_BY_ID[id];
+		const tdi = TDI[id];
+		const victims = victimsOf(real.filter((x) => x !== id), best.enzymes).filter((v) => v.id !== id);
+		const dualHit = best.kind === "inhibitor" && best.enzymes.includes("CYP3A4") && d.enzymes.some((r) => r.enzyme === "P-gp" && r.kind === "inhibitor");
+		const nti = victims.some((v) => v.nti);
+		const grade = FDA_GRADES[best.kind][best.strength];
+		const base = {
+			perpId: id,
+			name: d.name,
+			kind: best.kind,
+			enzymes: best.enzymes,
+			strength: best.strength,
+			clock: best.clock,
+			grade: grade.label,
+			fold: grade.fold,
+			start: startClock(d.name, best.kind, best.clock, victims, tdi),
+			stop: stopClock(d.name, best.kind, best.clock, victims, tdi),
+			linger: tdi ? `${tdi.resynth}. ${tdi.pearl}` : void 0,
+			victims,
+			nti,
+			dualHit,
+			tone: toneOf(best.strength, nti, best.clock)
+		};
+		cards.push({
+			...base,
+			steps: stepsFor(base)
+		});
+	}
+	cards.sort((a, b) => {
+		const t = {
+			danger: 3,
+			warn: 2,
+			ok: 1
+		};
+		if (t[b.tone] !== t[a.tone]) return t[b.tone] - t[a.tone];
+		return RANK[b.strength] - RANK[a.strength];
+	});
+	return cards;
+}
+function cypWanted(ids) {
+	if (protocolsOnDesk(ids).length) return true;
+	return ids.some((id) => Boolean(TDI[id]) || perpRoles(id).some((r) => r.strength !== "weak"));
+}
+function protocolFindings(ids) {
+	const cards = protocolsOnDesk(ids);
+	const out = [];
+	for (const card of cards) {
+		if (!card.victims.length) continue;
+		const severity = card.tone === "danger" ? "major" : card.strength === "strong" ? "major" : "moderate";
+		const victimIds = [...new Set(card.victims.map((v) => v.id))];
+		const enz = card.enzymes;
+		out.push({
+			id: `${card.perpId}__cyp-clock`,
+			severity,
+			kind: "clinic",
+			drugIds: [card.perpId, ...victimIds],
+			headline: `${card.name} ${card.kind} clock`,
+			enzymes: enz,
+			effect: card.clock === "induction" ? "start ↓ / stop rebound" : card.clock === "tdi" ? "TDI linger" : "start ↑ / stop ↓",
+			mechanism: `${card.grade} · ${card.clock}`,
+			clinical: `${card.start.body} ${card.stop.body} Teaching clock — not a dose. Open the PI.`,
+			tags: [
+				"cyp-protocol",
+				card.kind,
+				card.clock,
+				...enz
+			]
+		});
+		if (card.dualHit) out.push({
+			id: `${card.perpId}__cyp-dual`,
+			severity: "major",
+			kind: "clinic",
+			drugIds: [card.perpId, ...victimIds],
+			headline: `${card.name} hits CYP3A4 and P-gp`,
+			enzymes: ["CYP3A4", "P-gp"],
+			effect: "dual first-pass knockout",
+			mechanism: "CYP3A4 + P-gp co-inhibition",
+			clinical: "Oral victims that ride both gut 3A4 and P-gp (some DOACs, digoxin-neighborhood, many 3A4 first-pass drugs) move more than a CYP-only story. Independently review the PI.",
+			tags: [
+				"cyp-protocol",
+				"dual-hit",
+				"CYP3A4",
+				"P-gp"
+			]
+		});
+	}
+	return out;
+}
+var SAFETY_CHECKS = [
+	{
+		id: "isoform",
+		title: "Name the isoform",
+		body: "3A4, 2D6, 2C19, 2C9, 1A2, 2B6, 2C8, P-gp. Dual 3A4 + P-gp is a different story than CYP alone."
+	},
+	{
+		id: "grade",
+		title: "Grade it the FDA way",
+		body: "Strong / moderate / weak by fold-change of a sensitive index substrate. Huang 2007 / FDA 2020. The label still wins."
+	},
+	{
+		id: "index",
+		title: "Prefer an index pair when you can",
+		body: "Midazolam for 3A4, DXM for 2D6, omeprazole for 2C19, S-warfarin for 2C9, tizanidine for 1A2, repaglinide for 2C8, digoxin for P-gp."
+	},
+	{
+		id: "clock",
+		title: "Reversible vs TDI vs induction",
+		body: "Occupancy follows the inhibitor. TDI waits on new enzyme. Induction is a transcription week in and two weeks out."
+	},
+	{
+		id: "stop",
+		title: "Plan the stop on the start day",
+		body: "Stopping an inducer is rebound toxicity. Stopping a TDI is lingering victim. Stopping a reversible inhibitor is falling levels."
+	},
+	{
+		id: "nti",
+		title: "NTI victims get their own row",
+		body: "Warfarin, phenytoin, theophylline, clozapine, calcineurin inhibitors, digoxin, methadone. Open the PI. This desk does not pick a milligram."
+	},
+	{
+		id: "prodrug",
+		title: "Activation is the opposite arrow",
+		body: "Codeine, clopidogrel, tamoxifen, tramadol need the enzyme. A strong inhibitor looks like a poor metabolizer — loss of effect, stacked parent."
+	},
+	{
+		id: "pi",
+		title: "Independent review",
+		body: "Open DailyMed / the SPL. Absence of a mapped clock is not proof of safety. FirstPass is not FDA-cleared."
+	}
+];
+function protocolTray(ids) {
+	const cards = protocolsOnDesk(ids);
+	const tray = [];
+	if (!cards.length) return tray;
+	tray.push("CYP clock");
+	if (cards.some((c) => c.clock === "tdi")) tray.push("TDI linger");
+	if (cards.some((c) => c.kind === "inducer")) tray.push("de-induce watch");
+	if (cards.some((c) => c.nti)) tray.push("NTI victim");
+	if (cards.some((c) => c.dualHit)) tray.push("3A4+P-gp");
+	return tray;
+}
+/** Atlas helper — is this drug an FDA example on this isoform/role? */
+function isFdaIndex(id, enzyme, role) {
+	return INDEX.some((r) => r.id === id && r.enzyme === enzyme && r.role === role);
+}
+/**
+* Named ward / hospital collisions. Teaching — not a protocol, not a milligram.
+* The Prescribing Information governs.
+*/
+var CARBAPENEMS = /* @__PURE__ */ new Set([
+	"meropenem",
+	"ertapenem",
+	"imipenem-cilastatin",
+	"doripenem",
+	"meropenem-vaborbactam",
+	"imipenem-relebactam"
+]);
+var VALPROATES = /* @__PURE__ */ new Set(["valproate"]);
+var ACEI = /* @__PURE__ */ new Set([
+	"lisinopril",
+	"enalapril",
+	"enalaprilat",
+	"ramipril",
+	"benazepril",
+	"quinapril",
+	"captopril",
+	"perindopril",
+	"fosinopril",
+	"trandolapril",
+	"moexipril",
+	"lisinopril-hctz"
+]);
+var ARNI = /* @__PURE__ */ new Set(["sacubitril-valsartan"]);
+var VANCO_IV = /* @__PURE__ */ new Set(["vancomycin"]);
+var PIP_TAZO = /* @__PURE__ */ new Set(["piperacillin-tazobactam"]);
+var FLUOROPYRIMIDINE = /* @__PURE__ */ new Set(["capecitabine", "fluorouracil"]);
+var PEN_INDUCER = /* @__PURE__ */ new Set(["dicloxacillin", "nafcillin"]);
+var GLP = /* @__PURE__ */ new Set([
+	"semaglutide",
+	"tirzepatide",
+	"liraglutide",
+	"dulaglutide",
+	"exenatide",
+	"lixisenatide",
+	"exenatide-er",
+	"liraglutide-saxenda",
+	"semaglutide-oral",
+	"semaglutide-wegovy"
+]);
+function hit(kind, a, b, title, severity, tone, mechanism, clinical, watch, source) {
+	return {
+		id: kind,
+		drugIds: [a, b],
+		title,
+		severity,
+		tone,
+		mechanism,
+		clinical,
+		watch,
+		source
+	};
+}
+function names$1(a, b) {
+	return `${DRUG_BY_ID[a]?.name ?? a} × ${DRUG_BY_ID[b]?.name ?? b}`;
+}
+function pair(ids, left, right) {
+	const set = new Set(ids);
+	for (const l of left) {
+		if (!set.has(l)) continue;
+		for (const r of right) if (set.has(r) && r !== l) return [l, r];
+	}
+	return null;
+}
+function isCarbapenemValproate(a, b) {
+	return CARBAPENEMS.has(a) && VALPROATES.has(b) || CARBAPENEMS.has(b) && VALPROATES.has(a);
+}
+function isVancoZosyn(a, b) {
+	return VANCO_IV.has(a) && PIP_TAZO.has(b) || VANCO_IV.has(b) && PIP_TAZO.has(a);
+}
+function isInsulinId(id) {
+	return id === "insulin-glargine" || id.startsWith("insulin-");
+}
+function wardsOnDesk(ids) {
+	const out = [];
+	const cv = pair(ids, CARBAPENEMS, VALPROATES);
+	if (cv) out.push(hit("carbapenem-vpa", cv[0], cv[1], names$1(cv[0], cv[1]), "contraindicated", "danger", "carbapenem × valproate (UGT / glucuronide recycling)", "Carbapenems crash valproate levels within a day — not a CYP isoform, not stacked seizure threshold. Labels treat the pair as a loss of seizure control. Switch the antibiotic or the AED; do not 'give a bit more Depakote.'", "Levels fall fast. This desk does not pick a milligram or a replacement AED.", "Meropenem / ertapenem / imipenem labels. Spriet 2007 (PMID 17381386)."));
+	const vz = pair(ids, VANCO_IV, PIP_TAZO);
+	if (vz) out.push(hit("vanco-zosyn", vz[0], vz[1], names$1(vz[0], vz[1]), "major", "danger", "vancomycin × piperacillin–tazobactam AKI", "The combination is associated with more acute kidney injury than vancomycin plus cefepime or a carbapenem. Observational, still a ward row. Volume, trough, and a narrower beta-lactam are the conversation — not a free Zosyn piggyback.", "Creatinine, urine output. Oral vancomycin is a different exposure.", "Luther 2018 meta-analysis (PMID 29126268). Not a boxed contraindication."));
+	const aa = pair(ids, ARNI, ACEI);
+	if (aa) out.push(hit("arni-acei", aa[0], aa[1], names$1(aa[0], aa[1]), "contraindicated", "danger", "ARNI × ACE inhibitor — angioedema", "Sacubitril–valsartan with an ACE inhibitor is labeled contraindicated. Thirty-six hour washout when switching. Duplicate neprilysin / ACE blockade, not a potassium footnote and not an ARB swap.", "Angioedema, BP, K. This desk does not time the first Entresto tablet.", "Entresto boxed warning / contraindications. Open the PI."));
+	const cw = pair(ids, FLUOROPYRIMIDINE, /* @__PURE__ */ new Set(["warfarin"]));
+	if (cw) out.push(hit("capecitabine-warfarin", cw[0], cw[1], names$1(cw[0], cw[1]), "major", "danger", "fluoropyrimidine × warfarin INR rise", "Capecitabine and 5-FU raise INR and bleed risk on warfarin. Not a 2C9 bully on this desk's CYP map — still a labeled monitor. Recheck INR; this desk does not pick a warfarin milligram.", "INR, bleed. Xeloda / 5-FU labels.", "Capecitabine and fluorouracil labels: altered coagulation with warfarin."));
+	const pw = pair(ids, PEN_INDUCER, /* @__PURE__ */ new Set(["warfarin"]));
+	if (pw) out.push(hit("pen-inducer-warfarin", pw[0], pw[1], names$1(pw[0], pw[1]), "major", "warn", "nafcillin / dicloxacillin × warfarin INR fall", "Nafcillin and dicloxacillin induce 3A4 and can steal warfarin effect — INR falls, clots not bleeds. The enzyme row on this desk is 3A4; warfarin is still a 2C9 NTI. Recheck INR after the course starts and after it stops.", "INR. Not a free MSSA pill on a VKA.", "Dicloxacillin / nafcillin warfarin case series and labels. Teaching, not a dose."));
+	const lt = pair(ids, /* @__PURE__ */ new Set(["letermovir"]), /* @__PURE__ */ new Set(["tacrolimus"]));
+	if (lt) out.push(hit("letermovir-tacro", lt[0], lt[1], names$1(lt[0], lt[1]), "major", "warn", "letermovir × tacrolimus (3A4 / OATP)", "Letermovir is a moderate 3A4 inhibitor. Tacrolimus is a sensitive NTI 3A4 victim. Levels climb. CMV prophylaxis is not a free add-on on a transplant desk.", "Tacrolimus trough. Open the PI for the labeled adjustment — this desk does not pick it.", "Prevymis label. Tacrolimus is NTI 3A4 on this desk."));
+	const linezolidOn = new Set(ids).has("linezolid");
+	const sero = ids.filter((id) => {
+		const d = DRUG_BY_ID[id];
+		return d && (d.pd.includes("serotonergic") || d.pd.includes("ssri-snri") || d.pd.includes("maoi")) && id !== "linezolid";
+	});
+	if (linezolidOn && sero.length) out.push(hit("linezolid-sero", "linezolid", sero[0], names$1("linezolid", sero[0]), "contraindicated", "danger", "linezolid MAOI × serotonergic", "Linezolid is a reversible nonselective MAOI. Next to an SSRI, SNRI, or another serotonergic it is the labeled serotonin-toxicity row — not a free MRSA pill.", "Hunter screen. This desk is not a washout clock for the antidepressant.", "Zyvox label. MAOI contraindication."));
+	const glpOn = ids.filter((id) => GLP.has(id));
+	const insulinOn = ids.filter(isInsulinId);
+	if (glpOn.length && insulinOn.length) out.push(hit("glp-insulin", glpOn[0], insulinOn[0], names$1(glpOn[0], insulinOn[0]), "moderate", "warn", "GLP-1 / GIP agonist × insulin", "GLP-1 agonists rarely cause hypoglycemia alone. Next to insulin they do. Recheck home glucose. Metformin on this desk should stay quieter. Not a CYP row.", "Glucose. This desk does not cut the insulin.", "Semaglutide / tirzepatide / insulin labels."));
+	return out;
+}
+function wardWanted(ids) {
+	return wardsOnDesk(ids).length > 0;
 }
 var STRENGTH_RANK = {
 	strong: 3,
@@ -1071,7 +1698,63 @@ function pdFindings(a, b) {
 		clinical: "Combining an MAOI (including linezolid) with another serotonergic drug is contraindicated. Risk of life-threatening serotonin syndrome and, with tyramine-like effects, hypertensive crisis.",
 		tags: ["serotonin", "maoi"]
 	}));
-	else if (aSero && bSero) {
+	if (isCarbapenemValproate(a.id, b.id)) out.push(pdPair(a, b, {
+		suffix: "pd-carbapenem-vpa",
+		severity: "contraindicated",
+		effect: "valproate crash / loss of seizure control",
+		mechanism: "carbapenem × valproate (UGT / glucuronide recycling)",
+		clinical: "Carbapenems drop valproate levels within a day — not a CYP isoform and not stacked seizure threshold. Labels treat this as loss of seizure control. Switch the antibiotic or the AED; do not 'give a bit more Depakote.' This desk does not pick a milligram.",
+		tags: [
+			"ward",
+			"seizure",
+			"clinic"
+		]
+	}));
+	if (isVancoZosyn(a.id, b.id)) out.push(pdPair(a, b, {
+		suffix: "pd-vanco-zosyn",
+		severity: "major",
+		effect: "acute kidney injury",
+		mechanism: "vancomycin × piperacillin–tazobactam",
+		clinical: "IV vancomycin plus piperacillin–tazobactam is associated with more AKI than vancomycin plus cefepime or a carbapenem. Observational, still a ward row. Volume, trough, and a narrower beta-lactam are the conversation. Oral vancomycin is a different exposure.",
+		tags: [
+			"ward",
+			"renal",
+			"clinic"
+		]
+	}));
+	if (ARNI.has(a.id) && ACEI.has(b.id) || ARNI.has(b.id) && ACEI.has(a.id)) out.push(pdPair(a, b, {
+		suffix: "pd-arni-acei",
+		severity: "contraindicated",
+		effect: "angioedema",
+		mechanism: "ARNI × ACE inhibitor",
+		clinical: "Sacubitril–valsartan with an ACE inhibitor is labeled contraindicated. Thirty-six hour washout when switching. Duplicate neprilysin / ACE blockade — not a potassium footnote and not an ARB swap. This desk does not time the first Entresto tablet.",
+		tags: [
+			"ward",
+			"clinic",
+			"angioedema"
+		]
+	}));
+	if (FLUOROPYRIMIDINE.has(a.id) && b.id === "warfarin" || FLUOROPYRIMIDINE.has(b.id) && a.id === "warfarin") out.push(pdPair(a, b, {
+		suffix: "pd-cape-warfarin",
+		severity: "major",
+		effect: "INR rise / bleed",
+		mechanism: "fluoropyrimidine × warfarin",
+		clinical: "Capecitabine and 5-FU raise INR on warfarin. Not a 2C9 bully on this desk's CYP map — still a labeled monitor. Recheck INR. This desk does not pick a warfarin milligram.",
+		tags: [
+			"ward",
+			"clinic",
+			"bleed"
+		]
+	}));
+	if (PEN_INDUCER.has(a.id) && b.id === "warfarin" || PEN_INDUCER.has(b.id) && a.id === "warfarin") out.push(pdPair(a, b, {
+		suffix: "pd-pen-warfarin",
+		severity: "major",
+		effect: "INR fall / loss of anticoagulation",
+		mechanism: "nafcillin / dicloxacillin induction × warfarin",
+		clinical: "Nafcillin and dicloxacillin induce 3A4 and can steal warfarin effect — INR falls, clots not bleeds. Warfarin is still a 2C9 NTI. Recheck INR after the course starts and after it stops.",
+		tags: ["ward", "clinic"]
+	}));
+	if (aSero && bSero && !(aMaoi || bMaoi)) {
 		const strong = has(a, "ssri-snri") || has(b, "ssri-snri") || a.id === "tramadol" || b.id === "tramadol" || a.id === "dextromethorphan" || b.id === "dextromethorphan" || a.id === "mdma" || b.id === "mdma" || has(a, "serotonergic") && has(a, "stimulant") || has(b, "serotonergic") && has(b, "stimulant");
 		out.push(pdPair(a, b, {
 			suffix: "pd-sero",
@@ -1243,16 +1926,17 @@ function pdFindings(a, b) {
 		clinical: "ACE inhibitors, ARBs, and thiazides reduce lithium clearance. This is a classic precipitant of lithium toxicity.",
 		tags: ["lithium"]
 	}));
-	if (has(a, "hypoglycemic") && has(b, "hypoglycemic") || has(a, "insulin-secretagogue") && (b.id === "ciprofloxacin" || b.id === "levofloxacin" || b.id === "moxifloxacin") || has(b, "insulin-secretagogue") && (a.id === "ciprofloxacin" || a.id === "levofloxacin" || a.id === "moxifloxacin")) out.push(pdPair(a, b, {
-		suffix: "pd-hypoglycemia",
-		severity: "moderate",
-		effect: "stacked hypoglycemia",
-		mechanism: "glucose-lowering synergy",
-		clinical: "Combined glucose-lowering (or a fluoroquinolone with a sulfonylurea) can produce severe hypoglycemia. Recheck home glucose and consider dose reduction.",
-		tags: ["glucose"]
-	}));
-	const glp = /* @__PURE__ */ new Set(["semaglutide", "tirzepatide"]);
-	if (glp.has(a.id) && (has(b, "insulin-secretagogue") || b.id === "insulin-glargine") || glp.has(b.id) && (has(a, "insulin-secretagogue") || a.id === "insulin-glargine")) out.push(pdPair(a, b, {
+	if (has(a, "hypoglycemic") && has(b, "hypoglycemic") || has(a, "insulin-secretagogue") && (b.id === "ciprofloxacin" || b.id === "levofloxacin" || b.id === "moxifloxacin") || has(b, "insulin-secretagogue") && (a.id === "ciprofloxacin" || a.id === "levofloxacin" || a.id === "moxifloxacin")) {
+		if (!(GLP.has(a.id) && isInsulinId(b.id) || GLP.has(b.id) && isInsulinId(a.id))) out.push(pdPair(a, b, {
+			suffix: "pd-hypoglycemia",
+			severity: "moderate",
+			effect: "stacked hypoglycemia",
+			mechanism: "glucose-lowering synergy",
+			clinical: "Combined glucose-lowering (or a fluoroquinolone with a sulfonylurea) can produce severe hypoglycemia. Recheck home glucose and consider dose reduction.",
+			tags: ["glucose"]
+		}));
+	}
+	if (GLP.has(a.id) && (has(b, "insulin-secretagogue") || isInsulinId(b.id)) || GLP.has(b.id) && (has(a, "insulin-secretagogue") || isInsulinId(a.id))) out.push(pdPair(a, b, {
 		suffix: "pd-glp-secretagogue",
 		severity: "moderate",
 		effect: "stacked hypoglycemia",
@@ -1312,7 +1996,7 @@ function pdFindings(a, b) {
 			tags: ["myopathy"]
 		}));
 	}
-	if (has(a, "seizure-lowering") && has(b, "seizure-lowering")) out.push(pdPair(a, b, {
+	if (has(a, "seizure-lowering") && has(b, "seizure-lowering") && !isCarbapenemValproate(a.id, b.id)) out.push(pdPair(a, b, {
 		suffix: "pd-seizure",
 		severity: "moderate",
 		effect: "lowered seizure threshold",
@@ -1457,7 +2141,7 @@ function pdFindings(a, b) {
 		clinical: "Hawthorn has inotrope and vasodilator effects. Next to digoxin it is stacked cardiac PD, not a 3A4 row. Watch pulse and pressure.",
 		tags: ["cardiac", "food"]
 	}));
-	if (has(a, "nephrotoxic") && has(b, "nephrotoxic")) out.push(pdPair(a, b, {
+	if (has(a, "nephrotoxic") && has(b, "nephrotoxic") && !isVancoZosyn(a.id, b.id)) out.push(pdPair(a, b, {
 		suffix: "pd-nephro",
 		severity: "moderate",
 		effect: "stacked nephrotoxicity",
@@ -2144,6 +2828,7 @@ function analyze(drugIds, host) {
 	if (ctx) findings.push(...alcoholHostFindings(real, ctx.alcohol));
 	if (ctx) findings.push(...hostClinicFindings(real, ctx));
 	findings.push(...udsFindings(real.map((d) => d.id)));
+	findings.push(...protocolFindings(real.map((d) => d.id)));
 	const uniq = dedupe(findings);
 	uniq.sort((a, b) => {
 		const d = SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity];
@@ -2710,7 +3395,7 @@ function treesFor(ids) {
 	return out;
 }
 function sampleNeedsPro(s) {
-	return Boolean(s.phenotypes || s.smoking || s.alcohol || s.cannabisRoute || s.ketamineRoute && s.ketamineRoute !== "iv");
+	return Boolean(s.phenotypes || s.smoking || s.alcohol || s.cannabisRoute);
 }
 var SAMPLE_LANES = [
 	{
@@ -4215,6 +4900,90 @@ var SAMPLE_REGIMENS = [
 		blurb: "INR tab — 2C9 block over weeks, not overnight.",
 		drugIds: ["warfarin", "amiodarone"],
 		lane: "clinic"
+	},
+	{
+		id: "cyp-clarith-midazolam",
+		title: "Clarithromycin + midazolam",
+		blurb: "CYP tab — TDI 3A4. Stopping yesterday does not restore Versed.",
+		drugIds: ["clarithromycin", "midazolam"],
+		lane: "clinic"
+	},
+	{
+		id: "cyp-rifampin-midazolam",
+		title: "Rifampin + midazolam",
+		blurb: "CYP tab — 96% AUC dump. Stop is rebound, not a completed course.",
+		drugIds: ["rifampin", "midazolam"],
+		lane: "clinic"
+	},
+	{
+		id: "cyp-cipro-tizanidine",
+		title: "Cipro + tizanidine",
+		blurb: "Labeled 1A2 knockout. Sensitive index substrate. Start is hypotension.",
+		drugIds: ["ciprofloxacin", "tizanidine"],
+		lane: "clinic"
+	},
+	{
+		id: "cyp-fluoxetine-codeine",
+		title: "Fluoxetine + codeine",
+		blurb: "5-week 2D6 TDI clock. Stopping Prozac yesterday is not a clear.",
+		drugIds: ["fluoxetine", "codeine"],
+		lane: "clinic"
+	},
+	{
+		id: "cyp-itraconazole-simva",
+		title: "Itraconazole + simvastatin",
+		blurb: "Strong 3A4 + P-gp. Dual-hit first-pass. Labeled hold.",
+		drugIds: ["itraconazole", "simvastatin"],
+		lane: "clinic"
+	},
+	{
+		id: "ward-mero-vpa",
+		title: "Meropenem + valproate",
+		blurb: "Wards tab — carbapenem crashes valproate. UGT, not stacked seizure-lowering.",
+		drugIds: ["meropenem", "valproate"],
+		lane: "clinic"
+	},
+	{
+		id: "ward-vanco-zosyn",
+		title: "Vancomycin + Zosyn",
+		blurb: "Wards tab — observational AKI vs vanco + cefepime. Oral vanco is different.",
+		drugIds: ["vancomycin", "piperacillin-tazobactam"],
+		lane: "clinic"
+	},
+	{
+		id: "ward-entresto-acei",
+		title: "Entresto + lisinopril",
+		blurb: "Wards tab — ARNI × ACEI. 36-hour washout. Angioedema, not a potassium footnote.",
+		drugIds: ["sacubitril-valsartan", "lisinopril"],
+		lane: "clinic"
+	},
+	{
+		id: "ward-cape-warfarin",
+		title: "Capecitabine + warfarin",
+		blurb: "Wards / INR — fluoropyrimidine raises INR. Recheck. Not a 2C9 bully on this map.",
+		drugIds: ["capecitabine", "warfarin"],
+		lane: "clinic"
+	},
+	{
+		id: "ward-diclox-warfarin",
+		title: "Dicloxacillin + warfarin",
+		blurb: "Wards / INR — 3A4 induction steals warfarin. INR falls. Recheck after stop too.",
+		drugIds: ["dicloxacillin", "warfarin"],
+		lane: "clinic"
+	},
+	{
+		id: "ward-letermovir-tacro",
+		title: "Letermovir + tacrolimus",
+		blurb: "Wards / TDM — moderate 3A4 × sensitive NTI. CMV prophylaxis is not a free add-on.",
+		drugIds: ["letermovir", "tacrolimus"],
+		lane: "clinic"
+	},
+	{
+		id: "ward-glp-insulin",
+		title: "Semaglutide + insulin aspart",
+		blurb: "Wards tab — GLP-1 next to insulin is stacked hypo. Metformin stays quieter.",
+		drugIds: ["semaglutide", "insulin-aspart"],
+		lane: "clinic"
 	}
 ];
 var PLATES = {
@@ -4432,7 +5201,7 @@ var CLASS_TILES = [
 	{
 		id: "clinic",
 		label: "Clinic",
-		hint: "Imuran, Imdur, Ozempic",
+		hint: "Meropenem, Zosyn, Entresto",
 		plate: PLATES.heme
 	},
 	{
@@ -4518,13 +5287,13 @@ var useDesk = create()(persist((set, get) => ({
 	load: (ids, extras) => {
 		const cap = maxDrugs(activePlan(get()));
 		const next = ids.filter((id) => DRUG_BY_ID[id] && !id.startsWith("__")).slice(0, cap);
-		if (Boolean(extras?.phenotypes || extras?.smoking || extras?.alcohol || extras?.cannabisRoute || extras?.ketamineRoute && extras.ketamineRoute !== "iv") && activePlan(get()) === "free") {
+		if (Boolean(extras?.phenotypes || extras?.smoking || extras?.alcohol || extras?.cannabisRoute) && activePlan(get()) === "free") {
 			set({
 				checkout: {
 					open: true,
 					plan: "pro",
 					interval: get().checkout.interval,
-					reason: "That sample uses host factors — phenotype, route, smoke, or alcohol pattern."
+					reason: "That sample uses host factors — phenotype, smoke, alcohol, or cannabis route."
 				},
 				selected: next,
 				view: "desk",
@@ -4599,10 +5368,6 @@ var useDesk = create()(persist((set, get) => ({
 		set({ smoking });
 	},
 	setKetamineRoute: (ketamineRoute) => {
-		if (activePlan(get()) === "free") {
-			get().openCheckout("pro", "Ketamine route (IV vs oral first-pass) is Pro.");
-			return;
-		}
 		set({ ketamineRoute });
 	},
 	setCannabisRoute: (cannabisRoute) => {
@@ -4650,15 +5415,18 @@ var useDesk = create()(persist((set, get) => ({
 		kidney: "ok",
 		preg: "off"
 	}),
-	openCheckout: (plan, reason = "") => set({
-		view: "plans",
-		checkout: {
-			open: true,
-			plan: plan === "free" ? "pro" : plan,
-			interval: get().checkout.interval,
-			reason
-		}
-	}),
+	openCheckout: (plan, reason = "", interval) => {
+		const resolved = plan === "free" ? "pro" : plan;
+		set({
+			view: "plans",
+			checkout: {
+				open: true,
+				plan: resolved,
+				interval: interval ?? (resolved === "lab" ? "life" : get().checkout.interval),
+				reason
+			}
+		});
+	},
 	closeCheckout: () => set({ checkout: {
 		...get().checkout,
 		open: false
@@ -4805,10 +5573,9 @@ var SOFTWARE = {
 	phone: "360-707-8923",
 	udi: "FP-SW-1.1.0"
 };
-/** 21 CFR / FDA CDS Guidance (Sept 28, 2022) posture — not a clearance. */
-var INTENDED_USE = "FirstPass is clinical decision support software intended for use by licensed healthcare professionals to display mapped cytochrome P450 and pharmacodynamic interaction information, FDA-label excerpts (OpenFDA / DailyMed), published scale scores, and cited literature so the healthcare professional can independently review the basis of any recommendation before acting. It is not intended to diagnose, treat, mitigate, or prevent disease, to calculate or recommend a dose, or to replace the FDA-approved Prescribing Information.";
+var INTENDED_USE = `FirstPass is clinical decision support software intended for use by licensed healthcare professionals to display mapped cytochrome P450 and pharmacodynamic interaction information, FDA-label excerpts (OpenFDA / DailyMed), published scale scores, and cited literature so the healthcare professional can independently review the basis of any recommendation before acting. This desk may be used in educational harm-reduction and recreational-safety review for licensed healthcare professionals and trained safety staff, including analysis of stimulant, sedative, dissociative, and street-supply combinations. It is not intended for patient self-treatment, recreational dosing, or direct medical decision-making without independent review of the relevant FDA-approved Prescribing Information and local protocols. It is not intended to diagnose, treat, mitigate, or prevent disease, to calculate or recommend a dose, or to replace the FDA-approved Prescribing Information.`;
 var INDICATIONS = [
-	"Displaying CYP450 substrate / inhibitor / inducer maps and pharmacodynamic collision scores for drugs and foods on a user-selected regimen.",
+	"Displaying CYP450 substrate / inhibitor / inducer maps, FDA DDI fold-change grades, start/stop safety clocks (reversible vs time-dependent inactivation vs induction lag), and pharmacodynamic collision scores for drugs and foods on a user-selected regimen.",
 	"Surfacing excerpts of FDA-approved labeling (boxed warnings, contraindications, drug interactions, pregnancy) retrieved from OpenFDA and DailyMed.",
 	"Displaying published clinical scales (COWS, CIWA-Ar, Hunter criteria, CDC 2022 oral MME factors, Bazett / Fridericia, Cockcroft–Gault) with the published source named.",
 	"Linking CPIC / ClinPGx tables, PubMed PMIDs, DrugBank accessions, NIH RxClass, LactMed paraphrases, and ClinicalTrials.gov records for independent review."
@@ -4816,6 +5583,7 @@ var INDICATIONS = [
 var NOT_FOR = [
 	"Patients acting without a licensed healthcare professional.",
 	"Generating a prescription, a milligram, a take-home, or an induction protocol.",
+	"Patient self-treatment, recreational dosing, or informal harm-reduction guidance meant to replace professional assessment.",
 	"Charting, billing, PDMP query, or storing protected health information.",
 	"Processing medical images, waveforms, or device signals.",
 	"Replacing the FDA-approved Prescribing Information, a poison-control consult, or bedside assessment."
@@ -4823,10 +5591,11 @@ var NOT_FOR = [
 var WARNINGS = [
 	"FirstPass is not FDA-cleared and not FDA-approved. Do not describe it as either.",
 	"The FDA-approved Prescribing Information is the authority. If this desk and the label disagree, the label wins.",
+	"This software is for educational harm-reduction and recreational-safety review, not patient-directed treatment, self-dosing, or a substitute for clinical judgment.",
 	"Absence of a mapped collision is not proof of safety. Transporters, UGT, plasma protein, unlisted metabolites, and unpublished interactions still apply.",
 	"Live OpenFDA / DailyMed excerpts are truncated. Open the full SPL before acting.",
 	"Street-supply rows (xylazine, nitazenes, designer benzos) are teaching maps, not labeled products.",
-	"COWS, CIWA-Ar, Hunter, MME, and QTc are published formulas displayed for independent scoring — not a diagnosis and not a documented vital."
+	"COWS, CIWA-Ar, Hunter, MME, QTc, and CYP start/stop clocks are published formulas and FDA-grade paraphrases displayed for independent scoring — not a diagnosis, not a hold, and not a documented vital."
 ];
 /** FDA CDS Guidance 2022 — four criteria for non-device CDS. */
 var CDS_CRITERIA = [
@@ -4886,6 +5655,10 @@ var PRIMARY_SOURCES = [
 	{
 		name: "DailyMed SPL",
 		href: "https://dailymed.nlm.nih.gov/"
+	},
+	{
+		name: "FDA CYP / transporter tables",
+		href: "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers"
 	},
 	{
 		name: "FDA drug shortages",
@@ -5346,6 +6119,14 @@ function briefWindow(ids, report, host) {
 		else if (bup) pushUnique(watch, "Office-based and OTP both use buprenorphine in pregnancy. Precipitated withdrawal is occupancy, not a failed film.");
 	}
 	if (hasSuffix(findings, "pd-sero") || hasSuffix(findings, "pd-maoi-sero")) pushUnique(watch, "Serotonin — agitation, clonus, hyperreflexia, fever, diarrhea. Methadone and fentanyl are serotonergic too.");
+	if (hasSuffix(findings, "cyp-clock") || hasSuffix(findings, "cyp-dual")) {
+		const tdi = findings.some((f) => f.tags.includes("tdi"));
+		const induction = findings.some((f) => f.tags.includes("induction"));
+		if (tdi) pushUnique(watch, "CYP TDI linger — the enzyme was destroyed, not occupied. Yesterday’s last macrolide, azole, booster, or grapefruit still raises oral victims until new CYP is made.");
+		if (induction) pushUnique(watch, "CYP induction clock — start looks like a stolen dose over a week; stop is rebound toxicity over two. Plan the stop on the start day.");
+		if (!tdi && !induction) pushUnique(watch, "CYP start/stop clock — victim climbs while the inhibitor is on and falls when it clears. Open the CYP tab.");
+		pushUnique(callBits, "Open the CYP tab for the FDA grade and the stop clock. This desk is not a milligram.");
+	}
 	if (quiet && mat) {
 		pushUnique(watch, ids.length === 1 ? "Monograph on the desk. Tap today's extra on the window tray — a fold, Phenergan, a Z-Pak, Paxlovid, Luvox, or a benzo — to score the window." : "No mapped CYP collision, phenotype hit, or PD synergy on this pair. Absence is not proof of safety.");
 		if (!tell) tell = on("epclusa") && methadone ? "Epclusa next to methadone should stay quiet on this desk. Rifampin should not. Do not cut the methadone 'because of the new liver drug' without a map." : ids.length === 1 && methadone ? "Stable milligram is not a free tray. Window antiemetics, macrolides, and today's supply still collide." : ids.length === 1 && bup ? "A Suboxone film is occupancy. A full agonist on top is precipitated withdrawal or a blocked high — add the second drug." : ids.length === 1 && naltrexone ? "Vivitrol occupies μ for weeks. A leftover fold is precipitated withdrawal, not a failed shot." : "Quiet on this map is not a free pass. Transporters, UGT, and unlisted pathways still apply.";
@@ -5372,6 +6153,7 @@ function briefWindow(ids, report, host) {
 	if (methadone) pushUnique(tray, "EDDP");
 	if (bup || precip) pushUnique(tray, "COWS");
 	if (on("ethanol") || host.alcohol === "acute" || host.alcohol === "chronic") pushUnique(tray, "CIWA-Ar");
+	for (const chip of protocolTray(ids)) pushUnique(tray, chip);
 	for (const id of ids) for (const m of clinicFor(id)?.monitor ?? []) {
 		if (m === "withdrawal" && tray.some((t) => t.includes("withdrawal"))) continue;
 		pushUnique(tray, m);
@@ -5490,7 +6272,7 @@ function DrugSearch() {
 						e.target.blur();
 					}
 				},
-				placeholder: full ? "Regimen full · remove a drug to add another" : mat ? "Paxlovid, Phenergan, UDS, COWS…" : "Berberine, pubmed, beers…",
+				placeholder: full ? "Regimen full · remove a drug to add another" : mat ? "Paxlovid, Phenergan, UDS, COWS…" : "Berberine, protocol, beers…",
 				className: "h-12 w-full rounded-lg bg-surface-2 pl-10 pr-10 text-sm text-fg shadow-[var(--shadow-border)] placeholder:text-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-60",
 				autoComplete: "off",
 				spellCheck: false
@@ -5560,7 +6342,8 @@ var BOXED = {
 	},
 	"pd-nitrate-pde5": { detail: "Sildenafil / tadalafil / vardenafil labels contraindicate organic nitrates. Refractory hypotension." },
 	"pd-maoi-sero": { detail: "MAOI labels contraindicate serotonergic agents. Serotonin toxicity, hypertensive crisis." },
-	"pd-antag-opioid": { detail: "Naltrexone / naloxone labels: precipitated withdrawal in opioid-dependent patients; blockade of agonists." }
+	"pd-antag-opioid": { detail: "Naltrexone / naloxone labels: precipitated withdrawal in opioid-dependent patients; blockade of agonists." },
+	"pd-arni-acei": { detail: "Entresto boxed warning / contraindications: sacubitril–valsartan with an ACE inhibitor — angioedema. 36-hour washout when switching." }
 };
 var PI = {
 	"pd-methadone-ritonavir": "Methadone and ritonavir / Paxlovid labels: mixed PK — methadone may fall (withdrawal); fentanyl and other 3A4 opioids may rise.",
@@ -5572,7 +6355,14 @@ var PI = {
 	"clinic-preg-avoid": "Label: boxed or contraindicated in pregnancy. Open the PI. This desk is not obstetric advice.",
 	"clinic-preg-caution": "Label: use in pregnancy is a specialist call. Open the PI.",
 	"clinic-beers": "AGS Beers 2023. Not an FDA box. Confirm against the PI and the geriatric indication.",
-	"clinic-renal": "Many labels dose-adjust on Cockcroft–Gault or eGFR. This desk flags CKD; it does not pick a dose."
+	"clinic-renal": "Many labels dose-adjust on Cockcroft–Gault or eGFR. This desk flags CKD; it does not pick a dose.",
+	"cyp-clock": "FDA 2020 Clinical Drug Interaction Studies / Huang CPT 2007. Strong ≥5× AUC; strong inducer ≥80% ↓ AUC. Start and stop are different clocks. Not a milligram.",
+	"cyp-dual": "FDA example inhibitors often hit both CYP3A4 and P-gp. Gut first-pass victims move more than a CYP-only row.",
+	"pd-carbapenem-vpa": "Carbapenem labels (meropenem, ertapenem, imipenem): concomitant valproate — loss of seizure control. UGT / glucuronide recycling, not a CYP isoform. Switch the antibiotic or the AED.",
+	"pd-vanco-zosyn": "Observational AKI excess for IV vancomycin plus piperacillin–tazobactam versus vancomycin plus cefepime or a carbapenem. Not a boxed contraindication. Oral vancomycin is a different exposure.",
+	"pd-cape-warfarin": "Capecitabine and fluorouracil labels: altered coagulation / INR rise with warfarin. Recheck INR. This desk does not pick a milligram.",
+	"pd-pen-warfarin": "Nafcillin and dicloxacillin induce 3A4 and can steal warfarin effect — INR falls. Recheck after the course starts and after it stops.",
+	"pd-glp-secretagogue": "GLP-1 / GIP agonist labels: hypoglycemia stacked with insulin or a secretagogue. Rarely alone. This desk does not cut the insulin."
 };
 function suffixOf(id) {
 	const parts = id.split("__");
@@ -6058,34 +6848,40 @@ function EnzymeAtlas() {
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AtlasColumn, {
 						title: "Substrates",
-						hint: "Victims of inhibition / induction",
+						hint: "Victims of inhibition / induction · FDA index tagged",
 						drugs: bucket.substrates,
 						selected,
 						onAdd: add,
-						kind: "S"
+						kind: "S",
+						enzyme,
+						role: "substrate"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AtlasColumn, {
 						title: "Inhibitors",
-						hint: "Raise victim exposure",
+						hint: "Raise victim exposure · FDA index tagged",
 						drugs: bucket.inhibitors,
 						selected,
 						onAdd: add,
-						kind: "I"
+						kind: "I",
+						enzyme,
+						role: "inhibitor"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AtlasColumn, {
 						title: "Inducers",
-						hint: "Drop victim exposure",
+						hint: "Drop victim exposure · stop is rebound",
 						drugs: bucket.inducers,
 						selected,
 						onAdd: add,
-						kind: "D"
+						kind: "D",
+						enzyme,
+						role: "inducer"
 					})
 				]
 			})
 		]
 	});
 }
-function AtlasColumn({ title, hint, drugs, selected, onAdd, kind }) {
+function AtlasColumn({ title, hint, drugs, selected, onAdd, kind, enzyme, role }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 		className: "rounded-xl bg-surface p-4 shadow-[var(--shadow-border)]",
 		children: [
@@ -6107,6 +6903,7 @@ function AtlasColumn({ title, hint, drugs, selected, onAdd, kind }) {
 				className: "space-y-1",
 				children: [drugs.map((d) => {
 					const on = selected.includes(d.id);
+					const index = isFdaIndex(d.id, enzyme, role);
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 						type: "button",
 						onClick: () => onAdd(d.id),
@@ -6115,12 +6912,12 @@ function AtlasColumn({ title, hint, drugs, selected, onAdd, kind }) {
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "block text-sm text-fg",
 							children: d.name
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 							className: "block text-[11px] text-muted",
-							children: d.cls
+							children: [d.cls, index ? " · FDA index" : ""]
 						})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "font-mono text-[10px] text-subtle",
-							children: kind
+							children: index ? "IDX" : kind
 						})]
 					}) }, d.id);
 				}), drugs.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
@@ -6200,7 +6997,37 @@ var HINT = {
 	CYP2C9: "Warfarin, phenytoin, edible THC",
 	CYP2B6: "Ketamine, bupropion, methadone"
 };
-function PhenotypeCard() {
+function KetamineRouteCard() {
+	const ketamineRoute = useDesk((s) => s.ketamineRoute);
+	const setKetamineRoute = useDesk((s) => s.setKetamineRoute);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "rounded-xl bg-surface p-4 shadow-[var(--shadow-border)]",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				className: "text-xs font-medium uppercase tracking-wide text-muted",
+				children: "Ketamine route"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-1 text-[11px] leading-relaxed text-muted",
+				children: "Free teaching control — oral × grapefruit is the first-pass demo. Other host factors stay Pro."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-3 grid grid-cols-3 gap-1",
+				children: ROUTES.map((r) => {
+					const on = ketamineRoute === r;
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						"aria-pressed": on,
+						onClick: () => setKetamineRoute(r),
+						className: cn("h-10 rounded-sm text-[11px] font-medium", on ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg"),
+						children: KETAMINE_ROUTE_LABEL[r]
+					}, r);
+				})
+			})
+		]
+	});
+}
+function PhenotypeCard({ hideKetamineRoute = false }) {
 	const phenotypes = useDesk((s) => s.phenotypes);
 	const setPhenotype = useDesk((s) => s.setPhenotype);
 	const resetPhenotypes = useDesk((s) => s.resetPhenotypes);
@@ -6313,25 +7140,32 @@ function PhenotypeCard() {
 					})
 				})]
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			!hideKetamineRoute ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "mt-3",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "text-xs font-medium text-fg",
-					children: "Ketamine route"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "mt-1.5 grid grid-cols-3 gap-1",
-					children: ROUTES.map((r) => {
-						const on = ketamineRoute === r;
-						return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							"aria-pressed": on,
-							onClick: () => setKetamineRoute(r),
-							className: cn("h-10 rounded-sm text-[11px] font-medium", on ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg"),
-							children: KETAMINE_ROUTE_LABEL[r]
-						}, r);
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "text-xs font-medium text-fg",
+						children: "Ketamine route"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-0.5 text-[10px] text-subtle",
+						children: "Free on this desk — oral × grapefruit is the teaching demo."
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "mt-1.5 grid grid-cols-3 gap-1",
+						children: ROUTES.map((r) => {
+							const on = ketamineRoute === r;
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								"aria-pressed": on,
+								onClick: () => setKetamineRoute(r),
+								className: cn("h-10 rounded-sm text-[11px] font-medium", on ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg"),
+								children: KETAMINE_ROUTE_LABEL[r]
+							}, r);
+						})
 					})
-				})]
-			}),
+				]
+			}) : null,
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "mt-3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -6559,7 +7393,7 @@ function Paywall({ title, blurb, children }) {
 					className: "flex flex-wrap justify-center gap-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 						size: "sm",
-						onClick: () => openCheckout("lab", title),
+						onClick: () => openCheckout("lab", title, "life"),
 						children: "Founding · $79"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 						size: "sm",
@@ -6570,7 +7404,7 @@ function Paywall({ title, blurb, children }) {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 					className: "text-[11px] text-muted",
-					children: ["Card on Stripe · ", PAY_RAILS.map((r) => `${r.label} ${r.handle}`).join(" · ")]
+					children: [PAY_RAILS.map((r) => `${r.label} ${r.handle}`).join(" · "), " · card when Stripe is live"]
 				})
 			]
 		})]
@@ -6748,7 +7582,7 @@ function PlansPage() {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "mt-5 flex flex-wrap gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-									onClick: () => openCheckout("lab", "Founding lifetime — Pro plus export."),
+									onClick: () => openCheckout("lab", "Founding lifetime — Pro plus export.", "life"),
 									children: ["Buy founding · $", COMMERCE.founding]
 								}), current === "free" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 									variant: "secondary",
@@ -6833,7 +7667,7 @@ function PlansPage() {
 									children: "Current license"
 								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 									className: "w-full",
-									onClick: () => openCheckout(interval === "life" ? "lab" : p.id, interval === "life" ? "Founding lifetime." : p.name),
+									onClick: () => openCheckout(interval === "life" ? "lab" : p.id, interval === "life" ? "Founding lifetime." : p.name, interval),
 									children: cta
 								})
 							})
@@ -6980,7 +7814,7 @@ function CheckoutDrawer() {
 				}) : null,
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-4 text-sm leading-relaxed text-muted",
-					children: "Pay with card on Stripe. A signed key is minted automatically after Stripe says paid — this browser is licensed on return. Venmo, Cash App, and PayPal still work if you would rather write."
+					children: cardLive ? "Pay with card on Stripe. A signed key is minted only after Stripe says paid — there is no fake checkout. Venmo, Cash App, and PayPal still work if you would rather write." : "Card checkout is not live on this desk yet. Pay with Venmo, Cash App, or PayPal below. After payment clears, the operator emails or texts a signed key from Foundry — paste it under License key → Redeem. Nothing auto-appears below until you receive that key."
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "mt-4 grid grid-cols-3 gap-1",
@@ -6995,7 +7829,7 @@ function CheckoutDrawer() {
 						children: i === "life" ? `$${priceFor("lab", "life")} once` : i === "year" ? `$${priceFor(checkout.plan === "lab" ? "lab" : "pro", "year")}/yr` : `$${priceFor(checkout.plan === "lab" ? "lab" : "pro", "month")}/mo`
 					}, i))
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				cardLive ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 					className: "mt-5 w-full",
 					onClick: () => void payCard(),
 					disabled: cardBusy,
@@ -7005,22 +7839,20 @@ function CheckoutDrawer() {
 						amount,
 						" with card"
 					]
-				}),
-				stripeMode === "test" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				}), stripeMode === "test" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-xs text-warn",
 					children: "Stripe is in test mode. No live charge."
-				}) : null,
-				stripeMode === "off" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "mt-2 text-xs text-muted",
-					children: "Card is not live on this desk yet. Venmo, Cash App, or PayPal still close a sale — then redeem the key below."
-				}) : cardLive ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-xs text-ok",
-					children: "Stripe mints the key, stamps the receipt, and licenses this browser when you land back."
-				}) : null,
+					children: "Stripe mints a signed key only after the charge clears. You land back on this desk."
+				})] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-5 rounded-md bg-bg-sunken px-3 py-2 text-xs text-muted",
+					children: stripeMode === null ? "Checking card checkout…" : "Card button hidden until Stripe is configured. Use a pay rail below."
+				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "mt-3 grid grid-cols-3 gap-2",
 					children: PAY_RAILS.map((rail) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-						variant: "secondary",
+						variant: cardLive ? "secondary" : "default",
 						className: "w-full",
 						asChild: true,
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
@@ -7034,7 +7866,7 @@ function CheckoutDrawer() {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 					className: "mt-3 rounded-md bg-bg-sunken px-3 py-3 text-sm leading-relaxed text-muted",
 					children: [
-						life ? `Founding is $${COMMERCE.founding} once. Card is the default. ${OPERATOR.payLine} if you would rather write.` : `Pay $${amount} with card, or ${OPERATOR.payLine}.`,
+						life ? cardLive ? `Founding is $${COMMERCE.founding} once. Card is the default. ${OPERATOR.payLine} if you would rather write.` : `Founding is $${COMMERCE.founding} once. Pay ${OPERATOR.payLine}. After it clears, ${OPERATOR.email} or ${OPERATOR.phone} sends your key — Redeem below.` : cardLive ? `Pay $${amount} with card, or ${OPERATOR.payLine}.` : `Pay $${amount} via ${OPERATOR.payLine}. Key is emailed/texted after it clears — Redeem below.`,
 						" ",
 						OPERATOR.email,
 						" · ",
@@ -8171,13 +9003,13 @@ function LaunchDesk() {
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
 								className: "font-medium text-accent hover:underline",
-								href: SITE.url,
+								href: SITE.pages,
 								target: "_blank",
 								rel: "noreferrer",
 								children: "Pitch page"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 								className: "text-muted",
-								children: [" — ", SITE.url]
+								children: [" — ", SITE.pages]
 							})] }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
 								className: "font-medium text-accent hover:underline",
@@ -8210,7 +9042,7 @@ function LaunchDesk() {
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 							size: "sm",
 							variant: "secondary",
-							onClick: () => void copy("url", SITE.url),
+							onClick: () => void copy("url", SITE.pages),
 							children: [copied === "url" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-3.5" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Copy, { className: "size-3.5" }), copied === "url" ? "Copied" : "Copy URL"]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 							size: "sm",
@@ -8319,6 +9151,7 @@ function Foundry() {
 	const [plan, setPlan] = (0, import_react.useState)("life");
 	const [busy, setBusy] = (0, import_react.useState)(false);
 	const [err, setErr] = (0, import_react.useState)("");
+	const [pinWarn, setPinWarn] = (0, import_react.useState)("");
 	const [last, setLast] = (0, import_react.useState)(null);
 	const [packet, setPacket] = (0, import_react.useState)("");
 	const [copied, setCopied] = (0, import_react.useState)("");
@@ -8448,6 +9281,7 @@ function Foundry() {
 	async function mint() {
 		setBusy(true);
 		setErr("");
+		setPinWarn("");
 		try {
 			const res = await mintLicenseKey({ data: {
 				pin,
@@ -8458,6 +9292,7 @@ function Foundry() {
 				setErr(res.reason);
 				return;
 			}
+			if ("defaultPin" in res && res.defaultPin) setPinWarn("FOUNDER_PIN is unset — you minted with the default PIN. Set FOUNDER_PIN (and LICENSE_PEPPER) in production; defaults fail closed when NODE_ENV=production or GROK_PROJECT_ID is set.");
 			remember([{
 				key: res.key,
 				plan: res.plan,
@@ -8556,6 +9391,7 @@ function Foundry() {
 			setPlan,
 			busy,
 			err,
+			pinWarn,
 			last,
 			copied,
 			issued,
@@ -8581,7 +9417,7 @@ function Foundry() {
 		})]
 	});
 }
-function CloseDesk({ pin, setPin, plan, setPlan, busy, err, last, copied, issued, payNote, setPayNote, soldTo, setSoldTo, names, setNames, nameCount, waiting, collected, mailNote, pendingMail, dm, tweet, invoice, fulfillment, copy, mint, collect, draftMail }) {
+function CloseDesk({ pin, setPin, plan, setPlan, busy, err, pinWarn, last, copied, issued, payNote, setPayNote, soldTo, setSoldTo, names, setNames, nameCount, waiting, collected, mailNote, pendingMail, dm, tweet, invoice, fulfillment, copy, mint, collect, draftMail }) {
 	const extra = [waiting ? `${waiting} waiting in the hunt` : "", nameCount ? `${nameCount} pasted` : ""].filter(Boolean).join(" · ");
 	const canDraft = collected.some((r) => r.email && !r.mailed && r.source !== "stripe");
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
@@ -8756,6 +9592,10 @@ function CloseDesk({ pin, setPin, plan, setPlan, busy, err, last, copied, issued
 				err ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-3 text-sm text-danger",
 					children: err
+				}) : null,
+				pinWarn ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-3 text-sm text-warn",
+					children: pinWarn
 				}) : null,
 				last ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 					className: "mt-3 rounded-md bg-ok-soft px-3 py-2 font-mono text-sm text-ok",
@@ -9726,6 +10566,94 @@ var ROUNDS = [
 		drugIds: ["warfarin", "amiodarone"],
 		lane: "clinic",
 		blurb: "INR · amiodarone"
+	},
+	{
+		id: "r-cyp-rifampin-stop",
+		title: "The course that finished too well",
+		setting: "clinic",
+		stem: "Oral midazolam for a procedure. He finished rifampin for latent TB ten days ago. The anesthesiologist gives the usual milligram. He does not wake on time. Someone says the rifampin is gone.",
+		ask: "Is a finished course a clear?",
+		teach: "No. Induction dissipates over ~1–2 weeks. Victim levels rebound — sometimes past baseline if a dose was raised while induced. Put rifampin + midazolam on the desk and open CYP → Stop clock. Backman 1996 dumped oral midazolam 96% on rifampin; Backman 1998 still had only 13% of baseline AUC four days after stop. Niemi 2003: remember the stop. This desk is not a milligram.",
+		drugIds: ["rifampin", "midazolam"],
+		lane: "clinic",
+		blurb: "CYP · de-induce"
+	},
+	{
+		id: "r-cyp-clarith-linger",
+		title: "The Z-Pak that was not a Z-Pak",
+		setting: "ward",
+		stem: "Biaxin finished yesterday. Oral Versed this morning for cardioversion. He is still down at hour four. Pharmacy says the macrolide is off the MAR.",
+		ask: "Occupancy or destroyed enzyme?",
+		teach: "Clarithromycin is mechanism-based 3A4 inactivation. New enzyme has to be made — gut 24–72 h, liver longer. Put clarithromycin + midazolam on the desk. CYP tab should read TDI. A last tablet yesterday is not a free victim day. Open the PI. This desk is not a hold.",
+		drugIds: ["clarithromycin", "midazolam"],
+		lane: "clinic",
+		blurb: "CYP · TDI linger"
+	},
+	{
+		id: "r-cyp-prozac-five-weeks",
+		title: "The Prozac that still owned 2D6",
+		setting: "clinic",
+		stem: "Codeine after a dental extraction. She stopped fluoxetine two weeks ago 'so the painkiller would work.' No analgesia, then jitter and a high parent. Someone wants a 2D6 genotype.",
+		ask: "Two weeks — is 2D6 back?",
+		teach: "Norfluoxetine keeps 2D6 blocked ~5 weeks. Put fluoxetine + codeine on the desk. CYP stop clock and Pheno both fire. A genotype is not the enzyme she has today. Huang grades the inhibitor; the washout is the clock. This desk does not order a test.",
+		drugIds: ["fluoxetine", "codeine"],
+		lane: "clinic",
+		blurb: "CYP · 5-week 2D6"
+	},
+	{
+		id: "r-ward-mero-vpa",
+		title: "The meropenem that stole Depakote",
+		setting: "ward",
+		stem: "Seizure-free on valproate for a year. Empiric meropenem for hospital-acquired pneumonia. Day two the valproate level is a third of baseline. Someone wants to raise the Depakote.",
+		ask: "Is this stacked seizure-lowering, or a different map?",
+		teach: "UGT / glucuronide recycling — not CYP, not two seizure-lowering flags. Put meropenem + valproate on the desk. Wards should read contraindicated. Do not 'give a bit more Depakote.' Switch the antibiotic or the AED. Spriet 2007. This desk does not pick a milligram.",
+		drugIds: ["meropenem", "valproate"],
+		lane: "clinic",
+		blurb: "Wards · carbapenem–VPA"
+	},
+	{
+		id: "r-ward-vanco-zosyn",
+		title: "The Zosyn piggyback",
+		setting: "ward",
+		stem: "ICU MRSA coverage: vancomycin plus piperacillin–tazobactam because 'it covers everything.' Creatinine climbs on day four. Pharmacy asks why not cefepime.",
+		ask: "Is this boxed, or observational — and does oral vancomycin count?",
+		teach: "Observational AKI excess vs vancomycin plus cefepime or a carbapenem. Not a boxed contraindication. Oral vancomycin is a different exposure. Put the pair on the desk. Wards should read major. Luther 2018. Volume, trough, and a narrower beta-lactam — this desk is not a dose.",
+		drugIds: ["vancomycin", "piperacillin-tazobactam"],
+		lane: "clinic",
+		blurb: "Wards · vanco–Zosyn"
+	},
+	{
+		id: "r-ward-entresto",
+		title: "The ACEI that stayed on the MAR",
+		setting: "ward",
+		stem: "HFrEF. Entresto written at discharge. Lisinopril is still on the home list. Pharmacy catches it in the lobby. Someone says 'it's just an ARB combo.'",
+		ask: "Washout or potassium?",
+		teach: "ARNI × ACE inhibitor is labeled contraindicated — angioedema, 36-hour washout. Not a potassium footnote and not an ARB swap. Put Entresto + lisinopril on the desk. Wards should light. This desk does not time the first tablet.",
+		drugIds: ["sacubitril-valsartan", "lisinopril"],
+		lane: "clinic",
+		blurb: "Wards · ARNI–ACEI"
+	},
+	{
+		id: "r-ward-cape-inr",
+		title: "The INR that climbed on Xeloda",
+		setting: "clinic",
+		stem: "Warfarin 4 mg, INR 2.4 for years. Capecitabine for rectal cancer. Week two INR 5.1. Nobody touched the warfarin milligrams. 2C9 looks quiet on the CYP map.",
+		ask: "Why did the INR move if 2C9 did not?",
+		teach: "Fluoropyrimidines raise INR on warfarin by a labeled path this desk does not map as 2C9 inhibition. Put capecitabine + warfarin on the desk. Wards and INR both fire. Recheck. This desk does not pick a warfarin milligram.",
+		drugIds: ["capecitabine", "warfarin"],
+		lane: "clinic",
+		blurb: "Wards · Xeloda–warfarin"
+	},
+	{
+		id: "r-ward-glp-aspart",
+		title: "The NovoLog that met Ozempic",
+		setting: "clinic",
+		stem: "Type 2 on insulin aspart. Semaglutide started last month. Fasting glucoses are 50s. Metformin was left alone and nobody cut the bolus.",
+		ask: "Is metformin the problem?",
+		teach: "GLP-1 agonists rarely cause hypoglycemia alone. Next to insulin they do. Metformin on this desk stays quieter. Put semaglutide + insulin aspart on the desk. Wards should name the pair. This desk does not cut the insulin.",
+		drugIds: ["semaglutide", "insulin-aspart"],
+		lane: "clinic",
+		blurb: "Wards · GLP–insulin"
 	}
 ];
 function RoundsPage() {
@@ -9758,7 +10686,7 @@ function RoundsPage() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "mt-2 max-w-xl text-sm leading-relaxed text-muted",
-								children: "Pharmacy-student and clinic maps — first-pass, phenotype-as-perpetrator, α2 vs naloxone, food, MAT. Two-drug cases stay free. Host-factor cases are Pro."
+								children: "Pharmacy-student and clinic maps — first-pass, phenotype-as-perpetrator, α2 vs naloxone, food, MAT. Two-drug cases and oral ketamine route stay free. Phenotype, smoke, alcohol, and cannabis route stay Pro."
 							})
 						]
 					})]
@@ -9991,6 +10919,80 @@ function PathCard({ title, hot, steps, note }) {
 		]
 	});
 }
+var CIRCUIT_LABELS = {
+	pk: "PK",
+	pd: "PD",
+	geno: "Phenotype",
+	clinic: "Clinic"
+};
+function summarizeMultiCircuitFindings(findings) {
+	const byCircuit = {
+		pk: {
+			count: 0,
+			severe: 0
+		},
+		pd: {
+			count: 0,
+			severe: 0
+		},
+		geno: {
+			count: 0,
+			severe: 0
+		},
+		clinic: {
+			count: 0,
+			severe: 0
+		}
+	};
+	const pairMap = /* @__PURE__ */ new Map();
+	for (const finding of findings) {
+		const kind = finding.kind;
+		if (!(kind in byCircuit)) continue;
+		byCircuit[kind].count += 1;
+		if (finding.severity === "contraindicated" || finding.severity === "major") byCircuit[kind].severe += 1;
+		if (finding.drugIds.length < 2) continue;
+		const pair = [...new Set(finding.drugIds)];
+		const key = `${kind}:${pair.join("|")}`;
+		const id = pair.join("+");
+		const current = pairMap.get(key);
+		const rank = {
+			contraindicated: 4,
+			major: 3,
+			moderate: 2,
+			minor: 1
+		};
+		const next = {
+			id,
+			pair,
+			severity: finding.severity,
+			count: (current?.count ?? 0) + 1
+		};
+		if (!current || rank[finding.severity] > rank[current.severity]) pairMap.set(key, next);
+		else if (rank[finding.severity] === rank[current.severity]) pairMap.set(key, {
+			...current,
+			count: current.count + 1
+		});
+	}
+	const topPairs = [...pairMap.values()].map((entry) => ({
+		id: entry.id,
+		pair: entry.pair,
+		count: entry.count,
+		severity: entry.severity
+	})).sort((a, b) => {
+		const severityRank = {
+			contraindicated: 4,
+			major: 3,
+			moderate: 2,
+			minor: 1
+		};
+		return severityRank[b.severity] - severityRank[a.severity] || b.count - a.count || a.id.localeCompare(b.id);
+	}).slice(0, 8);
+	return {
+		total: findings.length,
+		byCircuit,
+		topPairs
+	};
+}
 var TONE = {
 	contraindicated: "stroke-danger",
 	major: "stroke-danger",
@@ -10080,6 +11082,138 @@ function CollisionMap({ selected, findings }) {
 				})
 			] }, n.id))]
 		})]
+	});
+}
+function MultiCircuitMap({ selected, findings }) {
+	const summary = (0, import_react.useMemo)(() => summarizeMultiCircuitFindings(findings), [findings]);
+	const circuitOrder = [
+		"pk",
+		"pd",
+		"geno",
+		"clinic"
+	];
+	const laneY = {
+		pk: 32,
+		pd: 78,
+		geno: 124,
+		clinic: 170
+	};
+	const xOf = (index) => 52 + index * 74;
+	const pairLineData = (0, import_react.useMemo)(() => {
+		const rows = [];
+		for (const finding of findings) {
+			if (finding.drugIds.length < 2) continue;
+			const pair = [...new Set(finding.drugIds)].filter((id) => selected.includes(id)).sort();
+			if (pair.length < 2) continue;
+			const a = selected.indexOf(pair[0]);
+			const b = selected.indexOf(pair[1]);
+			if (a === -1 || b === -1) continue;
+			rows.push({
+				key: `${finding.kind}:${pair.join("|")}`,
+				kind: finding.kind,
+				a: xOf(a),
+				b: xOf(b),
+				severity: finding.severity,
+				pair
+			});
+		}
+		return rows;
+	}, [findings, selected]);
+	const bulbs = selected.map((id, index) => ({
+		id,
+		name: DRUG_BY_ID[id]?.name ?? id,
+		x: xOf(index)
+	}));
+	if (selected.length < 2) return null;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "overflow-hidden rounded-xl bg-surface p-4 shadow-[var(--shadow-border)] sm:p-5",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mb-3 flex items-end justify-between gap-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+					className: "font-serif text-lg tracking-tight text-fg",
+					children: "Multi-circuit map"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-xs text-muted",
+					children: "Each lane is a distinct interaction circuit: PK, PD, phenotype, or clinic."
+				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex flex-wrap justify-end gap-2 text-[10px] uppercase tracking-wide text-muted",
+					children: circuitOrder.map((kind) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "rounded-full bg-bg-sunken px-2 py-1",
+						children: [
+							CIRCUIT_LABELS[kind],
+							" ",
+							summary.byCircuit[kind].count
+						]
+					}, kind))
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+				viewBox: "0 0 360 210",
+				className: "block h-auto w-full max-w-md",
+				role: "img",
+				"aria-label": "Drug interaction circuit map",
+				children: circuitOrder.map((kind) => {
+					const y = laneY[kind];
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("g", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+							x: "16",
+							y: y + 4,
+							className: "fill-fg",
+							style: {
+								fontSize: 10,
+								fontFamily: "IBM Plex Sans, sans-serif"
+							},
+							children: CIRCUIT_LABELS[kind]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("line", {
+							x1: "52",
+							y1: y,
+							x2: "310",
+							y2: y,
+							stroke: "currentColor",
+							strokeOpacity: "0.2",
+							strokeWidth: "1.2"
+						}),
+						bulbs.map((drug) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("g", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
+							cx: drug.x,
+							cy: y,
+							r: "7",
+							className: "fill-accent",
+							opacity: .9
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
+							cx: drug.x,
+							cy: y,
+							r: "3",
+							className: "fill-accent-fg"
+						})] }, `${kind}-${drug.id}`)),
+						pairLineData.filter((row) => row.kind === kind).map((row) => {
+							const midX = (row.a + row.b) / 2;
+							const bend = row.kind === "pk" ? -20 : row.kind === "pd" ? -10 : row.kind === "geno" ? 10 : 18;
+							const d = `M ${row.a} ${y} C ${midX} ${y + bend}, ${midX} ${y + bend}, ${row.b} ${y}`;
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+								d,
+								className: cn(TONE[row.severity]),
+								fill: "none",
+								strokeWidth: row.severity === "contraindicated" || row.severity === "major" ? 3 : 1.8,
+								strokeLinecap: "round",
+								opacity: .9
+							}, `${row.key}-${row.pair.join("-")}`);
+						})
+					] }, kind);
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-3 flex flex-wrap gap-2",
+				children: summary.topPairs.map((pair) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: cn("inline-flex items-center gap-2 rounded-full border px-2 py-1 text-[10px] uppercase tracking-wide", pair.severity === "contraindicated" || pair.severity === "major" ? "border-danger/40 bg-danger-soft text-fg" : "border-border bg-bg-sunken text-muted"),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "font-mono",
+						children: pair.id
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [pair.count, "x"] })]
+				}, pair.id))
+			})
+		]
 	});
 }
 function Formulary() {
@@ -13021,6 +14155,13 @@ var ISMP = /* @__PURE__ */ new Set([
 	"hydrocodone",
 	"buprenorphine",
 	"insulin-glargine",
+	"insulin-aspart",
+	"insulin-lispro",
+	"insulin-regular",
+	"insulin-detemir",
+	"insulin-degludec",
+	"insulin-nph",
+	"vancomycin",
 	"warfarin",
 	"apixaban",
 	"rivaroxaban",
@@ -13054,16 +14195,27 @@ var NIOSH = /* @__PURE__ */ new Set([
 	"sirolimus",
 	"tacrolimus",
 	"cyclosporine",
-	"mycophenolate"
+	"mycophenolate",
+	"capecitabine",
+	"fluorouracil",
+	"imatinib",
+	"ibrutinib",
+	"voclosporin",
+	"lenalidomide",
+	"thalidomide",
+	"isotretinoin"
 ]);
 var REMS = {
 	clozapine: "Clozapine REMS — ANC before dispense. The agranulocytosis boxed row.",
 	esketamine: "Spravato REMS — healthcare setting, 2-hour watch, no driving.",
-	buprenorphine: "MOUD buprenorphine is no longer X-waiver; some film / implant products still carry REMS paperwork."
+	buprenorphine: "MOUD buprenorphine is no longer X-waiver; some film / implant products still carry REMS paperwork.",
+	lenalidomide: "Revlimid REMS — embryo-fetal toxicity. Open the program. This desk is not a pregnancy test.",
+	thalidomide: "Thalomid REMS — embryo-fetal toxicity. Open the program.",
+	isotretinoin: "iPLEDGE REMS — embryo-fetal toxicity. This desk is not a pregnancy test."
 };
 function alertsFor(id) {
 	const out = [];
-	if (ISMP.has(id)) out.push({
+	if (ISMP.has(id) || id.startsWith("insulin-")) out.push({
 		kind: "ismp",
 		label: "ISMP high-alert",
 		note: "Heightened risk of significant harm when used in error. Independent double-check culture, not a CYP finding."
@@ -13262,7 +14414,7 @@ function CitesPage() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "mt-2 max-w-xl text-sm leading-relaxed text-muted",
-								children: "Curated PMIDs for the collisions on this formulary — grapefruit, St. John's wort, CPIC tables, methadone QT, Hunter criteria, Beers 2023, phenoconversion, UDS false-positives, COWS, MOTHER. Open PubMed. Live NCBI search, PubChem, DailyMed, CPIC, ClinicalTrials.gov, and NIH RxClass sit on the Sources card once a pair is on the desk."
+								children: "Curated PMIDs for the collisions on this formulary — grapefruit, St. John's wort, CPIC tables, methadone QT, Hunter criteria, Beers 2023, phenoconversion, UDS false-positives, COWS, MOTHER, Backman rifampin–midazolam, Zhou TDI. Open PubMed. Live NCBI search, PubChem, DailyMed, CPIC, ClinicalTrials.gov, and NIH RxClass sit on the Sources card once a pair is on the desk."
 							})
 						]
 					})]
@@ -15034,7 +16186,9 @@ function ClinicalBoard({ ids, host }) {
 	const uds = (0, import_react.useMemo)(() => udsOnDesk(ids), [ids.join("|")]);
 	const alerts = (0, import_react.useMemo)(() => alertsOnDesk(ids), [ids.join("|")]);
 	const otp = otpWanted(ids);
+	const cypOn = cypWanted(ids);
 	const ancOn = ancWanted(ids);
+	const wardsOn = wardWanted(ids);
 	const inr = (0, import_react.useMemo)(() => inrOnDesk(ids), [ids.join("|")]);
 	const tabs = (0, import_react.useMemo)(() => {
 		return [
@@ -15042,6 +16196,16 @@ function ClinicalBoard({ ids, host }) {
 				id: "otp",
 				label: "OTP",
 				on: otp
+			},
+			{
+				id: "wards",
+				label: "Wards",
+				on: wardsOn
+			},
+			{
+				id: "cyp",
+				label: "CYP",
+				on: cypOn
 			},
 			{
 				id: "qt",
@@ -15117,8 +16281,10 @@ function ClinicalBoard({ ids, host }) {
 		ids,
 		host,
 		otp,
+		cypOn,
 		ancOn,
-		inr
+		inr,
+		wardsOn
 	]);
 	const [tab, setTab] = (0, import_react.useState)("otp");
 	const live = tabs.some((t) => t.id === tab && t.on) ? tab : tabs.find((t) => t.on)?.id ?? "bedside";
@@ -15132,7 +16298,7 @@ function ClinicalBoard({ ids, host }) {
 				children: "Clinical board"
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-1 text-xs text-muted",
-				children: "QT, TDM, LiverTox, phenoconversion, reversal, MME, Hunter, UDS, OTP tools, ANC, INR, COWS / CIWA, bedside math. Teaching — not a protocol, not a QTc, not a dose."
+				children: "QT, TDM, LiverTox, phenoconversion, CYP start/stop clocks, reversal, MME, Hunter, UDS, OTP tools, Wards collisions, ANC, INR, COWS / CIWA, bedside math. Teaching — not a protocol, not a QTc, not a dose."
 			})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "flex flex-wrap gap-1",
 				children: tabs.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
@@ -15150,6 +16316,8 @@ function ClinicalBoard({ ids, host }) {
 					ids,
 					qtPartner: Boolean(qt?.rows.some((r) => r.id !== "methadone"))
 				}) : null,
+				live === "wards" && wardsOn ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardsPanel, { ids }) : null,
+				live === "cyp" && cypOn ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CypPanel, { ids }) : null,
 				live === "qt" && qt ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QtPanel, { report: qt }) : null,
 				live === "levels" && levels.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LevelsPanel, {
 					rows: levels,
@@ -15170,6 +16338,254 @@ function ClinicalBoard({ ids, host }) {
 				live === "alerts" && alerts.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AlertsPanel, { rows: alerts }) : null
 			]
 		})]
+	});
+}
+function CypPanel({ ids }) {
+	const cards = (0, import_react.useMemo)(() => protocolsOnDesk(ids), [ids.join("|")]);
+	const add = useDesk((s) => s.add);
+	const selected = useDesk((s) => s.selected);
+	const [phase, setPhase] = (0, import_react.useState)("start");
+	const [enzyme, setEnzyme] = (0, import_react.useState)("CYP3A4");
+	const [checks, setChecks] = (0, import_react.useState)({});
+	const index = (0, import_react.useMemo)(() => indexFor(enzyme), [enzyme]);
+	(0, import_react.useEffect)(() => {
+		const next = protocolsOnDesk(ids)[0]?.enzymes[0];
+		if (next) setEnzyme(next);
+	}, [ids]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-5",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-sm leading-relaxed text-muted",
+				children: "FDA DDI grades, start vs stop, TDI linger, induction lag. Huang 2007 / FDA 2020 teaching — not a milligram and not a hold. The Prescribing Information is the authority."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "flex flex-wrap gap-1",
+				children: ["start", "stop"].map((p) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					onClick: () => setPhase(p),
+					className: cn("h-10 rounded-full px-3 text-xs font-medium", phase === p ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg"),
+					children: p === "start" ? "Start clock" : "Stop clock"
+				}, p))
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "grid gap-2 sm:grid-cols-3",
+				children: [
+					["inhibitor", "strong"],
+					["inhibitor", "moderate"],
+					["inducer", "strong"]
+				].map(([kind, strength]) => {
+					const g = FDA_GRADES[kind][strength];
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "rounded-md bg-bg-sunken px-3 py-2.5",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xs font-medium text-fg",
+							children: g.label
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-1 text-[11px] leading-relaxed text-muted",
+							children: g.fold
+						})]
+					}, `${kind}-${strength}`);
+				})
+			}),
+			cards.length ? cards.map((card) => {
+				const clock = phase === "start" ? card.start : card.stop;
+				return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+					className: cn("rounded-md px-3 py-3", toneClass(card.tone)),
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-wrap items-center gap-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+									className: "font-serif text-lg tracking-tight text-fg",
+									children: card.name
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+									tone: card.tone === "danger" ? "danger" : card.tone === "warn" ? "warn" : "info",
+									children: card.grade
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+									tone: "default",
+									children: card.clock === "tdi" ? "TDI" : card.clock
+								}),
+								card.dualHit ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+									tone: "warn",
+									children: "3A4 + P-gp"
+								}) : null
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "mt-1 font-mono text-[11px] uppercase tracking-wide text-muted",
+							children: [
+								card.enzymes.join(" · "),
+								" · ",
+								card.fold
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "mt-2 text-sm font-medium text-fg",
+							children: [clock.title, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "ml-2 font-mono text-[11px] font-normal text-muted",
+								children: [" · ", clock.days]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-1 text-sm leading-relaxed text-fg",
+							children: clock.body
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-2 text-sm leading-relaxed text-muted",
+							children: clock.watch
+						}),
+						card.linger && phase === "stop" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-2 text-sm leading-relaxed text-fg",
+							children: card.linger
+						}) : null,
+						card.victims.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+							className: "mt-3 flex flex-wrap gap-1",
+							children: card.victims.slice(0, 8).map((v) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
+								tone: v.nti ? "danger" : v.sensitivity === "sensitive" ? "warn" : "default",
+								children: [
+									v.name,
+									v.nti ? " NTI" : "",
+									v.pathway === "activation" ? " prodrug" : ""
+								]
+							}) }, `${v.id}-${v.enzyme}`))
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-3 text-xs text-muted",
+							children: "No mapped victim on the desk. Add a sensitive substrate from the index table below."
+						})
+					]
+				}, card.perpId);
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-sm leading-relaxed text-muted",
+				children: "Add a strong or moderate perpetrator — clarithromycin, paroxetine, fluvoxamine, rifampin, ketoconazole — then a victim. The clock is the point, not a second PK row."
+			}),
+			cards[0] ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+				className: "rounded-md bg-bg-sunken px-3 py-3",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						className: "font-serif text-lg tracking-tight text-fg",
+						children: "Safety steps"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 text-xs text-muted",
+						children: "Teaching checklist for the hottest perpetrator on this desk. Nothing is stored."
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+						className: "mt-3 space-y-1",
+						children: cards[0].steps.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: () => setChecks((prev) => ({
+								...prev,
+								[s.id]: !prev[s.id]
+							})),
+							className: cn("flex h-auto min-h-10 w-full items-start gap-2 rounded-md px-3 py-2 text-left", checks[s.id] ? "bg-accent-soft text-fg" : "bg-surface text-muted hover:text-fg"),
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "mt-0.5",
+								children: checks[s.id] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SquareCheckBig, { className: "size-4" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Square, { className: "size-4" })
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "block text-sm font-medium text-fg",
+								children: s.title
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "block text-xs leading-relaxed text-muted",
+								children: s.body
+							})] })]
+						}) }, s.id))
+					})
+				]
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+				className: "rounded-md bg-bg-sunken px-3 py-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+					className: "font-serif text-lg tracking-tight text-fg",
+					children: "Safety steps"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+					className: "mt-3 space-y-2",
+					children: SAFETY_CHECKS.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-sm font-medium text-fg",
+						children: s.title
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-xs leading-relaxed text-muted",
+						children: s.body
+					})] }, s.id))
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+				className: "rounded-md bg-bg-sunken px-3 py-3",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						className: "font-serif text-lg tracking-tight text-fg",
+						children: "FDA index table"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "mt-1 text-xs text-muted",
+						children: [
+							"Example substrates, inhibitors, and inducers on this desk. Tap to add.",
+							" ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+								className: "text-accent underline",
+								href: FDA_DDI_TABLE,
+								target: "_blank",
+								rel: "noreferrer",
+								children: "Open the FDA table"
+							}),
+							"."
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "mt-3 flex flex-wrap gap-1",
+						children: ENZYMES.map((e) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
+							onClick: () => setEnzyme(e),
+							className: cn("h-10 rounded-full px-3 font-mono text-xs font-medium", enzyme === e ? "bg-ink text-bg" : "bg-surface text-muted hover:text-fg"),
+							children: e.replace("CYP", "")
+						}, e))
+					}),
+					[
+						["Substrates", index.substrates],
+						["Inhibitors", index.inhibitors],
+						["Inducers", index.inducers]
+					].map(([label, rows]) => rows.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mt-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-[11px] font-medium uppercase tracking-wide text-muted",
+							children: label
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "mt-1.5 flex flex-wrap gap-1",
+							children: rows.map((r) => {
+								const on = selected.includes(r.id);
+								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									disabled: on,
+									onClick: () => add(r.id),
+									className: cn("h-10 rounded-full px-3 text-xs", on ? "bg-ink/20 text-muted" : "bg-surface text-fg hover:text-accent"),
+									children: [r.name, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "ml-1 text-[10px] text-muted",
+										children: r.grade
+									})]
+								}, `${r.role}-${r.id}-${r.grade}`);
+							})
+						})]
+					}, label) : null)
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "text-[11px] leading-relaxed text-subtle",
+				children: [
+					"Not FDA-cleared. Independently review the",
+					" ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+						className: "text-accent underline",
+						href: FDA_DDI_TABLE,
+						target: "_blank",
+						rel: "noreferrer",
+						children: "FDA index table"
+					}),
+					" ",
+					"and each victim’s Prescribing Information. FirstPass does not pick a milligram, a hold, or a restart."
+				]
+			})
+		]
 	});
 }
 function QtPanel({ report }) {
@@ -15948,6 +17364,53 @@ function ScaleBlock({ title, blurb, items, bands, hot, extra }) {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-3 text-sm leading-relaxed text-fg",
 				children: band.note
+			})
+		]
+	});
+}
+function WardsPanel({ ids }) {
+	const rows = (0, import_react.useMemo)(() => wardsOnDesk(ids), [ids.join("|")]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-3",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-sm leading-relaxed text-muted",
+				children: "Named hospital collisions. Teaching — not a protocol, not a milligram. The Prescribing Information governs."
+			}),
+			rows.map((row) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+				className: cn("rounded-md px-3 py-3", toneClass(row.tone)),
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex flex-wrap items-center gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "text-sm font-medium text-fg",
+							children: row.title
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+							tone: row.tone === "danger" ? "danger" : "warn",
+							children: row.severity
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 font-mono text-[10px] uppercase tracking-wide text-muted",
+						children: row.mechanism
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-2 text-sm leading-relaxed text-fg",
+						children: row.clinical
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-2 text-sm leading-relaxed text-muted",
+						children: row.watch
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-2 text-[11px] leading-relaxed text-subtle",
+						children: row.source
+					})
+				]
+			}, row.id)),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-[11px] leading-relaxed text-subtle",
+				children: "Carbapenem–valproate is UGT, not stacked seizure-lowering. Vancomycin–Zosyn is observational AKI, not a boxed hold. Entresto next to an ACE inhibitor is a 36-hour washout. Open the PI."
 			})
 		]
 	});
@@ -16949,7 +18412,7 @@ function DeskApp() {
 						}), hydrated && !pro ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 							size: "sm",
 							className: "sm:hidden",
-							onClick: () => openCheckout("lab", "Founding lifetime."),
+							onClick: () => openCheckout("lab", "Founding lifetime.", "life"),
 							children: "Unlock"
 						}) : null]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -16973,7 +18436,7 @@ function DeskApp() {
 						}), hydrated && !pro ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 							size: "sm",
 							className: "hidden sm:inline-flex",
-							onClick: () => openCheckout("lab", "Founding lifetime."),
+							onClick: () => openCheckout("lab", "Founding lifetime.", "life"),
 							children: "Unlock"
 						}) : null]
 					})]
@@ -17158,10 +18621,17 @@ function DeskApp() {
 								report.findings.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "rounded-xl bg-ok-soft px-5 py-6 text-sm text-ok shadow-[var(--shadow-border)]",
 									children: "No mapped CYP collision, phenotype hit, or pharmacodynamic synergy. Absence is not proof of safety — transporters, UGT, plasma protein, and unlisted pathways still apply."
-								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollisionMap, {
-									selected,
-									findings: report.findings
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FindingList, { findings: report.findings })] }),
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollisionMap, {
+										selected,
+										findings: report.findings
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MultiCircuitMap, {
+										selected,
+										findings: report.findings
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FindingList, { findings: report.findings })
+								] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dossier, {
 									ids: selected,
 									host
@@ -17201,11 +18671,11 @@ function DeskApp() {
 								previewUntil,
 								cap: pro ? 8 : 2
 							}),
-							pro ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhenotypeCard, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Paywall, {
+							pro ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhenotypeCard, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KetamineRouteCard, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Paywall, {
 								title: "Host factors are Pro",
-								blurb: "Phenotype, smoke, alcohol pattern, route, age, kidney, and pregnancy change the score. Two-drug PK stays free.",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhenotypeCard, {})
-							}),
+								blurb: "Phenotype, smoke, alcohol pattern, cannabis route, age, kidney, and pregnancy change the score. Ketamine route stays free for the oral teaching demo. Two-drug PK stays free.",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhenotypeCard, { hideKetamineRoute: true })
+							})] }),
 							pro && selected.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HostDelta, {
 								selected,
 								host,
@@ -17251,7 +18721,7 @@ function EmptyState({ onLoad, ready }) {
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "max-w-xl text-sm leading-relaxed text-muted",
-					children: lane === "mat" ? "Built for the dosing window. Put methadone, a film, or Vivitrol on the desk, then tap today's extra. OTP tab: occupancy vs COWS, Vivitrol washout, 2024 take-homes, naloxone, ECG, ID screens. The briefing writes watch / counsel / consider. Live PI sits under it. Not a treatment order — the label wins." : "FirstPass is clinical decision support for licensed healthcare professionals — CYP450 maps, FDA-label excerpts, published scales — so you can independently review the basis of a collision. It is not FDA-cleared. The Prescribing Information is the authority. Two-drug collisions stay free. Open IFU for intended use."
+					children: lane === "mat" ? "Built for the dosing window. Put methadone, a film, or Vivitrol on the desk, then tap today's extra. OTP tab: occupancy vs COWS, Vivitrol washout, 2024 take-homes, naloxone, ECG, ID screens. The briefing writes watch / counsel / consider. Live PI sits under it. Not a treatment order — the label wins." : "FirstPass is clinical decision support for licensed healthcare professionals and educational harm-reduction review — CYP450 maps, FDA-label excerpts, and published scales to independently assess recreational-safety and street-supply risks. It is not FDA-cleared, not patient-directed, and not a dose or self-treatment tool. The Prescribing Information is the authority. Two-drug collisions stay free. Open IFU for intended use."
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "mt-4 flex flex-wrap gap-2",
@@ -17497,7 +18967,7 @@ function RiskBanner({ report, selected, host, plan }) {
 	}
 	async function copySummary() {
 		if (plan === "free") {
-			openCheckout("lab", "The full collision report is a licensed surface. Founding is $79 once.");
+			openCheckout("lab", "The full collision report is a licensed surface. Founding is $79 once.", "life");
 			return;
 		}
 		await write("full", [
@@ -17715,6 +19185,10 @@ function HowCard() {
 				}), " Put methadone or a film on the desk, then tap today's extra on the window tray. Buprenorphine on a fentanyl load is precipitated withdrawal, not stacked milligrams. Methadone lives on 3A4/2B6 — inducers look like a stolen dose; azoles, Vistaril, and Zofran are the QT traps. Paxlovid dumps methadone and raises fentanyl; cobicistat (Tybost) is the opposite arrow on methadone. Gabapentinoids are not free extras on an opioid airway. Lofexidine is α2 — naloxone will not reverse it. Epclusa next to methadone should stay quiet; rifampin should not. The window briefing is watch / counsel / hold — copy the huddle onto a note. Not a protocol."] }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 					className: "text-fg",
+					children: "CYP clock."
+				}), " Strong / moderate / weak are FDA fold-change grades (Huang 2007 / 2020 guidance), not vibes. Mechanism-based inhibitors (clarithromycin, grapefruit, ritonavir, paroxetine, fluoxetine) destroy the enzyme — stopping yesterday does not restore it. Inducers take a week to land and two weeks to leave; the stop is rebound toxicity. Open the CYP tab. Plan the stop on the start day. Not a milligram."] }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-fg",
 					children: "Clinic."
 				}), " Allopurinol × azathioprine is xanthine oxidase, not CYP — pancytopenia. Nitrates × PDE5 are labeled hypotension. Omeprazole blunts clopidogrel activation (2C19 prodrug); pantoprazole is the quieter switch. Oral budesonide and swallowed fluticasone are gut 3A4 first-pass victims — azoles and ritonavir make a 'local' steroid systemic. Terbinafine is a strong 2D6 inhibitor, not an azole. Ozempic next to a sulfonylurea is hypoglycemia; next to metformin it should stay quieter. Search clinic / primary / ozempic / imuran."] }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -17736,9 +19210,9 @@ function Disclaimer() {
 			SOFTWARE.name,
 			" ",
 			SOFTWARE.version,
-			" is clinical decision support for licensed healthcare professionals. ",
+			" is clinical decision support for licensed healthcare professionals and educational harm-reduction / recreational-safety review. ",
 			NOT_CLEARED,
-			" The FDA-approved Prescribing Information is the authority. Every collision names its basis (FDA boxed warning, PI excerpt, CPIC, PMID, or desk map) so you can independently review it. Not a dose, not a chart, not TDM, not a complete database. Street-supply rows are teaching maps. Always open DailyMed before acting."
+			" The FDA-approved Prescribing Information is the authority. Every collision names its basis (FDA boxed warning, PI excerpt, CPIC, PMID, or desk map) so you can independently review it. Not a dose, not a chart, not TDM, not a patient-directed treatment tool, and not a substitute for professional judgment. Street-supply rows are teaching maps. Always open DailyMed before acting."
 		]
 	});
 }

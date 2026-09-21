@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/plans-Bi1jffsv.js
+//#region node_modules/.nitro/vite/services/ssr/assets/plans-BRWqRvoI.js
 /** Public pay / write lines — the operator asked these onto the desk. */
 var OPERATOR = {
 	name: "Kaleb Lovingier",
@@ -34,13 +34,13 @@ var PAY_RAILS = [
 		href: OPERATOR.paypalUrl
 	}
 ];
-/** Public URLs. Override the live desk with VITE_PUBLIC_URL when Vercel is linked. */
 var SITE = {
 	repo: "https://github.com/kaleblovingier/mist-fleet-onyx-solar",
 	pages: "https://kaleblovingier.github.io/mist-fleet-onyx-solar/",
 	gamma: "https://gamma.app/docs/c1sxd9i8iyv80eq",
 	gammaCard: "https://gamma.app/docs/h9grlpif6t8ogmt",
-	url: "https://github.com/kaleblovingier/mist-fleet-onyx-solar"
+	/** Live desk. Prefer VITE_PUBLIC_URL; else the Vercel desk — never the bare repo. */
+	url: "https://firstpass-desk.vercel.app"
 };
 var TRY_THREE = [
 	{
@@ -88,7 +88,7 @@ var BUYERS = [
 	}
 ];
 function payClose(price = COMMERCE.founding) {
-	return `Pay $${price} with card on the desk, or Venmo @${OPERATOR.venmo}, Cash App $${OPERATOR.cashApp}, or PayPal ${OPERATOR.email}. Stripe mints a signed key when the charge clears.`;
+	return `Pay $${price} via Venmo @${OPERATOR.venmo}, Cash App $${OPERATOR.cashApp}, or PayPal ${OPERATOR.email} (card on the desk when Stripe is live). After payment clears, the operator emails or texts a signed key from Foundry — paste it under Pro → Redeem.`;
 }
 function salesDm(price = COMMERCE.founding) {
 	return [
@@ -132,7 +132,7 @@ function launchTweet(price = COMMERCE.founding) {
 		"Educational model. Not a charting system."
 	].join("\n");
 }
-function launchPosts(price = COMMERCE.founding, url = SITE.url) {
+function launchPosts(price = COMMERCE.founding, url = SITE.pages) {
 	const tryLines = TRY_THREE.map((t) => `• ${t.title} — ${t.punch}`).join("\n");
 	return [
 		{
@@ -284,7 +284,7 @@ var PLANS = [
 		monthly: 0,
 		yearly: 0,
 		features: [
-			"Search the 350+ compound formulary (including vitamin-shop bottles)",
+			"Search the 1,700+ compound formulary (WHO / US fills plus vitamin-shop bottles)",
 			"Two drugs on the desk",
 			"PK / PD collision cards",
 			"DrugBank, CPIC / PharmGKB, Stahl receptor cards",
