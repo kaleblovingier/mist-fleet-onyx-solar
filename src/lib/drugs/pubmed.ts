@@ -354,6 +354,12 @@ export const CITES: Cite[] = [
   c("18043468", 2007, "Ther Drug Monit", "Clinically important drug interactions potentially involving mechanism-based inhibition of cytochrome P450 3A4 and the role of therapeutic drug monitoring.",
     "Zhou. Macrolides, ritonavir, diltiazem/verapamil destroy 3A4. New enzyme, not dissociation. The TDI linger on this desk.",
     ["cyp", "review"], ["clarithromycin", "erythromycin", "ritonavir", "diltiazem", "verapamil"]),
+  c("17381386", 2007, "Ann Pharmacother", "Interaction between valproate and meropenem: a retrospective study.",
+    "Spriet. Carbapenems crash valproate within a day — UGT / glucuronide recycling, not a CYP isoform. Switch the antibiotic or the AED.",
+    ["clinic"], ["meropenem", "valproate"], ["meropenem", "valproate"]),
+  c("29126268", 2018, "Clin Infect Dis", "Vancomycin plus piperacillin-tazobactam and acute kidney injury in adults: a systematic review and meta-analysis.",
+    "Luther. Observational AKI excess vs vancomycin plus cefepime or a carbapenem. Not a boxed hold. Oral vancomycin is a different exposure.",
+    ["clinic"], ["vancomycin", "piperacillin-tazobactam"], ["vancomycin", "piperacillin-tazobactam"]),
 ];
 
 export function pubmedUrl(pmid: string) {

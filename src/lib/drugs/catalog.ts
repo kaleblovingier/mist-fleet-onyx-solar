@@ -2617,8 +2617,38 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
       24,
     );
   }
+  if (q === "wards" || q === "ward" || q === "hospital" || q === "zosyn" || q === "entresto") {
+    const wardOrder = [
+      "meropenem",
+      "ertapenem",
+      "imipenem-cilastatin",
+      "valproate",
+      "vancomycin",
+      "piperacillin-tazobactam",
+      "sacubitril-valsartan",
+      "lisinopril",
+      "capecitabine",
+      "fluorouracil",
+      "warfarin",
+      "dicloxacillin",
+      "nafcillin",
+      "letermovir",
+      "tacrolimus",
+      "linezolid",
+      "insulin-aspart",
+      "semaglutide",
+    ];
+    return wardOrder
+      .map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 18);
+  }
   if (q === "clinic" || q === "primary" || q === "common" || q === "pcp" || q === "staple" || q === "staples") {
     const clinicOrder = [
+      "meropenem",
+      "vancomycin",
+      "piperacillin-tazobactam",
+      "sacubitril-valsartan",
       "azathioprine",
       "allopurinol",
       "febuxostat",

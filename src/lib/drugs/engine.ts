@@ -5,6 +5,16 @@ import { phenoconversionFindings } from "./pheno-convert";
 import { udsFindings } from "./uds";
 import { protocolFindings } from "./cyp-protocol";
 import {
+  ACEI,
+  ARNI,
+  FLUOROPYRIMIDINE,
+  GLP,
+  PEN_INDUCER,
+  isCarbapenemValproate,
+  isInsulinId,
+  isVancoZosyn,
+} from "./wards";
+import {
   DEFAULT_HOST,
   DEFAULT_PHENOTYPES,
   ENZYMES,
@@ -269,7 +279,85 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         tags: ["serotonin", "maoi"],
       }),
     );
-  } else if (aSero && bSero) {
+  }
+
+  if (isCarbapenemValproate(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-carbapenem-vpa",
+        severity: "contraindicated",
+        effect: "valproate crash / loss of seizure control",
+        mechanism: "carbapenem × valproate (UGT / glucuronide recycling)",
+        clinical:
+          "Carbapenems drop valproate levels within a day — not a CYP isoform and not stacked seizure threshold. Labels treat this as loss of seizure control. Switch the antibiotic or the AED; do not 'give a bit more Depakote.' This desk does not pick a milligram.",
+        tags: ["ward", "seizure", "clinic"],
+      }),
+    );
+  }
+
+  if (isVancoZosyn(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-vanco-zosyn",
+        severity: "major",
+        effect: "acute kidney injury",
+        mechanism: "vancomycin × piperacillin–tazobactam",
+        clinical:
+          "IV vancomycin plus piperacillin–tazobactam is associated with more AKI than vancomycin plus cefepime or a carbapenem. Observational, still a ward row. Volume, trough, and a narrower beta-lactam are the conversation. Oral vancomycin is a different exposure.",
+        tags: ["ward", "renal", "clinic"],
+      }),
+    );
+  }
+
+  if ((ARNI.has(a.id) && ACEI.has(b.id)) || (ARNI.has(b.id) && ACEI.has(a.id))) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-arni-acei",
+        severity: "contraindicated",
+        effect: "angioedema",
+        mechanism: "ARNI × ACE inhibitor",
+        clinical:
+          "Sacubitril–valsartan with an ACE inhibitor is labeled contraindicated. Thirty-six hour washout when switching. Duplicate neprilysin / ACE blockade — not a potassium footnote and not an ARB swap. This desk does not time the first Entresto tablet.",
+        tags: ["ward", "clinic", "angioedema"],
+      }),
+    );
+  }
+
+  if (
+    (FLUOROPYRIMIDINE.has(a.id) && b.id === "warfarin") ||
+    (FLUOROPYRIMIDINE.has(b.id) && a.id === "warfarin")
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-cape-warfarin",
+        severity: "major",
+        effect: "INR rise / bleed",
+        mechanism: "fluoropyrimidine × warfarin",
+        clinical:
+          "Capecitabine and 5-FU raise INR on warfarin. Not a 2C9 bully on this desk's CYP map — still a labeled monitor. Recheck INR. This desk does not pick a warfarin milligram.",
+        tags: ["ward", "clinic", "bleed"],
+      }),
+    );
+  }
+
+  if (
+    (PEN_INDUCER.has(a.id) && b.id === "warfarin") ||
+    (PEN_INDUCER.has(b.id) && a.id === "warfarin")
+  ) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-pen-warfarin",
+        severity: "major",
+        effect: "INR fall / loss of anticoagulation",
+        mechanism: "nafcillin / dicloxacillin induction × warfarin",
+        clinical:
+          "Nafcillin and dicloxacillin induce 3A4 and can steal warfarin effect — INR falls, clots not bleeds. Warfarin is still a 2C9 NTI. Recheck INR after the course starts and after it stops.",
+        tags: ["ward", "clinic"],
+      }),
+    );
+  }
+
+  if (aSero && bSero && !(aMaoi || bMaoi)) {
     const strong =
       has(a, "ssri-snri") ||
       has(b, "ssri-snri") ||
@@ -557,23 +645,26 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
     (has(a, "insulin-secretagogue") && (b.id === "ciprofloxacin" || b.id === "levofloxacin" || b.id === "moxifloxacin")) ||
     (has(b, "insulin-secretagogue") && (a.id === "ciprofloxacin" || a.id === "levofloxacin" || a.id === "moxifloxacin"))
   ) {
-    out.push(
-      pdPair(a, b, {
-        suffix: "pd-hypoglycemia",
-        severity: "moderate",
-        effect: "stacked hypoglycemia",
-        mechanism: "glucose-lowering synergy",
-        clinical:
-          "Combined glucose-lowering (or a fluoroquinolone with a sulfonylurea) can produce severe hypoglycemia. Recheck home glucose and consider dose reduction.",
-        tags: ["glucose"],
-      }),
-    );
+    const glpInsulin =
+      (GLP.has(a.id) && isInsulinId(b.id)) || (GLP.has(b.id) && isInsulinId(a.id));
+    if (!glpInsulin) {
+      out.push(
+        pdPair(a, b, {
+          suffix: "pd-hypoglycemia",
+          severity: "moderate",
+          effect: "stacked hypoglycemia",
+          mechanism: "glucose-lowering synergy",
+          clinical:
+            "Combined glucose-lowering (or a fluoroquinolone with a sulfonylurea) can produce severe hypoglycemia. Recheck home glucose and consider dose reduction.",
+          tags: ["glucose"],
+        }),
+      );
+    }
   }
 
-  const glp = new Set(["semaglutide", "tirzepatide"]);
   if (
-    (glp.has(a.id) && (has(b, "insulin-secretagogue") || b.id === "insulin-glargine")) ||
-    (glp.has(b.id) && (has(a, "insulin-secretagogue") || a.id === "insulin-glargine"))
+    (GLP.has(a.id) && (has(b, "insulin-secretagogue") || isInsulinId(b.id))) ||
+    (GLP.has(b.id) && (has(a, "insulin-secretagogue") || isInsulinId(a.id)))
   ) {
     out.push(
       pdPair(a, b, {
@@ -682,7 +773,7 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
     );
   }
 
-  if (has(a, "seizure-lowering") && has(b, "seizure-lowering")) {
+  if (has(a, "seizure-lowering") && has(b, "seizure-lowering") && !isCarbapenemValproate(a.id, b.id)) {
     out.push(
       pdPair(a, b, {
         suffix: "pd-seizure",
@@ -923,7 +1014,7 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
     );
   }
 
-  if (has(a, "nephrotoxic") && has(b, "nephrotoxic")) {
+  if (has(a, "nephrotoxic") && has(b, "nephrotoxic") && !isVancoZosyn(a.id, b.id)) {
     out.push(
       pdPair(a, b, {
         suffix: "pd-nephro",

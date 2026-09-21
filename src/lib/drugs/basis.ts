@@ -34,6 +34,10 @@ const BOXED: Record<string, { detail: string; href?: string }> = {
   "pd-antag-opioid": {
     detail: "Naltrexone / naloxone labels: precipitated withdrawal in opioid-dependent patients; blockade of agonists.",
   },
+  "pd-arni-acei": {
+    detail:
+      "Entresto boxed warning / contraindications: sacubitril–valsartan with an ACE inhibitor — angioedema. 36-hour washout when switching.",
+  },
 };
 
 const PI: Record<string, string> = {
@@ -51,6 +55,16 @@ const PI: Record<string, string> = {
   "cyp-clock":
     "FDA 2020 Clinical Drug Interaction Studies / Huang CPT 2007. Strong ≥5× AUC; strong inducer ≥80% ↓ AUC. Start and stop are different clocks. Not a milligram.",
   "cyp-dual": "FDA example inhibitors often hit both CYP3A4 and P-gp. Gut first-pass victims move more than a CYP-only row.",
+  "pd-carbapenem-vpa":
+    "Carbapenem labels (meropenem, ertapenem, imipenem): concomitant valproate — loss of seizure control. UGT / glucuronide recycling, not a CYP isoform. Switch the antibiotic or the AED.",
+  "pd-vanco-zosyn":
+    "Observational AKI excess for IV vancomycin plus piperacillin–tazobactam versus vancomycin plus cefepime or a carbapenem. Not a boxed contraindication. Oral vancomycin is a different exposure.",
+  "pd-cape-warfarin":
+    "Capecitabine and fluorouracil labels: altered coagulation / INR rise with warfarin. Recheck INR. This desk does not pick a milligram.",
+  "pd-pen-warfarin":
+    "Nafcillin and dicloxacillin induce 3A4 and can steal warfarin effect — INR falls. Recheck after the course starts and after it stops.",
+  "pd-glp-secretagogue":
+    "GLP-1 / GIP agonist labels: hypoglycemia stacked with insulin or a secretagogue. Rarely alone. This desk does not cut the insulin.",
 };
 
 const SCALE: Record<string, string> = {

@@ -10,6 +10,7 @@ import { qtReport } from "@/lib/drugs/qt";
 import { reversalOnDesk } from "@/lib/drugs/reversal";
 import { ancBand, ancWanted } from "@/lib/drugs/anc";
 import { inrOnDesk } from "@/lib/drugs/inr";
+import { wardWanted, wardsOnDesk } from "@/lib/drugs/wards";
 import {
   cypWanted,
   FDA_DDI_TABLE,
@@ -63,7 +64,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 
-type Tab = "otp" | "cyp" | "qt" | "levels" | "liver" | "pheno" | "reversal" | "mme" | "hunter" | "uds" | "bedside" | "alerts" | "anc" | "inr";
+type Tab = "otp" | "wards" | "cyp" | "qt" | "levels" | "liver" | "pheno" | "reversal" | "mme" | "hunter" | "uds" | "bedside" | "alerts" | "anc" | "inr";
 
 export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext }) {
   const qt = useMemo(() => qtReport(ids, host), [ids.join("|"), host.age, host.kidney]);
@@ -78,10 +79,12 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
   const otp = otpWanted(ids);
   const cypOn = cypWanted(ids);
   const ancOn = ancWanted(ids);
+  const wardsOn = wardWanted(ids);
   const inr = useMemo(() => inrOnDesk(ids), [ids.join("|")]);
   const tabs = useMemo(() => {
     const t: { id: Tab; label: string; on: boolean }[] = [
       { id: "otp", label: "OTP", on: otp },
+      { id: "wards", label: "Wards", on: wardsOn },
       { id: "cyp", label: "CYP", on: cypOn },
       { id: "qt", label: "QT", on: Boolean(qt) },
       { id: "levels", label: "Levels", on: levels.length > 0 },
@@ -97,7 +100,7 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
       { id: "alerts", label: "Alerts", on: alerts.length > 0 },
     ];
     return t;
-  }, [qt, levels.length, liver.length, pheno, reversal.length, mme.length, hunterOn, uds.length, alerts.length, ids, host, otp, cypOn, ancOn, inr]);
+  }, [qt, levels.length, liver.length, pheno, reversal.length, mme.length, hunterOn, uds.length, alerts.length, ids, host, otp, cypOn, ancOn, inr, wardsOn]);
   const [tab, setTab] = useState<Tab>("otp");
   const live = tabs.some((t) => t.id === tab && t.on) ? tab : (tabs.find((t) => t.on)?.id ?? "bedside");
 
@@ -110,8 +113,8 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
           <h2 className="font-serif text-lg tracking-tight text-fg">Clinical board</h2>
           <p className="mt-1 text-xs text-muted">
             QT, TDM, LiverTox, phenoconversion, CYP start/stop clocks, reversal, MME, Hunter, UDS,
-            OTP tools, ANC, INR, COWS / CIWA, bedside math. Teaching — not a protocol, not a QTc, not a
-            dose.
+            OTP tools, Wards collisions, ANC, INR, COWS / CIWA, bedside math. Teaching — not a
+            protocol, not a QTc, not a dose.
           </p>
         </div>
         <div className="flex flex-wrap gap-1">
@@ -135,6 +138,7 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
 
       <div className="mt-4">
         {live === "otp" && otp ? <OtpPanel ids={ids} qtPartner={Boolean(qt?.rows.some((r) => r.id !== "methadone"))} /> : null}
+        {live === "wards" && wardsOn ? <WardsPanel ids={ids} /> : null}
         {live === "cyp" && cypOn ? <CypPanel ids={ids} /> : null}
         {live === "qt" && qt ? <QtPanel report={qt} /> : null}
         {live === "levels" && levels.length ? <LevelsPanel rows={levels} host={host} /> : null}
@@ -955,6 +959,34 @@ function ScaleBlock({
       </ul>
       <p className="mt-3 text-sm leading-relaxed text-fg">{band.note}</p>
     </article>
+  );
+}
+
+function WardsPanel({ ids }: { ids: string[] }) {
+  const rows = useMemo(() => wardsOnDesk(ids), [ids.join("|")]);
+  return (
+    <div className="space-y-3">
+      <p className="text-sm leading-relaxed text-muted">
+        Named hospital collisions. Teaching — not a protocol, not a milligram. The Prescribing
+        Information governs.
+      </p>
+      {rows.map((row) => (
+        <article key={row.id} className={cn("rounded-md px-3 py-3", toneClass(row.tone))}>
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-sm font-medium text-fg">{row.title}</h3>
+            <Badge tone={row.tone === "danger" ? "danger" : "warn"}>{row.severity}</Badge>
+          </div>
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-wide text-muted">{row.mechanism}</p>
+          <p className="mt-2 text-sm leading-relaxed text-fg">{row.clinical}</p>
+          <p className="mt-2 text-sm leading-relaxed text-muted">{row.watch}</p>
+          <p className="mt-2 text-[11px] leading-relaxed text-subtle">{row.source}</p>
+        </article>
+      ))}
+      <p className="text-[11px] leading-relaxed text-subtle">
+        Carbapenem–valproate is UGT, not stacked seizure-lowering. Vancomycin–Zosyn is observational
+        AKI, not a boxed hold. Entresto next to an ACE inhibitor is a 36-hour washout. Open the PI.
+      </p>
+    </div>
   );
 }
 

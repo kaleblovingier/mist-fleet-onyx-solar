@@ -21,6 +21,13 @@ const ISMP = new Set([
   "hydrocodone",
   "buprenorphine",
   "insulin-glargine",
+  "insulin-aspart",
+  "insulin-lispro",
+  "insulin-regular",
+  "insulin-detemir",
+  "insulin-degludec",
+  "insulin-nph",
+  "vancomycin",
   "warfarin",
   "apixaban",
   "rivaroxaban",
@@ -56,17 +63,28 @@ const NIOSH = new Set([
   "tacrolimus",
   "cyclosporine",
   "mycophenolate",
+  "capecitabine",
+  "fluorouracil",
+  "imatinib",
+  "ibrutinib",
+  "voclosporin",
+  "lenalidomide",
+  "thalidomide",
+  "isotretinoin",
 ]);
 
 const REMS: Record<string, string> = {
   clozapine: "Clozapine REMS — ANC before dispense. The agranulocytosis boxed row.",
   esketamine: "Spravato REMS — healthcare setting, 2-hour watch, no driving.",
   buprenorphine: "MOUD buprenorphine is no longer X-waiver; some film / implant products still carry REMS paperwork.",
+  lenalidomide: "Revlimid REMS — embryo-fetal toxicity. Open the program. This desk is not a pregnancy test.",
+  thalidomide: "Thalomid REMS — embryo-fetal toxicity. Open the program.",
+  isotretinoin: "iPLEDGE REMS — embryo-fetal toxicity. This desk is not a pregnancy test.",
 };
 
 export function alertsFor(id: string): AlertFlag[] {
   const out: AlertFlag[] = [];
-  if (ISMP.has(id)) {
+  if (ISMP.has(id) || id.startsWith("insulin-")) {
     out.push({
       kind: "ismp",
       label: "ISMP high-alert",
