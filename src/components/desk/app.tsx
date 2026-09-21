@@ -459,7 +459,7 @@ function EmptyState({
         <p className="max-w-xl text-sm leading-relaxed text-muted">
           {lane === "mat"
             ? "Built for the dosing window. Put methadone, a film, or Vivitrol on the desk, then tap today's extra. OTP tab: occupancy vs COWS, Vivitrol washout, 2024 take-homes, naloxone, ECG, ID screens. The briefing writes watch / counsel / consider. Live PI sits under it. Not a treatment order — the label wins."
-            : "FirstPass is clinical decision support for licensed healthcare professionals — CYP450 maps, FDA-label excerpts, published scales — so you can independently review the basis of a collision. It is not FDA-cleared. The Prescribing Information is the authority. Two-drug collisions stay free. Open IFU for intended use."}
+            : "FirstPass is clinical decision support for licensed healthcare professionals and educational harm-reduction review — CYP450 maps, FDA-label excerpts, and published scales to independently assess recreational-safety and street-supply risks. It is not FDA-cleared, not patient-directed, and not a dose or self-treatment tool. The Prescribing Information is the authority. Two-drug collisions stay free. Open IFU for intended use."}
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           {lane === "mat" ? (
@@ -944,10 +944,11 @@ function Disclaimer() {
   return (
     <p className="px-1 text-[11px] leading-relaxed text-subtle">
       {SOFTWARE.name} {SOFTWARE.version} is clinical decision support for licensed healthcare
-      professionals. {NOT_CLEARED} The FDA-approved Prescribing Information is the authority. Every
-      collision names its basis (FDA boxed warning, PI excerpt, CPIC, PMID, or desk map) so you can
-      independently review it. Not a dose, not a chart, not TDM, not a complete database. Street-supply
-      rows are teaching maps. Always open DailyMed before acting.
+      professionals and educational harm-reduction / recreational-safety review. {NOT_CLEARED} The
+      FDA-approved Prescribing Information is the authority. Every collision names its basis (FDA boxed
+      warning, PI excerpt, CPIC, PMID, or desk map) so you can independently review it. Not a dose,
+      not a chart, not TDM, not a patient-directed treatment tool, and not a substitute for
+      professional judgment. Street-supply rows are teaching maps. Always open DailyMed before acting.
     </p>
   );
 }

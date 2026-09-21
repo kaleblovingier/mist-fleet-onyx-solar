@@ -12,8 +12,11 @@ export const SOFTWARE = {
 } as const;
 
 /** 21 CFR / FDA CDS Guidance (Sept 28, 2022) posture — not a clearance. */
+export const RECREATIONAL_SAFETY_CONTEXT =
+  "This desk may be used in educational harm-reduction and recreational-safety review for licensed healthcare professionals and trained safety staff, including analysis of stimulant, sedative, dissociative, and street-supply combinations. It is not intended for patient self-treatment, recreational dosing, or direct medical decision-making without independent review of the relevant FDA-approved Prescribing Information and local protocols.";
+
 export const INTENDED_USE =
-  "FirstPass is clinical decision support software intended for use by licensed healthcare professionals to display mapped cytochrome P450 and pharmacodynamic interaction information, FDA-label excerpts (OpenFDA / DailyMed), published scale scores, and cited literature so the healthcare professional can independently review the basis of any recommendation before acting. It is not intended to diagnose, treat, mitigate, or prevent disease, to calculate or recommend a dose, or to replace the FDA-approved Prescribing Information.";
+  `FirstPass is clinical decision support software intended for use by licensed healthcare professionals to display mapped cytochrome P450 and pharmacodynamic interaction information, FDA-label excerpts (OpenFDA / DailyMed), published scale scores, and cited literature so the healthcare professional can independently review the basis of any recommendation before acting. ${RECREATIONAL_SAFETY_CONTEXT} It is not intended to diagnose, treat, mitigate, or prevent disease, to calculate or recommend a dose, or to replace the FDA-approved Prescribing Information.`;
 
 export const INDICATIONS = [
   "Displaying CYP450 substrate / inhibitor / inducer maps, FDA DDI fold-change grades, start/stop safety clocks (reversible vs time-dependent inactivation vs induction lag), and pharmacodynamic collision scores for drugs and foods on a user-selected regimen.",
@@ -25,6 +28,7 @@ export const INDICATIONS = [
 export const NOT_FOR = [
   "Patients acting without a licensed healthcare professional.",
   "Generating a prescription, a milligram, a take-home, or an induction protocol.",
+  "Patient self-treatment, recreational dosing, or informal harm-reduction guidance meant to replace professional assessment.",
   "Charting, billing, PDMP query, or storing protected health information.",
   "Processing medical images, waveforms, or device signals.",
   "Replacing the FDA-approved Prescribing Information, a poison-control consult, or bedside assessment.",
@@ -33,6 +37,7 @@ export const NOT_FOR = [
 export const WARNINGS = [
   "FirstPass is not FDA-cleared and not FDA-approved. Do not describe it as either.",
   "The FDA-approved Prescribing Information is the authority. If this desk and the label disagree, the label wins.",
+  "This software is for educational harm-reduction and recreational-safety review, not patient-directed treatment, self-dosing, or a substitute for clinical judgment.",
   "Absence of a mapped collision is not proof of safety. Transporters, UGT, plasma protein, unlisted metabolites, and unpublished interactions still apply.",
   "Live OpenFDA / DailyMed excerpts are truncated. Open the full SPL before acting.",
   "Street-supply rows (xylazine, nitazenes, designer benzos) are teaching maps, not labeled products.",
