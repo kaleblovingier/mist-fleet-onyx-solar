@@ -360,6 +360,21 @@ export const CITES: Cite[] = [
   c("29126268", 2018, "Clin Infect Dis", "Vancomycin plus piperacillin-tazobactam and acute kidney injury in adults: a systematic review and meta-analysis.",
     "Luther. Observational AKI excess vs vancomycin plus cefepime or a carbapenem. Not a boxed hold. Oral vancomycin is a different exposure.",
     ["clinic"], ["vancomycin", "piperacillin-tazobactam"], ["vancomycin", "piperacillin-tazobactam"]),
+  c("11248154", 2001, "N Engl J Med", "Cyclooxygenase inhibitors and the antiplatelet effects of aspirin.",
+    "Catella-Lawson. Ibuprofen occupies COX-1 and can block aspirin acetylation. Lost cardioprotection, not two NSAIDs.",
+    ["clinic"], ["aspirin", "ibuprofen"], ["aspirin", "ibuprofen"]),
+  c("16433873", 2006, "Br J Clin Pharmacol", "The pharmacokinetic and pharmacodynamic consequences of the co-administration of lamotrigine and a combined oral contraceptive in healthy female subjects.",
+    "Sidhu. Combined OCPs cut lamotrigine AUC roughly in half. Stopping the pill can spike parent.",
+    ["clinic"], ["lamotrigine", "ethinyl-estradiol"], ["lamotrigine", "ethinyl-estradiol"]),
+  c("29385237", 2018, "Clin Pharmacol Ther", "Clinical Pharmacogenetics Implementation Consortium (CPIC) Guideline for CYP2D6 and Tamoxifen Therapy.",
+    "CPIC tamoxifen. Strong 2D6 inhibitors steal endoxifen. Switch the SSRI, do not give more tamoxifen.",
+    ["pgx", "clinic"], ["tamoxifen", "paroxetine"], ["tamoxifen", "paroxetine"]),
+  c("18378520", 2008, "N Engl J Med", "Telmisartan, ramipril, or both in patients at high risk for vascular events.",
+    "ONTARGET. Dual ACEI+ARB — more hyperkalemia, hypotension, AKI without outcome gain.",
+    ["clinic"], ["ramipril", "telmisartan", "lisinopril", "losartan"], ["lisinopril", "losartan"]),
+  c("26253303", 2015, "Gastroenterology", "Extreme bradycardia after first doses of sofosbuvir and daclatasvir in patients receiving amiodarone: 2 cases including a rechallenge.",
+    "Fontaine. The labeled sofosbuvir–amiodarone bradycardia row. Not stacked nodal PD.",
+    ["clinic"], ["epclusa", "amiodarone", "sofosbuvir"], ["epclusa", "amiodarone"]),
 ];
 
 export function pubmedUrl(pmid: string) {

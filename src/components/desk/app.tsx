@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Copy, Check, RotateCcw, Download, Share2 } from "lucide-react";
 import { DRUG_BY_ID, DRUGS } from "@/lib/drugs/catalog";
 import { analyze } from "@/lib/drugs/engine";
+import { parseDoses } from "@/lib/drugs/dosing";
 import { applyHost, FIRST_PASS_NMDA } from "@/lib/drugs/host";
 import { treesFor } from "@/lib/drugs/metabolites";
 import { SAMPLE_LANES, sampleNeedsPro, samplesInLane, type SampleLane } from "@/lib/drugs/samples";
@@ -84,11 +85,15 @@ export function DeskApp() {
   const age = useDesk((s) => s.age);
   const kidney = useDesk((s) => s.kidney);
   const preg = useDesk((s) => s.preg);
+  const doses = useDesk((s) => s.doses);
   const host = useMemo<HostContext>(
     () => ({ phenotypes, smoking, ketamineRoute, cannabisRoute, alcohol, age, kidney, preg }),
     [phenotypes, smoking, ketamineRoute, cannabisRoute, alcohol, age, kidney, preg],
   );
-  const report = useMemo(() => analyze(selected, host), [selected, host]);
+  const report = useMemo(
+    () => analyze(selected, host, parseDoses(doses)),
+    [selected, host, doses],
+  );
   const hostDrugs = useMemo(
     () => applyHost(selected.map((id) => DRUG_BY_ID[id]).filter(Boolean), host),
     [selected, host],
@@ -254,6 +259,7 @@ export function DeskApp() {
                   {selected.map((id) => {
                     const drug = DRUG_BY_ID[id];
                     if (!drug) return null;
+                    const entered = doses[id];
                     return (
                       <button
                         key={id}
@@ -263,6 +269,9 @@ export function DeskApp() {
                         title="Remove from regimen"
                       >
                         <span className="font-medium">{drug.name}</span>
+                        {entered ? (
+                          <span className="font-mono text-[11px] text-muted">{entered}</span>
+                        ) : null}
                         {drug.kind !== "drug" ? (
                           <span className="font-mono text-[10px] uppercase tracking-wide text-muted">
                             {drug.kind}
@@ -558,6 +567,7 @@ function EmptyState({
                     ketamineRoute: s.ketamineRoute,
                     cannabisRoute: s.cannabisRoute,
                     alcohol: s.alcohol,
+                    doses: s.doses,
                   })
                 }
                 className="flex h-full w-full overflow-hidden rounded-lg bg-bg text-left shadow-[var(--shadow-border)] transition-transform duration-150 hover:-translate-y-px disabled:opacity-60"
@@ -896,6 +906,9 @@ function HowCard() {
           <span className="text-fg">Street.</span> Cocaine plus ethanol is cocaethylene. Stimulant
           plus opioid is a speedball — the stimulant masks apnea. Dirty 30s are pressed fentanyl ±
           xylazine, not oxycodone; naloxone will not reverse the α2. Percocet is oxy + APAP.
+          HR tab: never use alone, recovery position, test-strip limits, GHB steep curve, MDMA
+          heat/water, TripSit combo ratings, live PsychonautWiki intros with milligrams stripped.
+          A wiki is not a label — independently review. Not a cooking guide.
         </li>
         <li>
           <span className="text-fg">MAT.</span> Put methadone or a film on the desk, then tap

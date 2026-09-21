@@ -25,6 +25,7 @@ export interface LoadExtras {
   ketamineRoute?: KetamineRoute;
   cannabisRoute?: CannabisRoute;
   alcohol?: AlcoholPattern;
+  doses?: Record<string, string>;
 }
 
 interface DeskState {
@@ -39,6 +40,7 @@ interface DeskState {
   age: AgeBand;
   kidney: KidneyBand;
   preg: PregBand;
+  doses: Record<string, string>;
   plan: PlanId;
   license: string | null;
   lifetime: boolean;
@@ -60,6 +62,7 @@ interface DeskState {
   setAge: (age: AgeBand) => void;
   setKidney: (kidney: KidneyBand) => void;
   setPreg: (preg: PregBand) => void;
+  setDose: (id: string, value: string) => void;
   resetPhenotypes: () => void;
   openCheckout: (plan: PlanId, reason?: string, interval?: Interval) => void;
   closeCheckout: () => void;
@@ -91,6 +94,7 @@ export const useDesk = create<DeskState>()(
       age: "adult",
       kidney: "ok",
       preg: "off",
+      doses: {},
       plan: "free",
       license: null,
       lifetime: false,
@@ -117,7 +121,11 @@ export const useDesk = create<DeskState>()(
         set({ selected: [...cur, id], view: "desk" });
         return true;
       },
-      remove: (id) => set({ selected: get().selected.filter((x) => x !== id) }),
+      remove: (id) => {
+        const next = { ...get().doses };
+        delete next[id];
+        set({ selected: get().selected.filter((x) => x !== id), doses: next });
+      },
       clear: () =>
         set({
           selected: [],
@@ -129,6 +137,7 @@ export const useDesk = create<DeskState>()(
           age: "adult",
           kidney: "ok",
           preg: "off",
+          doses: {},
         }),
       load: (ids, extras) => {
         const cap = maxDrugs(activePlan(get()));
@@ -159,6 +168,7 @@ export const useDesk = create<DeskState>()(
             age: "adult",
             kidney: "ok",
             preg: "off",
+            doses: extras?.doses ?? {},
           });
           return false;
         }
@@ -173,6 +183,8 @@ export const useDesk = create<DeskState>()(
           age: "adult",
           kidney: "ok",
           preg: "off",
+          doses: extras?.doses ?? {},
+          checkout: { ...get().checkout, open: false },
         });
         return true;
       },
@@ -251,6 +263,13 @@ export const useDesk = create<DeskState>()(
         }
         set({ preg });
       },
+      setDose: (id, value) => {
+        const next = { ...get().doses };
+        const trimmed = value.trim();
+        if (!trimmed) delete next[id];
+        else next[id] = trimmed;
+        set({ doses: next });
+      },
       resetPhenotypes: () =>
         set({
           phenotypes: { ...DEFAULT_PHENOTYPES },
@@ -301,6 +320,12 @@ export const useDesk = create<DeskState>()(
           previewUntil: null,
           justActivated: false,
           selected: get().selected.slice(0, 2),
+          doses: Object.fromEntries(
+            get()
+              .selected.slice(0, 2)
+              .map((id) => [id, get().doses[id]])
+              .filter((row): row is [string, string] => Boolean(row[1])),
+          ),
         }),
     }),
     {
@@ -315,6 +340,7 @@ export const useDesk = create<DeskState>()(
           age: p.age === "geriatric" ? "geriatric" : "adult",
           kidney: p.kidney === "ckd" ? "ckd" : "ok",
           preg: p.preg === "pregnant" || p.preg === "lactating" ? p.preg : "off",
+          doses: p.doses && typeof p.doses === "object" ? p.doses : {},
           justActivated: false,
           hcpAck: Boolean(p.hcpAck),
         };
@@ -329,6 +355,7 @@ export const useDesk = create<DeskState>()(
         age: s.age,
         kidney: s.kidney,
         preg: s.preg,
+        doses: s.doses,
         plan: s.plan,
         license: s.license,
         lifetime: s.lifetime,

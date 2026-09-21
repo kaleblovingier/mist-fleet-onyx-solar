@@ -11,6 +11,25 @@ import { reversalOnDesk } from "@/lib/drugs/reversal";
 import { ancBand, ancWanted } from "@/lib/drugs/anc";
 import { inrOnDesk } from "@/lib/drugs/inr";
 import { wardWanted, wardsOnDesk } from "@/lib/drugs/wards";
+import { safetyOnDesk, safetyWanted } from "@/lib/drugs/safety";
+import {
+  HR_FOOTER,
+  HR_PRINCIPLES,
+  harmOnDesk,
+  harmWanted,
+  hrResourcesFor,
+  kitFor,
+  responseSteps,
+  stripsFor,
+} from "@/lib/drugs/harm";
+import { comboOnDesk, comboTone, wikiOnDesk, type LiveCombo, type WikiPage } from "@/lib/drugs/psychonaut";
+import { lookupPsychonaut } from "@/lib/drugs/psychonaut-rpc";
+import {
+  dosingOnDesk,
+  dosingWanted,
+  parseDoses,
+  type DoseCheck,
+} from "@/lib/drugs/dosing";
 import {
   cypWanted,
   FDA_DDI_TABLE,
@@ -64,7 +83,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 
-type Tab = "otp" | "wards" | "cyp" | "qt" | "levels" | "liver" | "pheno" | "reversal" | "mme" | "hunter" | "uds" | "bedside" | "alerts" | "anc" | "inr";
+type Tab = "otp" | "hr" | "wards" | "dose" | "cyp" | "qt" | "levels" | "liver" | "pheno" | "reversal" | "mme" | "hunter" | "uds" | "bedside" | "alerts" | "anc" | "inr";
 
 export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext }) {
   const qt = useMemo(() => qtReport(ids, host), [ids.join("|"), host.age, host.kidney]);
@@ -77,14 +96,18 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
   const uds = useMemo(() => udsOnDesk(ids), [ids.join("|")]);
   const alerts = useMemo(() => alertsOnDesk(ids), [ids.join("|")]);
   const otp = otpWanted(ids);
+  const hrOn = harmWanted(ids);
   const cypOn = cypWanted(ids);
   const ancOn = ancWanted(ids);
-  const wardsOn = wardWanted(ids);
+  const wardsOn = wardWanted(ids) || safetyWanted(ids);
+  const doseOn = dosingWanted(ids);
   const inr = useMemo(() => inrOnDesk(ids), [ids.join("|")]);
   const tabs = useMemo(() => {
     const t: { id: Tab; label: string; on: boolean }[] = [
       { id: "otp", label: "OTP", on: otp },
+      { id: "hr", label: "HR", on: hrOn },
       { id: "wards", label: "Wards", on: wardsOn },
+      { id: "dose", label: "Dose", on: doseOn },
       { id: "cyp", label: "CYP", on: cypOn },
       { id: "qt", label: "QT", on: Boolean(qt) },
       { id: "levels", label: "Levels", on: levels.length > 0 },
@@ -100,7 +123,7 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
       { id: "alerts", label: "Alerts", on: alerts.length > 0 },
     ];
     return t;
-  }, [qt, levels.length, liver.length, pheno, reversal.length, mme.length, hunterOn, uds.length, alerts.length, ids, host, otp, cypOn, ancOn, inr, wardsOn]);
+  }, [qt, levels.length, liver.length, pheno, reversal.length, mme.length, hunterOn, uds.length, alerts.length, ids, host, otp, hrOn, cypOn, ancOn, inr, wardsOn, doseOn]);
   const [tab, setTab] = useState<Tab>("otp");
   const live = tabs.some((t) => t.id === tab && t.on) ? tab : (tabs.find((t) => t.on)?.id ?? "bedside");
 
@@ -113,8 +136,8 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
           <h2 className="font-serif text-lg tracking-tight text-fg">Clinical board</h2>
           <p className="mt-1 text-xs text-muted">
             QT, TDM, LiverTox, phenoconversion, CYP start/stop clocks, reversal, MME, Hunter, UDS,
-            OTP tools, Wards collisions, ANC, INR, COWS / CIWA, bedside math. Teaching — not a
-            protocol, not a QTc, not a dose.
+            OTP tools, harm reduction, live PsychonautWiki, Wards collisions, labeled dose rails, ANC, INR, COWS / CIWA, bedside math. Teaching — not a
+            protocol, not a QTc. The PI governs the milligram.
           </p>
         </div>
         <div className="flex flex-wrap gap-1">
@@ -138,7 +161,9 @@ export function ClinicalBoard({ ids, host }: { ids: string[]; host: HostContext 
 
       <div className="mt-4">
         {live === "otp" && otp ? <OtpPanel ids={ids} qtPartner={Boolean(qt?.rows.some((r) => r.id !== "methadone"))} /> : null}
+        {live === "hr" && hrOn ? <HarmPanel ids={ids} /> : null}
         {live === "wards" && wardsOn ? <WardsPanel ids={ids} /> : null}
+        {live === "dose" && doseOn ? <DosePanel ids={ids} host={host} /> : null}
         {live === "cyp" && cypOn ? <CypPanel ids={ids} /> : null}
         {live === "qt" && qt ? <QtPanel report={qt} /> : null}
         {live === "levels" && levels.length ? <LevelsPanel rows={levels} host={host} /> : null}
@@ -962,13 +987,345 @@ function ScaleBlock({
   );
 }
 
-function WardsPanel({ ids }: { ids: string[] }) {
-  const rows = useMemo(() => wardsOnDesk(ids), [ids.join("|")]);
+function HarmPanel({ ids }: { ids: string[] }) {
+  const cards = useMemo(() => harmOnDesk(ids), [ids.join("|")]);
+  const strips = useMemo(() => stripsFor(ids), [ids.join("|")]);
+  const kit = useMemo(() => kitFor(ids), [ids.join("|")]);
+  const steps = useMemo(() => responseSteps(ids), [ids.join("|")]);
+  const wiki = useMemo(() => wikiOnDesk(ids), [ids.join("|")]);
+  const combos = useMemo(() => comboOnDesk(ids), [ids.join("|")]);
+  const resources = useMemo(() => hrResourcesFor(ids), [ids.join("|")]);
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const [pages, setPages] = useState<WikiPage[]>([]);
+  const [liveCombo, setLiveCombo] = useState<LiveCombo | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [wikiErr, setWikiErr] = useState("");
+
+  useEffect(() => {
+    if (!ids.length) {
+      setPages([]);
+      setLiveCombo(null);
+      return;
+    }
+    let live = true;
+    setBusy(true);
+    setWikiErr("");
+    void lookupPsychonaut({ data: { ids } })
+      .then((pack) => {
+        if (!live) return;
+        setPages(pack.pages);
+        setLiveCombo(pack.combo);
+      })
+      .catch(() => {
+        if (live) setWikiErr("PsychonautWiki did not answer. Local teaching still stands.");
+      })
+      .finally(() => {
+        if (live) setBusy(false);
+      });
+    return () => {
+      live = false;
+    };
+  }, [ids.join("|")]);
+
+  return (
+    <div className="space-y-5">
+      <p className="text-sm leading-relaxed text-muted">
+        Harm reduction for the molecules on this desk. Live PsychonautWiki intros (dosage
+        stripped), TripSit combination ratings, SAMHSA and CDC paraphrases — teaching, not a
+        protocol, not a milligram, not a cooking guide.
+      </p>
+
+      {combos.map((row) => (
+        <article key={row.id} className={cn("rounded-md px-3 py-3", toneClass(comboTone(row.rating)))}>
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-sm font-medium text-fg">{row.title}</h3>
+            <Badge tone={comboTone(row.rating) === "ok" ? "ok" : comboTone(row.rating) === "warn" ? "warn" : "danger"}>
+              {row.rating}
+            </Badge>
+          </div>
+          <p className="mt-2 text-sm leading-relaxed text-fg">{row.body}</p>
+          <p className="mt-2 text-sm leading-relaxed text-muted">{row.watch}</p>
+          <p className="mt-2 text-[11px] leading-relaxed text-subtle">{row.source}</p>
+          {liveCombo?.ok && (liveCombo.status || liveCombo.note) ? (
+            <p className="mt-2 text-sm leading-relaxed text-fg">
+              <span className="font-medium">TripSit live. </span>
+              {liveCombo.status ? `${liveCombo.status}. ` : ""}
+              {liveCombo.note}
+            </p>
+          ) : null}
+        </article>
+      ))}
+
+      {cards.map((row) => (
+        <article key={row.id} className={cn("rounded-md px-3 py-3", toneClass(row.tone))}>
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-sm font-medium text-fg">{row.title}</h3>
+            <Badge tone={row.tone === "danger" ? "danger" : row.tone === "warn" ? "warn" : "ok"}>
+              {row.kicker}
+            </Badge>
+          </div>
+          <p className="mt-2 text-sm leading-relaxed text-fg">{row.body}</p>
+          <p className="mt-2 text-sm leading-relaxed text-muted">{row.watch}</p>
+          <p className="mt-2 text-[11px] leading-relaxed text-subtle">{row.source}</p>
+        </article>
+      ))}
+
+      {wiki.length ? (
+        <article className="rounded-md bg-bg-sunken px-3 py-3">
+          <h3 className="font-serif text-lg tracking-tight text-fg">Wiki monograph</h3>
+          <p className="mt-1 text-xs text-muted">
+            PsychonautWiki paraphrases for what is on this desk. Wiki, not a label. No milligram
+            from this card.
+          </p>
+          <ul className="mt-3 space-y-4">
+            {wiki.map((w) => (
+              <li key={w.id}>
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <p className="text-sm font-medium text-fg">{w.name}</p>
+                  <a
+                    href={w.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-mono text-[11px] text-accent hover:underline"
+                  >
+                    Open {w.wikiTitle}
+                  </a>
+                </div>
+                <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wide text-muted">{w.cls}</p>
+                <p className="mt-2 text-sm leading-relaxed text-fg">{w.teach}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">{w.watch}</p>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ) : null}
+
+      <article className="rounded-md bg-bg-sunken px-3 py-3">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h3 className="font-serif text-lg tracking-tight text-fg">From PsychonautWiki tonight</h3>
+            <p className="mt-1 text-xs text-muted">
+              Live intro extract. Dosage, volumetric, and route how-to are stripped before they
+              land. Open the page.
+            </p>
+          </div>
+          <Badge tone="warn">Wiki ≠ PI</Badge>
+        </div>
+        {busy && pages.length === 0 ? <p className="mt-3 text-sm text-muted">Pulling the wiki…</p> : null}
+        {wikiErr ? <p className="mt-3 text-sm text-muted">{wikiErr}</p> : null}
+        <ul className="mt-3 space-y-3">
+          {pages.map((p) => (
+            <li key={p.id} className="rounded-md bg-surface px-3 py-3">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <p className="text-sm font-medium text-fg">{p.name}</p>
+                {p.url ? (
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-mono text-[11px] text-accent hover:underline"
+                  >
+                    Open wiki
+                  </a>
+                ) : null}
+              </div>
+              {p.extract ? (
+                <p className="mt-2 text-sm leading-relaxed text-fg">{p.extract}</p>
+              ) : (
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {p.reason ?? "No intro after sanitizing. Open the wiki."}
+                </p>
+              )}
+              {p.stripped && p.extract ? (
+                <p className="mt-2 text-[11px] leading-relaxed text-subtle">
+                  Dosage and route-how-to sentences were removed from this extract.
+                </p>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+        {liveCombo && !combos.length && (liveCombo.ok || liveCombo.reason) ? (
+          <p className="mt-3 text-sm leading-relaxed text-muted">
+            TripSit live: {liveCombo.ok ? `${liveCombo.status}. ${liveCombo.note}` : liveCombo.reason}
+          </p>
+        ) : null}
+      </article>
+
+      <article className="rounded-md bg-bg-sunken px-3 py-3">
+        <h3 className="font-serif text-lg tracking-tight text-fg">Overdose response</h3>
+        <p className="mt-1 text-xs text-muted">Airway first. This is first-aid teaching, not a field protocol.</p>
+        <ol className="mt-3 space-y-3">
+          {steps.map((s) => (
+            <li key={s.n} className="flex gap-3">
+              <span className="font-mono text-xs text-muted">{s.n}</span>
+              <div>
+                <p className="text-sm font-medium text-fg">{s.title}</p>
+                <p className="mt-0.5 text-sm leading-relaxed text-muted">{s.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </article>
+
+      <article className="rounded-md bg-bg-sunken px-3 py-3">
+        <h3 className="font-serif text-lg tracking-tight text-fg">Test the supply</h3>
+        <p className="mt-1 text-xs text-muted">
+          A negative strip is not proof of safety. Reagents name a class, not a milligram. PsychonautWiki:
+          chemically test; do not eyeball.
+        </p>
+        <ul className="mt-3 space-y-3">
+          {strips.map((s) => (
+            <li key={s.id}>
+              <p className="text-sm font-medium text-fg">{s.name}</p>
+              <p className="mt-0.5 text-sm leading-relaxed text-fg">{s.catches}</p>
+              <p className="mt-0.5 text-sm leading-relaxed text-muted">Misses: {s.misses}</p>
+            </li>
+          ))}
+        </ul>
+      </article>
+
+      <article className="rounded-md bg-bg-sunken px-3 py-3">
+        <h3 className="font-serif text-lg tracking-tight text-fg">Kit on the table</h3>
+        <p className="mt-1 text-xs text-muted">Tick what is actually there. Not a shopping list and not a dose.</p>
+        <ul className="mt-3 space-y-2">
+          {kit.map((item) => {
+            const on = Boolean(checked[item.id]);
+            return (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  onClick={() => setChecked((prev) => ({ ...prev, [item.id]: !prev[item.id] }))}
+                  className="flex w-full items-start gap-2 text-left"
+                >
+                  {on ? (
+                    <CheckSquare className="mt-0.5 h-4 w-4 shrink-0 text-fg" />
+                  ) : (
+                    <Square className="mt-0.5 h-4 w-4 shrink-0 text-muted" />
+                  )}
+                  <span>
+                    <span className="text-sm font-medium text-fg">{item.label}</span>
+                    <span className="mt-0.5 block text-sm leading-relaxed text-muted">{item.hint}</span>
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </article>
+
+      <article className="rounded-md bg-bg-sunken px-3 py-3">
+        <h3 className="font-serif text-lg tracking-tight text-fg">Principles</h3>
+        <p className="mt-1 text-xs text-muted">PsychonautWiki Responsible drug use — paraphrased. Wiki, not a label.</p>
+        <ul className="mt-3 space-y-3">
+          {HR_PRINCIPLES.map((p) => (
+            <li key={p.title}>
+              <p className="text-sm font-medium text-fg">{p.title}</p>
+              <p className="mt-0.5 text-sm leading-relaxed text-muted">{p.body}</p>
+            </li>
+          ))}
+        </ul>
+      </article>
+
+      <article className="rounded-md bg-bg-sunken px-3 py-3">
+        <h3 className="font-serif text-lg tracking-tight text-fg">Open the source</h3>
+        <ul className="mt-3 space-y-2">
+          {resources.map((r) => (
+            <li key={r.href}>
+              <a
+                href={r.href}
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm font-medium text-fg underline decoration-subtle underline-offset-2 hover:decoration-fg"
+              >
+                {r.name}
+              </a>
+              <p className="text-sm leading-relaxed text-muted">{r.why}</p>
+            </li>
+          ))}
+        </ul>
+      </article>
+
+      <p className="text-[11px] leading-relaxed text-subtle">{HR_FOOTER}</p>
+    </div>
+  );
+}
+
+function DosePanel({ ids, host }: { ids: string[]; host: HostContext }) {
+  const doses = useDesk((s) => s.doses);
+  const setDose = useDesk((s) => s.setDose);
+  const rows = useMemo(
+    () => dosingOnDesk(ids, parseDoses(doses), host),
+    [ids.join("|"), JSON.stringify(doses), host.age, host.kidney],
+  );
   return (
     <div className="space-y-3">
       <p className="text-sm leading-relaxed text-muted">
-        Named hospital collisions. Teaching — not a protocol, not a milligram. The Prescribing
-        Information governs.
+        Labeled usual ranges and interaction caps. Type a milligram to check it against the PI. This
+        desk does not pick one.
+      </p>
+      {rows.map((row) => (
+        <DoseCard key={row.id} row={row} value={doses[row.id] ?? ""} onChange={(v) => setDose(row.id, v)} />
+      ))}
+      <p className="text-[11px] leading-relaxed text-subtle">
+        Street mass, weight-based AUC, and titrated NTIs stay blank on purpose. Over-cap is the
+        label, not a replacement milligram.
+      </p>
+    </div>
+  );
+}
+
+function DoseCard({
+  row,
+  value,
+  onChange,
+}: {
+  row: DoseCheck;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <article className={cn("rounded-md px-3 py-3", toneClass(row.tone === "info" ? "ok" : row.tone))}>
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div>
+          <h3 className="text-sm font-medium text-fg">{row.name}</h3>
+          <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wide text-muted">
+            {row.label.usualAdult} {row.label.unit}
+          </p>
+        </div>
+        {row.label.neverPrescribe || row.label.weightBased ? null : (
+          <label className="flex items-center gap-2">
+            <span className="sr-only">Entered milligram for {row.name}</span>
+            <Input
+              inputMode="decimal"
+              className="h-10 w-24"
+              placeholder={row.label.unit}
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+            />
+          </label>
+        )}
+      </div>
+      <p className="mt-2 text-sm leading-relaxed text-fg">{row.headline}</p>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted">{row.detail}</p>
+      {row.cap ? (
+        <p className="mt-2 text-[11px] leading-relaxed text-subtle">
+          Cap: {row.cap.mg === 0 ? "labeled hold" : `${row.cap.mg} ${row.label.unit}`} · {row.cap.source}
+        </p>
+      ) : null}
+    </article>
+  );
+}
+
+function WardsPanel({ ids }: { ids: string[] }) {
+  const rows = useMemo(
+    () => [...wardsOnDesk(ids), ...safetyOnDesk(ids)],
+    [ids.join("|")],
+  );
+  return (
+    <div className="space-y-3">
+      <p className="text-sm leading-relaxed text-muted">
+        Named labeled collisions the generic PD map misses or mis-names. Teaching — not a
+        protocol, not a milligram. The Prescribing Information governs.
       </p>
       {rows.map((row) => (
         <article key={row.id} className={cn("rounded-md px-3 py-3", toneClass(row.tone))}>
@@ -983,8 +1340,9 @@ function WardsPanel({ ids }: { ids: string[] }) {
         </article>
       ))}
       <p className="text-[11px] leading-relaxed text-subtle">
-        Carbapenem–valproate is UGT, not stacked seizure-lowering. Vancomycin–Zosyn is observational
-        AKI, not a boxed hold. Entresto next to an ACE inhibitor is a 36-hour washout. Open the PI.
+        Carbapenem–valproate is UGT. Clozapine–benzo is boxed respiratory collapse, not generic
+        CNS. Epclusa–amiodarone is boxed bradycardia, not stacked nodal PD. Dual ACEI+ARB is not
+        the Entresto 36-hour washout. Open the PI.
       </p>
     </div>
   );

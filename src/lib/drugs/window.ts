@@ -90,6 +90,9 @@ export const WINDOW_EXTRAS: { group: string; hint: string; items: { id: string; 
       { id: "xylazine", label: "Xylazine" },
       { id: "medetomidine", label: "Medetomidine" },
       { id: "dirty-30", label: "Dirty 30" },
+      { id: "seven-oh", label: "7-OH" },
+      { id: "bromazolam", label: "Bromazolam" },
+      { id: "naloxone", label: "Narcan" },
     ],
   },
   {

@@ -432,7 +432,8 @@ const raw: Drug[] = [
     { note: "Absorption interactions (iron, calcium, PPIs) dominate over CYP." }),
   d("prednisone", "Prednisone", ["Deltasone"], "Corticosteroid",
     [sub("CYP3A4", "minor")],
-    [], "Hyperglycemia, immunosuppression"),
+    [], "Hyperglycemia, immunosuppression, tendon rupture with fluoroquinolones",
+    { note: "Empty PD on purpose — the fluoroquinolone tendon pair is a named row, not stacked GABA. Not a 3A4 inducer like dexamethasone." }),
   d("tacrolimus", "Tacrolimus", ["Prograf"], "Calcineurin inhibitor",
     [sub("CYP3A4", "sensitive", "clearance", true), sub("P-gp", "major")],
     ["immunosuppressant", "nephrotoxic", "seizure-lowering"], "Nephrotoxicity, neurotoxicity, infection",
@@ -1719,7 +1720,7 @@ const raw: Drug[] = [
     }),
   d("empagliflozin", "Empagliflozin", ["Jardiance"], "SGLT2 inhibitor",
     [],
-    [],
+    ["nephrotoxic"],
     "Euglycemic DKA, genital mycosis, volume depletion",
     {
       aliases: ["jardiance"],
@@ -1727,7 +1728,7 @@ const raw: Drug[] = [
     }),
   d("dapagliflozin", "Dapagliflozin", ["Farxiga"], "SGLT2 inhibitor",
     [],
-    [],
+    ["nephrotoxic"],
     "Euglycemic DKA, genital mycosis, volume depletion",
     {
       aliases: ["farxiga"],
@@ -2617,7 +2618,7 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
       24,
     );
   }
-  if (q === "wards" || q === "ward" || q === "hospital" || q === "zosyn" || q === "entresto") {
+  if (q === "wards" || q === "ward" || q === "hospital" || q === "zosyn" || q === "entresto" || q === "safety" || q === "named" || q === "boxed") {
     const wardOrder = [
       "meropenem",
       "ertapenem",
@@ -2637,8 +2638,78 @@ export function searchDrugs(query: string, excludeIds: string[] = []): Drug[] {
       "linezolid",
       "insulin-aspart",
       "semaglutide",
+      "epclusa",
+      "amiodarone",
+      "clozapine",
+      "lorazepam",
+      "aspirin",
+      "ibuprofen",
+      "lamotrigine",
+      "tamoxifen",
+      "paroxetine",
+      "ethinyl-estradiol",
+      "rifampin",
+      "isotretinoin",
+      "doxycycline",
+      "ciprofloxacin",
+      "prednisone",
+      "losartan",
+      "omeprazole",
+      "rilpivirine",
+      "empagliflozin",
+      "furosemide",
     ];
     return wardOrder
+      .map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 24);
+  }
+  if (q === "dose" || q === "dosing" || q === "mg" || q === "milligram" || q === "cap") {
+    const doseOrder = [
+      "simvastatin",
+      "amiodarone",
+      "amlodipine",
+      "methotrexate",
+      "colchicine",
+      "lithium",
+      "warfarin",
+      "gabapentin",
+      "metformin",
+      "vancomycin",
+      "lamotrigine",
+      "valproate",
+      "atorvastatin",
+      "sildenafil",
+      "buprenorphine",
+      "digoxin",
+    ];
+    return doseOrder
+      .map((id) => DRUG_BY_ID[id])
+      .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
+      .slice(0, 16);
+  }
+  if (q === "harm" || q === "hr" || q === "strips" || q === "recovery" || q === "never" || q === "wiki" || q === "psychonaut" || q === "tripsit" || q === "pw") {
+    const hrOrder = [
+      "naloxone",
+      "nalmefene",
+      "fentanyl",
+      "dirty-30",
+      "xylazine",
+      "medetomidine",
+      "heroin",
+      "seven-oh",
+      "bromazolam",
+      "sodium-oxybate",
+      "mdma",
+      "ketamine",
+      "cocaine",
+      "ethanol",
+      "lsd",
+      "twentyfive-i",
+      "buprenorphine",
+      "methadone",
+    ];
+    return hrOrder
       .map((id) => DRUG_BY_ID[id])
       .filter((d): d is Drug => Boolean(d) && !excluded.has(d.id))
       .slice(0, 18);

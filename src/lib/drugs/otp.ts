@@ -212,6 +212,9 @@ export function otpWanted(ids: string[]) {
       "heroin",
       "xylazine",
       "pressed-30",
+      "medetomidine",
+      "seven-oh",
+      "bromazolam",
     ].includes(id),
   );
 }

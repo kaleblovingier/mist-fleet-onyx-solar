@@ -110,9 +110,9 @@ export const CLINIC: Record<string, ClinicCard> = {
   }),
   lamotrigine: card({
     pregnancy: "caution",
-    pregNote: "Clearance rises in pregnancy — levels fall. Valproate is the UGT trap.",
+    pregNote: "Clearance rises in pregnancy — levels fall. Valproate is the UGT trap. Combined OCPs dump parent the other way.",
     lactation: "caution",
-    boxed: "SJS/TEN. Slow titration. Valproate doubles parent.",
+    boxed: "SJS/TEN. Slow titration. Valproate doubles parent. Estrogen OCPs cut it; stopping the pill can spike.",
     monitor: ["rash", "level"],
   }),
   lithium: card({
@@ -460,9 +460,9 @@ export const CLINIC: Record<string, ClinicCard> = {
   }),
   clozapine: card({
     pregnancy: "caution",
-    boxed: "Agranulocytosis, myocarditis, seizures, orthostasis, constipation/ileus.",
+    boxed: "Agranulocytosis, myocarditis, seizures, orthostasis, constipation/ileus. Benzodiazepines: respiratory collapse — not generic stacked sedation.",
     beers: "Anticholinergic / fall / constipation. ANC is the monitor at any age.",
-    monitor: ["ANC", "ECG", "glucose", "lipids"],
+    monitor: ["ANC", "ECG", "glucose", "lipids", "airway"],
   }),
   olanzapine: card({
     pregnancy: "caution",
@@ -533,9 +533,9 @@ export const CLINIC: Record<string, ClinicCard> = {
     pregnancy: "avoid",
     pregNote: "Fetal thyroid. Long half-life — a washout of months.",
     hepatic: "caution",
-    boxed: "Pulmonary, hepatic, and proarrhythmic toxicity. For life-threatening arrhythmia.",
+    boxed: "Pulmonary, hepatic, and proarrhythmic toxicity. Sofosbuvir DAAs: symptomatic bradycardia.",
     beers: "Avoid as first-line AF agent.",
-    monitor: ["TSH", "LFTs", "CXR", "ECG", "eye"],
+    monitor: ["TSH", "LFTs", "CXR", "ECG", "eye", "HR"],
   }),
   sotalol: card({
     pregnancy: "caution",
@@ -603,7 +603,7 @@ export const CLINIC: Record<string, ClinicCard> = {
   ketoconazole: card({
     pregnancy: "avoid",
     hepatic: "avoid",
-    boxed: "Hepatotoxicity. QT. Strong 3A4 inhibitor — the probe perpetrator.",
+    boxed: "Hepatotoxicity. QT. Strong 3A4 inhibitor — the probe perpetrator. Needs acidic pH — PPIs dump F.",
     monitor: ["LFTs", "ECG"],
   }),
   itraconazole: card({
@@ -620,25 +620,26 @@ export const CLINIC: Record<string, ClinicCard> = {
     pregnancy: "caution",
     renal: "caution",
     beers: "CNS, tendon, hypoglycemia, QT. Cations bind it in the gut.",
-    boxed: "Tendon, peripheral neuropathy, CNS, myasthenia. Next to methadone: QT plus a 1A2/weak-3A4 nudge (Herrlin 2000).",
-    monitor: ["glucose", "ECG"],
+    boxed: "Tendon, peripheral neuropathy, CNS, myasthenia. Concomitant corticosteroids raise tendon rupture. Next to methadone: QT plus a 1A2/weak-3A4 nudge (Herrlin 2000).",
+    monitor: ["glucose", "ECG", "tendon"],
   }),
   levofloxacin: card({
     pregnancy: "caution",
     renal: "caution",
     beers: "Same FQ boxed harms. QT more than cipro.",
-    boxed: "Tendon, neuropathy, CNS, myasthenia.",
-    monitor: ["ECG", "glucose"],
+    boxed: "Tendon, neuropathy, CNS, myasthenia. Corticosteroids raise rupture risk.",
+    monitor: ["ECG", "glucose", "tendon"],
   }),
   moxifloxacin: card({
     beers: "FQ harms plus QT.",
-    boxed: "Tendon, neuropathy, CNS. QT.",
-    monitor: ["ECG"],
+    boxed: "Tendon, neuropathy, CNS. QT. Corticosteroids raise rupture risk.",
+    monitor: ["ECG", "tendon"],
   }),
   doxycycline: card({
     pregnancy: "avoid",
     pregNote: "Tooth and bone in the second half of pregnancy. Cations bind it.",
     lactation: "caution",
+    boxed: "Isotretinoin: pseudotumor cerebri. Not a CYP perpetrator.",
   }),
   nitroglycerin: card({
     pregnancy: "caution",
@@ -1014,6 +1015,96 @@ export const CLINIC: Record<string, ClinicCard> = {
     renal: "caution",
     boxed: "Sensitive 3A4. Nephrotoxic like tacrolimus. Lupus nephritis.",
     monitor: ["Cr", "BP", "K"],
+  }),
+  tamoxifen: card({
+    pregnancy: "avoid",
+    pregNote: "SERM. Stop around planned pregnancy. 2D6 activation is the desk collision.",
+    boxed: "Uterine malignancy, thromboembolism. Strong 2D6 inhibitors steal endoxifen.",
+    monitor: ["hot flash is not efficacy"],
+  }),
+  epclusa: card({
+    pregnancy: "caution",
+    hepatic: "caution",
+    boxed: "Amiodarone: symptomatic bradycardia. Strong inducers dump the DAA. PPIs cut velpatasvir F.",
+    monitor: ["HR", "HCV RNA"],
+  }),
+  "sofosbuvir-velpatasvir": card({
+    pregnancy: "caution",
+    boxed: "Same Epclusa map — amiodarone bradycardia, inducers, acid.",
+    monitor: ["HR", "HCV RNA"],
+  }),
+  sofosbuvir: card({
+    pregnancy: "caution",
+    boxed: "Amiodarone bradycardia with sofosbuvir-containing regimens.",
+    monitor: ["HR"],
+  }),
+  "ledipasvir-sofosbuvir": card({
+    pregnancy: "caution",
+    boxed: "Harvoni: amiodarone bradycardia. PPIs cut ledipasvir. Strong inducers dump it.",
+    monitor: ["HR", "HCV RNA"],
+  }),
+  isotretinoin: card({
+    pregnancy: "avoid",
+    pregNote: "iPLEDGE teratogen. Two forms of contraception. This desk is not a pregnancy test.",
+    boxed: "Embryo-fetal toxicity. Pseudotumor cerebri with tetracyclines. iPLEDGE REMS.",
+    monitor: ["preg test", "lipids", "LFTs", "mood"],
+  }),
+  prednisone: card({
+    pregnancy: "caution",
+    boxed: "HPA suppression, infection. Fluoroquinolone tendon pair is the named collision.",
+    monitor: ["glucose", "BP", "bone"],
+  }),
+  dexamethasone: card({
+    pregnancy: "caution",
+    boxed: "Same systemic steroid harms. Moderate 3A4 inducer after days — OCPs and DOACs dump.",
+    monitor: ["glucose", "mood"],
+  }),
+  methylprednisolone: card({
+    pregnancy: "caution",
+    boxed: "Systemic corticosteroid. Fluoroquinolone tendon pair still applies.",
+    monitor: ["glucose"],
+  }),
+  aspirin: card({
+    pregnancy: "caution",
+    pregNote: "Low-dose is used in obstetrics. Anti-inflammatory doses near term close the ductus.",
+    beers: "Bleed. GI. Not a free cardioprotective if ibuprofen is around the dose.",
+    boxed: "Bleed. Reye in kids with viral illness. Ibuprofen attenuates antiplatelet effect.",
+    monitor: ["bleed", "CBC"],
+  }),
+  aliskiren: card({
+    pregnancy: "avoid",
+    pregNote: "RAAS fetal toxicity like ACEI/ARB.",
+    renal: "caution",
+    boxed: "Contraindicated with ACEI/ARB in diabetes. Fruit juice dumps OATP absorption.",
+    monitor: ["K", "Cr", "BP"],
+  }),
+  atazanavir: card({
+    pregnancy: "caution",
+    boxed: "Unboosted ATV: PPIs contraindicated — gastric pH, not 3A4. Hyperbilirubinemia. Strong 3A4 inhibitor.",
+    monitor: ["bilirubin", "viral load"],
+  }),
+  rilpivirine: card({
+    pregnancy: "caution",
+    boxed: "PPIs contraindicated. Needs a meal. QT. 3A4 victim — inducers dump it.",
+    monitor: ["viral load", "ECG"],
+  }),
+  canagliflozin: card({
+    pregnancy: "caution",
+    renal: "caution",
+    boxed: "Euglycemic DKA, volume, genital infection. Historical amputation boxed warning.",
+    monitor: ["Cr", "ketones", "feet"],
+  }),
+  omeprazole: card({
+    pregnancy: "caution",
+    beers: "Long-term PPI — C. difficile, bone, B12/Mg.",
+    boxed: "Blunts clopidogrel activation (2C19). Acid-dependent drugs lose F.",
+    monitor: ["Mg"],
+  }),
+  esomeprazole: card({
+    pregnancy: "caution",
+    beers: "Same long-term PPI harms.",
+    boxed: "Same 2C19 phenocopy of clopidogrel PM as omeprazole.",
+    monitor: ["Mg"],
   }),
 };
 

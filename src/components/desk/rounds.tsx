@@ -73,6 +73,7 @@ function extrasOf(r: Round) {
     ketamineRoute: r.ketamineRoute,
     cannabisRoute: r.cannabisRoute,
     alcohol: r.alcohol,
+    doses: r.doses,
   };
 }
 

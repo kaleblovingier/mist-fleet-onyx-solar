@@ -38,6 +38,31 @@ const BOXED: Record<string, { detail: string; href?: string }> = {
     detail:
       "Entresto boxed warning / contraindications: sacubitril–valsartan with an ACE inhibitor — angioedema. 36-hour washout when switching.",
   },
+  "pd-sofosbuvir-amio": {
+    detail:
+      "Harvoni / Epclusa / Sovaldi labels and FDA 2015 safety communication: sofosbuvir plus amiodarone — serious symptomatic bradycardia, including pacemaker-level events.",
+    href: "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-fda-warns-serious-slowing-heart-rate-when-hepatitis-c-treatments",
+  },
+  "pd-clozapine-benzo": {
+    detail:
+      "Clozapine boxed warning / PI: respiratory arrest and collapse with concomitant benzodiazepines, including deaths. Not generic stacked sedation.",
+  },
+  "pd-isotret-tetra": {
+    detail: "Isotretinoin (iPLEDGE) and tetracycline class labels: intracranial hypertension / pseudotumor cerebri.",
+  },
+  "pd-fq-steroid": {
+    detail:
+      "Fluoroquinolone boxed warning (FDA 2008 / 2016): tendinitis and tendon rupture. Risk higher with concomitant corticosteroids, age over 60, and transplant.",
+    href: "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-fda-updates-warnings-oral-and-injectable-fluoroquinolone-antibiotics",
+  },
+  "pd-dual-raas": {
+    detail:
+      "ACEI and ARB labels, ONTARGET, VA NEPHRON-D, Tekturna boxed warning: dual RAAS blockade — hyperkalemia, hypotension, AKI without outcome gain in the labeled populations. Aliskiren plus ACEI/ARB contraindicated in diabetes.",
+  },
+  "pd-ppi-acid": {
+    detail:
+      "Reyataz / Edurant / Nizoral / Harvoni / Epclusa labels: PPIs raise gastric pH and dump acid-dependent absorption. Rilpivirine PPIs are contraindicated.",
+  },
 };
 
 const PI: Record<string, string> = {
@@ -65,6 +90,24 @@ const PI: Record<string, string> = {
     "Nafcillin and dicloxacillin induce 3A4 and can steal warfarin effect — INR falls. Recheck after the course starts and after it stops.",
   "pd-glp-secretagogue":
     "GLP-1 / GIP agonist labels: hypoglycemia stacked with insulin or a secretagogue. Rarely alone. This desk does not cut the insulin.",
+  "dose-over-cap":
+    "Prescribing Information dose cap. The pair may be allowed; the milligram is not. This desk checked the amount you entered against the label. It does not pick the replacement milligram.",
+  "dose-over-max":
+    "Prescribing Information labeled maximum. Above this number is off-label unless a different indication says otherwise. Open the PI.",
+  "pd-asa-nsaid":
+    "Aspirin and ibuprofen labels. Ibuprofen occupies COX-1 and can block aspirin acetylation if taken around the ASA dose. Catella-Lawson 2001 (PMID 11248154). GI bleed is a separate row.",
+  "pd-lamo-vpa":
+    "Lamictal PI: valproate roughly doubles lamotrigine via UGT. Labeled starter kits. SJS/TEN boxed. Yuen 1992 (PMID 1524964). This desk does not pick the milligram.",
+  "pd-lamo-ee":
+    "Lamictal PI: estrogen-containing contraceptives induce UGT and cut lamotrigine. Stopping the pill can spike parent. Sidhu 2006 (PMID 16433873).",
+  "pd-tamoxifen-2d6":
+    "Soltamox PI and CPIC CYP2D6–tamoxifen: strong 2D6 inhibitors block activation to endoxifen. Switch the SSRI. Goetz 2005 (PMID 16361630). CPIC (PMID 29385237).",
+  "pd-ocp-inducer":
+    "Combined oral contraceptive and rifampin / enzyme-inducer labels: backup contraception. Niemi 2003 (PMID 12882588). Not a quieter pill.",
+  "pd-clopidogrel-ppi":
+    "Plavix boxed warning / FDA PPI communication: omeprazole and esomeprazole phenocopy CYP2C19 PM and blunt clopidogrel activation. Pantoprazole is the quieter PPI on this desk.",
+  "pd-sglt2-loop":
+    "Jardiance / Farxiga / Invokana labels: volume contraction with a diuretic; euglycemic DKA on sick days. A normal fingerstick does not clear ketones.",
 };
 
 const SCALE: Record<string, string> = {

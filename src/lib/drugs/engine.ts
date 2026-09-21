@@ -4,6 +4,7 @@ import { applyHost, isVirtual, WASHOUT } from "./host";
 import { phenoconversionFindings } from "./pheno-convert";
 import { udsFindings } from "./uds";
 import { protocolFindings } from "./cyp-protocol";
+import { doseFindings } from "./dosing";
 import {
   ACEI,
   ARNI,
@@ -14,6 +15,21 @@ import {
   isInsulinId,
   isVancoZosyn,
 } from "./wards";
+import {
+  isAsaNsaid,
+  isClozapineBenzo,
+  isClopidogrelPpi,
+  isDualRaas,
+  isFqSteroid,
+  isIsotretinoinTetra,
+  isLamotrigineEe,
+  isLamotrigineValproate,
+  isOcpInducer,
+  isPpiAcid,
+  isSglt2Loop,
+  isSofosbuvirAmio,
+  isTamoxifen2d6,
+} from "./safety";
 import {
   DEFAULT_HOST,
   DEFAULT_PHENOTYPES,
@@ -357,6 +373,196 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
     );
   }
 
+  if (isSofosbuvirAmio(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-sofosbuvir-amio",
+        severity: "contraindicated",
+        effect: "symptomatic bradycardia / sinus arrest",
+        mechanism: "sofosbuvir × amiodarone",
+        clinical:
+          "Sofosbuvir-containing HCV regimens plus amiodarone are labeled for serious symptomatic bradycardia, including pacemaker-level events. Not additive nodal PD — Epclusa is not a beta-blocker. Do not treat the DAA as a free add-on on an amiodarone MAR.",
+        tags: ["clinic", "bradycardia", "boxed"],
+      }),
+    );
+  }
+
+  if (isClozapineBenzo(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-clozapine-benzo",
+        severity: "contraindicated",
+        effect: "respiratory collapse / arrest",
+        mechanism: "clozapine × benzodiazepine",
+        clinical:
+          "Clozapine labels warn of respiratory arrest and collapse with benzodiazepines, including deaths. This is not generic stacked sedation. Z-hypnotics are a different GABA-A row. Do not treat Ativan as a free extra on a Clozaril MAR.",
+        tags: ["clinic", "cns", "boxed"],
+      }),
+    );
+  }
+
+  if (isAsaNsaid(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-asa-nsaid",
+        severity: "major",
+        effect: "loss of aspirin antiplatelet effect",
+        mechanism: "ibuprofen / naproxen COX-1 occupancy × aspirin",
+        clinical:
+          "Ibuprofen occupies COX-1 and blocks aspirin's irreversible acetylation if it is taken around the ASA dose. Lost cardioprotection, not 'two NSAIDs.' Naproxen is quieter and still mapped. GI bleed remains a separate row.",
+        tags: ["clinic", "bleeding"],
+      }),
+    );
+  }
+
+  if (isLamotrigineValproate(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-lamo-vpa",
+        severity: "major",
+        effect: "doubled lamotrigine / SJS-TEN risk",
+        mechanism: "valproate UGT blockade × lamotrigine",
+        clinical:
+          "Valproate inhibits UGT and roughly doubles lamotrigine. The starter kit is slower for a reason — rash and SJS/TEN, not stacked GABA. Not a CYP isoform. This desk does not pick the milligram.",
+        tags: ["clinic", "rash"],
+      }),
+    );
+  }
+
+  if (isLamotrigineEe(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-lamo-ee",
+        severity: "major",
+        effect: "lamotrigine falls; stop of OCP can spike parent",
+        mechanism: "ethinyl estradiol UGT induction × lamotrigine",
+        clinical:
+          "Combined OCPs induce UGT1A4 and cut lamotrigine roughly in half. Stopping the pill can spike parent and rash. Not CYP3A4 on this map — EE is a 3A4 substrate, lamotrigine is not.",
+        tags: ["clinic"],
+      }),
+    );
+  }
+
+  if (isTamoxifen2d6(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-tamoxifen-2d6",
+        severity: "major",
+        effect: "loss of endoxifen / lost tamoxifen efficacy",
+        mechanism: "strong CYP2D6 inhibitor × tamoxifen activation",
+        clinical:
+          "Tamoxifen is a 2D6 activation substrate. Paroxetine, fluoxetine, bupropion, quinidine, and terbinafine block the step to endoxifen. The CYP map already fires; this row names the oncology call — switch the SSRI, do not give more tamoxifen.",
+        tags: ["clinic", "pgx"],
+      }),
+    );
+  }
+
+  if (isOcpInducer(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-ocp-inducer",
+        severity: "major",
+        effect: "contraceptive failure",
+        mechanism: "strong inducer × ethinyl estradiol",
+        clinical:
+          "Rifampin, carbamazepine, phenytoin, phenobarbital, primidone, and St John's wort dump estrogen exposure. The CYP map already fires induction; this row names the counseling — backup or a non-CYP method, not a quieter pill.",
+        tags: ["clinic"],
+      }),
+    );
+  }
+
+  if (isIsotretinoinTetra(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-isotret-tetra",
+        severity: "contraindicated",
+        effect: "pseudotumor cerebri / intracranial hypertension",
+        mechanism: "isotretinoin × tetracycline",
+        clinical:
+          "Systemic retinoids plus tetracyclines are labeled for intracranial hypertension. Not a CYP row and not iPLEDGE itself. Pick a different antibiotic or hold the retinoid — this desk does not.",
+        tags: ["clinic", "boxed"],
+      }),
+    );
+  }
+
+  if (isFqSteroid(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-fq-steroid",
+        severity: "major",
+        effect: "tendinitis / tendon rupture",
+        mechanism: "fluoroquinolone × systemic corticosteroid",
+        clinical:
+          "Fluoroquinolone boxed warning: tendinitis and tendon rupture, risk higher with concomitant corticosteroids, age, and transplant. Prednisone is empty PD on this desk on purpose — the pair is this row, not stacked GABA.",
+        tags: ["clinic", "boxed"],
+      }),
+    );
+  }
+
+  if (isDualRaas(a.id, b.id)) {
+    const ali = a.id === "aliskiren" || b.id === "aliskiren";
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-dual-raas",
+        severity: "contraindicated",
+        effect: ali ? "hyperkalemia / AKI / hypotension" : "hyperkalemia / AKI without outcome gain",
+        mechanism: ali ? "aliskiren × ACEI / ARB" : "ACE inhibitor × ARB",
+        clinical: ali
+          ? "Aliskiren plus an ACE inhibitor or ARB is labeled contraindicated in diabetes and a no in CKD. Not the Entresto 36-hour ACEI washout — that is a different row."
+          : "Dual ACEI + ARB is more hyperkalemia, hypotension, and AKI without outcome gain in the labeled populations. Entresto already carries valsartan — a second ARB is extra blockade. Entresto plus an ACE inhibitor is the 36-hour angioedema row, already named.",
+        tags: ["clinic", "potassium", "renal"],
+      }),
+    );
+  }
+
+  if (isPpiAcid(a.id, b.id)) {
+    const hiv =
+      a.id === "atazanavir" ||
+      b.id === "atazanavir" ||
+      a.id === "rilpivirine" ||
+      b.id === "rilpivirine";
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-ppi-acid",
+        severity: hiv ? "contraindicated" : "major",
+        effect: "lost absorption / treatment failure",
+        mechanism: "PPI raises gastric pH — acid-dependent F",
+        clinical: hiv
+          ? "Rilpivirine labels contraindicate PPIs. Unboosted atazanavir does too. This is gastric pH, not CYP3A4 — a weak 3A4-inhibitor arrow on omeprazole is the wrong direction."
+          : "Ketoconazole, itraconazole capsules, ledipasvir, and velpatasvir need an acidic stomach. A PPI empties the exposure. Not a 2C19 row (that is clopidogrel) and not a 3A4 bully.",
+        tags: ["clinic", "absorption"],
+      }),
+    );
+  }
+
+  if (isClopidogrelPpi(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-clopidogrel-ppi",
+        severity: "major",
+        effect: "loss of clopidogrel activation",
+        mechanism: "omeprazole / esomeprazole 2C19 phenocopy",
+        clinical:
+          "Clopidogrel is a 2C19 activation substrate. Omeprazole and esomeprazole phenocopy a 2C19 PM. The CYP map already fires; this row names the switch. Pantoprazole is the quieter PPI on this desk. Do not give more Plavix.",
+        tags: ["clinic", "pgx"],
+      }),
+    );
+  }
+
+  if (isSglt2Loop(a.id, b.id)) {
+    out.push(
+      pdPair(a, b, {
+        suffix: "pd-sglt2-loop",
+        severity: "moderate",
+        effect: "volume contraction / euglycemic DKA risk",
+        mechanism: "SGLT2 inhibitor × loop diuretic",
+        clinical:
+          "SGLT2 inhibitors dump glucose and water. Next to a loop they stack volume contraction. Sick-day ketones can be euglycemic — a normal fingerstick does not clear DKA. Not a CYP row and not stacked sulfonylurea hypo.",
+        tags: ["clinic", "glucose", "renal"],
+      }),
+    );
+  }
+
   if (aSero && bSero && !(aMaoi || bMaoi)) {
     const strong =
       has(a, "ssri-snri") ||
@@ -485,6 +691,8 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
     !(aOp && bOp) &&
     !gabaOp &&
     !((aOp && bBz) || (bOp && aBz)) &&
+    !isClozapineBenzo(a.id, b.id) &&
+    !isLamotrigineValproate(a.id, b.id) &&
     ((aOp && bCns) || (bOp && aCns) || (aCns && bCns && a.id !== b.id))
   ) {
     const gabapentinoid =
@@ -554,7 +762,7 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
         tags: ["bleeding"],
       }),
     );
-  } else if (has(a, "nsaid") && has(b, "nsaid")) {
+  } else if (has(a, "nsaid") && has(b, "nsaid") && !isAsaNsaid(a.id, b.id)) {
     out.push(
       pdPair(a, b, {
         suffix: "pd-nsaid",
@@ -1014,7 +1222,13 @@ function pdFindings(a: Drug, b: Drug): Finding[] {
     );
   }
 
-  if (has(a, "nephrotoxic") && has(b, "nephrotoxic") && !isVancoZosyn(a.id, b.id)) {
+  if (
+    has(a, "nephrotoxic") &&
+    has(b, "nephrotoxic") &&
+    !isVancoZosyn(a.id, b.id) &&
+    !isDualRaas(a.id, b.id) &&
+    !isSglt2Loop(a.id, b.id)
+  ) {
     out.push(
       pdPair(a, b, {
         suffix: "pd-nephro",
@@ -2017,7 +2231,11 @@ function stackLoad(drugs: Drug[]): StackBar[] {
   });
 }
 
-export function analyze(drugIds: string[], host?: HostContext | PhenotypeMap): Report {
+export function analyze(
+  drugIds: string[],
+  host?: HostContext | PhenotypeMap,
+  amounts?: Record<string, number>,
+): Report {
   const ctx: HostContext | undefined =
     host && "smoking" in (host as HostContext)
       ? { ...DEFAULT_HOST, ...(host as HostContext), phenotypes: { ...DEFAULT_PHENOTYPES, ...(host as HostContext).phenotypes } }
@@ -2051,6 +2269,9 @@ export function analyze(drugIds: string[], host?: HostContext | PhenotypeMap): R
   if (ctx) findings.push(...hostClinicFindings(real, ctx));
   findings.push(...udsFindings(real.map((d) => d.id)));
   findings.push(...protocolFindings(real.map((d) => d.id)));
+  if (amounts && Object.keys(amounts).length) {
+    findings.push(...doseFindings(real.map((d) => d.id), amounts, ctx ?? DEFAULT_HOST));
+  }
   const uniq = dedupe(findings);
   uniq.sort((a, b) => {
     const d = SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity];

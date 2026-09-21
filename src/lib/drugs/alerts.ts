@@ -44,6 +44,7 @@ const ISMP = new Set([
   "amiodarone",
   "sotalol",
   "naloxone",
+  "potassium",
 ]);
 
 const NIOSH = new Set([
@@ -71,10 +72,11 @@ const NIOSH = new Set([
   "lenalidomide",
   "thalidomide",
   "isotretinoin",
+  "tamoxifen",
 ]);
 
 const REMS: Record<string, string> = {
-  clozapine: "Clozapine REMS — ANC before dispense. The agranulocytosis boxed row.",
+  clozapine: "Clozapine REMS — ANC before dispense. Benzodiazepines are the respiratory-collapse row, not the REMS form.",
   esketamine: "Spravato REMS — healthcare setting, 2-hour watch, no driving.",
   buprenorphine: "MOUD buprenorphine is no longer X-waiver; some film / implant products still carry REMS paperwork.",
   lenalidomide: "Revlimid REMS — embryo-fetal toxicity. Open the program. This desk is not a pregnancy test.",

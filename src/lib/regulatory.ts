@@ -3,12 +3,12 @@
 
 export const SOFTWARE = {
   name: "FirstPass",
-  version: "1.1.0",
-  released: "2026-09-19",
+  version: "1.5.0",
+  released: "2026-09-21",
   manufacturer: "Kaleb Lovingier",
   email: "kaleblovingier@gmail.com",
   phone: "360-707-8923",
-  udi: "FP-SW-1.1.0",
+  udi: "FP-SW-1.5.0",
 } as const;
 
 /** 21 CFR / FDA CDS Guidance (Sept 28, 2022) posture — not a clearance. */
@@ -16,12 +16,15 @@ export const RECREATIONAL_SAFETY_CONTEXT =
   "This desk may be used in educational harm-reduction and recreational-safety review for licensed healthcare professionals and trained safety staff, including analysis of stimulant, sedative, dissociative, and street-supply combinations. Where local drug-checking services are available, purity and content testing services are complementary harm-reduction tools; they are not urine testing, not patient-directed dosing guidance, and not a substitute for the relevant FDA-approved Prescribing Information or local protocols. It is not intended for patient self-treatment, recreational dosing, or direct medical decision-making without independent review of the relevant FDA-approved Prescribing Information and local protocols.";
 
 export const INTENDED_USE =
-  `FirstPass is clinical decision support software intended for use by licensed healthcare professionals to display mapped cytochrome P450 and pharmacodynamic interaction information, FDA-label excerpts (OpenFDA / DailyMed), published scale scores, and cited literature so the healthcare professional can independently review the basis of any recommendation before acting. ${RECREATIONAL_SAFETY_CONTEXT} It is not intended to diagnose, treat, mitigate, or prevent disease, to calculate or recommend a dose, or to replace the FDA-approved Prescribing Information.`;
+  `FirstPass is clinical decision support software intended for use by licensed healthcare professionals to display mapped cytochrome P450 and pharmacodynamic interaction information, FDA-label excerpts (OpenFDA / DailyMed), published scale scores, labeled dose ranges and dose-caps, and cited literature so the healthcare professional can independently review the basis of any recommendation before acting. ${RECREATIONAL_SAFETY_CONTEXT} It is not intended to diagnose, treat, mitigate, or prevent disease, to generate a prescription, or to replace the FDA-approved Prescribing Information. Displayed dose ranges paraphrase FDA-approved labeling; a user-entered milligram is checked against those rails. The desk does not pick a milligram.`;
 
 export const INDICATIONS = [
   "Displaying CYP450 substrate / inhibitor / inducer maps, FDA DDI fold-change grades, start/stop safety clocks (reversible vs time-dependent inactivation vs induction lag), and pharmacodynamic collision scores for drugs and foods on a user-selected regimen.",
   "Surfacing excerpts of FDA-approved labeling (boxed warnings, contraindications, drug interactions, pregnancy) retrieved from OpenFDA and DailyMed.",
   "Displaying published clinical scales (COWS, CIWA-Ar, Hunter criteria, CDC 2022 oral MME factors, Bazett / Fridericia, Cockcroft–Gault) with the published source named.",
+  "Displaying labeled usual dose ranges, labeled maxima, and interaction dose-caps paraphrased from FDA-approved labeling, and checking a user-entered milligram against those rails.",
+  "Displaying named labeled pharmacodynamic collisions (sofosbuvir–amiodarone bradycardia, clozapine–benzodiazepine respiratory collapse, dual RAAS blockade, fluoroquinolone–corticosteroid tendinopathy, and related boxed pairs) so the healthcare professional can independently review the basis.",
+  "Displaying harm-reduction teaching (overdose response, test-strip limits, never-use-alone, recovery position, PsychonautWiki / TripSit / SAMHSA / CDC paraphrases, and live wiki intros with dosage and route-how-to stripped) so the healthcare professional can independently review the basis. Not a protocol and not a milligram.",
   "Linking CPIC / ClinPGx tables, PubMed PMIDs, DrugBank accessions, NIH RxClass, LactMed paraphrases, and ClinicalTrials.gov records for independent review.",
 ] as const;
 
@@ -41,6 +44,7 @@ export const WARNINGS = [
   "Absence of a mapped collision is not proof of safety. Transporters, UGT, plasma protein, unlisted metabolites, and unpublished interactions still apply.",
   "Live OpenFDA / DailyMed excerpts are truncated. Open the full SPL before acting.",
   "Street-supply rows (xylazine, nitazenes, designer benzos) are teaching maps, not labeled products.",
+  "Harm-reduction copy paraphrases PsychonautWiki, TripSit, SAMHSA, and CDC. Live wiki extracts are sanitized of milligrams and route how-to; a wiki is still not a Prescribing Information. Independently review.",
   "COWS, CIWA-Ar, Hunter, MME, QTc, and CYP start/stop clocks are published formulas and FDA-grade paraphrases displayed for independent scoring — not a diagnosis, not a hold, and not a documented vital.",
 ] as const;
 
@@ -72,7 +76,7 @@ export const HAZARDS: { id: string; hazard: string; control: string }[] = [
   {
     id: "H1",
     hazard: "User treats a collision as a dose or a hold order.",
-    control: "No milligrams. Window language is 'consider / independently review.' IFU and huddle footer repeat that the PI governs.",
+    control: "Labeled ranges and user-entered milligram checks only. Window language is 'consider / independently review.' IFU and huddle footer repeat that the PI governs. The desk never fills a milligram.",
   },
   {
     id: "H2",
@@ -87,7 +91,7 @@ export const HAZARDS: { id: string; hazard: string; control: string }[] = [
   {
     id: "H4",
     hazard: "Patient uses the desk without an HCP.",
-    control: "Intended-use statement, persistent HCP banner, and no patient-dosing UI.",
+    control: "Intended-use statement, persistent HCP banner, and no patient-facing dosing UI. Dose rails are HCP-directed labeled ranges, not a prescription writer.",
   },
   {
     id: "H5",
@@ -107,12 +111,14 @@ export const PRIMARY_SOURCES = [
   { name: "NCBI PubMed", href: "https://pubmed.ncbi.nlm.nih.gov/" },
   { name: "NIDDK LiverTox", href: "https://www.ncbi.nlm.nih.gov/books/NBK547852/" },
   { name: "NIH LactMed", href: "https://www.ncbi.nlm.nih.gov/books/NBK501922/" },
+  { name: "PsychonautWiki", href: "https://psychonautwiki.org/wiki/Responsible_drug_use" },
+  { name: "TripSit combination chart", href: "https://wiki.tripsit.me/wiki/Drug_combinations" },
 ] as const;
 
 export const NOT_CLEARED =
   "This software has not been cleared or approved by the U.S. Food and Drug Administration. Display of FDA-label text does not make FirstPass an FDA-cleared device.";
 
-export const PI_FOOTER = `${SOFTWARE.name} ${SOFTWARE.version} · Not FDA-cleared · Confirm against the FDA-approved Prescribing Information · Not a dose, not a treatment order, not a chart. Independent review required.`;
+export const PI_FOOTER = `${SOFTWARE.name} ${SOFTWARE.version} · Not FDA-cleared · Confirm against the FDA-approved Prescribing Information · Labeled ranges are not a prescription · Independent review required.`;
 
 export function dailymedSearchUrl(name: string) {
   return `https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=${encodeURIComponent(name)}`;
