@@ -40,7 +40,7 @@ import { DeskFooter } from "./operator";
 import { severitySurface } from "./severity";
 import { Plate } from "./plate";
 import { FirstPassMap } from "./first-pass";
-import { CollisionMap, MultiCircuitMap } from "./constellation";
+import { CollisionMap } from "./constellation";
 import { Formulary } from "./library";
 import { WashoutCard } from "./washout";
 import { PkExplorer } from "./pk";
@@ -372,7 +372,6 @@ export function DeskApp() {
                   ) : (
                     <>
                       <CollisionMap selected={selected} findings={report.findings} />
-                      <MultiCircuitMap selected={selected} findings={report.findings} />
                       <FindingList findings={report.findings} />
                     </>
                   )}

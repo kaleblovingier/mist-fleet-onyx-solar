@@ -1,6 +1,6 @@
 import { t as createServerFn } from "./ssr.mjs";
 import { t as createServerRpc } from "./createServerRpc-A6pJPYTF.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/collect-wIAMsE7m.js
+//#region node_modules/.nitro/vite/services/ssr/assets/collect-YKeLD-Ex.js
 function readString(input, key) {
 	if (!input || typeof input !== "object") return "";
 	const v = input[key];
@@ -27,7 +27,7 @@ var collectLicenses = createServerFn({ method: "POST" }).validator((input) => ({
 	names: readString(input, "names"),
 	hunt: readString(input, "hunt")
 })).handler(collectLicenses_createServerFn_handler, async ({ data }) => {
-	const { collectLicenses: run } = await import("./collect.server-DdP4foN5.mjs");
+	const { collectLicenses: run } = await import("./collect.server-Dqcx_GQM.mjs");
 	return run(data);
 });
 var draftCollected_createServerFn_handler = createServerRpc({
@@ -39,7 +39,7 @@ var draftCollected = createServerFn({ method: "POST" }).validator((input) => ({
 	pin: readString(input, "pin"),
 	rows: readRows(input)
 })).handler(draftCollected_createServerFn_handler, async ({ data }) => {
-	const { draftCollected: run } = await import("./collect.server-DdP4foN5.mjs");
+	const { draftCollected: run } = await import("./collect.server-Dqcx_GQM.mjs");
 	return run(data);
 });
 //#endregion

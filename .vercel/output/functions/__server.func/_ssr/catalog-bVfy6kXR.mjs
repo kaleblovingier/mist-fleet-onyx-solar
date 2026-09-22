@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/catalog-ChglGbbv.js
+//#region node_modules/.nitro/vite/services/ssr/assets/catalog-bVfy6kXR.js
 function card(partial) {
 	return partial;
 }
@@ -115,9 +115,9 @@ var CLINIC = {
 	}),
 	lamotrigine: card({
 		pregnancy: "caution",
-		pregNote: "Clearance rises in pregnancy — levels fall. Valproate is the UGT trap.",
+		pregNote: "Clearance rises in pregnancy — levels fall. Valproate is the UGT trap. Combined OCPs dump parent the other way.",
 		lactation: "caution",
-		boxed: "SJS/TEN. Slow titration. Valproate doubles parent.",
+		boxed: "SJS/TEN. Slow titration. Valproate doubles parent. Estrogen OCPs cut it; stopping the pill can spike.",
 		monitor: ["rash", "level"]
 	}),
 	lithium: card({
@@ -484,13 +484,14 @@ var CLINIC = {
 	oxybutynin: card({ beers: "Anticholinergic for bladder. Avoid if possible in older adults." }),
 	clozapine: card({
 		pregnancy: "caution",
-		boxed: "Agranulocytosis, myocarditis, seizures, orthostasis, constipation/ileus.",
+		boxed: "Agranulocytosis, myocarditis, seizures, orthostasis, constipation/ileus. Benzodiazepines: respiratory collapse — not generic stacked sedation.",
 		beers: "Anticholinergic / fall / constipation. ANC is the monitor at any age.",
 		monitor: [
 			"ANC",
 			"ECG",
 			"glucose",
-			"lipids"
+			"lipids",
+			"airway"
 		]
 	}),
 	olanzapine: card({
@@ -570,14 +571,15 @@ var CLINIC = {
 		pregnancy: "avoid",
 		pregNote: "Fetal thyroid. Long half-life — a washout of months.",
 		hepatic: "caution",
-		boxed: "Pulmonary, hepatic, and proarrhythmic toxicity. For life-threatening arrhythmia.",
+		boxed: "Pulmonary, hepatic, and proarrhythmic toxicity. Sofosbuvir DAAs: symptomatic bradycardia.",
 		beers: "Avoid as first-line AF agent.",
 		monitor: [
 			"TSH",
 			"LFTs",
 			"CXR",
 			"ECG",
-			"eye"
+			"eye",
+			"HR"
 		]
 	}),
 	sotalol: card({
@@ -669,7 +671,7 @@ var CLINIC = {
 	ketoconazole: card({
 		pregnancy: "avoid",
 		hepatic: "avoid",
-		boxed: "Hepatotoxicity. QT. Strong 3A4 inhibitor — the probe perpetrator.",
+		boxed: "Hepatotoxicity. QT. Strong 3A4 inhibitor — the probe perpetrator. Needs acidic pH — PPIs dump F.",
 		monitor: ["LFTs", "ECG"]
 	}),
 	itraconazole: card({
@@ -690,25 +692,34 @@ var CLINIC = {
 		pregnancy: "caution",
 		renal: "caution",
 		beers: "CNS, tendon, hypoglycemia, QT. Cations bind it in the gut.",
-		boxed: "Tendon, peripheral neuropathy, CNS, myasthenia. Next to methadone: QT plus a 1A2/weak-3A4 nudge (Herrlin 2000).",
-		monitor: ["glucose", "ECG"]
+		boxed: "Tendon, peripheral neuropathy, CNS, myasthenia. Concomitant corticosteroids raise tendon rupture. Next to methadone: QT plus a 1A2/weak-3A4 nudge (Herrlin 2000).",
+		monitor: [
+			"glucose",
+			"ECG",
+			"tendon"
+		]
 	}),
 	levofloxacin: card({
 		pregnancy: "caution",
 		renal: "caution",
 		beers: "Same FQ boxed harms. QT more than cipro.",
-		boxed: "Tendon, neuropathy, CNS, myasthenia.",
-		monitor: ["ECG", "glucose"]
+		boxed: "Tendon, neuropathy, CNS, myasthenia. Corticosteroids raise rupture risk.",
+		monitor: [
+			"ECG",
+			"glucose",
+			"tendon"
+		]
 	}),
 	moxifloxacin: card({
 		beers: "FQ harms plus QT.",
-		boxed: "Tendon, neuropathy, CNS. QT.",
-		monitor: ["ECG"]
+		boxed: "Tendon, neuropathy, CNS. QT. Corticosteroids raise rupture risk.",
+		monitor: ["ECG", "tendon"]
 	}),
 	doxycycline: card({
 		pregnancy: "avoid",
 		pregNote: "Tooth and bone in the second half of pregnancy. Cations bind it.",
-		lactation: "caution"
+		lactation: "caution",
+		boxed: "Isotretinoin: pseudotumor cerebri. Not a CYP perpetrator."
 	}),
 	nitroglycerin: card({
 		pregnancy: "caution",
@@ -1124,6 +1135,113 @@ var CLINIC = {
 			"BP",
 			"K"
 		]
+	}),
+	tamoxifen: card({
+		pregnancy: "avoid",
+		pregNote: "SERM. Stop around planned pregnancy. 2D6 activation is the desk collision.",
+		boxed: "Uterine malignancy, thromboembolism. Strong 2D6 inhibitors steal endoxifen.",
+		monitor: ["hot flash is not efficacy"]
+	}),
+	epclusa: card({
+		pregnancy: "caution",
+		hepatic: "caution",
+		boxed: "Amiodarone: symptomatic bradycardia. Strong inducers dump the DAA. PPIs cut velpatasvir F.",
+		monitor: ["HR", "HCV RNA"]
+	}),
+	"sofosbuvir-velpatasvir": card({
+		pregnancy: "caution",
+		boxed: "Same Epclusa map — amiodarone bradycardia, inducers, acid.",
+		monitor: ["HR", "HCV RNA"]
+	}),
+	sofosbuvir: card({
+		pregnancy: "caution",
+		boxed: "Amiodarone bradycardia with sofosbuvir-containing regimens.",
+		monitor: ["HR"]
+	}),
+	"ledipasvir-sofosbuvir": card({
+		pregnancy: "caution",
+		boxed: "Harvoni: amiodarone bradycardia. PPIs cut ledipasvir. Strong inducers dump it.",
+		monitor: ["HR", "HCV RNA"]
+	}),
+	isotretinoin: card({
+		pregnancy: "avoid",
+		pregNote: "iPLEDGE teratogen. Two forms of contraception. This desk is not a pregnancy test.",
+		boxed: "Embryo-fetal toxicity. Pseudotumor cerebri with tetracyclines. iPLEDGE REMS.",
+		monitor: [
+			"preg test",
+			"lipids",
+			"LFTs",
+			"mood"
+		]
+	}),
+	prednisone: card({
+		pregnancy: "caution",
+		boxed: "HPA suppression, infection. Fluoroquinolone tendon pair is the named collision.",
+		monitor: [
+			"glucose",
+			"BP",
+			"bone"
+		]
+	}),
+	dexamethasone: card({
+		pregnancy: "caution",
+		boxed: "Same systemic steroid harms. Moderate 3A4 inducer after days — OCPs and DOACs dump.",
+		monitor: ["glucose", "mood"]
+	}),
+	methylprednisolone: card({
+		pregnancy: "caution",
+		boxed: "Systemic corticosteroid. Fluoroquinolone tendon pair still applies.",
+		monitor: ["glucose"]
+	}),
+	aspirin: card({
+		pregnancy: "caution",
+		pregNote: "Low-dose is used in obstetrics. Anti-inflammatory doses near term close the ductus.",
+		beers: "Bleed. GI. Not a free cardioprotective if ibuprofen is around the dose.",
+		boxed: "Bleed. Reye in kids with viral illness. Ibuprofen attenuates antiplatelet effect.",
+		monitor: ["bleed", "CBC"]
+	}),
+	aliskiren: card({
+		pregnancy: "avoid",
+		pregNote: "RAAS fetal toxicity like ACEI/ARB.",
+		renal: "caution",
+		boxed: "Contraindicated with ACEI/ARB in diabetes. Fruit juice dumps OATP absorption.",
+		monitor: [
+			"K",
+			"Cr",
+			"BP"
+		]
+	}),
+	atazanavir: card({
+		pregnancy: "caution",
+		boxed: "Unboosted ATV: PPIs contraindicated — gastric pH, not 3A4. Hyperbilirubinemia. Strong 3A4 inhibitor.",
+		monitor: ["bilirubin", "viral load"]
+	}),
+	rilpivirine: card({
+		pregnancy: "caution",
+		boxed: "PPIs contraindicated. Needs a meal. QT. 3A4 victim — inducers dump it.",
+		monitor: ["viral load", "ECG"]
+	}),
+	canagliflozin: card({
+		pregnancy: "caution",
+		renal: "caution",
+		boxed: "Euglycemic DKA, volume, genital infection. Historical amputation boxed warning.",
+		monitor: [
+			"Cr",
+			"ketones",
+			"feet"
+		]
+	}),
+	omeprazole: card({
+		pregnancy: "caution",
+		beers: "Long-term PPI — C. difficile, bone, B12/Mg.",
+		boxed: "Blunts clopidogrel activation (2C19). Acid-dependent drugs lose F.",
+		monitor: ["Mg"]
+	}),
+	esomeprazole: card({
+		pregnancy: "caution",
+		beers: "Same long-term PPI harms.",
+		boxed: "Same 2C19 phenocopy of clopidogrel PM as omeprazole.",
+		monitor: ["Mg"]
 	})
 };
 function clinicFor(id) {
@@ -2828,7 +2946,7 @@ var CLINIC_FORMULARY = [
 		["Invokana"],
 		"SGLT2 inhibitor",
 		"",
-		["hypoglycemic"],
+		["hypoglycemic", "nephrotoxic"],
 		"Euglycemic DKA, amputation boxed historically",
 		["invokana"]
 	],
@@ -2838,7 +2956,7 @@ var CLINIC_FORMULARY = [
 		["Steglatro"],
 		"SGLT2 inhibitor",
 		"",
-		["hypoglycemic"],
+		["hypoglycemic", "nephrotoxic"],
 		"Euglycemic DKA, GU mycosis",
 		["steglatro"]
 	],
@@ -16508,7 +16626,21 @@ var CITES = [
 		"verapamil"
 	]),
 	c("17381386", 2007, "Ann Pharmacother", "Interaction between valproate and meropenem: a retrospective study.", "Spriet. Carbapenems crash valproate within a day — UGT / glucuronide recycling, not a CYP isoform. Switch the antibiotic or the AED.", ["clinic"], ["meropenem", "valproate"], ["meropenem", "valproate"]),
-	c("29126268", 2018, "Clin Infect Dis", "Vancomycin plus piperacillin-tazobactam and acute kidney injury in adults: a systematic review and meta-analysis.", "Luther. Observational AKI excess vs vancomycin plus cefepime or a carbapenem. Not a boxed hold. Oral vancomycin is a different exposure.", ["clinic"], ["vancomycin", "piperacillin-tazobactam"], ["vancomycin", "piperacillin-tazobactam"])
+	c("29126268", 2018, "Clin Infect Dis", "Vancomycin plus piperacillin-tazobactam and acute kidney injury in adults: a systematic review and meta-analysis.", "Luther. Observational AKI excess vs vancomycin plus cefepime or a carbapenem. Not a boxed hold. Oral vancomycin is a different exposure.", ["clinic"], ["vancomycin", "piperacillin-tazobactam"], ["vancomycin", "piperacillin-tazobactam"]),
+	c("11248154", 2001, "N Engl J Med", "Cyclooxygenase inhibitors and the antiplatelet effects of aspirin.", "Catella-Lawson. Ibuprofen occupies COX-1 and can block aspirin acetylation. Lost cardioprotection, not two NSAIDs.", ["clinic"], ["aspirin", "ibuprofen"], ["aspirin", "ibuprofen"]),
+	c("16433873", 2006, "Br J Clin Pharmacol", "The pharmacokinetic and pharmacodynamic consequences of the co-administration of lamotrigine and a combined oral contraceptive in healthy female subjects.", "Sidhu. Combined OCPs cut lamotrigine AUC roughly in half. Stopping the pill can spike parent.", ["clinic"], ["lamotrigine", "ethinyl-estradiol"], ["lamotrigine", "ethinyl-estradiol"]),
+	c("29385237", 2018, "Clin Pharmacol Ther", "Clinical Pharmacogenetics Implementation Consortium (CPIC) Guideline for CYP2D6 and Tamoxifen Therapy.", "CPIC tamoxifen. Strong 2D6 inhibitors steal endoxifen. Switch the SSRI, do not give more tamoxifen.", ["pgx", "clinic"], ["tamoxifen", "paroxetine"], ["tamoxifen", "paroxetine"]),
+	c("18378520", 2008, "N Engl J Med", "Telmisartan, ramipril, or both in patients at high risk for vascular events.", "ONTARGET. Dual ACEI+ARB — more hyperkalemia, hypotension, AKI without outcome gain.", ["clinic"], [
+		"ramipril",
+		"telmisartan",
+		"lisinopril",
+		"losartan"
+	], ["lisinopril", "losartan"]),
+	c("26253303", 2015, "Gastroenterology", "Extreme bradycardia after first doses of sofosbuvir and daclatasvir in patients receiving amiodarone: 2 cases including a rechallenge.", "Fontaine. The labeled sofosbuvir–amiodarone bradycardia row. Not stacked nodal PD.", ["clinic"], [
+		"epclusa",
+		"amiodarone",
+		"sofosbuvir"
+	], ["epclusa", "amiodarone"])
 ];
 function pubmedUrl(pmid) {
 	return `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`;
@@ -16586,6 +16718,19 @@ var CITE_TAGS = [
 		label: "Reviews"
 	}
 ];
+function synapseLayoutForOccupancy(occupancy) {
+	if (!occupancy.length) return [];
+	return occupancy.map((entry, index) => {
+		const x = 260 + index % 2 * 90 + Math.min(index, 2) * 14;
+		const y = 72 + index % 3 * 44 + (index % 2 === 0 ? 0 : 20);
+		return {
+			label: entry.r,
+			x,
+			y,
+			strength: entry.n
+		};
+	});
+}
 function st(spectrum, occupancy, pearl, sides) {
 	return {
 		spectrum,
@@ -18206,7 +18351,7 @@ var raw = [
 		"Toujeo"
 	], "Long-acting insulin", [], ["hypoglycemic"], "Hypoglycemia"),
 	d("levothyroxine", "Levothyroxine", ["Synthroid", "Levoxyl"], "Thyroid hormone", [], [], "Iatrogenic hyper/hypothyroidism", { note: "Absorption interactions (iron, calcium, PPIs) dominate over CYP." }),
-	d("prednisone", "Prednisone", ["Deltasone"], "Corticosteroid", [sub("CYP3A4", "minor")], [], "Hyperglycemia, immunosuppression"),
+	d("prednisone", "Prednisone", ["Deltasone"], "Corticosteroid", [sub("CYP3A4", "minor")], [], "Hyperglycemia, immunosuppression, tendon rupture with fluoroquinolones", { note: "Empty PD on purpose — the fluoroquinolone tendon pair is a named row, not stacked GABA. Not a 3A4 inducer like dexamethasone." }),
 	d("tacrolimus", "Tacrolimus", ["Prograf"], "Calcineurin inhibitor", [sub("CYP3A4", "sensitive", "clearance", true), sub("P-gp", "major")], [
 		"immunosuppressant",
 		"nephrotoxic",
@@ -19418,11 +19563,11 @@ var raw = [
 		aliases: ["actos"],
 		note: "Sensitive CYP2C8 substrate. Gemfibrozil is a strong 2C8 inhibitor — labeled dose cap or avoid. Fluid retention next to a glitazone is PD, not this curve."
 	}),
-	d("empagliflozin", "Empagliflozin", ["Jardiance"], "SGLT2 inhibitor", [], [], "Euglycemic DKA, genital mycosis, volume depletion", {
+	d("empagliflozin", "Empagliflozin", ["Jardiance"], "SGLT2 inhibitor", [], ["nephrotoxic"], "Euglycemic DKA, genital mycosis, volume depletion", {
 		aliases: ["jardiance"],
 		note: "UGT, not CYP. The collision is volume/AKI next to a diuretic or ACEI, and DKA with a sick day — not a cytochrome row. Stacked hypo with a sulfonylurea is still real."
 	}),
-	d("dapagliflozin", "Dapagliflozin", ["Farxiga"], "SGLT2 inhibitor", [], [], "Euglycemic DKA, genital mycosis, volume depletion", {
+	d("dapagliflozin", "Dapagliflozin", ["Farxiga"], "SGLT2 inhibitor", [], ["nephrotoxic"], "Euglycemic DKA, genital mycosis, volume depletion", {
 		aliases: ["farxiga"],
 		note: "Same SGLT2 map as empagliflozin. Not a CYP substrate. Search jardiance if you want the class."
 	}),
@@ -20204,7 +20349,7 @@ function searchDrugs(query, excludeIds = []) {
 	if (q === "abx" || q === "antibiotic" || q === "antibiotics") return DRUGS.filter((d) => !excluded.has(d.id) && familyOf(d) === "id").slice(0, 24);
 	if (q === "hiv" || q === "art" || q === "arv") return DRUGS.filter((d) => !excluded.has(d.id) && /HIV|INSTI|NRTI|NNRTI|protease inhibitor|capsid inhibitor|attachment inhibitor/i.test(d.cls)).slice(0, 24);
 	if (q === "insulin" || q === "insulins") return DRUGS.filter((d) => !excluded.has(d.id) && /insulin/i.test(`${d.cls} ${d.name}`)).slice(0, 24);
-	if (q === "wards" || q === "ward" || q === "hospital" || q === "zosyn" || q === "entresto") return [
+	if (q === "wards" || q === "ward" || q === "hospital" || q === "zosyn" || q === "entresto" || q === "safety" || q === "named" || q === "boxed") return [
 		"meropenem",
 		"ertapenem",
 		"imipenem-cilastatin",
@@ -20222,7 +20367,65 @@ function searchDrugs(query, excludeIds = []) {
 		"tacrolimus",
 		"linezolid",
 		"insulin-aspart",
-		"semaglutide"
+		"semaglutide",
+		"epclusa",
+		"amiodarone",
+		"clozapine",
+		"lorazepam",
+		"aspirin",
+		"ibuprofen",
+		"lamotrigine",
+		"tamoxifen",
+		"paroxetine",
+		"ethinyl-estradiol",
+		"rifampin",
+		"isotretinoin",
+		"doxycycline",
+		"ciprofloxacin",
+		"prednisone",
+		"losartan",
+		"omeprazole",
+		"rilpivirine",
+		"empagliflozin",
+		"furosemide"
+	].map((id) => DRUG_BY_ID[id]).filter((d) => Boolean(d) && !excluded.has(d.id)).slice(0, 24);
+	if (q === "dose" || q === "dosing" || q === "mg" || q === "milligram" || q === "cap") return [
+		"simvastatin",
+		"amiodarone",
+		"amlodipine",
+		"methotrexate",
+		"colchicine",
+		"lithium",
+		"warfarin",
+		"gabapentin",
+		"metformin",
+		"vancomycin",
+		"lamotrigine",
+		"valproate",
+		"atorvastatin",
+		"sildenafil",
+		"buprenorphine",
+		"digoxin"
+	].map((id) => DRUG_BY_ID[id]).filter((d) => Boolean(d) && !excluded.has(d.id)).slice(0, 16);
+	if (q === "harm" || q === "hr" || q === "strips" || q === "recovery" || q === "never" || q === "wiki" || q === "psychonaut" || q === "tripsit" || q === "pw") return [
+		"naloxone",
+		"nalmefene",
+		"fentanyl",
+		"dirty-30",
+		"xylazine",
+		"medetomidine",
+		"heroin",
+		"seven-oh",
+		"bromazolam",
+		"sodium-oxybate",
+		"mdma",
+		"ketamine",
+		"cocaine",
+		"ethanol",
+		"lsd",
+		"twentyfive-i",
+		"buprenorphine",
+		"methadone"
 	].map((id) => DRUG_BY_ID[id]).filter((d) => Boolean(d) && !excluded.has(d.id)).slice(0, 18);
 	if (q === "clinic" || q === "primary" || q === "common" || q === "pcp" || q === "staple" || q === "staples") return [
 		"meropenem",
@@ -20440,4 +20643,4 @@ function familyOf(drug) {
 	return "other";
 }
 //#endregion
-export { searchCites as C, tdmOnDesk as D, tdmHostNote as E, pubmedUrl as S, stahlFor as T, hasStahl as _, DRUGS as a, pgxFor as b, citesFor as c, drugbankUrl as d, familyOf as f, hasPgx as g, hasClinic as h, DRUGBANK as i, clinicFor as l, hasCite as m, CITE_TAGS as n, DRUG_BY_ID as o, fentanylPatchMme as p, CLINIC as r, FAMILIES as s, CITES as t, drugbankSearchUrl as u, methadoneFactor as v, searchDrugs as w, pubmedSearchUrl as x, mmeOnDesk as y };
+export { searchCites as C, tdmHostNote as D, synapseLayoutForOccupancy as E, tdmOnDesk as O, pubmedUrl as S, stahlFor as T, hasStahl as _, DRUGS as a, pgxFor as b, citesFor as c, drugbankUrl as d, familyOf as f, hasPgx as g, hasClinic as h, DRUGBANK as i, clinicFor as l, hasCite as m, CITE_TAGS as n, DRUG_BY_ID as o, fentanylPatchMme as p, CLINIC as r, FAMILIES as s, CITES as t, drugbankSearchUrl as u, methadoneFactor as v, searchDrugs as w, pubmedSearchUrl as x, mmeOnDesk as y };

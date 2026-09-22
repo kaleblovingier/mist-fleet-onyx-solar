@@ -1,5 +1,5 @@
-import { n as EMPTY_LIVE } from "./live-rpc-78hg3AZJ.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/live.server-BvGdy6en.js
+import { n as EMPTY_LIVE } from "./live-rpc-CTpDO4mR.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/live.server-ByrJ19iB.js
 var cache = /* @__PURE__ */ new Map();
 var TTL = 18e5;
 var UA = "FirstPass/1.0 (educational CYP desk; kaleblovingier@gmail.com)";

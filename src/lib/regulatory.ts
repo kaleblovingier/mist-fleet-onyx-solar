@@ -24,7 +24,7 @@ export const INDICATIONS = [
   "Displaying published clinical scales (COWS, CIWA-Ar, Hunter criteria, CDC 2022 oral MME factors, Bazett / Fridericia, Cockcroft–Gault) with the published source named.",
   "Displaying labeled usual dose ranges, labeled maxima, and interaction dose-caps paraphrased from FDA-approved labeling, and checking a user-entered milligram against those rails.",
   "Displaying named labeled pharmacodynamic collisions (sofosbuvir–amiodarone bradycardia, clozapine–benzodiazepine respiratory collapse, dual RAAS blockade, fluoroquinolone–corticosteroid tendinopathy, and related boxed pairs) so the healthcare professional can independently review the basis.",
-  "Displaying harm-reduction teaching (overdose response, test-strip limits, never-use-alone, recovery position, PsychonautWiki / TripSit / SAMHSA / CDC paraphrases, and live wiki intros with dosage and route-how-to stripped) so the healthcare professional can independently review the basis. Not a protocol and not a milligram.",
+  "Displaying harm-reduction teaching (overdose response, test-strip limits, never-use-alone, recovery position, DanceSafe reagent instructions, PsychonautWiki / TripSit / SAMHSA / CDC paraphrases, and live wiki intros with dosage and route-how-to stripped) so the healthcare professional can independently review the basis. Not a protocol and not a milligram.",
   "Linking CPIC / ClinPGx tables, PubMed PMIDs, DrugBank accessions, NIH RxClass, LactMed paraphrases, and ClinicalTrials.gov records for independent review.",
 ] as const;
 
@@ -44,7 +44,7 @@ export const WARNINGS = [
   "Absence of a mapped collision is not proof of safety. Transporters, UGT, plasma protein, unlisted metabolites, and unpublished interactions still apply.",
   "Live OpenFDA / DailyMed excerpts are truncated. Open the full SPL before acting.",
   "Street-supply rows (xylazine, nitazenes, designer benzos) are teaching maps, not labeled products.",
-  "Harm-reduction copy paraphrases PsychonautWiki, TripSit, SAMHSA, and CDC. Live wiki extracts are sanitized of milligrams and route how-to; a wiki is still not a Prescribing Information. Independently review.",
+  "Harm-reduction copy paraphrases DanceSafe, PsychonautWiki, TripSit, SAMHSA, and CDC. Live wiki extracts are sanitized of milligrams and route how-to; a wiki is still not a Prescribing Information. Independently review.",
   "COWS, CIWA-Ar, Hunter, MME, QTc, and CYP start/stop clocks are published formulas and FDA-grade paraphrases displayed for independent scoring — not a diagnosis, not a hold, and not a documented vital.",
 ] as const;
 
@@ -113,6 +113,7 @@ export const PRIMARY_SOURCES = [
   { name: "NIH LactMed", href: "https://www.ncbi.nlm.nih.gov/books/NBK501922/" },
   { name: "PsychonautWiki", href: "https://psychonautwiki.org/wiki/Responsible_drug_use" },
   { name: "TripSit combination chart", href: "https://wiki.tripsit.me/wiki/Drug_combinations" },
+  { name: "DanceSafe · reagent instructions", href: "https://dancesafe.org/testing-kit-instructions/" },
 ] as const;
 
 export const NOT_CLEARED =
