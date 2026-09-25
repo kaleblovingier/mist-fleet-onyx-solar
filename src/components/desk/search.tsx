@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
-import { searchDrugs } from "@/lib/drugs/catalog";
+import { DRUG_BY_ID, searchDrugs } from "@/lib/drugs/catalog";
 import { isMatDesk } from "@/lib/drugs/window";
 import { plateForDrug } from "@/lib/drugs/visuals";
 import { useDesk, usePlan } from "@/lib/drugs/store";
@@ -91,9 +91,11 @@ export function DrugSearch() {
         placeholder={
           full
             ? "Regimen full · remove a drug to add another"
-            : mat
-              ? "Paxlovid, Phenergan, UDS, COWS…"
-              : "Berberine, protocol, beers…"
+            : selected.length === 1
+              ? `Second drug to check against ${DRUG_BY_ID[selected[0]]?.name ?? "this"}`
+              : mat
+                ? "Paxlovid, Phenergan, UDS, COWS…"
+                : "Check a pair — simvastatin, clarithromycin…"
         }
         className="h-12 w-full rounded-lg bg-surface-2 pl-10 pr-10 text-sm text-fg shadow-[var(--shadow-border)] placeholder:text-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-60"
         autoComplete="off"

@@ -1,0 +1,410 @@
+import { useMemo, useState, type ReactNode } from "react";
+import { ChevronDown, ExternalLink } from "lucide-react";
+import { DRUG_BY_ID } from "@/lib/drugs/catalog";
+import { basisFor } from "@/lib/drugs/basis";
+import { conditionLanes, foodBeside, sameShelf } from "@/lib/drugs/also";
+import { maxDrugs } from "@/lib/billing/plans";
+import { useDesk, usePlan } from "@/lib/drugs/store";
+import type { EnzymeRole, Finding, HostContext, Severity } from "@/lib/drugs/types";
+import { SEVERITY_LABEL } from "@/lib/drugs/types";
+import { cn } from "@/lib/utils";
+import { severitySurface } from "./severity";
+
+const TIERS: Array<Severity | "all"> = ["all", "contraindicated", "major", "moderate", "minor"];
+
+const KIND_LABEL: Record<Finding["kind"], string> = {
+  pk: "Pharmacokinetic",
+  pd: "Pharmacodynamic",
+  geno: "Phenotype",
+  clinic: "Clinic",
+};
+
+function rank(f: Finding) {
+  const sev = { contraindicated: 40, major: 30, moderate: 20, minor: 10 }[f.severity];
+  return sev + (f.tags.includes("boxed") ? 6 : 0);
+}
+
+function ordered(findings: Finding[]) {
+  return [...findings].sort((a, b) => rank(b) - rank(a) || a.headline.localeCompare(b.headline));
+}
+
+function roleText(e: EnzymeRole) {
+  if (e.kind === "substrate") {
+    const act = e.pathway === "activation" ? " · activation" : "";
+    const nti = e.nti ? " · narrow index" : "";
+    return `${e.sensitivity} ${e.enzyme} substrate${act}${nti}`;
+  }
+  return `${e.strength} ${e.enzyme} ${e.kind}`;
+}
+
+function rolesFor(id: string, findings: Finding[]) {
+  const drug = DRUG_BY_ID[id];
+  if (!drug) return [];
+  const hit = new Set(findings.flatMap((f) => f.enzymes));
+  const relevant = hit.size ? drug.enzymes.filter((e) => hit.has(e.enzyme)) : drug.enzymes;
+  const rows = (relevant.length ? relevant : drug.enzymes).slice(0, 4);
+  return rows.map(roleText);
+}
+
+function actors(f: Finding): { left: string; verb: string; right: string } {
+  const names = f.drugIds.map((id) => DRUG_BY_ID[id]?.name ?? id);
+  const induces = f.tags.includes("inducer");
+  const inhibits = f.tags.includes("inhibitor");
+  const activation = f.tags.includes("activation");
+  if (f.kind === "pk" && (inhibits || induces) && names.length >= 2) {
+    const verb = induces
+      ? activation
+        ? "speeds activation of"
+        : "induces clearance of"
+      : activation
+        ? "blocks activation of"
+        : "inhibits clearance of";
+    return { left: names[0], verb, right: names[1] };
+  }
+  if (f.kind === "pk" && f.tags.includes("competition") && names.length >= 2) {
+    return { left: names[0], verb: "shares a substrate with", right: names[1] };
+  }
+  if (f.tags.includes("phenoconversion") && names.length >= 2) {
+    return { left: names[0], verb: "phenoconverts", right: names.slice(1).join(" · ") };
+  }
+  if (f.kind === "geno" && names[0]) {
+    return { left: f.enzymes[0] ? `${f.enzymes[0]} phenotype` : "Phenotype", verb: "rewrites", right: names[0] };
+  }
+  if (names.length >= 2) return { left: names[0], verb: "with", right: names.slice(1).join(" · ") };
+  return { left: names[0] ?? f.headline, verb: "", right: "" };
+}
+
+export function CheckBoard({
+  ids,
+  findings,
+  counts,
+  host,
+}: {
+  ids: string[];
+  findings: Finding[];
+  counts: Record<Severity, number>;
+  host: HostContext;
+}) {
+  const add = useDesk((s) => s.add);
+  const plan = usePlan();
+  const room = ids.length < maxDrugs(plan);
+  const rows = ordered(findings);
+  const food = useMemo(() => foodBeside(ids, host), [ids, host]);
+  const lanes = useMemo(
+    () => conditionLanes(ids, host, new Set(findings.map((f) => f.id))),
+    [ids, host, findings],
+  );
+  const shelf = sameShelf(ids);
+  const pairKey = ids.join("|");
+  const [scope, setScope] = useState(pairKey);
+  const [openId, setOpenId] = useState<string | null>(rows[0]?.id ?? food[0]?.id ?? null);
+  const [showAll, setShowAll] = useState(false);
+  const [tier, setTier] = useState<Severity | "all">("all");
+  const [showFood, setShowFood] = useState(false);
+  if (scope !== pairKey) {
+    setScope(pairKey);
+    setShowAll(false);
+    setShowFood(false);
+    setTier("all");
+    setOpenId(rows[0]?.id ?? food[0]?.id ?? null);
+  }
+  const filtered = tier === "all" ? rows : rows.filter((f) => f.severity === tier);
+  const visible = showAll ? filtered : filtered.slice(0, 5);
+  const hidden = filtered.length - visible.length;
+  const foodShown = showFood ? food : food.slice(0, 4);
+  const pairLead = rows[0];
+  const foodLead = food[0];
+  const lead =
+    pairLead && foodLead ? (rank(foodLead) > rank(pairLead) ? foodLead : pairLead) : (pairLead ?? foodLead);
+  const leadSev: Severity | "none" = lead?.severity ?? "none";
+  const foodOutranks = Boolean(pairLead && foodLead && rank(foodLead) > rank(pairLead));
+  const quietEnzymes = quietLine(ids, [...rows, ...food]);
+
+  return (
+    <section className="space-y-3 rounded-xl bg-surface px-4 py-4 shadow-[var(--shadow-border)] sm:px-5 sm:py-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Interaction check</p>
+          <h2 className="mt-1 font-serif text-2xl tracking-tight text-fg">
+            {lead ? verdictTitle(lead) : "No mapped collision."}
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+            {foodOutranks
+              ? "The sharper row is food or drink, not the two names. It sits under the pair and is not on the desk. Not a milligram. If the label disagrees, the label wins."
+              : rows.length === 0
+              ? "No collision between the names on the desk. Food, drink, and a different host are below — same map, not a second list. That is not a clearance."
+              : "Who acts, who is affected, and which way it moves. Food and drink for this list sit under the pair, even when they are not on the desk. Contraindicated is its own tier. Not a milligram. If the label disagrees, the label wins."}
+            {ids.length < 2 ? " Add a second drug when you have one." : ""}
+          </p>
+        </div>
+        <span
+          className={cn(
+            "inline-flex min-h-10 items-center justify-center rounded-md px-3 font-mono text-[11px] font-medium uppercase tracking-wider",
+            severitySurface(leadSev),
+          )}
+        >
+          {lead ? SEVERITY_LABEL[lead.severity] : "Unmapped"}
+        </span>
+      </div>
+
+      {shelf ? (
+        <p className="rounded-md bg-bg-sunken px-3 py-2 text-sm leading-relaxed text-fg">
+          {shelf}. Same shelf is not a collision by itself.
+        </p>
+      ) : null}
+
+      {rows.length > 0 ? (
+        <div className="flex flex-wrap gap-1">
+          {TIERS.map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => {
+                setTier(t);
+                setShowAll(false);
+              }}
+              className={cn(
+                "h-10 rounded-full px-3 text-xs font-medium",
+                tier === t ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+              )}
+            >
+              {t === "all"
+                ? `All ${rows.length}`
+                : `${SEVERITY_LABEL[t]} ${counts[t]}`}
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      <div className="grid gap-2 sm:grid-cols-2">
+        {ids.map((id) => {
+          const drug = DRUG_BY_ID[id];
+          if (!drug) return null;
+          const roles = rolesFor(id, rows);
+          return (
+            <div key={id} className="rounded-md bg-bg-sunken px-3 py-2.5">
+              <p className="text-sm font-medium text-fg">{drug.name}</p>
+              <p className="text-[11px] text-muted">{drug.cls}</p>
+              {roles.length ? (
+                <ul className="mt-1.5 space-y-0.5">
+                  {roles.map((r, i) => (
+                    <li key={`${id}-${i}`} className="text-xs leading-relaxed text-fg">
+                      {r}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-1.5 text-xs text-muted">No CYP or P-gp role on this map.</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {rows.length === 0 && quietEnzymes ? (
+        <p className="text-xs leading-relaxed text-muted">{quietEnzymes}</p>
+      ) : filtered.length === 0 && rows.length > 0 ? (
+        <p className="rounded-md bg-bg-sunken px-3 py-3 text-sm text-muted">Nothing at this tier.</p>
+      ) : rows.length > 0 ? (
+        <ol className="space-y-2">
+          {visible.map((f) => (
+            <CheckRow
+              key={f.id}
+              finding={f}
+              open={openId === f.id}
+              onToggle={() => setOpenId((id) => (id === f.id ? null : f.id))}
+            />
+          ))}
+        </ol>
+      ) : null}
+
+      {hidden > 0 ? (
+        <button
+          type="button"
+          onClick={() => setShowAll(true)}
+          className="h-11 rounded-full px-3 text-xs font-medium text-muted hover:text-fg"
+        >
+          {hidden} more in this check
+        </button>
+      ) : null}
+
+      {rows.length > 0 && quietEnzymes ? <p className="text-xs leading-relaxed text-muted">{quietEnzymes}</p> : null}
+
+      {food.length > 0 ? (
+        <div className="space-y-2 border-t border-border pt-3">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Food, drink, alcohol</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted">
+              Not on the desk. Same map, run against grapefruit, ethanol, dairy, St. John’s wort, leafy greens, coffee,
+              calcium, and tyramine foods. Add one only if you want it in the pair.
+            </p>
+          </div>
+          <ol className="space-y-2">
+            {foodShown.map((f) => {
+              const extra = f.drugIds.find((id) => !ids.includes(id) && DRUG_BY_ID[id]);
+              return (
+                <CheckRow
+                  key={f.id}
+                  finding={f}
+                  open={openId === f.id}
+                  onToggle={() => setOpenId((id) => (id === f.id ? null : f.id))}
+                  action={
+                    room && extra ? (
+                      <button
+                        type="button"
+                        onClick={() => add(extra)}
+                        className="h-10 rounded-full bg-surface px-3 text-xs font-medium text-fg"
+                      >
+                        Add {DRUG_BY_ID[extra]?.name}
+                      </button>
+                    ) : null
+                  }
+                />
+              );
+            })}
+          </ol>
+          {food.length > foodShown.length ? (
+            <button
+              type="button"
+              onClick={() => setShowFood(true)}
+              className="h-11 rounded-full px-3 text-xs font-medium text-muted hover:text-fg"
+            >
+              {food.length - foodShown.length} more food and drink
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+
+      {lanes.length > 0 ? (
+        <div className="space-y-3 border-t border-border pt-3">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">If the host changes</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted">
+              Not the person in front of you unless you flip the flag. Pregnancy, CKD, older adult, daily smoke.
+            </p>
+          </div>
+          {lanes.map((lane) => (
+            <div key={lane.id} className="space-y-2">
+              <p className="text-sm font-medium text-fg">{lane.label}</p>
+              <ol className="space-y-2">
+                {lane.findings.map((f) => (
+                  <CheckRow
+                    key={`${lane.id}-${f.id}`}
+                    finding={f}
+                    open={openId === `${lane.id}-${f.id}`}
+                    onToggle={() =>
+                      setOpenId((id) => (id === `${lane.id}-${f.id}` ? null : `${lane.id}-${f.id}`))
+                    }
+                  />
+                ))}
+              </ol>
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function actorLine(f: Finding) {
+  const a = actors(f);
+  if (!a.verb) return a.left;
+  return `${a.left} ${a.verb} ${a.right}`.replace(/\s+/g, " ").trim();
+}
+
+function verdictTitle(f: Finding) {
+  const raw = f.kind === "pk" || f.kind === "geno" ? actorLine(f) : f.effect || actorLine(f);
+  return raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : raw;
+}
+
+function quietLine(ids: string[], findings: Finding[]) {
+  const seen = new Set<string>();
+  for (const id of ids) {
+    for (const e of DRUG_BY_ID[id]?.enzymes ?? []) seen.add(e.enzyme);
+  }
+  const hit = new Set<string>(findings.flatMap((f) => f.enzymes));
+  const quiet = [...seen].filter((e) => !hit.has(e));
+  if (seen.size === 0) return "No CYP or P-gp role was on the map for this pair. Pharmacodynamic flags were still compared.";
+  if (quiet.length === 0) return "";
+  return `Also compared, no collision: ${quiet.join(", ")}.`;
+}
+
+function CheckRow({
+  finding,
+  open,
+  onToggle,
+  action,
+}: {
+  finding: Finding;
+  open: boolean;
+  onToggle: () => void;
+  action?: ReactNode;
+}) {
+  const a = actors(finding);
+  const basis = basisFor(finding).slice(0, 2);
+  return (
+    <li className="rounded-lg bg-bg-sunken">
+      <button type="button" onClick={onToggle} aria-expanded={open} className="flex w-full items-start gap-3 px-3 py-3 text-left">
+        <span
+          className={cn(
+            "mt-0.5 inline-flex min-w-24 shrink-0 items-center justify-center rounded-sm px-2 py-1 font-mono text-[10px] font-medium uppercase tracking-wider",
+            severitySurface(finding.severity),
+          )}
+        >
+          {SEVERITY_LABEL[finding.severity]}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-sm font-medium leading-snug text-fg">
+            {a.left}
+            {a.verb ? <span className="font-normal text-muted"> {a.verb} </span> : null}
+            {a.right}
+          </span>
+          <span className="mt-0.5 block text-xs text-muted">
+            {finding.effect ? `${finding.effect} · ` : ""}
+            {finding.mechanism}
+          </span>
+          <span className="mt-1 flex flex-wrap gap-1.5">
+            <span className="font-mono text-[10px] uppercase tracking-wide text-subtle">
+              {KIND_LABEL[finding.kind]}
+            </span>
+            {finding.tags.includes("boxed") ? (
+              <span className="font-mono text-[10px] uppercase tracking-wide text-danger">Boxed pair</span>
+            ) : null}
+            {finding.enzymes.map((e) => (
+              <span key={e} className="font-mono text-[10px] uppercase tracking-wide text-subtle">
+                {e}
+              </span>
+            ))}
+          </span>
+        </span>
+        <ChevronDown className={cn("mt-1 size-4 shrink-0 text-subtle", open && "rotate-180")} />
+      </button>
+      {open ? (
+        <div className="space-y-2 border-t border-border px-3 py-3">
+          <p className="text-sm leading-relaxed text-fg">{finding.clinical}</p>
+          <div className="flex flex-wrap gap-2">
+            {basis.map((b) =>
+              b.href ? (
+                <a
+                  key={`${b.kind}-${b.label}`}
+                  href={b.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex h-10 items-center gap-1 rounded-full bg-surface px-3 text-xs font-medium text-accent hover:underline"
+                >
+                  {b.label}
+                  <ExternalLink className="size-3" />
+                </a>
+              ) : (
+                <span key={`${b.kind}-${b.label}`} className="inline-flex h-10 items-center px-1 text-xs text-muted">
+                  {b.label}
+                </span>
+              ),
+            )}
+          </div>
+          {action}
+        </div>
+      ) : null}
+    </li>
+  );
+}

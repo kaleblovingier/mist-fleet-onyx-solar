@@ -3,12 +3,12 @@
 
 export const SOFTWARE = {
   name: "FirstPass",
-  version: "1.5.0",
-  released: "2026-09-21",
+  version: "1.9.0",
+  released: "2026-09-24",
   manufacturer: "Kaleb Lovingier",
   email: "kaleblovingier@gmail.com",
   phone: "360-707-8923",
-  udi: "FP-SW-1.5.0",
+  udi: "FP-SW-1.9.0",
 } as const;
 
 /** 21 CFR / FDA CDS Guidance (Sept 28, 2022) posture — not a clearance. */
@@ -25,6 +25,9 @@ export const INDICATIONS = [
   "Displaying labeled usual dose ranges, labeled maxima, and interaction dose-caps paraphrased from FDA-approved labeling, and checking a user-entered milligram against those rails.",
   "Displaying named labeled pharmacodynamic collisions (sofosbuvir–amiodarone bradycardia, clozapine–benzodiazepine respiratory collapse, dual RAAS blockade, fluoroquinolone–corticosteroid tendinopathy, and related boxed pairs) so the healthcare professional can independently review the basis.",
   "Displaying harm-reduction teaching (overdose response, test-strip limits, never-use-alone, recovery position, DanceSafe reagent instructions, PsychonautWiki / TripSit / SAMHSA / CDC paraphrases, and live wiki intros with dosage and route-how-to stripped) so the healthcare professional can independently review the basis. Not a protocol and not a milligram.",
+  "Leading a pair check with the perpetrator, the victim, the direction of effect, the enzyme or receptor, and a source that can be opened. Contraindicated is its own tier, above major. The check does not pick a milligram.",
+  "Showing food, drink, and alcohol rows for the names already on the desk, and pregnancy, CKD, older-adult, and daily-smoke rows labeled as a different host. Those rows are the same map. They are not a clearance and not a milligram.",
+  "Displaying study cards (rounds, named labeled pairs, formulary CYP roles, FDA fold-change grades, and mechanism cards from the selected pair) so a healthcare trainee can rehearse the basis, mark misses, and review them. Not an exam key and not a milligram.",
   "Linking CPIC / ClinPGx tables, PubMed PMIDs, DrugBank accessions, NIH RxClass, LactMed paraphrases, and ClinicalTrials.gov records for independent review.",
 ] as const;
 

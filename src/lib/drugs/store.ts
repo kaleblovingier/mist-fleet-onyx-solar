@@ -17,7 +17,7 @@ import {
   type PregBand,
 } from "./types";
 
-type View = "desk" | "atlas" | "plans" | "library" | "foundry" | "rounds" | "cites" | "label";
+type View = "desk" | "atlas" | "plans" | "library" | "foundry" | "rounds" | "cites" | "label" | "study";
 
 export interface LoadExtras {
   phenotypes?: Partial<PhenotypeMap>;
@@ -41,6 +41,7 @@ interface DeskState {
   kidney: KidneyBand;
   preg: PregBand;
   doses: Record<string, string>;
+  studyMarks: Record<string, "got" | "miss">;
   plan: PlanId;
   license: string | null;
   lifetime: boolean;
@@ -63,6 +64,8 @@ interface DeskState {
   setKidney: (kidney: KidneyBand) => void;
   setPreg: (preg: PregBand) => void;
   setDose: (id: string, value: string) => void;
+  markStudy: (id: string, mark: "got" | "miss") => void;
+  clearStudy: () => void;
   resetPhenotypes: () => void;
   openCheckout: (plan: PlanId, reason?: string, interval?: Interval) => void;
   closeCheckout: () => void;
@@ -95,6 +98,7 @@ export const useDesk = create<DeskState>()(
       kidney: "ok",
       preg: "off",
       doses: {},
+      studyMarks: {},
       plan: "free",
       license: null,
       lifetime: false,
@@ -270,6 +274,8 @@ export const useDesk = create<DeskState>()(
         else next[id] = trimmed;
         set({ doses: next });
       },
+      markStudy: (id, mark) => set({ studyMarks: { ...get().studyMarks, [id]: mark } }),
+      clearStudy: () => set({ studyMarks: {} }),
       resetPhenotypes: () =>
         set({
           phenotypes: { ...DEFAULT_PHENOTYPES },
@@ -341,6 +347,7 @@ export const useDesk = create<DeskState>()(
           kidney: p.kidney === "ckd" ? "ckd" : "ok",
           preg: p.preg === "pregnant" || p.preg === "lactating" ? p.preg : "off",
           doses: p.doses && typeof p.doses === "object" ? p.doses : {},
+          studyMarks: p.studyMarks && typeof p.studyMarks === "object" ? p.studyMarks : {},
           justActivated: false,
           hcpAck: Boolean(p.hcpAck),
         };
@@ -356,6 +363,7 @@ export const useDesk = create<DeskState>()(
         kidney: s.kidney,
         preg: s.preg,
         doses: s.doses,
+        studyMarks: s.studyMarks,
         plan: s.plan,
         license: s.license,
         lifetime: s.lifetime,

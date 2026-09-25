@@ -251,5 +251,5 @@ export const SEVERITY_LABEL: Record<Severity | "none", string> = {
   major: "Major",
   moderate: "Moderate",
   minor: "Minor",
-  none: "Clear",
+  none: "Unmapped",
 };

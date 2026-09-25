@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DrugSearch } from "./search";
 import { FindingList } from "./findings";
+import { CheckBoard } from "./check";
 import { CypHeatmap } from "./heatmap";
 import { EnzymeAtlas } from "./atlas";
 import { HemeMark } from "./mark";
@@ -52,6 +53,7 @@ import { CitesPage } from "./cites";
 import { WindowBriefing } from "./window";
 import { WindowExtras } from "./tray";
 import { ClinicalBoard } from "./clinical";
+import { StudyPage } from "./study";
 import { RxnavBoard } from "./rxnav";
 import { LabelPage } from "./label";
 import { PrescribingStrip } from "./pi";
@@ -169,6 +171,7 @@ export function DeskApp() {
                   ["library", "Materia"],
                   ["cites", "Cites"],
                   ["atlas", "Atlas"],
+                  ["study", "Study"],
                   ["rounds", "Rounds"],
                   ["label", "IFU"],
                   ["plans", "Pro"],
@@ -243,6 +246,8 @@ export function DeskApp() {
           <Foundry />
         ) : view === "rounds" ? (
           <RoundsPage />
+        ) : view === "study" ? (
+          <StudyPage />
         ) : view === "cites" ? (
           <CitesPage />
         ) : view === "label" ? (
@@ -292,6 +297,15 @@ export function DeskApp() {
               ) : null}
 
               {selected.length > 0 ? <WindowExtras /> : null}
+
+              {selected.length > 0 ? (
+                <CheckBoard
+                  ids={selected}
+                  findings={report.findings}
+                  counts={report.counts}
+                  host={host}
+                />
+              ) : null}
 
               {selected.length === 0 ? (
                 <EmptyState onLoad={load} ready={hydrated} />
@@ -353,6 +367,19 @@ export function DeskApp() {
                   <PrescribingStrip ids={selected} />
                   <ClinicPanel ids={selected} host={host} />
                   <ClinicalBoard ids={selected} host={host} />
+                  <button
+                    type="button"
+                    onClick={() => setView("study")}
+                    className="flex w-full items-center justify-between rounded-xl bg-surface px-4 py-3 text-left shadow-[var(--shadow-border)]"
+                  >
+                    <span>
+                      <span className="font-serif text-lg tracking-tight text-fg">Study this pair</span>
+                      <span className="mt-0.5 block text-xs text-muted">
+                        Mechanism cards from this pair. Rounds, named pairs, and the CYP map live on Study. Not a milligram.
+                      </span>
+                    </span>
+                    <span className="font-mono text-[11px] uppercase tracking-wide text-muted">Study</span>
+                  </button>
                   <RxnavBoard ids={selected} />
                   {pro ? (
                     <StackMeters stacks={report.stacks} />
@@ -364,18 +391,12 @@ export function DeskApp() {
                       <StackMeters stacks={report.stacks} />
                     </Paywall>
                   ) : null}
-                  {report.findings.length === 0 ? (
-                    <div className="rounded-xl bg-ok-soft px-5 py-6 text-sm text-ok shadow-[var(--shadow-border)]">
-                      No mapped CYP collision, phenotype hit, or pharmacodynamic synergy. Absence is not
-                      proof of safety — transporters, UGT, plasma protein, and unlisted pathways still
-                      apply.
-                    </div>
-                  ) : (
+                  {report.findings.length > 0 ? (
                     <>
                       <CollisionMap selected={selected} findings={report.findings} />
                       <FindingList findings={report.findings} />
                     </>
-                  )}
+                  ) : null}
                   <Dossier ids={selected} host={host} />
                   <PkExplorer drugs={hostDrugs} host={host} />
                   {pro ? (
@@ -518,6 +539,9 @@ function EmptyState({
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setView("rounds")}>
             Teaching rounds
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => setView("study")}>
+            Study drill
           </Button>
         </div>
         <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
