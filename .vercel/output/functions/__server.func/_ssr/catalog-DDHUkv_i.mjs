@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/catalog-D4HC6v6d.js
+//#region node_modules/.nitro/vite/services/ssr/assets/catalog-DDHUkv_i.js
 function card(partial) {
 	return partial;
 }
@@ -20240,12 +20240,14 @@ function psychRank(drug) {
 }
 function searchDrugs(query, excludeIds = []) {
 	const q = query.trim().toLowerCase();
+	const normalizedQuery = normalizeSearchText(q);
 	const excluded = new Set(excludeIds);
 	if (!q) {
 		const psych = DRUGS.filter((d) => !excluded.has(d.id) && isPsych(d) && !isFood(d)).sort((a, b) => psychRank(a) - psychRank(b) || a.name.localeCompare(b.name)).slice(0, 12);
 		const foods = DRUGS.filter((d) => !excluded.has(d.id) && isFood(d)).slice(0, 6);
 		return [...psych, ...foods];
 	}
+	if (!normalizedQuery) return [];
 	const foodQuery = q === "food" || q === "foods" || q === "diet" || q === "meal" || q === "herb" || q === "herbs" || q === "juice" || q === "dairy" || q === "kitchen";
 	const psychQuery = q === "psych" || q.includes("psychoact") || q.includes("dissociat") || q.includes("psychedel") || q === "stimulant" || q === "stimulants";
 	if (foodQuery) {
@@ -20538,17 +20540,27 @@ function searchDrugs(query, excludeIds = []) {
 	const scored = [];
 	for (const drug of DRUGS) {
 		if (excluded.has(drug.id)) continue;
-		const name = drug.name.toLowerCase();
-		const brands = drug.brands.map((b) => b.toLowerCase());
-		const aliases = drug.aliases.map((a) => a.toLowerCase());
+		const name = normalizeSearchText(drug.name);
+		const brands = drug.brands.map(normalizeSearchText);
+		const aliases = drug.aliases.map(normalizeSearchText);
+		const id = normalizeSearchText(drug.id);
 		const cls = drug.cls.toLowerCase();
-		const enzymeHit = drug.enzymes.some((e) => e.enzyme.toLowerCase().includes(q.replace(/\s+/g, "")));
+		const searchable = [
+			name,
+			id,
+			...brands,
+			...aliases
+		];
+		const compactQuery = normalizedQuery.replace(/\s/g, "");
+		const enzymeHit = drug.enzymes.some((e) => normalizeSearchText(e.enzyme).replace(/\s/g, "").includes(compactQuery));
+		const tokenHit = normalizedQuery.length >= 3 && normalizedQuery.split(" ").every((token) => searchable.some((value) => value.includes(token)));
 		let score = 0;
-		if (name === q || brands.includes(q) || aliases.includes(q)) score = 100;
-		else if (name.startsWith(q)) score = 80;
-		else if (brands.some((b) => b.startsWith(q)) || aliases.some((a) => a.startsWith(q))) score = 70;
-		else if (name.includes(q)) score = 60;
-		else if (brands.some((b) => b.includes(q)) || aliases.some((a) => a.includes(q))) score = 50;
+		if (searchable.some((value) => value === normalizedQuery)) score = 100;
+		else if (name.startsWith(normalizedQuery) || id.startsWith(normalizedQuery)) score = 80;
+		else if (brands.some((b) => b.startsWith(normalizedQuery)) || aliases.some((a) => a.startsWith(normalizedQuery))) score = 70;
+		else if (name.includes(normalizedQuery) || id.includes(normalizedQuery)) score = 60;
+		else if (brands.some((b) => b.includes(normalizedQuery)) || aliases.some((a) => a.includes(normalizedQuery))) score = 50;
+		else if (tokenHit) score = 45;
 		else if (cls.includes(q)) score = 35;
 		else if (enzymeHit) score = 25;
 		else if (eKindQuery(drug, q)) score = 20;
@@ -20559,6 +20571,14 @@ function searchDrugs(query, excludeIds = []) {
 	}
 	scored.sort((a, b) => b.score - a.score || a.drug.name.localeCompare(b.drug.name));
 	return scored.slice(0, 24).map((s) => s.drug);
+}
+/**
+* Make generic, brand, salt-form, and street-name lookups comparable without
+* changing the displayed clinical name. Punctuation and diacritics should not
+* decide whether a catalog entry is discoverable.
+*/
+function normalizeSearchText(value) {
+	return value.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
 }
 function eKindQuery(drug, q) {
 	if (q.includes("inhibit")) return drug.enzymes.some((e) => e.kind === "inhibitor");

@@ -3,16 +3,16 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { v as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as TSS_SERVER_FUNCTION, r as getServerFnById, t as createServerFn } from "./ssr.mjs";
 import { r as CONNECTOR_TOKEN_READY_EVENT } from "./types-DXXiBr9d.mjs";
-import { _ as priceFor, a as PLANS, b as tweetFor, c as TRY_THREE, d as fulfillKeys, f as invoiceText, g as payClose, h as maxDrugs, i as PAY_RAILS, l as buyerDm, m as launchTweet, n as COMMERCE, o as PLAN_BY_ID, p as launchPosts, r as OPERATOR, s as SITE, t as BUYERS, u as fulfillKey, v as requestLicense, y as salesDm } from "./plans-BRWqRvoI.mjs";
-import { C as searchCites, D as tdmOnDesk, E as tdmHostNote, S as pubmedUrl, T as stahlFor, _ as hasStahl, a as DRUGS, b as pgxFor, c as citesFor, d as drugbankUrl, f as familyOf, g as hasPgx, h as hasClinic, i as DRUGBANK, l as clinicFor, m as hasCite, n as CITE_TAGS, o as DRUG_BY_ID, p as fentanylPatchMme, r as CLINIC, s as FAMILIES, t as CITES, u as drugbankSearchUrl, v as methadoneFactor, w as searchDrugs, x as pubmedSearchUrl, y as mmeOnDesk } from "./catalog-D4HC6v6d.mjs";
-import { a as comboOnDesk, d as wikiResourcesFor, n as PW_STATIC_RESOURCES, o as comboTone, t as PW_PRINCIPLES, u as wikiOnDesk } from "./psychonaut-C_rBJMYH.mjs";
+import { _ as priceFor, a as PLANS, b as tweetFor, c as TRY_THREE, d as fulfillKeys, f as invoiceText, g as payClose, h as maxDrugs, i as PAY_RAILS, l as buyerDm, m as launchTweet, n as COMMERCE, o as PLAN_BY_ID, p as launchPosts, r as OPERATOR, s as SITE, t as BUYERS, u as fulfillKey, v as requestLicense, y as salesDm } from "./plans-DkYlOxq4.mjs";
+import { C as searchCites, D as tdmOnDesk, E as tdmHostNote, S as pubmedUrl, T as stahlFor, _ as hasStahl, a as DRUGS, b as pgxFor, c as citesFor, d as drugbankUrl, f as familyOf, g as hasPgx, h as hasClinic, i as DRUGBANK, l as clinicFor, m as hasCite, n as CITE_TAGS, o as DRUG_BY_ID, p as fentanylPatchMme, r as CLINIC, s as FAMILIES, t as CITES, u as drugbankSearchUrl, v as methadoneFactor, w as searchDrugs, x as pubmedSearchUrl, y as mmeOnDesk } from "./catalog-DDHUkv_i.mjs";
+import { a as comboOnDesk, d as wikiResourcesFor, n as PW_STATIC_RESOURCES, o as comboTone, t as PW_PRINCIPLES, u as wikiOnDesk } from "./psychonaut-lk1QLUaU.mjs";
 import { _ as ChevronDown, a as Share2, c as Plus, d as KeyRound, f as ExternalLink, g as ClipboardCopy, h as Copy, i as SquareCheckBig, l as Lock, m as CreditCard, o as Search, p as Download, r as Square, s as RotateCcw, t as X, u as LoaderCircle, v as Check } from "../_libs/lucide-react.mjs";
 import { n as create, t as persist } from "../_libs/zustand.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as Slot } from "../_libs/radix-ui__react-slot.mjs";
 import { a as CartesianGrid, i as Line, n as YAxis, o as ResponsiveContainer, r as XAxis, s as Tooltip, t as LineChart } from "../_libs/recharts+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-GS3keirk.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-Bg5zdB6Y.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function isLoginRequired(result) {
@@ -341,7 +341,7 @@ var SEVERITY_LABEL = {
 	major: "Major",
 	moderate: "Moderate",
 	minor: "Minor",
-	none: "Clear"
+	none: "Unmapped"
 };
 /**
 * Phenoconversion — a strong inhibitor or inducer rewriting the host genotype.
@@ -3731,7 +3731,7 @@ function burdenFor(drugs) {
 		};
 	}).filter((b) => b.substrates.length || b.inhibitors.length || b.inducers.length);
 }
-function dedupe(findings) {
+function dedupe$1(findings) {
 	const byKey = /* @__PURE__ */ new Map();
 	for (const f of findings) {
 		const key = f.kind === "pd" ? f.id : `${[...f.drugIds].sort().join("-")}|${f.enzymes.join(",")}|${f.tags.join(",")}`;
@@ -3995,7 +3995,7 @@ function analyze(drugIds, host, amounts) {
 	findings.push(...udsFindings(real.map((d) => d.id)));
 	findings.push(...protocolFindings(real.map((d) => d.id)));
 	if (amounts && Object.keys(amounts).length) findings.push(...doseFindings(real.map((d) => d.id), amounts, ctx ?? DEFAULT_HOST));
-	const uniq = dedupe(findings);
+	const uniq = dedupe$1(findings);
 	uniq.sort((a, b) => {
 		const d = SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity];
 		if (d) return d;
@@ -6563,6 +6563,7 @@ var useDesk = create()(persist((set, get) => ({
 	kidney: "ok",
 	preg: "off",
 	doses: {},
+	studyMarks: {},
 	plan: "free",
 	license: null,
 	lifetime: false,
@@ -6749,6 +6750,11 @@ var useDesk = create()(persist((set, get) => ({
 		else next[id] = trimmed;
 		set({ doses: next });
 	},
+	markStudy: (id, mark) => set({ studyMarks: {
+		...get().studyMarks,
+		[id]: mark
+	} }),
+	clearStudy: () => set({ studyMarks: {} }),
 	resetPhenotypes: () => set({
 		phenotypes: { ...DEFAULT_PHENOTYPES },
 		smoking: false,
@@ -6827,6 +6833,7 @@ var useDesk = create()(persist((set, get) => ({
 			kidney: p.kidney === "ckd" ? "ckd" : "ok",
 			preg: p.preg === "pregnant" || p.preg === "lactating" ? p.preg : "off",
 			doses: p.doses && typeof p.doses === "object" ? p.doses : {},
+			studyMarks: p.studyMarks && typeof p.studyMarks === "object" ? p.studyMarks : {},
 			justActivated: false,
 			hcpAck: Boolean(p.hcpAck)
 		};
@@ -6842,6 +6849,7 @@ var useDesk = create()(persist((set, get) => ({
 		kidney: s.kidney,
 		preg: s.preg,
 		doses: s.doses,
+		studyMarks: s.studyMarks,
 		plan: s.plan,
 		license: s.license,
 		lifetime: s.lifetime,
@@ -6913,12 +6921,12 @@ function Badge({ className, tone, ...props }) {
 *  Not FDA-cleared. Not FDA-approved. The Prescribing Information governs. */
 var SOFTWARE = {
 	name: "FirstPass",
-	version: "1.5.0",
-	released: "2026-09-21",
+	version: "1.9.0",
+	released: "2026-09-24",
 	manufacturer: "Kaleb Lovingier",
 	email: "kaleblovingier@gmail.com",
 	phone: "360-707-8923",
-	udi: "FP-SW-1.5.0"
+	udi: "FP-SW-1.9.0"
 };
 var INTENDED_USE = `FirstPass is clinical decision support software intended for use by licensed healthcare professionals to display mapped cytochrome P450 and pharmacodynamic interaction information, FDA-label excerpts (OpenFDA / DailyMed), published scale scores, labeled dose ranges and dose-caps, and cited literature so the healthcare professional can independently review the basis of any recommendation before acting. This desk may be used in educational harm-reduction and recreational-safety review for licensed healthcare professionals and trained safety staff, including analysis of stimulant, sedative, dissociative, and street-supply combinations. Where local drug-checking services are available, purity and content testing services are complementary harm-reduction tools; they are not urine testing, not patient-directed dosing guidance, and not a substitute for the relevant FDA-approved Prescribing Information or local protocols. It is not intended for patient self-treatment, recreational dosing, or direct medical decision-making without independent review of the relevant FDA-approved Prescribing Information and local protocols. It is not intended to diagnose, treat, mitigate, or prevent disease, to generate a prescription, or to replace the FDA-approved Prescribing Information. Displayed dose ranges paraphrase FDA-approved labeling; a user-entered milligram is checked against those rails. The desk does not pick a milligram.`;
 var INDICATIONS = [
@@ -6928,6 +6936,9 @@ var INDICATIONS = [
 	"Displaying labeled usual dose ranges, labeled maxima, and interaction dose-caps paraphrased from FDA-approved labeling, and checking a user-entered milligram against those rails.",
 	"Displaying named labeled pharmacodynamic collisions (sofosbuvir–amiodarone bradycardia, clozapine–benzodiazepine respiratory collapse, dual RAAS blockade, fluoroquinolone–corticosteroid tendinopathy, and related boxed pairs) so the healthcare professional can independently review the basis.",
 	"Displaying harm-reduction teaching (overdose response, test-strip limits, never-use-alone, recovery position, DanceSafe reagent instructions, PsychonautWiki / TripSit / SAMHSA / CDC paraphrases, and live wiki intros with dosage and route-how-to stripped) so the healthcare professional can independently review the basis. Not a protocol and not a milligram.",
+	"Leading a pair check with the perpetrator, the victim, the direction of effect, the enzyme or receptor, and a source that can be opened. Contraindicated is its own tier, above major. The check does not pick a milligram.",
+	"Showing food, drink, and alcohol rows for the names already on the desk, and pregnancy, CKD, older-adult, and daily-smoke rows labeled as a different host. Those rows are the same map. They are not a clearance and not a milligram.",
+	"Displaying study cards (rounds, named labeled pairs, formulary CYP roles, FDA fold-change grades, and mechanism cards from the selected pair) so a healthcare trainee can rehearse the basis, mark misses, and review them. Not an exam key and not a milligram.",
 	"Linking CPIC / ClinPGx tables, PubMed PMIDs, DrugBank accessions, NIH RxClass, LactMed paraphrases, and ClinicalTrials.gov records for independent review."
 ];
 var NOT_FOR = [
@@ -7647,7 +7658,7 @@ function DrugSearch() {
 						e.target.blur();
 					}
 				},
-				placeholder: full ? "Regimen full · remove a drug to add another" : mat ? "Paxlovid, Phenergan, UDS, COWS…" : "Berberine, protocol, beers…",
+				placeholder: full ? "Regimen full · remove a drug to add another" : selected.length === 1 ? `Second drug to check against ${DRUG_BY_ID[selected[0]]?.name ?? "this"}` : mat ? "Paxlovid, Phenergan, UDS, COWS…" : "Check a pair — simvastatin, clarithromycin…",
 				className: "h-12 w-full rounded-lg bg-surface-2 pl-10 pr-10 text-sm text-fg shadow-[var(--shadow-border)] placeholder:text-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-60",
 				autoComplete: "off",
 				spellCheck: false
@@ -8023,6 +8034,485 @@ function FindingCard({ finding }) {
 						]
 					}, d.id))
 				})
+			]
+		}) : null]
+	});
+}
+/**
+* Food, drink, and host-condition rows for names already on the desk.
+* Same engine as the pair check. Not a second database. Not a milligram.
+*/
+var FOOD_PROBES = [
+	"grapefruit",
+	"ethanol",
+	"dairy",
+	"st-johns-wort",
+	"leafy-greens",
+	"coffee",
+	"calcium",
+	"tyramine-foods"
+];
+var SEV = {
+	contraindicated: 4,
+	major: 3,
+	moderate: 2,
+	minor: 1
+};
+function dedupe(rows) {
+	const seen = /* @__PURE__ */ new Set();
+	const out = [];
+	for (const f of rows) {
+		if (seen.has(f.id)) continue;
+		seen.add(f.id);
+		out.push(f);
+	}
+	return out.sort((a, b) => SEV[b.severity] - SEV[a.severity] || a.headline.localeCompare(b.headline));
+}
+function realIds(ids) {
+	return ids.filter((id) => DRUG_BY_ID[id] && !id.startsWith("__"));
+}
+function foodBeside(ids, host) {
+	const real = realIds(ids);
+	const out = [];
+	for (const id of real) for (const extra of FOOD_PROBES) {
+		if (real.includes(extra) || !DRUG_BY_ID[extra]) continue;
+		const report = analyze([id, extra], host);
+		for (const f of report.findings) if (f.drugIds.includes(extra)) out.push(f);
+	}
+	const ranked = dedupe(out).filter((f) => {
+		if (!f.tags.includes("phenoconversion")) return true;
+		const key = [...f.drugIds].sort().join("|");
+		return !out.some((other) => other.kind === "pk" && other.id !== f.id && [...other.drugIds].sort().join("|") === key);
+	});
+	const loud = ranked.filter((f) => f.severity !== "minor");
+	return loud.length ? loud : ranked.slice(0, 4);
+}
+function conditionLanes(ids, host, already) {
+	const real = realIds(ids);
+	if (!real.length) return [];
+	const base = {
+		...host,
+		phenotypes: { ...host.phenotypes }
+	};
+	const lanes = [];
+	if ((base.preg ?? "off") === "off") lanes.push({
+		id: "preg",
+		label: "If pregnant",
+		host: {
+			...base,
+			preg: "pregnant"
+		}
+	});
+	if ((base.kidney ?? "ok") === "ok") lanes.push({
+		id: "ckd",
+		label: "If CKD",
+		host: {
+			...base,
+			kidney: "ckd"
+		}
+	});
+	if ((base.age ?? "adult") === "adult") lanes.push({
+		id: "age",
+		label: "If older adult",
+		host: {
+			...base,
+			age: "geriatric"
+		}
+	});
+	if (!base.smoking) lanes.push({
+		id: "smoke",
+		label: "If daily smoke",
+		host: {
+			...base,
+			smoking: true
+		}
+	});
+	return lanes.map((lane) => ({
+		id: lane.id,
+		label: lane.label,
+		findings: dedupe(analyze(real, lane.host).findings.filter((f) => !already.has(f.id))).slice(0, 3)
+	})).filter((lane) => lane.findings.length > 0);
+}
+function sameShelf(ids) {
+	const named = realIds(ids).map((id) => DRUG_BY_ID[id]).filter((d) => Boolean(d) && d.kind === "drug");
+	const by = /* @__PURE__ */ new Map();
+	for (const d of named) {
+		const list = by.get(d.cls) ?? [];
+		list.push(d.name);
+		by.set(d.cls, list);
+	}
+	const dups = [...by.entries()].filter(([, names]) => names.length > 1);
+	if (!dups.length) return null;
+	return dups.map(([cls, names]) => `${names.join(" and ")} are both on the ${cls} shelf`).join(". ");
+}
+var TIERS = [
+	"all",
+	"contraindicated",
+	"major",
+	"moderate",
+	"minor"
+];
+var KIND_LABEL = {
+	pk: "Pharmacokinetic",
+	pd: "Pharmacodynamic",
+	geno: "Phenotype",
+	clinic: "Clinic"
+};
+function rank(f) {
+	return {
+		contraindicated: 40,
+		major: 30,
+		moderate: 20,
+		minor: 10
+	}[f.severity] + (f.tags.includes("boxed") ? 6 : 0);
+}
+function ordered(findings) {
+	return [...findings].sort((a, b) => rank(b) - rank(a) || a.headline.localeCompare(b.headline));
+}
+function roleText(e) {
+	if (e.kind === "substrate") {
+		const act = e.pathway === "activation" ? " · activation" : "";
+		const nti = e.nti ? " · narrow index" : "";
+		return `${e.sensitivity} ${e.enzyme} substrate${act}${nti}`;
+	}
+	return `${e.strength} ${e.enzyme} ${e.kind}`;
+}
+function rolesFor(id, findings) {
+	const drug = DRUG_BY_ID[id];
+	if (!drug) return [];
+	const hit = new Set(findings.flatMap((f) => f.enzymes));
+	const relevant = hit.size ? drug.enzymes.filter((e) => hit.has(e.enzyme)) : drug.enzymes;
+	return (relevant.length ? relevant : drug.enzymes).slice(0, 4).map(roleText);
+}
+function actors(f) {
+	const names = f.drugIds.map((id) => DRUG_BY_ID[id]?.name ?? id);
+	const induces = f.tags.includes("inducer");
+	const inhibits = f.tags.includes("inhibitor");
+	const activation = f.tags.includes("activation");
+	if (f.kind === "pk" && (inhibits || induces) && names.length >= 2) {
+		const verb = induces ? activation ? "speeds activation of" : "induces clearance of" : activation ? "blocks activation of" : "inhibits clearance of";
+		return {
+			left: names[0],
+			verb,
+			right: names[1]
+		};
+	}
+	if (f.kind === "pk" && f.tags.includes("competition") && names.length >= 2) return {
+		left: names[0],
+		verb: "shares a substrate with",
+		right: names[1]
+	};
+	if (f.tags.includes("phenoconversion") && names.length >= 2) return {
+		left: names[0],
+		verb: "phenoconverts",
+		right: names.slice(1).join(" · ")
+	};
+	if (f.kind === "geno" && names[0]) return {
+		left: f.enzymes[0] ? `${f.enzymes[0]} phenotype` : "Phenotype",
+		verb: "rewrites",
+		right: names[0]
+	};
+	if (names.length >= 2) return {
+		left: names[0],
+		verb: "with",
+		right: names.slice(1).join(" · ")
+	};
+	return {
+		left: names[0] ?? f.headline,
+		verb: "",
+		right: ""
+	};
+}
+function CheckBoard({ ids, findings, counts, host }) {
+	const add = useDesk((s) => s.add);
+	const plan = usePlan();
+	const room = ids.length < maxDrugs(plan);
+	const rows = ordered(findings);
+	const food = (0, import_react.useMemo)(() => foodBeside(ids, host), [ids, host]);
+	const lanes = (0, import_react.useMemo)(() => conditionLanes(ids, host, new Set(findings.map((f) => f.id))), [
+		ids,
+		host,
+		findings
+	]);
+	const shelf = sameShelf(ids);
+	const pairKey = ids.join("|");
+	const [scope, setScope] = (0, import_react.useState)(pairKey);
+	const [openId, setOpenId] = (0, import_react.useState)(rows[0]?.id ?? food[0]?.id ?? null);
+	const [showAll, setShowAll] = (0, import_react.useState)(false);
+	const [tier, setTier] = (0, import_react.useState)("all");
+	const [showFood, setShowFood] = (0, import_react.useState)(false);
+	if (scope !== pairKey) {
+		setScope(pairKey);
+		setShowAll(false);
+		setShowFood(false);
+		setTier("all");
+		setOpenId(rows[0]?.id ?? food[0]?.id ?? null);
+	}
+	const filtered = tier === "all" ? rows : rows.filter((f) => f.severity === tier);
+	const visible = showAll ? filtered : filtered.slice(0, 5);
+	const hidden = filtered.length - visible.length;
+	const foodShown = showFood ? food : food.slice(0, 4);
+	const pairLead = rows[0];
+	const foodLead = food[0];
+	const lead = pairLead && foodLead ? rank(foodLead) > rank(pairLead) ? foodLead : pairLead : pairLead ?? foodLead;
+	const leadSev = lead?.severity ?? "none";
+	const foodOutranks = Boolean(pairLead && foodLead && rank(foodLead) > rank(pairLead));
+	const quietEnzymes = quietLine(ids, [...rows, ...food]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "space-y-3 rounded-xl bg-surface px-4 py-4 shadow-[var(--shadow-border)] sm:px-5 sm:py-5",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-wrap items-start justify-between gap-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "min-w-0",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "font-mono text-[11px] uppercase tracking-[0.2em] text-muted",
+							children: "Interaction check"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "mt-1 font-serif text-2xl tracking-tight text-fg",
+							children: lead ? verdictTitle(lead) : "No mapped collision."
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "mt-2 max-w-2xl text-sm leading-relaxed text-muted",
+							children: [foodOutranks ? "The sharper row is food or drink, not the two names. It sits under the pair and is not on the desk. Not a milligram. If the label disagrees, the label wins." : rows.length === 0 ? "No collision between the names on the desk. Food, drink, and a different host are below — same map, not a second list. That is not a clearance." : "Who acts, who is affected, and which way it moves. Food and drink for this list sit under the pair, even when they are not on the desk. Contraindicated is its own tier. Not a milligram. If the label disagrees, the label wins.", ids.length < 2 ? " Add a second drug when you have one." : ""]
+						})
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: cn("inline-flex min-h-10 items-center justify-center rounded-md px-3 font-mono text-[11px] font-medium uppercase tracking-wider", severitySurface(leadSev)),
+					children: lead ? SEVERITY_LABEL[lead.severity] : "Unmapped"
+				})]
+			}),
+			shelf ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "rounded-md bg-bg-sunken px-3 py-2 text-sm leading-relaxed text-fg",
+				children: [shelf, ". Same shelf is not a collision by itself."]
+			}) : null,
+			rows.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "flex flex-wrap gap-1",
+				children: TIERS.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					onClick: () => {
+						setTier(t);
+						setShowAll(false);
+					},
+					className: cn("h-10 rounded-full px-3 text-xs font-medium", tier === t ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg"),
+					children: t === "all" ? `All ${rows.length}` : `${SEVERITY_LABEL[t]} ${counts[t]}`
+				}, t))
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "grid gap-2 sm:grid-cols-2",
+				children: ids.map((id) => {
+					const drug = DRUG_BY_ID[id];
+					if (!drug) return null;
+					const roles = rolesFor(id, rows);
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "rounded-md bg-bg-sunken px-3 py-2.5",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm font-medium text-fg",
+								children: drug.name
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-[11px] text-muted",
+								children: drug.cls
+							}),
+							roles.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+								className: "mt-1.5 space-y-0.5",
+								children: roles.map((r, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
+									className: "text-xs leading-relaxed text-fg",
+									children: r
+								}, `${id}-${i}`))
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-1.5 text-xs text-muted",
+								children: "No CYP or P-gp role on this map."
+							})
+						]
+					}, id);
+				})
+			}),
+			rows.length === 0 && quietEnzymes ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs leading-relaxed text-muted",
+				children: quietEnzymes
+			}) : filtered.length === 0 && rows.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "rounded-md bg-bg-sunken px-3 py-3 text-sm text-muted",
+				children: "Nothing at this tier."
+			}) : rows.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
+				className: "space-y-2",
+				children: visible.map((f) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckRow, {
+					finding: f,
+					open: openId === f.id,
+					onToggle: () => setOpenId((id) => id === f.id ? null : f.id)
+				}, f.id))
+			}) : null,
+			hidden > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+				type: "button",
+				onClick: () => setShowAll(true),
+				className: "h-11 rounded-full px-3 text-xs font-medium text-muted hover:text-fg",
+				children: [hidden, " more in this check"]
+			}) : null,
+			rows.length > 0 && quietEnzymes ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs leading-relaxed text-muted",
+				children: quietEnzymes
+			}) : null,
+			food.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "space-y-2 border-t border-border pt-3",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "font-mono text-[11px] uppercase tracking-[0.18em] text-muted",
+						children: "Food, drink, alcohol"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 text-xs leading-relaxed text-muted",
+						children: "Not on the desk. Same map, run against grapefruit, ethanol, dairy, St. John’s wort, leafy greens, coffee, calcium, and tyramine foods. Add one only if you want it in the pair."
+					})] }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
+						className: "space-y-2",
+						children: foodShown.map((f) => {
+							const extra = f.drugIds.find((id) => !ids.includes(id) && DRUG_BY_ID[id]);
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckRow, {
+								finding: f,
+								open: openId === f.id,
+								onToggle: () => setOpenId((id) => id === f.id ? null : f.id),
+								action: room && extra ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => add(extra),
+									className: "h-10 rounded-full bg-surface px-3 text-xs font-medium text-fg",
+									children: ["Add ", DRUG_BY_ID[extra]?.name]
+								}) : null
+							}, f.id);
+						})
+					}),
+					food.length > foodShown.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						type: "button",
+						onClick: () => setShowFood(true),
+						className: "h-11 rounded-full px-3 text-xs font-medium text-muted hover:text-fg",
+						children: [food.length - foodShown.length, " more food and drink"]
+					}) : null
+				]
+			}) : null,
+			lanes.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "space-y-3 border-t border-border pt-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "font-mono text-[11px] uppercase tracking-[0.18em] text-muted",
+					children: "If the host changes"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-1 text-xs leading-relaxed text-muted",
+					children: "Not the person in front of you unless you flip the flag. Pregnancy, CKD, older adult, daily smoke."
+				})] }), lanes.map((lane) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-sm font-medium text-fg",
+						children: lane.label
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
+						className: "space-y-2",
+						children: lane.findings.map((f) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckRow, {
+							finding: f,
+							open: openId === `${lane.id}-${f.id}`,
+							onToggle: () => setOpenId((id) => id === `${lane.id}-${f.id}` ? null : `${lane.id}-${f.id}`)
+						}, `${lane.id}-${f.id}`))
+					})]
+				}, lane.id))]
+			}) : null
+		]
+	});
+}
+function actorLine(f) {
+	const a = actors(f);
+	if (!a.verb) return a.left;
+	return `${a.left} ${a.verb} ${a.right}`.replace(/\s+/g, " ").trim();
+}
+function verdictTitle(f) {
+	const raw = f.kind === "pk" || f.kind === "geno" ? actorLine(f) : f.effect || actorLine(f);
+	return raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : raw;
+}
+function quietLine(ids, findings) {
+	const seen = /* @__PURE__ */ new Set();
+	for (const id of ids) for (const e of DRUG_BY_ID[id]?.enzymes ?? []) seen.add(e.enzyme);
+	const hit = new Set(findings.flatMap((f) => f.enzymes));
+	const quiet = [...seen].filter((e) => !hit.has(e));
+	if (seen.size === 0) return "No CYP or P-gp role was on the map for this pair. Pharmacodynamic flags were still compared.";
+	if (quiet.length === 0) return "";
+	return `Also compared, no collision: ${quiet.join(", ")}.`;
+}
+function CheckRow({ finding, open, onToggle, action }) {
+	const a = actors(finding);
+	const basis = basisFor(finding).slice(0, 2);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+		className: "rounded-lg bg-bg-sunken",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+			type: "button",
+			onClick: onToggle,
+			"aria-expanded": open,
+			className: "flex w-full items-start gap-3 px-3 py-3 text-left",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: cn("mt-0.5 inline-flex min-w-24 shrink-0 items-center justify-center rounded-sm px-2 py-1 font-mono text-[10px] font-medium uppercase tracking-wider", severitySurface(finding.severity)),
+					children: SEVERITY_LABEL[finding.severity]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "min-w-0 flex-1",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "block text-sm font-medium leading-snug text-fg",
+							children: [
+								a.left,
+								a.verb ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "font-normal text-muted",
+									children: [
+										" ",
+										a.verb,
+										" "
+									]
+								}) : null,
+								a.right
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "mt-0.5 block text-xs text-muted",
+							children: [finding.effect ? `${finding.effect} · ` : "", finding.mechanism]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "mt-1 flex flex-wrap gap-1.5",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-mono text-[10px] uppercase tracking-wide text-subtle",
+									children: KIND_LABEL[finding.kind]
+								}),
+								finding.tags.includes("boxed") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-mono text-[10px] uppercase tracking-wide text-danger",
+									children: "Boxed pair"
+								}) : null,
+								finding.enzymes.map((e) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-mono text-[10px] uppercase tracking-wide text-subtle",
+									children: e
+								}, e))
+							]
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { className: cn("mt-1 size-4 shrink-0 text-subtle", open && "rotate-180") })
+			]
+		}), open ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "space-y-2 border-t border-border px-3 py-3",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-sm leading-relaxed text-fg",
+					children: finding.clinical
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex flex-wrap gap-2",
+					children: basis.map((b) => b.href ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+						href: b.href,
+						target: "_blank",
+						rel: "noreferrer",
+						className: "inline-flex h-10 items-center gap-1 rounded-full bg-surface px-3 text-xs font-medium text-accent hover:underline",
+						children: [b.label, /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "size-3" })]
+					}, `${b.kind}-${b.label}`) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "inline-flex h-10 items-center px-1 text-xs text-muted",
+						children: b.label
+					}, `${b.kind}-${b.label}`))
+				}),
+				action
 			]
 		}) : null]
 	});
@@ -9528,7 +10018,7 @@ var DIRECTORY = [
 		city: "Bellingham",
 		who: "Medication-assisted treatment clinic",
 		site: "https://www.idealoption.com/clinics/bellingham",
-		hook: "High-throughput MAT. A two-drug free desk is how staff try it; founding is the formulary they keep."
+		hook: "High-throughput MAT. A five-drug free desk is how staff try it; founding is the formulary they keep."
 	},
 	{
 		id: "ccs-recovery",
@@ -9748,7 +10238,7 @@ var DIRECTORY = [
 		city: "Seattle",
 		who: "PharmD program / Student & Academic Services",
 		site: "https://sop.washington.edu/",
-		hook: "Teaching desk they will actually open. Lab export goes in the notebook. Two-drug maps stay free for the class."
+		hook: "Teaching desk they will actually open. Lab export goes in the notebook. Five-drug maps stay free for the class."
 	},
 	{
 		id: "wsu-pharmacy",
@@ -9964,7 +10454,7 @@ function targetDm(t, price = COMMERCE.founding) {
 		"",
 		`Looked you up because of ${t.name} in ${t.city}.`,
 		"",
-		"Two-drug collisions stay free so you can kick the tires.",
+		"Up to five-drug collision checks stay free so you can kick the tires.",
 		`Founding license is $${price} once: host factors, metabolites, enzyme atlas, JSON/CSV export.`,
 		payClose(price),
 		`${OPERATOR.email} · ${OPERATOR.phone}`,
@@ -10418,7 +10908,7 @@ function LaunchDesk() {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "mt-2 max-w-2xl text-sm leading-relaxed text-muted",
-						children: "Post these yourself. Do not cold-email the Hunt directory. Two-drug collisions stay free; founding is $79 once. Educational — not a charting system."
+						children: "Post these yourself. Do not cold-email the Hunt directory. Up to five-drug collision checks stay free; founding is $79 once. Educational — not a charting system."
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", {
 						className: "mt-4 space-y-2 text-sm",
@@ -12275,7 +12765,7 @@ function RoundsPage() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "mt-2 max-w-xl text-sm leading-relaxed text-muted",
-								children: "Pharmacy-student and clinic maps — first-pass, phenotype-as-perpetrator, α2 vs naloxone, food, MAT. Two-drug cases and oral ketamine route stay free. Phenotype, smoke, alcohol, and cannabis route stay Pro."
+								children: "Pharmacy-student and clinic maps — first-pass, phenotype-as-perpetrator, α2 vs naloxone, food, MAT. Up to five-drug cases and oral ketamine route stay free. Phenotype, smoke, alcohol, and cannabis route stay Pro."
 							})
 						]
 					})]
@@ -12648,7 +13138,7 @@ function Formulary() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "mt-2 max-w-xl text-sm leading-relaxed text-muted",
-								children: "Browse the formulary by family, then put anything on the desk. Two-drug collisions stay free. Host factors and the atlas are Pro."
+								children: "Browse the formulary by family, then put anything on the desk. Up to five drugs stay free. Host factors and the atlas are Pro."
 							})
 						]
 					})]
@@ -16048,7 +16538,7 @@ function WindowExtras() {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 					className: "mt-1 text-xs text-muted",
-					children: ["Tap what they handed over the glass. Two-drug collisions stay free.", full ? " Remove one to add another." : ""]
+					children: ["Tap what they handed over the glass. Up to five-drug collision checks stay free.", full ? " Remove one to add another." : ""]
 				})
 			] })
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -20105,6 +20595,622 @@ function PhenytoinBlock() {
 		]
 	});
 }
+/**
+* Study cards for trainees.
+* Every answer is a restatement of this desk's map, a round, or an FDA grade already on the CYP tab.
+* Not an exam key. Not a milligram. Not a prescription.
+*/
+var STUDY_LANES = [
+	{
+		id: "drill",
+		label: "Rounds"
+	},
+	{
+		id: "boards",
+		label: "Named pairs"
+	},
+	{
+		id: "cyp",
+		label: "CYP map"
+	},
+	{
+		id: "desk",
+		label: "This desk"
+	}
+];
+var STUDY_PILES = [
+	{
+		id: "all",
+		label: "All"
+	},
+	{
+		id: "open",
+		label: "Unseen"
+	},
+	{
+		id: "miss",
+		label: "Missed"
+	}
+];
+function hash(s) {
+	let h = 2166136261;
+	for (let i = 0; i < s.length; i++) {
+		h ^= s.charCodeAt(i);
+		h = Math.imul(h, 16777619);
+	}
+	return h >>> 0;
+}
+function bySeed(rows, seed) {
+	return [...rows].sort((a, b) => hash(seed + a.id) - hash(seed + b.id) || a.id.localeCompare(b.id));
+}
+function clip(s, n = 520) {
+	const t = s.replace(/\s+/g, " ").trim();
+	if (t.length <= n) return t;
+	return `${t.slice(0, n).replace(/\s+\S*$/, "")}…`;
+}
+var POOL = DRUGS.filter((d) => d.kind === "drug" || d.kind === "food" || d.kind === "herb");
+function strongOf(d, enzyme, kind) {
+	return d.enzymes.some((e) => e.kind === kind && e.enzyme === enzyme && e.strength === "strong");
+}
+function sensitiveOf(d, enzyme) {
+	return d.enzymes.some((e) => e.kind === "substrate" && e.enzyme === enzyme && e.sensitivity === "sensitive");
+}
+function activationOf(d, enzyme) {
+	return d.enzymes.some((e) => e.kind === "substrate" && e.enzyme === enzyme && e.pathway === "activation");
+}
+function choicesFor(correct, reject, seed) {
+	const distractors = bySeed(POOL.filter((d) => d.id !== correct.id && !reject(d)), seed).slice(0, 3);
+	if (distractors.length < 3) return null;
+	return bySeed([{
+		id: correct.id,
+		label: correct.name
+	}, ...distractors.map((d) => ({
+		id: d.id,
+		label: d.name
+	}))], `${seed}-order`);
+}
+function pushRole(out, enzyme, kind, hits, cap) {
+	const verb = kind === "inhibitor" ? `strong ${enzyme} inhibitor` : kind === "inducer" ? `strong ${enzyme} inducer` : kind === "activation" ? `${enzyme} activation substrate (prodrug)` : `sensitive ${enzyme} substrate`;
+	const fold = kind === "inhibitor" ? FDA_GRADES.inhibitor.strong.fold : kind === "inducer" ? FDA_GRADES.inducer.strong.fold : "Sensitive index substrates are how FDA grades the perpetrator. Not a milligram.";
+	for (const hit of hits.slice(0, cap)) {
+		const choices = choicesFor(hit, kind === "inhibitor" ? (d) => strongOf(d, enzyme, "inhibitor") : kind === "inducer" ? (d) => strongOf(d, enzyme, "inducer") : kind === "activation" ? (d) => activationOf(d, enzyme) : (d) => sensitiveOf(d, enzyme), `${enzyme}-${kind}-${hit.id}`);
+		if (!choices) continue;
+		out.push({
+			id: `cyp-${enzyme}-${kind}-${hit.id}`,
+			lane: "cyp",
+			kicker: enzyme,
+			title: verb,
+			prompt: "Formulary map. One of these four carries the role. The other three do not, on this desk.",
+			ask: `Which is a ${verb}?`,
+			answer: `${hit.name} is mapped as a ${verb}. ${kind === "inhibitor" || kind === "inducer" ? `FDA strong: ${fold}.` : fold} Open the atlas. This card does not pick a milligram.`,
+			choices,
+			correct: hit.id,
+			drugIds: [hit.id]
+		});
+	}
+}
+function cypCards() {
+	const out = [];
+	for (const enzyme of ENZYMES) {
+		const strongInh = POOL.filter((d) => strongOf(d, enzyme, "inhibitor")).sort((a, b) => a.name.localeCompare(b.name));
+		const strongInd = POOL.filter((d) => strongOf(d, enzyme, "inducer")).sort((a, b) => a.name.localeCompare(b.name));
+		const sensitive = POOL.filter((d) => sensitiveOf(d, enzyme)).sort((a, b) => a.name.localeCompare(b.name));
+		const activation = POOL.filter((d) => activationOf(d, enzyme)).sort((a, b) => a.name.localeCompare(b.name));
+		pushRole(out, enzyme, "inhibitor", strongInh, 1);
+		pushRole(out, enzyme, "inducer", strongInd, 1);
+		pushRole(out, enzyme, "substrate", sensitive, 1);
+		if (activation.length) pushRole(out, enzyme, "activation", activation, 1);
+	}
+	const grades = [{
+		id: "cyp-grade-inh-strong",
+		ask: "FDA fold-change for a strong inhibitor?",
+		correct: "strong",
+		rows: [
+			{
+				id: "strong",
+				label: FDA_GRADES.inhibitor.strong.fold
+			},
+			{
+				id: "mod",
+				label: FDA_GRADES.inhibitor.moderate.fold
+			},
+			{
+				id: "weak",
+				label: FDA_GRADES.inhibitor.weak.fold
+			},
+			{
+				id: "ind",
+				label: FDA_GRADES.inducer.strong.fold
+			}
+		],
+		answer: `Strong inhibitor: ${FDA_GRADES.inhibitor.strong.fold}. Moderate is ${FDA_GRADES.inhibitor.moderate.fold}. Weak is ${FDA_GRADES.inhibitor.weak.fold}. Huang / FDA 2020 table — not a vibe, and not a milligram.`
+	}, {
+		id: "cyp-grade-ind-strong",
+		ask: "FDA fold-change for a strong inducer?",
+		correct: "strong",
+		rows: [
+			{
+				id: "strong",
+				label: FDA_GRADES.inducer.strong.fold
+			},
+			{
+				id: "mod",
+				label: FDA_GRADES.inducer.moderate.fold
+			},
+			{
+				id: "weak",
+				label: FDA_GRADES.inducer.weak.fold
+			},
+			{
+				id: "inh",
+				label: FDA_GRADES.inhibitor.strong.fold
+			}
+		],
+		answer: `Strong inducer: ${FDA_GRADES.inducer.strong.fold}. The stop is rebound, not a completed course. Open the CYP tab.`
+	}];
+	for (const g of grades) out.push({
+		id: g.id,
+		lane: "cyp",
+		kicker: "FDA grade",
+		title: "Fold-change, not a vibe",
+		prompt: "These numbers are AUC fold-changes of a sensitive index substrate. They are not a dose.",
+		ask: g.ask,
+		answer: g.answer,
+		choices: g.rows,
+		correct: g.correct,
+		drugIds: []
+	});
+	for (const [id, row] of Object.entries(TDI)) {
+		const drug = DRUG_BY_ID[id];
+		if (!drug) continue;
+		out.push({
+			id: `cyp-tdi-${id}`,
+			lane: "cyp",
+			kicker: "Time-dependent inactivation",
+			title: drug.name,
+			prompt: `Yesterday's last dose of ${drug.name} is gone from the bottle. The enzyme is not.`,
+			ask: "Why is the victim still hot after the perpetrator stops?",
+			answer: `${row.pearl} Resynthesis: ${row.resynth}. Enzymes: ${row.enzymes.join(", ")}. This is a clock, not a milligram.`,
+			drugIds: [id]
+		});
+	}
+	return out;
+}
+function drillCards() {
+	return ROUNDS.map((r) => ({
+		id: `round-${r.id}`,
+		lane: "drill",
+		kicker: r.setting,
+		title: r.title,
+		prompt: r.stem,
+		ask: r.ask,
+		answer: r.teach,
+		drugIds: r.drugIds
+	}));
+}
+function roleLine(d) {
+	return d.enzymes.map((e) => {
+		if (e.kind === "substrate") {
+			const act = e.pathway === "activation" ? ", activation" : "";
+			return `${e.sensitivity} ${e.enzyme} substrate${act}`;
+		}
+		return `${e.strength} ${e.enzyme} ${e.kind}`;
+	});
+}
+function deskCards(ids, findings) {
+	const out = [];
+	for (const f of findings.slice(0, 6)) {
+		const names = f.drugIds.map((id) => DRUG_BY_ID[id]?.name ?? id).join(" × ");
+		const kind = f.kind === "pk" ? "Pharmacokinetic" : f.kind === "pd" ? "Pharmacodynamic" : f.kind === "geno" ? "Phenotype" : "Clinic";
+		out.push({
+			id: `desk-${f.id}`,
+			lane: "desk",
+			kicker: kind,
+			title: names || "Collision",
+			prompt: `${names}. Mapped severity: ${f.severity}. Effect: ${f.effect}.`,
+			ask: "Say the mechanism out loud before you reveal. A preceptor wants the enzyme or the receptor, not a milligram.",
+			answer: clip([f.mechanism, f.clinical].filter(Boolean).join(" ")),
+			drugIds: f.drugIds
+		});
+	}
+	for (const id of ids) {
+		const d = DRUG_BY_ID[id];
+		if (!d) continue;
+		const roles = roleLine(d);
+		out.push({
+			id: `mono-${id}`,
+			lane: "desk",
+			kicker: d.cls,
+			title: d.name,
+			prompt: d.brands.length ? `Brands on this shelf: ${d.brands.slice(0, 3).join(", ")}.` : d.cls,
+			ask: "Enzyme roles, then the PD flag. Skip any milligram.",
+			answer: clip([
+				roles.length ? `Enzymes: ${roles.join("; ")}.` : "No CYP role on this map — absence is not proof it is clean.",
+				d.pd.length ? `PD flags: ${d.pd.join(", ")}.` : "",
+				d.toxicityHint ? `Watch: ${d.toxicityHint}.` : "",
+				d.note ?? ""
+			].filter(Boolean).join(" ")),
+			drugIds: [id]
+		});
+	}
+	return out;
+}
+function cardsFor(lane, ids, findings) {
+	if (lane === "drill") return drillCards();
+	if (lane === "cyp") return cypCards();
+	if (lane === "boards") return boardsCards();
+	return deskCards(ids, findings);
+}
+/** Canonical labeled collisions. Stems come from safetyOnDesk — no new milligrams. */
+var NAMED_PAIRS = [
+	["epclusa", "amiodarone"],
+	["clozapine", "lorazepam"],
+	["aspirin", "ibuprofen"],
+	["lamotrigine", "valproate"],
+	["lamotrigine", "ethinyl-estradiol"],
+	["tamoxifen", "paroxetine"],
+	["ethinyl-estradiol", "rifampin"],
+	["isotretinoin", "doxycycline"],
+	["ciprofloxacin", "prednisone"],
+	["lisinopril", "losartan"],
+	["omeprazole", "ketoconazole"],
+	["clopidogrel", "omeprazole"],
+	["empagliflozin", "furosemide"]
+];
+function boardsCards() {
+	const hits = NAMED_PAIRS.flatMap(([a, b]) => {
+		if (!DRUG_BY_ID[a] || !DRUG_BY_ID[b]) return [];
+		return safetyOnDesk([a, b]);
+	});
+	const unique = hits.filter((h, i) => hits.findIndex((x) => x.id === h.id && x.drugIds.join("|") === h.drugIds.join("|")) === i);
+	const out = [];
+	for (const h of unique) {
+		const others = bySeed(unique.filter((x) => x.mechanism !== h.mechanism), `board-${h.id}`).slice(0, 3);
+		if (others.length < 3) continue;
+		const choices = bySeed([{
+			id: h.id,
+			label: h.mechanism
+		}, ...others.map((o) => ({
+			id: `${o.id}-d`,
+			label: o.mechanism
+		}))], `board-order-${h.id}`);
+		out.push({
+			id: `board-${h.id}-${h.drugIds.join("+")}`,
+			lane: "boards",
+			kicker: "Named pair",
+			title: h.title,
+			prompt: `Mapped severity: ${h.severity}. Three of these mechanisms belong to other labeled pairs.`,
+			ask: "Which mechanism is this pair?",
+			answer: clip(`${h.clinical} ${h.watch} Source: ${h.source}`),
+			choices,
+			correct: h.id,
+			drugIds: [...h.drugIds]
+		});
+	}
+	return out;
+}
+function pileOf(cards, pile, marks) {
+	if (pile === "open") return cards.filter((c) => !marks[c.id]);
+	if (pile === "miss") return cards.filter((c) => marks[c.id] === "miss");
+	return cards;
+}
+function StudyPage() {
+	const selected = useDesk((s) => s.selected);
+	const doses = useDesk((s) => s.doses);
+	const phenotypes = useDesk((s) => s.phenotypes);
+	const smoking = useDesk((s) => s.smoking);
+	const ketamineRoute = useDesk((s) => s.ketamineRoute);
+	const cannabisRoute = useDesk((s) => s.cannabisRoute);
+	const alcohol = useDesk((s) => s.alcohol);
+	const age = useDesk((s) => s.age);
+	const kidney = useDesk((s) => s.kidney);
+	const preg = useDesk((s) => s.preg);
+	const marks = useDesk((s) => s.studyMarks);
+	const markStudy = useDesk((s) => s.markStudy);
+	const clearStudy = useDesk((s) => s.clearStudy);
+	const load = useDesk((s) => s.load);
+	const plan = usePlan();
+	const [lane, setLane] = (0, import_react.useState)(selected.length ? "desk" : "drill");
+	const [pile, setPile] = (0, import_react.useState)("all");
+	const [epoch, setEpoch] = (0, import_react.useState)(0);
+	const findings = (0, import_react.useMemo)(() => analyze(selected, {
+		phenotypes,
+		smoking,
+		ketamineRoute,
+		cannabisRoute,
+		alcohol,
+		age,
+		kidney,
+		preg
+	}, parseDoses(doses)).findings, [
+		selected,
+		phenotypes,
+		smoking,
+		ketamineRoute,
+		cannabisRoute,
+		alcohol,
+		age,
+		kidney,
+		preg,
+		doses
+	]);
+	const source = (0, import_react.useMemo)(() => cardsFor(lane, selected, findings), [
+		lane,
+		selected,
+		findings
+	]);
+	const key = `${lane}|${pile}|${epoch}|${source.map((c) => c.id).join(",")}`;
+	const [frozen, setFrozen] = (0, import_react.useState)({
+		key: "",
+		deck: []
+	});
+	if (frozen.key !== key) setFrozen({
+		key,
+		deck: pileOf(source, pile, marks)
+	});
+	const deck = frozen.key === key ? frozen.deck : pileOf(source, pile, marks);
+	const [cursor, setCursor] = (0, import_react.useState)({
+		key: "",
+		index: 0,
+		revealed: false,
+		picked: null
+	});
+	if (cursor.key !== key) setCursor({
+		key,
+		index: 0,
+		revealed: false,
+		picked: null
+	});
+	const index = cursor.key === key ? cursor.index : 0;
+	const revealed = cursor.key === key ? cursor.revealed : false;
+	const picked = cursor.key === key ? cursor.picked : null;
+	const card = deck[Math.min(index, Math.max(deck.length - 1, 0))];
+	const known = source.filter((c) => marks[c.id] === "got").length;
+	const missed = source.filter((c) => marks[c.id] === "miss").length;
+	const unseen = source.length - known - missed;
+	const knownPct = source.length ? Math.round(known / source.length * 100) : 0;
+	const missPct = source.length ? Math.round(missed / source.length * 100) : 0;
+	function jump(next) {
+		setCursor({
+			key,
+			index: next,
+			revealed: false,
+			picked: null
+		});
+	}
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-5",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+				className: "overflow-hidden rounded-xl bg-surface shadow-[var(--shadow-border)]",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "grid sm:grid-cols-[220px_minmax(0,1fr)]",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plate, {
+						src: LANE_PLATE.clinic,
+						alt: "",
+						className: "h-36 w-full min-h-36 sm:h-full"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "px-5 py-5 sm:px-6",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "font-mono text-[11px] uppercase tracking-[0.2em] text-muted",
+								children: "Study"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "mt-2 font-serif text-2xl tracking-tight text-fg",
+								children: "Say the mechanism before you reveal it."
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-2 max-w-xl text-sm leading-relaxed text-muted",
+								children: "For pharmacy and medical trainees. Rounds are preceptor stems. Named pairs are the labeled collisions. CYP cards are the formulary map and FDA fold-change grades. Desk cards are whatever pair is loaded. Mark a miss, then drill only those. Not an exam key, not a milligram, not a prescription. The Prescribing Information still wins."
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "mt-3 font-mono text-[11px] uppercase tracking-wide text-muted",
+								children: [
+									known,
+									" known · ",
+									missed,
+									" missed · ",
+									unseen,
+									" unseen",
+									plan === "free" ? " · five-drug desks stay free" : ""
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-3 flex h-1.5 overflow-hidden rounded-full bg-bg-sunken",
+								"aria-hidden": true,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "h-full bg-ok",
+									style: { width: `${knownPct}%` }
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "h-full bg-warn",
+									style: { width: `${missPct}%` }
+								})]
+							})
+						]
+					})]
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-wrap items-center gap-1",
+				children: [STUDY_LANES.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					onClick: () => setLane(s.id),
+					className: cn("h-10 rounded-full px-3 text-xs font-medium", lane === s.id ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg"),
+					children: s.label
+				}, s.id)), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					onClick: () => {
+						clearStudy();
+						setEpoch((n) => n + 1);
+					},
+					className: "h-10 rounded-full px-3 text-xs font-medium text-muted hover:text-fg",
+					children: "Reset marks"
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "flex flex-wrap items-center gap-1",
+				children: STUDY_PILES.map((s) => {
+					const n = s.id === "all" ? source.length : s.id === "open" ? unseen : missed;
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						type: "button",
+						onClick: () => setPile(s.id),
+						className: cn("h-10 rounded-full px-3 text-xs font-medium", pile === s.id ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg"),
+						children: [
+							s.label,
+							" ",
+							n
+						]
+					}, s.id);
+				})
+			}),
+			!card ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "rounded-xl bg-surface px-5 py-8 text-sm text-muted shadow-[var(--shadow-border)]",
+				children: pile === "miss" ? "Nothing missed in this lane. Mark a miss, then come back." : pile === "open" ? "Nothing unseen here. Switch to All, or reset marks to start over." : lane === "desk" ? "Nothing on the desk yet. Load a pair, or switch to Rounds, Named pairs, or CYP map." : "No cards in this lane."
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StudyCardView, {
+				card,
+				n: Math.min(index, deck.length - 1) + 1,
+				total: deck.length,
+				revealed: revealed || Boolean(picked),
+				picked,
+				mark: marks[card.id],
+				onReveal: () => setCursor({
+					key,
+					index,
+					revealed: true,
+					picked
+				}),
+				onPick: (id) => {
+					setCursor({
+						key,
+						index,
+						revealed: true,
+						picked: id
+					});
+					if (card.correct) markStudy(card.id, id === card.correct ? "got" : "miss");
+				},
+				onMark: (m) => markStudy(card.id, m),
+				onPrev: () => jump(Math.max(0, index - 1)),
+				onNext: () => jump(Math.min(deck.length - 1, index + 1)),
+				onLoad: () => {
+					if (card.drugIds.length) load(card.drugIds);
+				}
+			})
+		]
+	});
+}
+function StudyCardView({ card, n, total, revealed, picked, mark, onReveal, onPick, onMark, onPrev, onNext, onLoad }) {
+	const correct = card.choices?.find((c) => c.id === card.correct);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+		className: "rounded-xl bg-surface px-5 py-5 shadow-[var(--shadow-border)] sm:px-6",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-wrap items-center justify-between gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "font-mono text-[11px] uppercase tracking-[0.18em] text-accent",
+					children: card.kicker
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "font-mono text-[11px] text-muted",
+					children: [
+						n,
+						" / ",
+						total,
+						mark ? ` · ${mark === "got" ? "known" : "missed"}` : ""
+					]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+				className: "mt-2 font-serif text-2xl tracking-tight text-fg",
+				children: card.title
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-3 text-sm leading-relaxed text-muted",
+				children: card.prompt
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-3 text-sm font-medium leading-relaxed text-fg",
+				children: card.ask
+			}),
+			card.choices ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+				className: "mt-4 space-y-2",
+				children: card.choices.map((c) => {
+					const on = picked === c.id;
+					const isCorrect = revealed && c.id === card.correct;
+					const isWrong = revealed && on && c.id !== card.correct;
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						disabled: revealed,
+						onClick: () => onPick(c.id),
+						className: cn("flex min-h-11 w-full items-start rounded-md px-3 py-2.5 text-left text-sm leading-relaxed", isCorrect && "bg-ok-soft text-fg", isWrong && "bg-danger-soft text-fg", !isCorrect && !isWrong && "bg-bg-sunken text-fg hover:bg-surface-2"),
+						children: c.label
+					}) }, c.id);
+				})
+			}) : null,
+			revealed ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-4 rounded-md bg-bg-sunken px-3 py-3",
+				children: [
+					card.choices && correct ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-sm font-medium text-fg",
+						children: picked === card.correct ? "That role is on the map." : `Mapped answer: ${correct.label}`
+					}) : null,
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: cn("text-sm leading-relaxed text-fg", card.choices && correct && "mt-2"),
+						children: card.answer
+					}),
+					card.drugIds.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-2 text-[11px] leading-relaxed text-subtle",
+						children: card.drugIds.map((id) => DRUG_BY_ID[id]?.name ?? id).join(" · ")
+					}) : null
+				]
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-4 flex flex-wrap gap-2",
+				children: [
+					!card.choices && !revealed ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						size: "sm",
+						onClick: onReveal,
+						children: "Reveal"
+					}) : null,
+					revealed && !card.choices ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						size: "sm",
+						variant: mark === "got" ? "default" : "secondary",
+						onClick: () => onMark("got"),
+						children: "I knew it"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						size: "sm",
+						variant: mark === "miss" ? "danger" : "secondary",
+						onClick: () => onMark("miss"),
+						children: "I missed it"
+					})] }) : null,
+					card.drugIds.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						size: "sm",
+						variant: "secondary",
+						onClick: onLoad,
+						children: "Put on desk"
+					}) : null,
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						size: "sm",
+						variant: "ghost",
+						onClick: onPrev,
+						disabled: n <= 1,
+						children: "Back"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						size: "sm",
+						variant: "ghost",
+						onClick: onNext,
+						disabled: n >= total,
+						children: "Next"
+					}),
+					mark ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+						tone: mark === "got" ? "ok" : "warn",
+						children: mark === "got" ? "Known" : "Missed"
+					}) : null
+				]
+			})
+		]
+	});
+}
 function RxnavBoard({ ids }) {
 	const [pairs, setPairs] = (0, import_react.useState)(null);
 	const [classes, setClasses] = (0, import_react.useState)([]);
@@ -20664,6 +21770,7 @@ function DeskApp() {
 								["library", "Materia"],
 								["cites", "Cites"],
 								["atlas", "Atlas"],
+								["study", "Study"],
 								["rounds", "Rounds"],
 								["label", "IFU"],
 								["plans", "Pro"]
@@ -20732,7 +21839,7 @@ function DeskApp() {
 			}) : null,
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
 				className: "mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6",
-				children: view === "plans" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlansPage, {}) : view === "foundry" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Foundry, {}) : view === "rounds" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RoundsPage, {}) : view === "cites" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CitesPage, {}) : view === "label" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LabelPage, {}) : view === "atlas" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EnzymeAtlas, {}) : view === "library" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Formulary, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				children: view === "plans" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlansPage, {}) : view === "foundry" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Foundry, {}) : view === "rounds" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RoundsPage, {}) : view === "study" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StudyPage, {}) : view === "cites" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CitesPage, {}) : view === "label" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LabelPage, {}) : view === "atlas" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EnzymeAtlas, {}) : view === "library" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Formulary, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "grid gap-5 lg:grid-cols-[minmax(0,1fr)_260px]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "space-y-4",
@@ -20777,6 +21884,12 @@ function DeskApp() {
 								})]
 							}) : null,
 							selected.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WindowExtras, {}) : null,
+							selected.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckBoard, {
+								ids: selected,
+								findings: report.findings,
+								counts: report.counts,
+								host
+							}) : null,
 							selected.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyState, {
 								onLoad: load,
 								ready: hydrated
@@ -20857,19 +21970,31 @@ function DeskApp() {
 									ids: selected,
 									host
 								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setView("study"),
+									className: "flex w-full items-center justify-between rounded-xl bg-surface px-4 py-3 text-left shadow-[var(--shadow-border)]",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-serif text-lg tracking-tight text-fg",
+										children: "Study this pair"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "mt-0.5 block text-xs text-muted",
+										children: "Mechanism cards from this pair. Rounds, named pairs, and the CYP map live on Study. Not a milligram."
+									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-mono text-[11px] uppercase tracking-wide text-muted",
+										children: "Study"
+									})]
+								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RxnavBoard, { ids: selected }),
 								pro ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StackMeters, { stacks: report.stacks }) : report.stacks.some((s) => s.score > 0) ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Paywall, {
 									title: "Stack load is Pro",
 									blurb: "Serotonin, CNS, QT, pressor, and NMDA meters come with the host license.",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StackMeters, { stacks: report.stacks })
 								}) : null,
-								report.findings.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "rounded-xl bg-ok-soft px-5 py-6 text-sm text-ok shadow-[var(--shadow-border)]",
-									children: "No mapped CYP collision, phenotype hit, or pharmacodynamic synergy. Absence is not proof of safety — transporters, UGT, plasma protein, and unlisted pathways still apply."
-								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollisionMap, {
+								report.findings.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollisionMap, {
 									selected,
 									findings: report.findings
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FindingList, { findings: report.findings })] }),
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FindingList, { findings: report.findings })] }) : null,
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dossier, {
 									ids: selected,
 									host
@@ -20907,11 +22032,11 @@ function DeskApp() {
 								license,
 								lifetime,
 								previewUntil,
-								cap: pro ? 8 : 2
+								cap: pro ? 8 : 5
 							}),
 							pro ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhenotypeCard, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KetamineRouteCard, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Paywall, {
 								title: "Host factors are Pro",
-								blurb: "Phenotype, smoke, alcohol pattern, cannabis route, age, kidney, and pregnancy change the score. Ketamine route stays free for the oral teaching demo. Two-drug PK stays free.",
+								blurb: "Phenotype, smoke, alcohol pattern, cannabis route, age, kidney, and pregnancy change the score. Ketamine route stays free for the oral teaching demo. Up to five-drug PK stays free.",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhenotypeCard, { hideKetamineRoute: true })
 							})] }),
 							pro && selected.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HostDelta, {
@@ -20959,7 +22084,7 @@ function EmptyState({ onLoad, ready }) {
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "max-w-xl text-sm leading-relaxed text-muted",
-					children: lane === "mat" ? "Built for the dosing window. Put methadone, a film, or Vivitrol on the desk, then tap today's extra. OTP tab: occupancy vs COWS, Vivitrol washout, 2024 take-homes, naloxone, ECG, ID screens. The briefing writes watch / counsel / consider. Live PI sits under it. Not a treatment order — the label wins." : "FirstPass is clinical decision support for licensed healthcare professionals and educational harm-reduction review — CYP450 maps, FDA-label excerpts, and published scales to independently assess recreational-safety and street-supply risks. If local drug-checking services are available, use them for purity and content testing; they are not urine testing, not a dose tool, and not a substitute for the label. It is not FDA-cleared, not patient-directed, and not a dose or self-treatment tool. The Prescribing Information is the authority. Two-drug collisions stay free. Open IFU for intended use."
+					children: lane === "mat" ? "Built for the dosing window. Put methadone, a film, or Vivitrol on the desk, then tap today's extra. OTP tab: occupancy vs COWS, Vivitrol washout, 2024 take-homes, naloxone, ECG, ID screens. The briefing writes watch / counsel / consider. Live PI sits under it. Not a treatment order — the label wins." : "FirstPass is clinical decision support for licensed healthcare professionals and educational harm-reduction review — CYP450 maps, FDA-label excerpts, and published scales to independently assess recreational-safety and street-supply risks. If local drug-checking services are available, use them for purity and content testing; they are not urine testing, not a dose tool, and not a substitute for the label. It is not FDA-cleared, not patient-directed, and not a dose or self-treatment tool. The Prescribing Information is the authority. Up to five drugs stay free. Open IFU for intended use."
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "mt-4 flex flex-wrap gap-2",
@@ -21022,6 +22147,12 @@ function EmptyState({ onLoad, ready }) {
 							size: "sm",
 							onClick: () => setView("rounds"),
 							children: "Teaching rounds"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							variant: "secondary",
+							size: "sm",
+							onClick: () => setView("study"),
+							children: "Study drill"
 						})
 					]
 				}),
@@ -21393,7 +22524,7 @@ function HowCard() {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 					className: "text-fg",
 					children: "Curve."
-				}), " Grey is this route, normal metabolizer, no perpetrators. Teal is this desk. q8h / q12h / q24h superimpose doses (Rac). Overlay IV vs oral on first-pass victims. Not a plasma level. Two-drug AUCR stays free."] }),
+				}), " Grey is this route, normal metabolizer, no perpetrators. Teal is this desk. q8h / q12h / q24h superimpose doses (Rac). Overlay IV vs oral on first-pass victims. Not a plasma level. Five-drug AUCR stays free."] }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 					className: "text-fg",
 					children: "2D6."
