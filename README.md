@@ -2,7 +2,7 @@
 
 Clinical decision support desk for licensed healthcare professionals: CYP450 / PD collisions, FDA-label excerpts, and published scales (COWS, CIWA-Ar, Hunter, MME).
 
-Two-drug collisions stay free. Host factors (phenotype, smoke, alcohol, route), the enzyme atlas, metabolites, and export are licensed. Founding license is **$79 once**.
+The core checker stays free for up to five drugs, including CYP / PD collision cards, the curated formulary, and common-name / brand / alias search. Host factors (phenotype, smoke, alcohol, route), the enzyme atlas, metabolites, and export are licensed. Founding license is **$79 once**.
 
 **Not FDA-cleared. Not FDA-approved. Not a dose. Not a charting system. The Prescribing Information governs.**
 
@@ -53,7 +53,7 @@ Pay $79 with card on the desk (Stripe), or Venmo / Cash App / PayPal. A signed k
 
 ## License
 
-HMAC-signed keys (`FP-LIFE-…`). Two-drug stays free. Founding lifetime is $79.
+HMAC-signed keys (`FP-LIFE-…`). The five-drug core checker stays free. Founding lifetime is $79.
 
 ---
 
