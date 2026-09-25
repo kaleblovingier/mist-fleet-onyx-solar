@@ -31,7 +31,7 @@ export function WindowExtras() {
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Today's extra</p>
           <h2 className="mt-1 font-serif text-lg tracking-tight text-fg">Window tray</h2>
           <p className="mt-1 text-xs text-muted">
-            Tap what they handed over the glass. Two-drug collisions stay free.
+            Tap what they handed over the glass. Up to five-drug collision checks stay free.
             {full ? " Remove one to add another." : ""}
           </p>
         </div>

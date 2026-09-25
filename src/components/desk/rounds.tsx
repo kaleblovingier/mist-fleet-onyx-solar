@@ -28,7 +28,7 @@ export function RoundsPage() {
             </h2>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
               Pharmacy-student and clinic maps — first-pass, phenotype-as-perpetrator, α2 vs naloxone,
-              food, MAT. Two-drug cases and oral ketamine route stay free. Phenotype, smoke, alcohol, and cannabis route stay Pro.
+              food, MAT. Up to five-drug cases and oral ketamine route stay free. Phenotype, smoke, alcohol, and cannabis route stay Pro.
             </p>
           </div>
         </div>

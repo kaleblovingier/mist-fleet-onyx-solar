@@ -58,7 +58,7 @@ export const COMMERCE = {
   payUrl: (import.meta.env.VITE_PAY_URL as string | undefined)?.trim() || OPERATOR.venmoUrl,
   operatorContact: (import.meta.env.VITE_OPERATOR_CONTACT as string | undefined)?.trim() || OPERATOR.email,
   pitch:
-    "A CYP450 desk for ketamine clinics, MAT, harm-reduction staff, and pharmacy students. Two-drug collisions stay free. Host factors, the atlas, and export are licensed.",
+    "A CYP450 desk for ketamine clinics, MAT, harm-reduction staff, and pharmacy students. Up to five-drug collision checks stay free. Host factors, the atlas, and export are licensed.",
 };
 
 export const BUYERS = [
@@ -92,7 +92,7 @@ export function salesDm(price = COMMERCE.founding) {
   return [
     "I built FirstPass — a CYP450 desk that maps ketamine, MAT, street adulterants (xylazine, nitazenes), and the usual psych stack, including grapefruit, smoke, and metabolizer status.",
     "",
-    "Free: two-drug collisions.",
+    "Free: up to five-drug collision checks.",
     `Founding license: $${price} once. Host factors, metabolites, enzyme atlas, export. Yours on this desk.`,
     "",
     SITE.url,
@@ -110,7 +110,7 @@ export function buyerDm(who: (typeof BUYERS)[number]["who"], price = COMMERCE.fo
   return [
     `I built FirstPass — a CYP450 desk for ${hook}.`,
     "",
-    "Two-drug collisions stay free so you can kick the tires.",
+    "Up to five-drug collision checks stay free so you can kick the tires.",
     `Founding license is $${price} once: host factors, metabolites, enzyme atlas, JSON/CSV export.`,
     "",
     SITE.url,
@@ -126,7 +126,7 @@ export function launchTweet(price = COMMERCE.founding) {
   return [
     "FirstPass is a CYP450 desk for ketamine clinics, MAT, and pharmacy students.",
     "",
-    "Two-drug collisions stay free.",
+    "Up to five-drug collision checks stay free.",
     `Founding license $${price} once — host factors, enzyme atlas, export.`,
     SITE.url,
     "Pay with card on the desk, or Venmo / Cash App / PayPal.",
@@ -157,7 +157,7 @@ export function launchPosts(price = COMMERCE.founding, url = SITE.pages): Launch
         "1/",
         "FirstPass is a CYP450 desk for ketamine clinics, MAT, and pharmacy students.",
         "",
-        "Two-drug collisions stay free. Founding license $" + price + " once.",
+        "Up to five-drug collision checks stay free. Founding license $" + price + " once.",
         "",
         "2/",
         "Three cases the desk actually draws:",
@@ -181,7 +181,7 @@ export function launchPosts(price = COMMERCE.founding, url = SITE.pages): Launch
         "",
         "I built an educational CYP450 / PD collision desk for the stacks I kept looking up by hand: ketamine (oral vs IV), MAT / street adulterants, psych, and kitchen inhibitors.",
         "",
-        "Free: two drugs on the desk, collision cards, a one-compartment concentration sketch (AUCR, q8h accumulation, oral vs IV overlay).",
+        "Free: up to five drugs on the desk, collision cards, a one-compartment concentration sketch (AUCR, q8h accumulation, oral vs IV overlay).",
         "",
         "Three cases worth opening:",
         tryLines,
@@ -205,7 +205,7 @@ export function launchPosts(price = COMMERCE.founding, url = SITE.pages): Launch
         "",
         "Oral ketamine is a first-pass problem. IV is not. Grapefruit knocks out gut 3A4 so oral F rises while t½ stays put; an IV overlay on the same milligram scale stays flat. Strong hepatic 3A4 inhibitors are a different shape.",
         "",
-        "I put that on a desk with 2B6 phenotype, benzo airway stacks, and the usual psych list. Two-drug collisions are free.",
+        "I put that on a desk with 2B6 phenotype, benzo airway stacks, and the usual psych list. Up to five-drug collision checks are free.",
         "",
         "Educational model — not medical advice, not a clinic chart.",
         "",
@@ -222,7 +222,7 @@ export function launchPosts(price = COMMERCE.founding, url = SITE.pages): Launch
         "Title: Show HN: FirstPass – educational CYP450 collision desk",
         "URL: " + url,
         "",
-        "FirstPass maps CYP450 / PD collisions for ketamine (oral vs IV), MAT and street adulterants, and the usual psych stack. Two-drug collisions are free. A one-compartment sketch shows AUCR, q8h accumulation, and an oral/IV overlay. Host phenotype, the enzyme atlas, and export are a $" +
+        "FirstPass maps CYP450 / PD collisions for ketamine (oral vs IV), MAT and street adulterants, and the usual psych stack. Up to five-drug collision checks are free. A one-compartment sketch shows AUCR, q8h accumulation, and an oral/IV overlay. Host phenotype, the enzyme atlas, and export are a $" +
           price +
           " founding license.",
         "",
@@ -238,7 +238,7 @@ export function launchPosts(price = COMMERCE.founding, url = SITE.pages): Launch
       text: [
         "I built FirstPass, an educational CYP450 desk for ketamine clinics, MAT programs, and pharmacy students.",
         "",
-        "Two-drug collisions stay free so a preceptor can open it in rounds. Founding license is $" +
+        "Up to five-drug collision checks stay free so a preceptor can open it in rounds. Founding license is $" +
           price +
           " once: host metabolizer status, smoke and alcohol, metabolites, enzyme atlas, JSON/CSV export.",
         "",

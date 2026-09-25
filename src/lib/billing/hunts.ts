@@ -85,7 +85,7 @@ export const DIRECTORY: Target[] = [
     city: "Bellingham",
     who: "Medication-assisted treatment clinic",
     site: "https://www.idealoption.com/clinics/bellingham",
-    hook: "High-throughput MAT. A two-drug free desk is how staff try it; founding is the formulary they keep.",
+    hook: "High-throughput MAT. A five-drug free desk is how staff try it; founding is the formulary they keep.",
   },
   {
     id: "ccs-recovery",
@@ -305,7 +305,7 @@ export const DIRECTORY: Target[] = [
     city: "Seattle",
     who: "PharmD program / Student & Academic Services",
     site: "https://sop.washington.edu/",
-    hook: "Teaching desk they will actually open. Lab export goes in the notebook. Two-drug maps stay free for the class.",
+    hook: "Teaching desk they will actually open. Lab export goes in the notebook. Five-drug maps stay free for the class.",
   },
   {
     id: "wsu-pharmacy",
@@ -533,7 +533,7 @@ export function targetDm(t: Pick<Target, "name" | "city" | "hook">, price = COMM
     "",
     `Looked you up because of ${t.name} in ${t.city}.`,
     "",
-    "Two-drug collisions stay free so you can kick the tires.",
+    "Up to five-drug collision checks stay free so you can kick the tires.",
     `Founding license is $${price} once: host factors, metabolites, enzyme atlas, JSON/CSV export.`,
     payClose(price),
     `${OPERATOR.email} · ${OPERATOR.phone}`,

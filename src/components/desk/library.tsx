@@ -55,7 +55,7 @@ export function Formulary() {
               {DRUGS.length} compounds on the shelf
             </h2>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
-              Browse the formulary by family, then put anything on the desk. Two-drug collisions stay
+              Browse the formulary by family, then put anything on the desk. Up to five drugs stay
               free. Host factors and the atlas are Pro.
             </p>
           </div>

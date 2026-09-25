@@ -413,7 +413,7 @@ export function DeskApp() {
                 license={license}
                 lifetime={lifetime}
                 previewUntil={previewUntil}
-                cap={pro ? 8 : 2}
+                cap={pro ? 8 : 5}
               />
               {pro ? (
                 <PhenotypeCard />
@@ -422,7 +422,7 @@ export function DeskApp() {
                   <KetamineRouteCard />
                   <Paywall
                     title="Host factors are Pro"
-                    blurb="Phenotype, smoke, alcohol pattern, cannabis route, age, kidney, and pregnancy change the score. Ketamine route stays free for the oral teaching demo. Two-drug PK stays free."
+                    blurb="Phenotype, smoke, alcohol pattern, cannabis route, age, kidney, and pregnancy change the score. Ketamine route stays free for the oral teaching demo. Up to five-drug PK stays free."
                   >
                     <PhenotypeCard hideKetamineRoute />
                   </Paywall>
@@ -470,7 +470,7 @@ function EmptyState({
         <p className="max-w-xl text-sm leading-relaxed text-muted">
           {lane === "mat"
             ? "Built for the dosing window. Put methadone, a film, or Vivitrol on the desk, then tap today's extra. OTP tab: occupancy vs COWS, Vivitrol washout, 2024 take-homes, naloxone, ECG, ID screens. The briefing writes watch / counsel / consider. Live PI sits under it. Not a treatment order — the label wins."
-            : "FirstPass is clinical decision support for licensed healthcare professionals and educational harm-reduction review — CYP450 maps, FDA-label excerpts, and published scales to independently assess recreational-safety and street-supply risks. If local drug-checking services are available, use them for purity and content testing; they are not urine testing, not a dose tool, and not a substitute for the label. It is not FDA-cleared, not patient-directed, and not a dose or self-treatment tool. The Prescribing Information is the authority. Two-drug collisions stay free. Open IFU for intended use."}
+            : "FirstPass is clinical decision support for licensed healthcare professionals and educational harm-reduction review — CYP450 maps, FDA-label excerpts, and published scales to independently assess recreational-safety and street-supply risks. If local drug-checking services are available, use them for purity and content testing; they are not urine testing, not a dose tool, and not a substitute for the label. It is not FDA-cleared, not patient-directed, and not a dose or self-treatment tool. The Prescribing Information is the authority. Up to five drugs stay free. Open IFU for intended use."}
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           {lane === "mat" ? (
@@ -874,7 +874,7 @@ function HowCard() {
         <li>
           <span className="text-fg">Curve.</span> Grey is this route, normal metabolizer, no
           perpetrators. Teal is this desk. q8h / q12h / q24h superimpose doses (Rac). Overlay IV vs
-          oral on first-pass victims. Not a plasma level. Two-drug AUCR stays free.
+          oral on first-pass victims. Not a plasma level. Five-drug AUCR stays free.
         </li>
         <li>
           <span className="text-fg">2D6.</span> Blockade of codeine or tamoxifen is lost

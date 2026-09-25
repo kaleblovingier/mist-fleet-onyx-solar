@@ -16,16 +16,16 @@ export const PLANS: Plan[] = [
   {
     id: "free",
     name: "Desk",
-    tagline: "Two-drug CYP and PD collisions.",
+    tagline: "Up to five-drug CYP and PD collisions.",
     monthly: 0,
     yearly: 0,
     features: [
       "Search the 1,700+ compound formulary (WHO / US fills plus vitamin-shop bottles)",
-      "Two drugs on the desk",
+      "Up to five drugs on the desk",
       "PK / PD collision cards",
       "DrugBank, CPIC / PharmGKB, Stahl receptor cards",
       "PubMed citation shelf (curated PMIDs + live NCBI)",
-      "Concentration-time sketch (two-drug AUCR, q8h accumulation)",
+      "Concentration-time sketch (five-drug AUCR, q8h accumulation)",
       "CYP occupancy heatmap",
       "Share a one-line map",
     ],
@@ -76,5 +76,5 @@ export function priceFor(plan: PlanId, interval: Interval) {
 }
 
 export function maxDrugs(plan: PlanId) {
-  return plan === "free" ? 2 : 8;
+  return plan === "free" ? 5 : 8;
 }
