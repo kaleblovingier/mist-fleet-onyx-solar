@@ -1,7 +1,7 @@
 import { t as createServerFn } from "./ssr.mjs";
-import { o as DRUG_BY_ID } from "./catalog-bVfy6kXR.mjs";
+import { o as DRUG_BY_ID } from "./catalog-D4HC6v6d.mjs";
 import { t as createServerRpc } from "./createServerRpc-A6pJPYTF.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/psychonaut-rpc-H6L2Gt3q.js
+//#region node_modules/.nitro/vite/services/ssr/assets/psychonaut-rpc-CSEu1JQ0.js
 function readIds(input) {
 	if (!input || typeof input !== "object") return [];
 	const v = input.ids;
@@ -14,7 +14,7 @@ var lookupPsychonaut_createServerFn_handler = createServerRpc({
 	filename: "src/lib/drugs/psychonaut-rpc.ts"
 }, (opts) => lookupPsychonaut.__executeServer(opts));
 var lookupPsychonaut = createServerFn({ method: "POST" }).validator((input) => ({ ids: readIds(input) })).handler(lookupPsychonaut_createServerFn_handler, async ({ data }) => {
-	const { lookupPsychonaut: pull } = await import("./psychonaut.server-BYuRhHKs.mjs");
+	const { lookupPsychonaut: pull } = await import("./psychonaut.server-dOT_hzK9.mjs");
 	return pull(data.ids);
 });
 //#endregion

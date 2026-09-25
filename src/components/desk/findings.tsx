@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { ChevronDown, ExternalLink } from "lucide-react";
 import { DRUG_BY_ID } from "@/lib/drugs/catalog";
 import { basisFor } from "@/lib/drugs/basis";
+import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
 import type { Finding, Severity } from "@/lib/drugs/types";
 import { SEVERITY_LABEL } from "@/lib/drugs/types";
 import { cn } from "@/lib/utils";
@@ -93,6 +94,7 @@ function FindingCard({ finding }: { finding: Finding }) {
     finding.severity === "contraindicated" || finding.severity === "major",
   );
   const drugs = finding.drugIds.map((id) => DRUG_BY_ID[id]).filter(Boolean);
+  const plainSummary = plainLanguageSummary(finding);
 
   return (
     <li className="rounded-lg bg-surface shadow-[var(--shadow-border)]">
@@ -112,10 +114,7 @@ function FindingCard({ finding }: { finding: Finding }) {
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-medium text-fg">{finding.headline}</span>
-          <span className="mt-0.5 block text-xs text-muted">
-            {finding.mechanism}
-            {finding.effect ? ` · ${finding.effect}` : ""}
-          </span>
+          <span className="mt-0.5 block text-xs leading-relaxed text-muted">{plainSummary}</span>
         </span>
         <ChevronDown
           className={cn(
@@ -126,7 +125,22 @@ function FindingCard({ finding }: { finding: Finding }) {
       </button>
       {open ? (
         <div className="space-y-3 border-t border-border px-4 py-3">
-          <p className="text-sm leading-relaxed text-fg">{finding.clinical}</p>
+          <div className="grid gap-3 md:grid-cols-2">
+            <div className="rounded-md bg-bg-sunken px-3 py-2.5">
+              <p className="font-mono text-[10px] uppercase tracking-wide text-muted">Plain English</p>
+              <p className="mt-2 text-sm leading-relaxed text-fg">{plainSummary}</p>
+            </div>
+            <div className="rounded-md bg-bg-sunken px-3 py-2.5">
+              <p className="font-mono text-[10px] uppercase tracking-wide text-muted">
+                Clinician / student detail
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-fg">{finding.clinical}</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted">
+                {finding.mechanism}
+                {finding.effect ? ` · ${finding.effect}` : ""}
+              </p>
+            </div>
+          </div>
           <div className="space-y-2 rounded-md bg-bg-sunken px-3 py-2.5">
             <p className="font-mono text-[10px] uppercase tracking-wide text-muted">Independent review</p>
             {basisFor(finding).map((b) => (

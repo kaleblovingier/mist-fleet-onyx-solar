@@ -1,6 +1,6 @@
-import { o as DRUG_BY_ID } from "./catalog-bVfy6kXR.mjs";
-import { c as pwTitleFor, i as TRIPSIT_NAME, l as sanitizeWiki, r as PW_TITLE, s as pwHref } from "./psychonaut-Cg5xu7dj.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/psychonaut.server-BYuRhHKs.js
+import { o as DRUG_BY_ID } from "./catalog-D4HC6v6d.mjs";
+import { c as pwTitleFor, i as TRIPSIT_NAME, l as sanitizeWiki, r as PW_TITLE, s as pwHref } from "./psychonaut-C_rBJMYH.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/psychonaut.server-dOT_hzK9.js
 /** Live PsychonautWiki MediaWiki extracts + TripSit combo. Server-only. */
 var cache = /* @__PURE__ */ new Map();
 var TTL = 18e5;

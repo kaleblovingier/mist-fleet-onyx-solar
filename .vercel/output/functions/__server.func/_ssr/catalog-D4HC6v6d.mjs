@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/catalog-bVfy6kXR.js
+//#region node_modules/.nitro/vite/services/ssr/assets/catalog-D4HC6v6d.js
 function card(partial) {
 	return partial;
 }
@@ -16718,19 +16718,6 @@ var CITE_TAGS = [
 		label: "Reviews"
 	}
 ];
-function synapseLayoutForOccupancy(occupancy) {
-	if (!occupancy.length) return [];
-	return occupancy.map((entry, index) => {
-		const x = 260 + index % 2 * 90 + Math.min(index, 2) * 14;
-		const y = 72 + index % 3 * 44 + (index % 2 === 0 ? 0 : 20);
-		return {
-			label: entry.r,
-			x,
-			y,
-			strength: entry.n
-		};
-	});
-}
 function st(spectrum, occupancy, pearl, sides) {
 	return {
 		spectrum,
@@ -20643,4 +20630,4 @@ function familyOf(drug) {
 	return "other";
 }
 //#endregion
-export { searchCites as C, tdmHostNote as D, synapseLayoutForOccupancy as E, tdmOnDesk as O, pubmedUrl as S, stahlFor as T, hasStahl as _, DRUGS as a, pgxFor as b, citesFor as c, drugbankUrl as d, familyOf as f, hasPgx as g, hasClinic as h, DRUGBANK as i, clinicFor as l, hasCite as m, CITE_TAGS as n, DRUG_BY_ID as o, fentanylPatchMme as p, CLINIC as r, FAMILIES as s, CITES as t, drugbankSearchUrl as u, methadoneFactor as v, searchDrugs as w, pubmedSearchUrl as x, mmeOnDesk as y };
+export { searchCites as C, tdmOnDesk as D, tdmHostNote as E, pubmedUrl as S, stahlFor as T, hasStahl as _, DRUGS as a, pgxFor as b, citesFor as c, drugbankUrl as d, familyOf as f, hasPgx as g, hasClinic as h, DRUGBANK as i, clinicFor as l, hasCite as m, CITE_TAGS as n, DRUG_BY_ID as o, fentanylPatchMme as p, CLINIC as r, FAMILIES as s, CITES as t, drugbankSearchUrl as u, methadoneFactor as v, searchDrugs as w, pubmedSearchUrl as x, mmeOnDesk as y };

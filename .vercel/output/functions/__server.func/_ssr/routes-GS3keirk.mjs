@@ -4,15 +4,15 @@ import { v as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].
 import { n as TSS_SERVER_FUNCTION, r as getServerFnById, t as createServerFn } from "./ssr.mjs";
 import { r as CONNECTOR_TOKEN_READY_EVENT } from "./types-DXXiBr9d.mjs";
 import { _ as priceFor, a as PLANS, b as tweetFor, c as TRY_THREE, d as fulfillKeys, f as invoiceText, g as payClose, h as maxDrugs, i as PAY_RAILS, l as buyerDm, m as launchTweet, n as COMMERCE, o as PLAN_BY_ID, p as launchPosts, r as OPERATOR, s as SITE, t as BUYERS, u as fulfillKey, v as requestLicense, y as salesDm } from "./plans-BRWqRvoI.mjs";
-import { C as searchCites, D as tdmHostNote, E as synapseLayoutForOccupancy, O as tdmOnDesk, S as pubmedUrl, T as stahlFor, _ as hasStahl, a as DRUGS, b as pgxFor, c as citesFor, d as drugbankUrl, f as familyOf, g as hasPgx, h as hasClinic, i as DRUGBANK, l as clinicFor, m as hasCite, n as CITE_TAGS, o as DRUG_BY_ID, p as fentanylPatchMme, r as CLINIC, s as FAMILIES, t as CITES, u as drugbankSearchUrl, v as methadoneFactor, w as searchDrugs, x as pubmedSearchUrl, y as mmeOnDesk } from "./catalog-bVfy6kXR.mjs";
-import { a as comboOnDesk, d as wikiResourcesFor, n as PW_STATIC_RESOURCES, o as comboTone, t as PW_PRINCIPLES, u as wikiOnDesk } from "./psychonaut-Cg5xu7dj.mjs";
+import { C as searchCites, D as tdmOnDesk, E as tdmHostNote, S as pubmedUrl, T as stahlFor, _ as hasStahl, a as DRUGS, b as pgxFor, c as citesFor, d as drugbankUrl, f as familyOf, g as hasPgx, h as hasClinic, i as DRUGBANK, l as clinicFor, m as hasCite, n as CITE_TAGS, o as DRUG_BY_ID, p as fentanylPatchMme, r as CLINIC, s as FAMILIES, t as CITES, u as drugbankSearchUrl, v as methadoneFactor, w as searchDrugs, x as pubmedSearchUrl, y as mmeOnDesk } from "./catalog-D4HC6v6d.mjs";
+import { a as comboOnDesk, d as wikiResourcesFor, n as PW_STATIC_RESOURCES, o as comboTone, t as PW_PRINCIPLES, u as wikiOnDesk } from "./psychonaut-C_rBJMYH.mjs";
 import { _ as ChevronDown, a as Share2, c as Plus, d as KeyRound, f as ExternalLink, g as ClipboardCopy, h as Copy, i as SquareCheckBig, l as Lock, m as CreditCard, o as Search, p as Download, r as Square, s as RotateCcw, t as X, u as LoaderCircle, v as Check } from "../_libs/lucide-react.mjs";
 import { n as create, t as persist } from "../_libs/zustand.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as Slot } from "../_libs/radix-ui__react-slot.mjs";
 import { a as CartesianGrid, i as Line, n as YAxis, o as ResponsiveContainer, r as XAxis, s as Tooltip, t as LineChart } from "../_libs/recharts+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BkkYkPvn.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-GS3keirk.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function isLoginRequired(result) {
@@ -4051,6 +4051,20 @@ function enzymeIndex() {
 	}
 	return idx;
 }
+function plainLanguageSummary(finding) {
+	const headline = (finding.headline ?? "This interaction").replace(/ × /g, " and ");
+	const effect = (finding.effect ?? "").toLowerCase();
+	const mechanism = (finding.mechanism ?? "").toLowerCase();
+	const clinical = (finding.clinical ?? "").toLowerCase();
+	let outcome = "change how much drug is in the body and how strongly it acts";
+	if (effect.includes("↑ exposure") || effect.includes("↑ active metabolite") || /higher|build up|more side effects|toxicity/.test(clinical)) outcome = "make one medicine build up and raise side effects or toxicity";
+	else if (effect.includes("↓ exposure") || effect.includes("loss of efficacy") || /falling|less effective|not work as well|withdrawal/.test(clinical)) outcome = "make one medicine less effective or wear off sooner";
+	else if (mechanism.includes("serotonin") || clinical.includes("serotonin") || /agitation|tremor|sweating|fever/.test(clinical)) outcome = "push serotonin too high and cause agitation, tremor, sweating, or a dangerous fever";
+	else if (/qt|arrhythmia|palpitations|rhythm/.test(clinical)) outcome = "make the heart rhythm less stable and raise the chance of dangerous rhythm problems";
+	else if (/sleepiness|sedation|breathing|respiratory|blood pressure/.test(clinical)) outcome = "make drowsiness, breathing problems, or low blood pressure more likely";
+	else if (effect.includes("competitive substrate overlap")) outcome = "make both drugs compete for the same pathway and shift levels unexpectedly";
+	return `In plain English: ${headline} can ${outcome}.`;
+}
 var METABOLITE_TREES = {
 	ketamine: {
 		id: "ketamine",
@@ -7896,6 +7910,7 @@ function FindingList({ findings }) {
 function FindingCard({ finding }) {
 	const [open, setOpen] = (0, import_react.useState)(finding.severity === "contraindicated" || finding.severity === "major");
 	const drugs = finding.drugIds.map((id) => DRUG_BY_ID[id]).filter(Boolean);
+	const plainSummary = plainLanguageSummary(finding);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
 		className: "rounded-lg bg-surface shadow-[var(--shadow-border)]",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
@@ -7913,9 +7928,9 @@ function FindingCard({ finding }) {
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 						className: "block text-sm font-medium text-fg",
 						children: finding.headline
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-						className: "mt-0.5 block text-xs text-muted",
-						children: [finding.mechanism, finding.effect ? ` · ${finding.effect}` : ""]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "mt-0.5 block text-xs leading-relaxed text-muted",
+						children: plainSummary
 					})]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { className: cn("mt-1 size-4 shrink-0 text-subtle transition-transform duration-150", open && "rotate-180") })
@@ -7923,9 +7938,34 @@ function FindingCard({ finding }) {
 		}), open ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "space-y-3 border-t border-border px-4 py-3",
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "text-sm leading-relaxed text-fg",
-					children: finding.clinical
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "grid gap-3 md:grid-cols-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "rounded-md bg-bg-sunken px-3 py-2.5",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "font-mono text-[10px] uppercase tracking-wide text-muted",
+							children: "Plain English"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-2 text-sm leading-relaxed text-fg",
+							children: plainSummary
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "rounded-md bg-bg-sunken px-3 py-2.5",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "font-mono text-[10px] uppercase tracking-wide text-muted",
+								children: "Clinician / student detail"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-2 text-sm leading-relaxed text-fg",
+								children: finding.clinical
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "mt-2 text-xs leading-relaxed text-muted",
+								children: [finding.mechanism, finding.effect ? ` · ${finding.effect}` : ""]
+							})
+						]
+					})]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "space-y-2 rounded-md bg-bg-sunken px-3 py-2.5",
@@ -12469,80 +12509,6 @@ function PathCard({ title, hot, steps, note }) {
 		]
 	});
 }
-var CIRCUIT_LABELS = {
-	pk: "PK",
-	pd: "PD",
-	geno: "Phenotype",
-	clinic: "Clinic"
-};
-function summarizeMultiCircuitFindings(findings) {
-	const byCircuit = {
-		pk: {
-			count: 0,
-			severe: 0
-		},
-		pd: {
-			count: 0,
-			severe: 0
-		},
-		geno: {
-			count: 0,
-			severe: 0
-		},
-		clinic: {
-			count: 0,
-			severe: 0
-		}
-	};
-	const pairMap = /* @__PURE__ */ new Map();
-	for (const finding of findings) {
-		const kind = finding.kind;
-		if (!(kind in byCircuit)) continue;
-		byCircuit[kind].count += 1;
-		if (finding.severity === "contraindicated" || finding.severity === "major") byCircuit[kind].severe += 1;
-		if (finding.drugIds.length < 2) continue;
-		const pair = [...new Set(finding.drugIds)];
-		const key = `${kind}:${pair.join("|")}`;
-		const id = pair.join("+");
-		const current = pairMap.get(key);
-		const rank = {
-			contraindicated: 4,
-			major: 3,
-			moderate: 2,
-			minor: 1
-		};
-		const next = {
-			id,
-			pair,
-			severity: finding.severity,
-			count: (current?.count ?? 0) + 1
-		};
-		if (!current || rank[finding.severity] > rank[current.severity]) pairMap.set(key, next);
-		else if (rank[finding.severity] === rank[current.severity]) pairMap.set(key, {
-			...current,
-			count: current.count + 1
-		});
-	}
-	const topPairs = [...pairMap.values()].map((entry) => ({
-		id: entry.id,
-		pair: entry.pair,
-		count: entry.count,
-		severity: entry.severity
-	})).sort((a, b) => {
-		const severityRank = {
-			contraindicated: 4,
-			major: 3,
-			moderate: 2,
-			minor: 1
-		};
-		return severityRank[b.severity] - severityRank[a.severity] || b.count - a.count || a.id.localeCompare(b.id);
-	}).slice(0, 8);
-	return {
-		total: findings.length,
-		byCircuit,
-		topPairs
-	};
-}
 var TONE = {
 	contraindicated: "stroke-danger",
 	major: "stroke-danger",
@@ -12632,138 +12598,6 @@ function CollisionMap({ selected, findings }) {
 				})
 			] }, n.id))]
 		})]
-	});
-}
-function MultiCircuitMap({ selected, findings }) {
-	const summary = (0, import_react.useMemo)(() => summarizeMultiCircuitFindings(findings), [findings]);
-	const circuitOrder = [
-		"pk",
-		"pd",
-		"geno",
-		"clinic"
-	];
-	const laneY = {
-		pk: 32,
-		pd: 78,
-		geno: 124,
-		clinic: 170
-	};
-	const xOf = (index) => 52 + index * 74;
-	const pairLineData = (0, import_react.useMemo)(() => {
-		const rows = [];
-		for (const finding of findings) {
-			if (finding.drugIds.length < 2) continue;
-			const pair = [...new Set(finding.drugIds)].filter((id) => selected.includes(id)).sort();
-			if (pair.length < 2) continue;
-			const a = selected.indexOf(pair[0]);
-			const b = selected.indexOf(pair[1]);
-			if (a === -1 || b === -1) continue;
-			rows.push({
-				key: `${finding.kind}:${pair.join("|")}`,
-				kind: finding.kind,
-				a: xOf(a),
-				b: xOf(b),
-				severity: finding.severity,
-				pair
-			});
-		}
-		return rows;
-	}, [findings, selected]);
-	const bulbs = selected.map((id, index) => ({
-		id,
-		name: DRUG_BY_ID[id]?.name ?? id,
-		x: xOf(index)
-	}));
-	if (selected.length < 2) return null;
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-		className: "overflow-hidden rounded-xl bg-surface p-4 shadow-[var(--shadow-border)] sm:p-5",
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mb-3 flex items-end justify-between gap-3",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-					className: "font-serif text-lg tracking-tight text-fg",
-					children: "Multi-circuit map"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "text-xs text-muted",
-					children: "Each lane is a distinct interaction circuit: PK, PD, phenotype, or clinic."
-				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "flex flex-wrap justify-end gap-2 text-[10px] uppercase tracking-wide text-muted",
-					children: circuitOrder.map((kind) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-						className: "rounded-full bg-bg-sunken px-2 py-1",
-						children: [
-							CIRCUIT_LABELS[kind],
-							" ",
-							summary.byCircuit[kind].count
-						]
-					}, kind))
-				})]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-				viewBox: "0 0 360 210",
-				className: "block h-auto w-full max-w-md",
-				role: "img",
-				"aria-label": "Drug interaction circuit map",
-				children: circuitOrder.map((kind) => {
-					const y = laneY[kind];
-					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("g", { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
-							x: "16",
-							y: y + 4,
-							className: "fill-fg",
-							style: {
-								fontSize: 10,
-								fontFamily: "IBM Plex Sans, sans-serif"
-							},
-							children: CIRCUIT_LABELS[kind]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("line", {
-							x1: "52",
-							y1: y,
-							x2: "310",
-							y2: y,
-							stroke: "currentColor",
-							strokeOpacity: "0.2",
-							strokeWidth: "1.2"
-						}),
-						bulbs.map((drug) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("g", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
-							cx: drug.x,
-							cy: y,
-							r: "7",
-							className: "fill-accent",
-							opacity: .9
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
-							cx: drug.x,
-							cy: y,
-							r: "3",
-							className: "fill-accent-fg"
-						})] }, `${kind}-${drug.id}`)),
-						pairLineData.filter((row) => row.kind === kind).map((row) => {
-							const midX = (row.a + row.b) / 2;
-							const bend = row.kind === "pk" ? -20 : row.kind === "pd" ? -10 : row.kind === "geno" ? 10 : 18;
-							const d = `M ${row.a} ${y} C ${midX} ${y + bend}, ${midX} ${y + bend}, ${row.b} ${y}`;
-							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-								d,
-								className: cn(TONE[row.severity]),
-								fill: "none",
-								strokeWidth: row.severity === "contraindicated" || row.severity === "major" ? 3 : 1.8,
-								strokeLinecap: "round",
-								opacity: .9
-							}, `${row.key}-${row.pair.join("-")}`);
-						})
-					] }, kind);
-				})
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "mt-3 flex flex-wrap gap-2",
-				children: summary.topPairs.map((pair) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-					className: cn("inline-flex items-center gap-2 rounded-full border px-2 py-1 text-[10px] uppercase tracking-wide", pair.severity === "contraindicated" || pair.severity === "major" ? "border-danger/40 bg-danger-soft text-fg" : "border-border bg-bg-sunken text-muted"),
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "font-mono",
-						children: pair.id
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [pair.count, "x"] })]
-				}, pair.id))
-			})
-		]
 	});
 }
 function Formulary() {
@@ -15498,10 +15332,10 @@ function StahlPanel({ name, card }) {
 				className: "mt-1 font-serif text-xl tracking-tight text-fg",
 				children: card.spectrum
 			})] }),
-			card.occupancy.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SynapseDiagram, { occupancy: card.occupancy }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+			card.occupancy.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
 				className: "space-y-2",
 				children: card.occupancy.map((o) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ReceptorBar, { o }) }, o.r))
-			})] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-sm text-muted",
 				children: "No single-receptor occupancy — the ion / enzyme is the point."
 			}),
@@ -15515,121 +15349,10 @@ function StahlPanel({ name, card }) {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-[11px] leading-relaxed text-subtle",
-				children: "Educational receptor sketch in the Stahl method (spectrum first, occupancy, then side effects from those receptors). BioRender-inspired synapse view; original language — not a quotation of Stahl's Essential Psychopharmacology."
+				children: "Educational receptor sketch in the Stahl method (spectrum first, occupancy, then side effects from those receptors). Original language — not a quotation of Stahl's Essential Psychopharmacology."
 			})
 		]
 	});
-}
-function SynapseDiagram({ occupancy }) {
-	const nodes = synapseLayoutForOccupancy(occupancy);
-	if (!nodes.length) return null;
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "rounded-xl border border-border bg-surface p-3 shadow-[var(--shadow-border)]",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "mb-2 flex items-center justify-between gap-2",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "font-mono text-[10px] uppercase tracking-[0.18em] text-muted",
-				children: "Synapse map"
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "font-mono text-[10px] uppercase tracking-[0.18em] text-subtle",
-				children: "BioRender-style"
-			})]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-			viewBox: "0 0 520 220",
-			className: "h-44 w-full overflow-visible",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", {
-					id: "neuro-gradient",
-					x1: "0%",
-					x2: "100%",
-					y1: "0%",
-					y2: "0%",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
-						offset: "0%",
-						stopColor: "var(--color-accent-soft)"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
-						offset: "100%",
-						stopColor: "var(--color-border)"
-					})]
-				}) }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
-					x: "42",
-					y: "52",
-					width: "110",
-					height: "118",
-					rx: "20",
-					fill: "var(--color-bg-sunken)",
-					stroke: "var(--color-border)"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
-					x: "368",
-					y: "52",
-					width: "110",
-					height: "118",
-					rx: "20",
-					fill: "var(--color-bg-sunken)",
-					stroke: "var(--color-border)"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-					d: "M 152 110 C 220 110, 250 90, 318 110",
-					fill: "none",
-					stroke: "url(#neuro-gradient)",
-					strokeWidth: "3",
-					strokeLinecap: "round"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-					d: "M 152 126 C 220 126, 250 142, 318 126",
-					fill: "none",
-					stroke: "var(--color-border-strong)",
-					strokeWidth: "2",
-					strokeLinecap: "round",
-					strokeDasharray: "6 8"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
-					cx: "96",
-					cy: "110",
-					r: "26",
-					fill: "var(--color-accent-soft)",
-					stroke: "var(--color-accent)",
-					strokeWidth: "2"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
-					cx: "425",
-					cy: "110",
-					r: "26",
-					fill: "var(--color-bg-sunken)",
-					stroke: "var(--color-accent)",
-					strokeWidth: "2"
-				}),
-				nodes.map((node) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ReceptorGlyph, { node }, node.label))
-			]
-		})]
-	});
-}
-function ReceptorGlyph({ node }) {
-	const fill = {
-		1: "var(--color-bg-sunken)",
-		2: "var(--color-accent-soft)",
-		3: "var(--color-accent)",
-		4: "var(--color-ink)"
-	}[node.strength];
-	const textColor = node.strength >= 3 ? "var(--color-surface)" : "var(--color-fg)";
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("g", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
-		cx: node.x,
-		cy: node.y,
-		r: 18 + node.strength * 2,
-		fill,
-		stroke: "var(--color-border-strong)",
-		strokeWidth: "2"
-	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
-		x: node.x,
-		y: node.y + 4,
-		textAnchor: "middle",
-		fontSize: "8",
-		fill: textColor,
-		fontFamily: "IBM Plex Sans, sans-serif",
-		children: node.label
-	})] });
 }
 function ReceptorBar({ o }) {
 	const width = {
@@ -21143,17 +20866,10 @@ function DeskApp() {
 								report.findings.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "rounded-xl bg-ok-soft px-5 py-6 text-sm text-ok shadow-[var(--shadow-border)]",
 									children: "No mapped CYP collision, phenotype hit, or pharmacodynamic synergy. Absence is not proof of safety — transporters, UGT, plasma protein, and unlisted pathways still apply."
-								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollisionMap, {
-										selected,
-										findings: report.findings
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MultiCircuitMap, {
-										selected,
-										findings: report.findings
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FindingList, { findings: report.findings })
-								] }),
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollisionMap, {
+									selected,
+									findings: report.findings
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FindingList, { findings: report.findings })] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dossier, {
 									ids: selected,
 									host
@@ -21502,7 +21218,7 @@ function RiskBanner({ report, selected, host, plan }) {
 			`Cannabis route: ${CANNABIS_ROUTE_LABEL[host.cannabisRoute]}`,
 			`Highest severity: ${SEVERITY_LABEL[highest]}`,
 			"",
-			...report.findings.map((f) => `• ${SEVERITY_LABEL[f.severity]} — ${f.headline}: ${f.mechanism}. ${f.clinical}`),
+			...report.findings.map((f) => `• ${SEVERITY_LABEL[f.severity]} — ${f.headline}: ${plainLanguageSummary(f)} ${f.mechanism}. ${f.clinical}`),
 			"",
 			"Educational model. Not a substitute for clinical decision support."
 		].join("\n"));

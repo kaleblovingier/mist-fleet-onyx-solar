@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Copy, Check, RotateCcw, Download, Share2 } from "lucide-react";
 import { DRUG_BY_ID, DRUGS } from "@/lib/drugs/catalog";
 import { analyze } from "@/lib/drugs/engine";
+import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
 import { parseDoses } from "@/lib/drugs/dosing";
 import { applyHost, FIRST_PASS_NMDA } from "@/lib/drugs/host";
 import { treesFor } from "@/lib/drugs/metabolites";
@@ -712,7 +713,8 @@ function RiskBanner({
       `Highest severity: ${SEVERITY_LABEL[highest]}`,
       "",
       ...report.findings.map(
-        (f) => `• ${SEVERITY_LABEL[f.severity]} — ${f.headline}: ${f.mechanism}. ${f.clinical}`,
+        (f) =>
+          `• ${SEVERITY_LABEL[f.severity]} — ${f.headline}: ${plainLanguageSummary(f)} ${f.mechanism}. ${f.clinical}`,
       ),
       "",
       "Educational model. Not a substitute for clinical decision support.",
