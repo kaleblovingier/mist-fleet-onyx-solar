@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/plans-BRWqRvoI.js
+//#region node_modules/.nitro/vite/services/ssr/assets/plans-DkYlOxq4.js
 /** Public pay / write lines — the operator asked these onto the desk. */
 var OPERATOR = {
 	name: "Kaleb Lovingier",
@@ -63,7 +63,7 @@ var COMMERCE = {
 	founding: 79,
 	payUrl: OPERATOR.venmoUrl,
 	operatorContact: OPERATOR.email,
-	pitch: "A CYP450 desk for ketamine clinics, MAT, harm-reduction staff, and pharmacy students. Two-drug collisions stay free. Host factors, the atlas, and export are licensed."
+	pitch: "A CYP450 desk for ketamine clinics, MAT, harm-reduction staff, and pharmacy students. Up to five-drug collision checks stay free. Host factors, the atlas, and export are licensed."
 };
 var BUYERS = [
 	{
@@ -94,7 +94,7 @@ function salesDm(price = COMMERCE.founding) {
 	return [
 		"I built FirstPass — a CYP450 desk that maps ketamine, MAT, street adulterants (xylazine, nitazenes), and the usual psych stack, including grapefruit, smoke, and metabolizer status.",
 		"",
-		"Free: two-drug collisions.",
+		"Free: up to five-drug collision checks.",
 		`Founding license: $${price} once. Host factors, metabolites, enzyme atlas, export. Yours on this desk.`,
 		"",
 		SITE.url,
@@ -109,7 +109,7 @@ function buyerDm(who, price = COMMERCE.founding) {
 	return [
 		`I built FirstPass — a CYP450 desk for ${BUYERS.find((b) => b.who === who)?.hook ?? "the maps you keep asking pharmacy for"}.`,
 		"",
-		"Two-drug collisions stay free so you can kick the tires.",
+		"Up to five-drug collision checks stay free so you can kick the tires.",
 		`Founding license is $${price} once: host factors, metabolites, enzyme atlas, JSON/CSV export.`,
 		"",
 		SITE.url,
@@ -124,7 +124,7 @@ function launchTweet(price = COMMERCE.founding) {
 	return [
 		"FirstPass is a CYP450 desk for ketamine clinics, MAT, and pharmacy students.",
 		"",
-		"Two-drug collisions stay free.",
+		"Up to five-drug collision checks stay free.",
 		`Founding license $${price} once — host factors, enzyme atlas, export.`,
 		SITE.url,
 		"Pay with card on the desk, or Venmo / Cash App / PayPal.",
@@ -145,7 +145,7 @@ function launchPosts(price = COMMERCE.founding, url = SITE.pages) {
 				"1/",
 				"FirstPass is a CYP450 desk for ketamine clinics, MAT, and pharmacy students.",
 				"",
-				"Two-drug collisions stay free. Founding license $" + price + " once.",
+				"Up to five-drug collision checks stay free. Founding license $" + price + " once.",
 				"",
 				"2/",
 				"Three cases the desk actually draws:",
@@ -169,7 +169,7 @@ function launchPosts(price = COMMERCE.founding, url = SITE.pages) {
 				"",
 				"I built an educational CYP450 / PD collision desk for the stacks I kept looking up by hand: ketamine (oral vs IV), MAT / street adulterants, psych, and kitchen inhibitors.",
 				"",
-				"Free: two drugs on the desk, collision cards, a one-compartment concentration sketch (AUCR, q8h accumulation, oral vs IV overlay).",
+				"Free: up to five drugs on the desk, collision cards, a one-compartment concentration sketch (AUCR, q8h accumulation, oral vs IV overlay).",
 				"",
 				"Three cases worth opening:",
 				tryLines,
@@ -191,7 +191,7 @@ function launchPosts(price = COMMERCE.founding, url = SITE.pages) {
 				"",
 				"Oral ketamine is a first-pass problem. IV is not. Grapefruit knocks out gut 3A4 so oral F rises while t½ stays put; an IV overlay on the same milligram scale stays flat. Strong hepatic 3A4 inhibitors are a different shape.",
 				"",
-				"I put that on a desk with 2B6 phenotype, benzo airway stacks, and the usual psych list. Two-drug collisions are free.",
+				"I put that on a desk with 2B6 phenotype, benzo airway stacks, and the usual psych list. Up to five-drug collision checks are free.",
 				"",
 				"Educational model — not medical advice, not a clinic chart.",
 				"",
@@ -208,7 +208,7 @@ function launchPosts(price = COMMERCE.founding, url = SITE.pages) {
 				"Title: Show HN: FirstPass – educational CYP450 collision desk",
 				"URL: " + url,
 				"",
-				"FirstPass maps CYP450 / PD collisions for ketamine (oral vs IV), MAT and street adulterants, and the usual psych stack. Two-drug collisions are free. A one-compartment sketch shows AUCR, q8h accumulation, and an oral/IV overlay. Host phenotype, the enzyme atlas, and export are a $" + price + " founding license.",
+				"FirstPass maps CYP450 / PD collisions for ketamine (oral vs IV), MAT and street adulterants, and the usual psych stack. Up to five-drug collision checks are free. A one-compartment sketch shows AUCR, q8h accumulation, and an oral/IV overlay. Host phenotype, the enzyme atlas, and export are a $" + price + " founding license.",
 				"",
 				"Educational model, not clinical decision support. Source: " + SITE.repo
 			].join("\n")
@@ -222,7 +222,7 @@ function launchPosts(price = COMMERCE.founding, url = SITE.pages) {
 			text: [
 				"I built FirstPass, an educational CYP450 desk for ketamine clinics, MAT programs, and pharmacy students.",
 				"",
-				"Two-drug collisions stay free so a preceptor can open it in rounds. Founding license is $" + price + " once: host metabolizer status, smoke and alcohol, metabolites, enzyme atlas, JSON/CSV export.",
+				"Up to five-drug collision checks stay free so a preceptor can open it in rounds. Founding license is $" + price + " once: host metabolizer status, smoke and alcohol, metabolites, enzyme atlas, JSON/CSV export.",
 				"",
 				"Three teaching cases:",
 				tryLines,
@@ -280,16 +280,16 @@ var PLANS = [
 	{
 		id: "free",
 		name: "Desk",
-		tagline: "Two-drug CYP and PD collisions.",
+		tagline: "Up to five-drug CYP and PD collisions.",
 		monthly: 0,
 		yearly: 0,
 		features: [
 			"Search the 1,700+ compound formulary (WHO / US fills plus vitamin-shop bottles)",
-			"Two drugs on the desk",
+			"Up to five drugs on the desk",
 			"PK / PD collision cards",
 			"DrugBank, CPIC / PharmGKB, Stahl receptor cards",
 			"PubMed citation shelf (curated PMIDs + live NCBI)",
-			"Concentration-time sketch (two-drug AUCR, q8h accumulation)",
+			"Concentration-time sketch (five-drug AUCR, q8h accumulation)",
 			"CYP occupancy heatmap",
 			"Share a one-line map"
 		]
@@ -337,7 +337,7 @@ function priceFor(plan, interval) {
 	return interval === "year" ? p.yearly : p.monthly;
 }
 function maxDrugs(plan) {
-	return plan === "free" ? 2 : 8;
+	return plan === "free" ? 5 : 8;
 }
 //#endregion
 export { priceFor as _, PLANS as a, tweetFor as b, TRY_THREE as c, fulfillKeys as d, invoiceText as f, payClose as g, maxDrugs as h, PAY_RAILS as i, buyerDm as l, launchTweet as m, COMMERCE as n, PLAN_BY_ID as o, launchPosts as p, OPERATOR as r, SITE as s, BUYERS as t, fulfillKey as u, requestLicense as v, salesDm as y };

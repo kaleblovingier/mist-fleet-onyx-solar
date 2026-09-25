@@ -1,7 +1,7 @@
-import { u as fulfillKey } from "./plans-BRWqRvoI.mjs";
+import { u as fulfillKey } from "./plans-DkYlOxq4.mjs";
 import { defaultPinSet, mintKeyFromNote, mintKeyFromPaid, parseIssuedPlan, parseNameList, pinOk } from "./license.server-Deu4zNmD.mjs";
-import { listPaidSessions } from "./stripe.server-CzMDNrWS.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/collect.server-B08E82wV.js
+import { listPaidSessions } from "./stripe.server-7lEmYoqD.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/collect.server-BWs1tF8b.js
 var LICENSE_SET = /* @__PURE__ */ new Set([
 	12,
 	29,
@@ -138,7 +138,7 @@ function nameKey(name) {
 }
 async function scanMail() {
 	try {
-		const { callTool } = await import("./client.server-DlmYrsVm.mjs");
+		const { callTool } = await import("./client.server-DfF_p6Bw.mjs");
 		const { ConnectorType, GmailTools } = await import("./types-DXXiBr9d.mjs").then((n) => n.a);
 		const res = await callTool(GmailTools.search, {
 			query: MAIL_QUERY,
@@ -243,7 +243,7 @@ async function draftCollected(opts) {
 		reason: "No buyer emails to draft — copy the packet instead."
 	};
 	try {
-		const { callTool } = await import("./client.server-DlmYrsVm.mjs");
+		const { callTool } = await import("./client.server-DfF_p6Bw.mjs");
 		const { ConnectorType, GmailTools } = await import("./types-DXXiBr9d.mjs").then((n) => n.a);
 		let drafted = 0;
 		for (const row of withMail.slice(0, 20)) {

@@ -1,6 +1,6 @@
-import { o as DRUG_BY_ID } from "./catalog-D4HC6v6d.mjs";
-import { lookupLive } from "./live.server-6r0zrxOH.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/rxnav.server-C2FlEPD2.js
+import { o as DRUG_BY_ID } from "./catalog-DDHUkv_i.mjs";
+import { lookupLive } from "./live.server-DQbmeCAd.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/rxnav.server-C2rc7YSO.js
 /**
 * Live DDI from OpenFDA labels + NIH RxClass.
 * NLM retired the RxNav Interaction API in 2024 — this desk does not call it.
