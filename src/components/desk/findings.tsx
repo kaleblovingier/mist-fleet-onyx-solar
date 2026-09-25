@@ -59,6 +59,9 @@ export function FindingList({ findings }: { findings: Finding[] }) {
           ))}
         </div>
       </div>
+      <p className="text-xs leading-relaxed text-muted">
+        Possible concerns in the selected items. Severity labels describe this checker’s categories, not a personal prediction of harm.
+      </p>
       <div className="flex flex-wrap gap-1">
         {KIND_FILTERS.map((k) => (
           <button
@@ -127,12 +130,12 @@ function FindingCard({ finding }: { finding: Finding }) {
         <div className="space-y-3 border-t border-border px-4 py-3">
           <div className="grid gap-3 md:grid-cols-2">
             <div className="rounded-md bg-bg-sunken px-3 py-2.5">
-              <p className="font-mono text-[10px] uppercase tracking-wide text-muted">Plain English</p>
+              <p className="font-mono text-[10px] uppercase tracking-wide text-muted">Everyday-language summary</p>
               <p className="mt-2 text-sm leading-relaxed text-fg">{plainSummary}</p>
             </div>
             <div className="rounded-md bg-bg-sunken px-3 py-2.5">
               <p className="font-mono text-[10px] uppercase tracking-wide text-muted">
-                Clinician / student detail
+                Clinical detail
               </p>
               <p className="mt-2 text-sm leading-relaxed text-fg">{finding.clinical}</p>
               <p className="mt-2 text-xs leading-relaxed text-muted">
@@ -142,7 +145,7 @@ function FindingCard({ finding }: { finding: Finding }) {
             </div>
           </div>
           <div className="space-y-2 rounded-md bg-bg-sunken px-3 py-2.5">
-            <p className="font-mono text-[10px] uppercase tracking-wide text-muted">Independent review</p>
+            <p className="font-mono text-[10px] uppercase tracking-wide text-muted">Sources to check</p>
             {basisFor(finding).map((b) => (
               <div key={`${b.kind}-${b.label}`}>
                 <p className="text-xs font-medium text-fg">{b.label}</p>

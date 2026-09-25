@@ -152,8 +152,8 @@ export function DeskApp() {
                   </span>
                 ) : null}
               </div>
-              <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
-                CYP450 desk · not FDA-cleared
+              <div className="mt-1 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
+                CYP450 · not FDA-cleared
               </div>
             </div>
             </div>
@@ -163,26 +163,27 @@ export function DeskApp() {
               </Button>
             ) : null}
           </div>
-          <div className="flex min-w-0 items-center gap-2">
-            <nav className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto rounded-full bg-bg-sunken p-1 sm:flex-none">
+          <div className="flex w-full min-w-0 items-center gap-2">
+            <nav aria-label="Main navigation" className="flex w-full flex-wrap items-center justify-center gap-1 rounded-xl bg-bg-sunken p-1 sm:w-auto sm:flex-nowrap sm:justify-start sm:rounded-full">
               {(
                 [
                   ["desk", "Desk"],
-                  ["library", "Materia"],
-                  ["cites", "Cites"],
-                  ["atlas", "Atlas"],
-                  ["study", "Study"],
-                  ["rounds", "Rounds"],
-                  ["label", "IFU"],
-                  ["plans", "Pro"],
+                  ["library", "Library"],
+                  ["cites", "Sources"],
+                  ["atlas", "CYP map"],
+                  ["study", "Learn"],
+                  ["rounds", "Cases"],
+                  ["label", "Safety"],
+                  ["plans", "Plans"],
                 ] as const
               ).map(([id, label]) => (
                 <button
                   key={id}
                   type="button"
                   onClick={() => setView(id)}
+                  aria-current={view === id ? "page" : undefined}
                   className={cn(
-                    "h-9 shrink-0 rounded-full px-2.5 text-xs font-medium sm:px-4 sm:text-sm",
+                    "h-11 shrink-0 rounded-full px-2 text-xs font-medium sm:h-9 sm:px-4 sm:text-sm",
                     view === id ? "bg-surface-2 text-fg shadow-[var(--shadow-border)]" : "text-muted hover:text-fg",
                   )}
                 >
@@ -202,18 +203,19 @@ export function DeskApp() {
       {hydrated && !hcpAck ? (
         <div className="border-b border-border bg-warn-soft">
           <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-            <p className="text-sm leading-relaxed text-fg">
-              For licensed healthcare professionals. {SOFTWARE.name} is not FDA-cleared. The
-              Prescribing Information is the authority — independently review the basis of every
-              recommendation before acting. If local drug-checking services are available, use them
-              for purity and content testing; they are not urine testing and not a dose tool.
+            <p className="max-w-3xl text-sm leading-relaxed text-fg">
+              <span className="font-medium">For clinicians and supervised learning.</span> Not for
+              personal treatment, dose changes, or deciding whether to combine substances. This
+              educational checker can miss risks and cannot test what is in a product. If someone is
+              seriously unwell or may be overdosing, contact local emergency services or a poison
+              center now; do not wait for this checker.
             </p>
             <div className="flex shrink-0 flex-wrap gap-2">
               <Button variant="secondary" size="sm" onClick={() => setView("label")}>
-                Open IFU
+                Safety notes
               </Button>
               <Button size="sm" onClick={ackHcp}>
-                I understand
+                Continue
               </Button>
             </div>
           </div>
@@ -257,7 +259,7 @@ export function DeskApp() {
         ) : view === "library" ? (
           <Formulary />
         ) : (
-          <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_260px]">
+          <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_260px]">
             <div className="space-y-4">
               <DrugSearch />
               {selected.length > 0 ? (
@@ -480,19 +482,38 @@ function EmptyState({
         <Plate src={PLATES.hero} alt="" className="h-48 w-full sm:h-64" />
         <div className="absolute inset-x-0 bottom-0 bg-ink px-5 py-4 sm:px-8 sm:py-5">
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-fg/70">
-            Psychoactive interaction desk
+            Educational interaction checker
           </p>
           <h1 className="mt-2 max-w-xl font-serif text-3xl leading-tight tracking-tight text-accent-fg sm:text-4xl">
-            Map ketamine, entactogens, and the rest of the stack.
+            Explore possible medicine and substance interactions.
           </h1>
         </div>
       </div>
       <div className="px-5 py-6 sm:px-8 sm:py-8">
         <p className="max-w-xl text-sm leading-relaxed text-muted">
           {lane === "mat"
-            ? "Built for the dosing window. Put methadone, a film, or Vivitrol on the desk, then tap today's extra. OTP tab: occupancy vs COWS, Vivitrol washout, 2024 take-homes, naloxone, ECG, ID screens. The briefing writes watch / counsel / consider. Live PI sits under it. Not a treatment order — the label wins."
-            : "FirstPass is clinical decision support for licensed healthcare professionals and educational harm-reduction review — CYP450 maps, FDA-label excerpts, and published scales to independently assess recreational-safety and street-supply risks. If local drug-checking services are available, use them for purity and content testing; they are not urine testing, not a dose tool, and not a substitute for the label. It is not FDA-cleared, not patient-directed, and not a dose or self-treatment tool. The Prescribing Information is the authority. Up to five drugs stay free. Open IFU for intended use."}
+            ? "Explore educational examples involving opioid-treatment medicines and other substances. These notes are not a treatment plan; a qualified clinician and current product labeling must guide care."
+            : "Add two or more medicines, supplements, foods, or other substances to see possible concerns in everyday language, with clinical details and sources for review. This is a learning aid for clinicians and supervised education—not personal medical advice. It can miss interactions; no result does not mean a combination is safe."}
         </p>
+        {lane !== "mat" ? (
+          <ol className="mt-5 grid gap-3 sm:grid-cols-3">
+            {[
+              ["1", "Search", "Use a generic name, brand, or common name."],
+              ["2", "Add another", "Choose a second item to check the pair."],
+              ["3", "Review", "Start with the everyday-language summary; open sources for context."],
+            ].map(([step, title, detail]) => (
+              <li key={step} className="flex gap-3 rounded-lg bg-bg px-3 py-3">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-soft font-mono text-xs text-accent">
+                  {step}
+                </span>
+                <span>
+                  <span className="block text-sm font-medium text-fg">{title}</span>
+                  <span className="mt-0.5 block text-xs leading-relaxed text-muted">{detail}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        ) : null}
         <div className="mt-4 flex flex-wrap gap-2">
           {lane === "mat" ? (
             <>
@@ -523,7 +544,7 @@ function EmptyState({
             </>
           ) : null}
           <Button variant="secondary" size="sm" onClick={() => setView("library")}>
-            Browse the materia
+            Browse drug library
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setLane("mat")}>
             MAT / OTP board
@@ -578,7 +599,15 @@ function EmptyState({
             </button>
           ))}
         </div>
-        <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+        <div className="mt-6">
+          <h2 className="font-serif text-lg tracking-tight text-fg">
+            {lane === "all" ? "Try an example" : `Examples: ${SAMPLE_LANES.find((item) => item.id === lane)?.label ?? lane}`}
+          </h2>
+          <p className="mt-1 text-xs leading-relaxed text-muted">
+            Examples load into the checker so you can see how its summaries and source links work.
+          </p>
+        </div>
+        <ul className="mt-3 grid gap-2 sm:grid-cols-2">
           {shown.map((s) => (
             <li key={s.id}>
               <button
@@ -983,12 +1012,11 @@ function HowCard() {
 function Disclaimer() {
   return (
     <p className="px-1 text-[11px] leading-relaxed text-subtle">
-      {SOFTWARE.name} {SOFTWARE.version} is clinical decision support for licensed healthcare
-      professionals and educational harm-reduction / recreational-safety review. {NOT_CLEARED} The
-      FDA-approved Prescribing Information is the authority. Every collision names its basis (FDA boxed
-      warning, PI excerpt, CPIC, PMID, or desk map) so you can independently review it. Not a dose,
-      not a chart, not TDM, not a patient-directed treatment tool, and not a substitute for
-      professional judgment. Street-supply rows are teaching maps. Always open DailyMed before acting.
+      {SOFTWARE.name} {SOFTWARE.version} is an educational clinical decision-support aid for clinicians
+      and supervised learning. {NOT_CLEARED} It can miss risks; an empty result is not proof that a
+      combination is safe. It does not identify product contents, diagnose, or tell anyone what to
+      start, stop, or change. For care decisions, consult a qualified clinician and current FDA-approved
+      labeling. Street-supply entries are teaching examples, not product identification.
     </p>
   );
 }

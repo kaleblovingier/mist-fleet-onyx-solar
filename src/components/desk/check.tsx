@@ -4,6 +4,7 @@ import { DRUG_BY_ID } from "@/lib/drugs/catalog";
 import { basisFor } from "@/lib/drugs/basis";
 import { conditionLanes, foodBeside, sameShelf } from "@/lib/drugs/also";
 import { maxDrugs } from "@/lib/billing/plans";
+import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
 import { useDesk, usePlan } from "@/lib/drugs/store";
 import type { EnzymeRole, Finding, HostContext, Severity } from "@/lib/drugs/types";
 import { SEVERITY_LABEL } from "@/lib/drugs/types";
@@ -130,11 +131,11 @@ export function CheckBoard({
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
             {foodOutranks
-              ? "The sharper row is food or drink, not the two names. It sits under the pair and is not on the desk. Not a milligram. If the label disagrees, the label wins."
+              ? "The main concern shown is a food or drink, listed below the pair. It is an educational map, not a dose tool; current product labeling and a qualified clinician guide care decisions."
               : rows.length === 0
-              ? "No collision between the names on the desk. Food, drink, and a different host are below — same map, not a second list. That is not a clearance."
-              : "Who acts, who is affected, and which way it moves. Food and drink for this list sit under the pair, even when they are not on the desk. Contraindicated is its own tier. Not a milligram. If the label disagrees, the label wins."}
-            {ids.length < 2 ? " Add a second drug when you have one." : ""}
+              ? "No mapped interaction appeared for these names. This checker can miss risks, so no result does not mean a combination is safe."
+              : "Possible concern found. Start with the everyday-language summary; expand a row for clinical details and sources. These categories are not a personal prediction of harm."}
+            {ids.length < 2 ? " Add another medicine or substance to compare." : ""}
           </p>
         </div>
         <span
@@ -154,26 +155,31 @@ export function CheckBoard({
       ) : null}
 
       {rows.length > 0 ? (
-        <div className="flex flex-wrap gap-1">
-          {TIERS.map((t) => (
-            <button
-              key={t}
-              type="button"
-              onClick={() => {
-                setTier(t);
-                setShowAll(false);
-              }}
-              className={cn(
-                "h-10 rounded-full px-3 text-xs font-medium",
-                tier === t ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
-              )}
-            >
-              {t === "all"
-                ? `All ${rows.length}`
-                : `${SEVERITY_LABEL[t]} ${counts[t]}`}
-            </button>
-          ))}
-        </div>
+        <>
+          <p className="text-xs leading-relaxed text-muted">
+            Severity labels organize the checker’s findings; they do not estimate an individual’s risk.
+          </p>
+          <div className="flex flex-wrap gap-1">
+            {TIERS.map((t) => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => {
+                  setTier(t);
+                  setShowAll(false);
+                }}
+                className={cn(
+                  "h-10 rounded-full px-3 text-xs font-medium",
+                  tier === t ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+                )}
+              >
+                {t === "all"
+                  ? `All ${rows.length}`
+                  : `${SEVERITY_LABEL[t]} ${counts[t]}`}
+              </button>
+            ))}
+          </div>
+        </>
       ) : null}
 
       <div className="grid gap-2 sm:grid-cols-2">
@@ -359,9 +365,8 @@ function CheckRow({
             {a.verb ? <span className="font-normal text-muted"> {a.verb} </span> : null}
             {a.right}
           </span>
-          <span className="mt-0.5 block text-xs text-muted">
-            {finding.effect ? `${finding.effect} · ` : ""}
-            {finding.mechanism}
+          <span className="mt-1 block text-xs leading-relaxed text-muted">
+            {plainLanguageSummary(finding)}
           </span>
           <span className="mt-1 flex flex-wrap gap-1.5">
             <span className="font-mono text-[10px] uppercase tracking-wide text-subtle">
@@ -381,7 +386,13 @@ function CheckRow({
       </button>
       {open ? (
         <div className="space-y-2 border-t border-border px-3 py-3">
+          <p className="font-mono text-[10px] uppercase tracking-wide text-muted">Clinical detail</p>
           <p className="text-sm leading-relaxed text-fg">{finding.clinical}</p>
+          <p className="text-xs leading-relaxed text-muted">
+            Mechanism: {finding.mechanism}
+            {finding.effect ? ` · ${finding.effect}` : ""}
+          </p>
+          <p className="font-mono text-[10px] uppercase tracking-wide text-muted">Sources to check</p>
           <div className="flex flex-wrap gap-2">
             {basis.map((b) =>
               b.href ? (

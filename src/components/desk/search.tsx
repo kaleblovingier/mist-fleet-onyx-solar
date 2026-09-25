@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
-import { DRUG_BY_ID, searchDrugs } from "@/lib/drugs/catalog";
+import { searchDrugs } from "@/lib/drugs/catalog";
 import { isMatDesk } from "@/lib/drugs/window";
 import { plateForDrug } from "@/lib/drugs/visuals";
 import { useDesk, usePlan } from "@/lib/drugs/store";
@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 export function DrugSearch() {
   const selected = useDesk((s) => s.selected);
   const add = useDesk((s) => s.add);
+  const setView = useDesk((s) => s.setView);
   const plan = usePlan();
   const cap = maxDrugs(plan);
   const [q, setQ] = useState("");
@@ -57,12 +58,13 @@ export function DrugSearch() {
   }
 
   return (
-    <div ref={rootRef} className="relative">
-      <label className="sr-only" htmlFor="drug-search">
-        Search drugs
-      </label>
-      <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-subtle" />
-      <input
+    <div>
+      <div ref={rootRef} className="relative">
+        <label className="sr-only" htmlFor="drug-search">
+          Search medicines and other substances
+        </label>
+        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-subtle" />
+        <input
         id="drug-search"
         ref={inputRef}
         value={q}
@@ -72,6 +74,11 @@ export function DrugSearch() {
           setOpen(true);
         }}
         onFocus={() => setOpen(true)}
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded={open && !full && (results.length > 0 || Boolean(q.trim()))}
+        aria-controls="drug-search-results"
+        aria-activedescendant={open && results[active] ? `drug-option-${results[active].id}` : undefined}
         onKeyDown={(e) => {
           if (e.key === "ArrowDown") {
             e.preventDefault();
@@ -90,43 +97,46 @@ export function DrugSearch() {
         }}
         placeholder={
           full
-            ? "Regimen full · remove a drug to add another"
+            ? `${cap} items added · remove one to add another`
             : selected.length === 1
-              ? `Second drug to check against ${DRUG_BY_ID[selected[0]]?.name ?? "this"}`
+              ? "Search another item to compare"
               : mat
-                ? "Paxlovid, Phenergan, UDS, COWS…"
-                : "Check a pair — simvastatin, clarithromycin…"
+                ? "Search medicines or substances"
+                : "Search a medicine or substance"
         }
         className="h-12 w-full rounded-lg bg-surface-2 pl-10 pr-10 text-sm text-fg shadow-[var(--shadow-border)] placeholder:text-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-60"
         autoComplete="off"
         spellCheck={false}
-      />
-      {q ? (
-        <button
+        />
+        {q ? (
+          <button
           type="button"
           aria-label="Clear search"
-          className="absolute right-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-sm text-subtle hover:bg-bg-sunken hover:text-fg"
+          className="absolute right-1 top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-sm text-subtle hover:bg-bg-sunken hover:text-fg"
           onClick={() => {
             setQ("");
             inputRef.current?.focus();
           }}
         >
           <X className="size-4" />
-        </button>
-      ) : (
-        <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-xs bg-bg-sunken px-1.5 py-0.5 font-mono text-[10px] text-subtle sm:inline">
-          /
-        </kbd>
-      )}
+          </button>
+        ) : (
+          <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-xs bg-bg-sunken px-1.5 py-0.5 font-mono text-[10px] text-subtle sm:inline">
+            /
+          </kbd>
+        )}
 
       {open && results.length > 0 && !full ? (
         <ul
+          id="drug-search-results"
           role="listbox"
+          aria-label="Matching medicines and substances"
           className="absolute z-30 mt-2 max-h-80 w-full overflow-auto rounded-lg bg-surface-2 py-1 shadow-[var(--shadow-border)]"
         >
           {results.map((drug, i) => (
             <li key={drug.id}>
               <button
+                id={`drug-option-${drug.id}`}
                 type="button"
                 role="option"
                 aria-selected={i === active}
@@ -150,19 +160,44 @@ export function DrugSearch() {
                     {drug.brands.length ? ` · ${drug.brands.slice(0, 2).join(", ")}` : ""}
                   </span>
                 </span>
-                <span className="shrink-0 font-mono text-[10px] uppercase tracking-wide text-subtle">
+                <span
+                  className="shrink-0 font-mono text-[10px] uppercase tracking-wide text-subtle"
+                  title="Mapped enzyme involvement; see the result details for an explanation."
+                >
                   {drug.enzymes
                     .filter((e) => e.kind !== "substrate")
                     .slice(0, 2)
-                    .map((e) => e.enzyme.replace("CYP", ""))
+                    .map((e) => e.enzyme)
                     .join(" ") ||
-                    drug.enzymes[0]?.enzyme.replace("CYP", "") ||
-                    "PD"}
+                    drug.enzymes[0]?.enzyme ||
+                    (drug.kind === "drug" ? "Medicine" : drug.kind)}
                 </span>
               </button>
             </li>
           ))}
         </ul>
+      ) : null}
+        {open && !full && q.trim() && results.length === 0 ? (
+          <p
+            role="status"
+            className="absolute z-30 mt-2 w-full rounded-lg bg-surface-2 px-4 py-3 text-sm leading-relaxed text-muted shadow-[var(--shadow-border)]"
+          >
+            No match for “{q.trim()}”. Try a generic name, brand, or common name, or check the spelling.
+            <span className="mt-1 block text-xs">No match does not mean an interaction is absent or a combination is safe.</span>
+            <button
+              type="button"
+              className="mt-2 min-h-10 rounded-md px-2 text-sm font-medium text-accent underline underline-offset-2 hover:bg-accent-soft"
+              onClick={() => setView("library")}
+            >
+              Browse the full library
+            </button>
+          </p>
+        ) : null}
+      </div>
+      {selected.length < 2 && !q ? (
+        <p className="mt-2 px-1 text-xs leading-relaxed text-muted">
+          Search by generic, brand, or common name. Add two or more items to see mapped pair findings.
+        </p>
       ) : null}
     </div>
   );
