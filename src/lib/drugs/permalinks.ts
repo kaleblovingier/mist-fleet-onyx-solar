@@ -1,4 +1,4 @@
-import { SITE } from "@/lib/billing/commerce";
+import { labAssignment, sampleForLab, type LabAssignment } from "./lab";
 import { SAMPLE_REGIMENS, type SampleRegimen } from "./samples";
 import type { LoadExtras } from "./store";
 import type { KetamineRoute } from "./types";
@@ -31,9 +31,11 @@ export const PACKS: Record<PackId, PackMeta> = {
 export const PACK_IDS = Object.keys(PACKS) as PackId[];
 
 export interface PermalinkResolved {
-  kind: "case" | "pack" | "none";
+  kind: "case" | "pack" | "lab" | "none";
   caseId: string | null;
   packId: PackId | null;
+  labId: string | null;
+  assignment: LabAssignment | null;
   flip: boolean;
   sample: SampleRegimen | null;
   ids: string[];
@@ -79,28 +81,54 @@ function isPackId(value: string | null): value is PackId {
   return value === "clinic-onboard" || value === "mat-cup";
 }
 
-/**
- * Parse desk share params.
- * - `case` (preferred) or legacy `sample`: sample regimen id
- * - `pack`: clinic-onboard | mat-cup
- * - `flip=1`: invert ketamine route for first-pass contrast
- */
-export function parsePermalink(search: string | URLSearchParams): PermalinkResolved {
-  const params = typeof search === "string" ? new URLSearchParams(search.startsWith("?") ? search.slice(1) : search) : search;
-  const flip = params.get("flip") === "1" || params.get("flip") === "true";
-  const packRaw = params.get("pack");
-  const packId = isPackId(packRaw) ? packRaw : null;
-  const caseRaw = params.get("case") || params.get("sample");
-
-  const empty: PermalinkResolved = {
+function emptyResolved(flip: boolean): PermalinkResolved {
+  return {
     kind: "none",
     caseId: null,
     packId: null,
+    labId: null,
+    assignment: null,
     flip,
     sample: null,
     ids: [],
     extras: {},
   };
+}
+
+/**
+ * Parse desk share params.
+ * - `case` (preferred) or legacy `sample`: sample regimen id
+ * - `pack`: clinic-onboard | mat-cup
+ * - `lab`: PharmD lab-book assignment id (loads sample + Study view)
+ * - `flip=1`: invert ketamine route for first-pass contrast
+ */
+export function parsePermalink(search: string | URLSearchParams): PermalinkResolved {
+  const params = typeof search === "string" ? new URLSearchParams(search.startsWith("?") ? search.slice(1) : search) : search;
+  const flip = params.get("flip") === "1" || params.get("flip") === "true";
+  const labRaw = params.get("lab");
+  const assignment = labAssignment(labRaw);
+  if (assignment) {
+    const sample = sampleForLab(assignment);
+    if (!sample) {
+      return { ...emptyResolved(flip), kind: "lab", labId: assignment.id, assignment };
+    }
+    return {
+      kind: "lab",
+      caseId: sample.id,
+      packId: null,
+      labId: assignment.id,
+      assignment,
+      flip,
+      sample,
+      ids: sample.drugIds,
+      extras: applyFlip(extrasFromSample(sample), flip),
+    };
+  }
+
+  const packRaw = params.get("pack");
+  const packId = isPackId(packRaw) ? packRaw : null;
+  const caseRaw = params.get("case") || params.get("sample");
+  const empty = emptyResolved(flip);
 
   if (packId) {
     const pack = PACKS[packId];
@@ -111,6 +139,8 @@ export function parsePermalink(search: string | URLSearchParams): PermalinkResol
       kind: "pack",
       caseId: sample.id,
       packId,
+      labId: null,
+      assignment: null,
       flip,
       sample,
       ids: sample.drugIds,
@@ -124,6 +154,8 @@ export function parsePermalink(search: string | URLSearchParams): PermalinkResol
     kind: "case",
     caseId: sample.id,
     packId: null,
+    labId: null,
+    assignment: null,
     flip,
     sample,
     ids: sample.drugIds,
@@ -132,8 +164,11 @@ export function parsePermalink(search: string | URLSearchParams): PermalinkResol
 }
 
 function deskBase(): string {
-  const base = (SITE.url || SITE.pages).replace(/\/$/, "");
-  return base || "https://firstpass-desk.vercel.app";
+  // Prefer live origin in browser; fall back to the public desk URL for SSR / tests.
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return window.location.origin.replace(/\/$/, "");
+  }
+  return "https://firstpass-desk.vercel.app";
 }
 
 export function buildCaseUrl(
@@ -153,9 +188,16 @@ export function buildPackUrl(packId: PackId, opts?: { caseId?: string; flip?: bo
   return buildCaseUrl(caseId, { pack: packId, flip: opts?.flip, base: opts?.base });
 }
 
+export function buildLabPermalink(assignmentId: string, opts?: { base?: string; flip?: boolean }): string {
+  const url = new URL(opts?.base ?? deskBase());
+  url.searchParams.set("lab", assignmentId);
+  if (opts?.flip) url.searchParams.set("flip", "1");
+  return url.toString();
+}
+
 export type LoadFn = (ids: string[], extras?: LoadExtras) => boolean;
 
-/** Load the resolved case (first pack case, or single case). Returns false if nothing to load. */
+/** Load the resolved case (lab assignment, first pack case, or single case). Returns false if nothing to load. */
 export function applyPermalink(loadFn: LoadFn, search: string | URLSearchParams = typeof window !== "undefined" ? window.location.search : ""): PermalinkResolved {
   const resolved = parsePermalink(search);
   if (resolved.kind === "none" || resolved.ids.length === 0) return resolved;

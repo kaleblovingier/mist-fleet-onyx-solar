@@ -4,10 +4,12 @@ import {
   PACKS,
   applyPermalink,
   buildCaseUrl,
+  buildLabPermalink,
   buildPackUrl,
   flipKetamineRoute,
   parsePermalink,
 } from "./permalinks.ts";
+import { LAB_ASSIGNMENTS, labNeedsPro } from "./lab.ts";
 import { sampleNeedsPro } from "./samples.ts";
 
 test("parses case permalink and resolves sample load payload", () => {
@@ -73,4 +75,35 @@ test("applyPermalink calls load once", () => {
   }, "?pack=clinic-onboard");
   assert.equal(calls, 1);
   assert.equal(resolved.kind, "pack");
+});
+
+test("lab permalink loads sample and marks study intent", () => {
+  const resolved = parsePermalink("?lab=gf-oral-ketamine");
+  assert.equal(resolved.kind, "lab");
+  assert.equal(resolved.labId, "gf-oral-ketamine");
+  assert.equal(resolved.caseId, "gf-oral-ketamine");
+  assert.deepEqual(resolved.ids, ["grapefruit", "ketamine"]);
+  assert.equal(resolved.extras.ketamineRoute, "oral");
+  assert.ok(resolved.assignment);
+});
+
+test("lab Beers assignment maps to clinic sample", () => {
+  const resolved = parsePermalink("?lab=beers-lorazepam");
+  assert.equal(resolved.kind, "lab");
+  assert.equal(resolved.labId, "beers-lorazepam");
+  assert.equal(resolved.caseId, "safety-clozapine-lorazepam");
+  assert.deepEqual(resolved.ids, ["clozapine", "lorazepam"]);
+});
+
+test("buildLabPermalink sets lab param", () => {
+  const url = buildLabPermalink("tacrolimus-gf", { base: "https://example.test/" });
+  assert.equal(url, "https://example.test/?lab=tacrolimus-gf");
+});
+
+test("lab seed mixes free and Pro-host assignments", () => {
+  assert.equal(LAB_ASSIGNMENTS.length, 8);
+  const free = LAB_ASSIGNMENTS.filter((a) => a.freeOk && !labNeedsPro(a));
+  const pro = LAB_ASSIGNMENTS.filter((a) => labNeedsPro(a));
+  assert.ok(free.length >= 4, "enough free assignments");
+  assert.ok(pro.length >= 2, "enough Pro-host assignments");
 });
