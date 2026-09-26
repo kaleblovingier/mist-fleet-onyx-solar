@@ -888,8 +888,8 @@ function RiskBanner({
             {selected.length} drug{selected.length === 1 ? "" : "s"}
           </div>
           <div className="text-xs text-muted">
-            {report.counts.contraindicated} contra · {report.counts.major} major ·{" "}
-            {report.counts.moderate} moderate · {report.counts.minor} minor
+            {report.counts.contraindicated} avoid · {report.counts.major} strong ·{" "}
+            {report.counts.moderate} care · {report.counts.minor} mild
           </div>
         </div>
       </div>
