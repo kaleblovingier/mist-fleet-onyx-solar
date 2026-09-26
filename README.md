@@ -14,7 +14,7 @@ Deck: [gamma.app/docs/c1sxd9i8iyv80eq](https://gamma.app/docs/c1sxd9i8iyv80eq)
 
 ## Try these
 
-Shareable desk links: `?case=gf-oral-ketamine` loads a sample; `?pack=clinic-onboard` or `?pack=mat-cup` opens a teaching pack (first case loads; the pack strip jumps the rest). `?lab=gf-oral-ketamine` opens Study with a PharmD lab-book assignment (three-sentence answer + receipt export on founding / lab). Add `&flip=1` to invert the ketamine route for oral↔IV contrast. Legacy `?sample=` still works.
+Shareable desk links: `?case=gf-oral-ketamine` loads a sample; `?pack=clinic-onboard` or `?pack=mat-cup` opens a teaching pack (first case loads; the pack strip jumps the rest). `?lab=gf-oral-ketamine` opens Study with a PharmD lab-book assignment (three-sentence answer + receipt export on founding / lab). `?brief=ketamine,alprazolam` loads those catalog ids onto the desk and pairs with **Copy brief** (free teaching hook — sharpest pair first, not the founding Report). Add `&flip=1` to invert the ketamine route for oral↔IV contrast. Legacy `?sample=` still works.
 
 **Lab book** — eight seeded assignments (oral ketamine × grapefruit, DXM 2D6 PM, ketamine × benzo, tacrolimus × GF, xylazine × fentanyl, naltrexone precip, smoke × clozapine, clozapine × lorazepam / Beers). Free desks open free cases; Pro-host cases and receipt JSON/CSV need founding.
 
@@ -95,7 +95,8 @@ Scholarly apothecary: paper `#efece4`, teal `#2f5d56`, Newsreader + IBM Plex. Au
 | `src/lib/drugs/host.ts` | Route, smoke, alcohol, washout |
 | `src/lib/drugs/rounds.ts` | Teaching cases |
 | `src/lib/drugs/samples.ts` | Sample regimens |
-| `src/lib/drugs/permalinks.ts` | `?case=` / `?pack=` / `?lab=` share links and teaching packs |
+| `src/lib/drugs/permalinks.ts` | `?case=` / `?pack=` / `?lab=` / `?brief=` share links and teaching packs |
+| `src/lib/drugs/brief.ts` | Sharpest-pair regimen brief (pairs before whole-desk notes) |
 | `src/lib/drugs/lab.ts` | PharmD lab-book assignments + receipt shape |
 | `src/lib/billing/commerce.ts` | Pay rails, DMs, launch posts, invoices |
 | `src/lib/billing/stripe.server.ts` | Stripe Checkout session + paid-session key mint |

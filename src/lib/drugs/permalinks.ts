@@ -2,6 +2,9 @@ import { labAssignment, sampleForLab, type LabAssignment } from "./lab";
 import { SAMPLE_REGIMENS, type SampleRegimen } from "./samples";
 import type { LoadExtras } from "./store";
 import type { KetamineRoute } from "./types";
+import { DRUG_BY_ID } from "./catalog";
+import { buildBriefUrl as briefUrlFromIds } from "./brief";
+import { isVirtual } from "./host";
 
 export type PackId = "clinic-onboard" | "mat-cup";
 
@@ -31,7 +34,7 @@ export const PACKS: Record<PackId, PackMeta> = {
 export const PACK_IDS = Object.keys(PACKS) as PackId[];
 
 export interface PermalinkResolved {
-  kind: "case" | "pack" | "lab" | "none";
+  kind: "case" | "pack" | "lab" | "brief" | "none";
   caseId: string | null;
   packId: PackId | null;
   labId: string | null;
@@ -100,7 +103,9 @@ function emptyResolved(flip: boolean): PermalinkResolved {
  * - `case` (preferred) or legacy `sample`: sample regimen id
  * - `pack`: clinic-onboard | mat-cup
  * - `lab`: PharmD lab-book assignment id (loads sample + Study view)
+ * - `brief`: comma-separated catalog ids (loads onto desk; stays on desk view)
  * - `flip=1`: invert ketamine route for first-pass contrast
+ * Priority: lab > pack > case > brief > none
  */
 export function parsePermalink(search: string | URLSearchParams): PermalinkResolved {
   const params = typeof search === "string" ? new URLSearchParams(search.startsWith("?") ? search.slice(1) : search) : search;
@@ -149,18 +154,53 @@ export function parsePermalink(search: string | URLSearchParams): PermalinkResol
   }
 
   const sample = sampleById(caseRaw);
-  if (!sample) return empty;
-  return {
-    kind: "case",
-    caseId: sample.id,
-    packId: null,
-    labId: null,
-    assignment: null,
-    flip,
-    sample,
-    ids: sample.drugIds,
-    extras: applyFlip(extrasFromSample(sample), flip),
-  };
+  if (sample) {
+    return {
+      kind: "case",
+      caseId: sample.id,
+      packId: null,
+      labId: null,
+      assignment: null,
+      flip,
+      sample,
+      ids: sample.drugIds,
+      extras: applyFlip(extrasFromSample(sample), flip),
+    };
+  }
+
+  // ?brief=id1,id2 — load catalog ids onto the desk (no sample / Study).
+  const briefIds = parseBriefIds(params.get("brief"));
+  if (briefIds.length > 0) {
+    return {
+      kind: "brief",
+      caseId: null,
+      packId: null,
+      labId: null,
+      assignment: null,
+      flip,
+      sample: null,
+      ids: briefIds,
+      extras: {},
+    };
+  }
+
+  return empty;
+}
+
+/** Comma-separated catalog ids that exist and are non-virtual; max 8; tray order preserved. */
+export function parseBriefIds(raw: string | null | undefined): string[] {
+  if (!raw || !raw.trim()) return [];
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const part of raw.split(",")) {
+    const id = decodeURIComponent(part.trim());
+    if (!id || isVirtual(id) || seen.has(id)) continue;
+    if (!DRUG_BY_ID[id]) continue;
+    seen.add(id);
+    out.push(id);
+    if (out.length >= 8) break;
+  }
+  return out;
 }
 
 function deskBase(): string {
@@ -203,4 +243,9 @@ export function applyPermalink(loadFn: LoadFn, search: string | URLSearchParams 
   if (resolved.kind === "none" || resolved.ids.length === 0) return resolved;
   loadFn(resolved.ids, resolved.extras);
   return resolved;
+}
+
+/** Absolute `?brief=` share URL (tray order, max 8). */
+export function buildBriefUrl(ids: string[], opts?: { base?: string }): string {
+  return briefUrlFromIds(ids, opts);
 }
