@@ -3,3 +3,6 @@ node_modules/
 .github_repo
 .env
 .env.*
+
+# Local Vercel env upsert payloads (may contain secrets)
+.vercel-env-upsert.json

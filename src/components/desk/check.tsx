@@ -169,7 +169,7 @@ export function CheckBoard({
         <div className="min-w-0">
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Interaction check</p>
           <h2 className="mt-1 font-serif text-2xl tracking-tight text-fg">
-            {lead ? verdictTitle(lead) : "No mapped collision."}
+            {lead ? verdictTitle(lead) : "No interaction found in this map."}
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
             {foodOutranks
@@ -177,8 +177,8 @@ export function CheckBoard({
               : rows.length === 0
                 ? "No mapped interaction appeared for these names. This checker can miss risks, so no result does not mean a combination is safe."
                 : regimen
-                  ? "This is a regimen, not one pair. Pairs are ranked by the sharpest row, not by the order you added them. Start with the everyday-language summary. These categories are not a personal prediction of harm."
-                  : "Possible concern found. Start with the everyday-language summary; expand a row for clinical details and sources. These categories are not a personal prediction of harm."}
+                  ? "You added more than two names, so this is a full list, not a single pair. The desk ranks every pair by the strongest mapped finding and leads with that row — not the order you typed. Start with the everyday-language line. Severity labels are teaching categories, not a personal prediction of harm."
+                  : "A possible concern is mapped. Start with the everyday-language line; expand a row for clinical details and sources. Severity labels are teaching categories, not a personal prediction of harm."}
             {ids.length < 2 ? " Add another medicine or substance to compare." : ""}
           </p>
           {plain ? <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fg">{plain}</p> : null}
@@ -467,7 +467,7 @@ function CheckRow({
               {KIND_LABEL[finding.kind]}
             </span>
             {finding.tags.includes("boxed") ? (
-              <span className="font-mono text-[10px] uppercase tracking-wide text-danger">Boxed pair</span>
+              <span className="font-mono text-[10px] uppercase tracking-wide text-danger">Boxed warning (label)</span>
             ) : null}
             {finding.enzymes.map((e) => (
               <span key={e} className="font-mono text-[10px] uppercase tracking-wide text-subtle">
