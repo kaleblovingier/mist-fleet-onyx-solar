@@ -38,6 +38,7 @@ import {
   protocolsOnDesk,
   SAFETY_CHECKS,
 } from "@/lib/drugs/cyp-protocol";
+import { glossWithTerm, plainClockKind, plainLine } from "@/lib/drugs/plain-huddle";
 import { ENZYMES, type Enzyme, type HostContext } from "@/lib/drugs/types";
 import { useDesk } from "@/lib/drugs/store";
 import {
@@ -198,8 +199,9 @@ function CypPanel({ ids }: { ids: string[] }) {
   return (
     <div className="space-y-5">
       <p className="text-sm leading-relaxed text-muted">
-        FDA DDI grades, start vs stop, TDI linger, induction lag. Huang 2007 / FDA 2020 teaching —
-        not a milligram and not a hold. The Prescribing Information is the authority.
+        FDA DDI grades, start vs stop clocks. TDI linger means {glossWithTerm("tdi")}; induction lag
+        means {glossWithTerm("induction")}. Huang 2007 / FDA 2020 teaching — not a milligram and not a
+        hold. The Prescribing Information is the authority.
       </p>
 
       <div className="flex flex-wrap gap-1">
@@ -246,7 +248,9 @@ function CypPanel({ ids }: { ids: string[] }) {
                 <Badge tone={card.tone === "danger" ? "danger" : card.tone === "warn" ? "warn" : "info"}>
                   {card.grade}
                 </Badge>
-                <Badge tone="default">{card.clock === "tdi" ? "TDI" : card.clock}</Badge>
+                <Badge tone="default" title={plainClockKind(card.clock).title}>
+                  {plainClockKind(card.clock).label}
+                </Badge>
                 {card.dualHit ? <Badge tone="warn">3A4 + P-gp</Badge> : null}
               </div>
               <p className="mt-1 font-mono text-[11px] uppercase tracking-wide text-muted">
@@ -256,10 +260,10 @@ function CypPanel({ ids }: { ids: string[] }) {
                 {clock.title}
                 <span className="ml-2 font-mono text-[11px] font-normal text-muted"> · {clock.days}</span>
               </p>
-              <p className="mt-1 text-sm leading-relaxed text-fg">{clock.body}</p>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{clock.watch}</p>
+              <p className="mt-1 text-sm leading-relaxed text-fg">{plainLine(clock.body)}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{plainLine(clock.watch)}</p>
               {card.linger && phase === "stop" ? (
-                <p className="mt-2 text-sm leading-relaxed text-fg">{card.linger}</p>
+                <p className="mt-2 text-sm leading-relaxed text-fg">{plainLine(card.linger)}</p>
               ) : null}
               {card.victims.length ? (
                 <ul className="mt-3 flex flex-wrap gap-1">
@@ -284,7 +288,8 @@ function CypPanel({ ids }: { ids: string[] }) {
       ) : (
         <p className="text-sm leading-relaxed text-muted">
           Add a strong or moderate perpetrator — clarithromycin, paroxetine, fluvoxamine, rifampin,
-          ketoconazole — then a victim. The clock is the point, not a second PK row.
+          ketoconazole — then a victim. The start/stop clock is the teaching point, not a second
+          clearance row. An empty clock is not clearance.
         </p>
       )}
 

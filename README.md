@@ -28,6 +28,7 @@ Deck: [gamma.app/docs/c1sxd9i8iyv80eq](https://gamma.app/docs/c1sxd9i8iyv80eq)
 12. **Methadone cup** — opiate EIA stays negative. Search `uds`. EDDP is how an OTP proves they swallowed it.
 13. **Buprenorphine + fentanyl** — precipitated withdrawal. Open Bedside for COWS. A score is not occupancy.
 14. **Wellbutrin** — amphetamine-cup false-positive. Search `uds` or `cup`.
+15. **Methadone + Paxlovid** — OTP window huddle. Toggle **Plain words**; washout / start-stop clocks stay watch–counsel–consider, not a dose.
 
 ## Pay / write
 
