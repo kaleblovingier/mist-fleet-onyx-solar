@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { DRUG_BY_ID } from "./catalog";
+import { rememberTray } from "./tray-history";
 import { maxDrugs, type Interval, type PlanId } from "@/lib/billing/plans";
 import {
   DEFAULT_HOST,
@@ -130,7 +131,11 @@ export const useDesk = create<DeskState>()(
         delete next[id];
         set({ selected: get().selected.filter((x) => x !== id), doses: next });
       },
-      clear: () =>
+      clear: () => {
+        const s = get();
+        if (s.selected.length > 0) {
+          rememberTray(s.selected, { ketamineRoute: s.ketamineRoute });
+        }
         set({
           selected: [],
           phenotypes: { ...DEFAULT_PHENOTYPES },
@@ -142,8 +147,13 @@ export const useDesk = create<DeskState>()(
           kidney: "ok",
           preg: "off",
           doses: {},
-        }),
+        });
+      },
       load: (ids, extras) => {
+        const s0 = get();
+        if (s0.selected.length > 0) {
+          rememberTray(s0.selected, { ketamineRoute: s0.ketamineRoute });
+        }
         const cap = maxDrugs(activePlan(get()));
         const next = ids.filter((id) => DRUG_BY_ID[id] && !id.startsWith("__")).slice(0, cap);
         // Oral/IN ketamine route is free for the teaching demo (grapefruit × oral K).
