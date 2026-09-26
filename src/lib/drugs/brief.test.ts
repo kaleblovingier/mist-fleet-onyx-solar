@@ -106,3 +106,26 @@ test("permalink helpers encode ids in tray order", () => {
   const capped = buildBriefPermalink(Array.from({ length: 12 }, (_, i) => `d${i}`));
   assert.equal(capped.split(",").length, 8);
 });
+
+test("findingsOnTray drops off-tray grapefruit so brief lead stays on-tray", () => {
+  const onTray = finding({
+    id: "ka",
+    drugIds: ["ketamine", "alprazolam"],
+    headline: "Ketamine × Alprazolam",
+    severity: "major",
+  });
+  const offTray = finding({
+    id: "gf",
+    drugIds: ["grapefruit", "ketamine"],
+    headline: "Grapefruit × Ketamine",
+    severity: "contraindicated",
+  });
+  const text = buildRegimenBrief({
+    names: "Ketamine, Alprazolam",
+    findings: [offTray, onTray],
+    highest: "contraindicated",
+    trayIds: ["ketamine", "alprazolam"],
+  });
+  assert.match(text, /Sharpest pair \(Major\): Ketamine × Alprazolam/);
+  assert.doesNotMatch(text, /[Gg]rapefruit/);
+});

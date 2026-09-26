@@ -24,6 +24,16 @@ export function isPairFinding(f: Finding): boolean {
   return realDrugIds(f.drugIds).length === 2;
 }
 
+/** Keep findings whose real drug ids are all on the tray (drops off-tray food/perp rows). */
+export function findingsOnTray(findings: Finding[], trayIds: string[]): Finding[] {
+  const tray = new Set(trayIds.filter((id) => id && !isVirtual(id)));
+  if (tray.size === 0) return [];
+  return findings.filter((f) => {
+    const ids = realDrugIds(f.drugIds);
+    return ids.length > 0 && ids.every((id) => tray.has(id));
+  });
+}
+
 export function partitionFindings(findings: Finding[]): {
   pairs: Finding[];
   deskNotes: Finding[];
@@ -53,6 +63,8 @@ export interface RegimenBriefInput {
   names: string;
   findings: Finding[];
   highest: Severity | "none";
+  /** When set, drop findings that name drugs not on this tray. */
+  trayIds?: string[];
   hostLine?: string;
   version?: string;
   /** Optional share URL appended as last content line before the footer. */
@@ -64,8 +76,9 @@ export interface RegimenBriefInput {
  * Pairs (worst first), optional Whole-desk notes, educational footer.
  */
 export function buildRegimenBrief(input: RegimenBriefInput): string {
-  const { names, findings, highest, hostLine, version, url } = input;
-  const { pairs, deskNotes } = partitionFindings(findings);
+  const { names, highest, hostLine, version, url, trayIds } = input;
+  const scoped = trayIds ? findingsOnTray(input.findings, trayIds) : input.findings;
+  const { pairs, deskNotes } = partitionFindings(scoped);
   const ver = version ?? SOFTWARE.version;
   const lines: string[] = [];
 
@@ -74,7 +87,7 @@ export function buildRegimenBrief(input: RegimenBriefInput): string {
 
   if (pairs.length === 0) {
     lines.push(
-      findings.length === 0
+      scoped.length === 0
         ? "No mapped collisions on this desk. Absence is not proof of safety."
         : "No two-drug pairs mapped; see whole-desk notes below.",
     );
@@ -88,7 +101,7 @@ export function buildRegimenBrief(input: RegimenBriefInput): string {
   if (hostLine) {
     lines.push(`Host: ${hostLine}`);
   }
-  if (highest !== "none" && pairs.length === 0 && findings.length > 0) {
+  if (highest !== "none" && pairs.length === 0 && scoped.length > 0) {
     lines.push(`Highest severity on desk: ${SEVERITY_LABEL[highest]}`);
   }
 

@@ -445,6 +445,7 @@ export function DeskApp() {
                     showCannabis={selected.some((id) =>
                       ["dronabinol", "cannabidiol"].includes(id),
                     )}
+                    trayIds={selected}
                   />
                   {pro ? (
                     <MetaboliteCard ids={selected} />
@@ -516,6 +517,7 @@ export function DeskApp() {
                     showCannabis={selected.some((id) =>
                       ["dronabinol", "cannabidiol"].includes(id),
                     )}
+                    trayIds={selected}
                   />
                   <CypHeatmap drugs={hostDrugs} colliding={colliding} />
                 </>
@@ -884,6 +886,7 @@ function RiskBanner({
       names,
       findings: report.findings,
       highest,
+      trayIds: selected,
       url,
     });
     await write("brief", text);
