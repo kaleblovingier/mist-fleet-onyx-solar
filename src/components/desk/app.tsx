@@ -6,6 +6,7 @@ import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
 import { parseDoses } from "@/lib/drugs/dosing";
 import { applyHost, FIRST_PASS_NMDA } from "@/lib/drugs/host";
 import { treesFor } from "@/lib/drugs/metabolites";
+import { METABOLITE_PAYWALL_BLURB } from "@/lib/drugs/metabolite-plain";
 import {
   SAMPLE_LANES,
   SAMPLE_REGIMENS,
@@ -378,7 +379,7 @@ export function DeskApp() {
                   ) : treesFor(selected).length > 0 ? (
                     <Paywall
                       title="Metabolite maps are Pro"
-                      blurb="Norketamine, 11-OH-THC, morphine, dextrorphan — the parent is only half the story."
+                      blurb={METABOLITE_PAYWALL_BLURB}
                     >
                       <MetaboliteCard ids={selected} />
                     </Paywall>
@@ -429,7 +430,7 @@ export function DeskApp() {
                   ) : treesFor(selected).length > 0 ? (
                     <Paywall
                       title="Metabolite maps are Pro"
-                      blurb="Norketamine, 11-OH-THC, morphine, dextrorphan — the parent is only half the story."
+                      blurb={METABOLITE_PAYWALL_BLURB}
                     >
                       <MetaboliteCard ids={selected} />
                     </Paywall>
