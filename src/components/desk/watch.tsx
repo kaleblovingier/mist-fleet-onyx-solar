@@ -34,6 +34,7 @@ export function WatchPage() {
   );
   const [rows, setRows] = useState<Record<string, RowStatus>>({});
   const [epoch, setEpoch] = useState(0);
+  const [note, setNote] = useState<string | null>(null);
 
   const refreshOne = useCallback(async (id: string) => {
     setRows((prev) => ({
@@ -70,24 +71,35 @@ export function WatchPage() {
 
   function addTray() {
     if (selected.length === 0) return;
+    setNote(null);
     const room = cap - book.ids.length;
     if (room <= 0) {
-      openCheckout(
-        "lab",
-        `Watchlist holds ${cap} names on this plan. Founding unlocks 12 pins.`,
-        "life",
-      );
+      if (plan === "free") {
+        openCheckout(
+          "lab",
+          `Watchlist holds ${cap} names on the free desk. Founding unlocks 12 pins.`,
+          "life",
+        );
+      } else {
+        setNote(`Watchlist is full (${cap}). Remove a pin before adding more.`);
+      }
       return;
     }
     const { state, rejected } = saveAdd(selected, cap);
     setBook(state);
     setEpoch((e) => e + 1);
     if (rejected.length > 0) {
-      openCheckout(
-        "lab",
-        `Added what fit under the ${cap}-name watch cap. Founding unlocks 12 pins.`,
-        "life",
-      );
+      if (plan === "free") {
+        openCheckout(
+          "lab",
+          `Added what fit under the ${cap}-name watch cap. Founding unlocks 12 pins.`,
+          "life",
+        );
+      } else {
+        setNote(
+          `Added what fit under the ${cap}-name watch cap. Remove a pin to make room for the rest.`,
+        );
+      }
     }
   }
 
@@ -143,6 +155,11 @@ export function WatchPage() {
             Refresh all
           </Button>
         </div>
+        {note ? (
+          <p className="mt-3 text-sm leading-relaxed text-muted" role="status">
+            {note}
+          </p>
+        ) : null}
       </section>
 
       {book.ids.length === 0 ? (
