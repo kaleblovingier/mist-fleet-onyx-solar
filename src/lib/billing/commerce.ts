@@ -126,12 +126,12 @@ export function launchTweet(price = COMMERCE.founding) {
   return [
     "FirstPass is a CYP450 desk for ketamine clinics, MAT, and pharmacy students.",
     "",
-    "Up to five-drug collision checks stay free.",
+    "Free up to five drugs on the desk.",
     `Founding license $${price} once — host factors, enzyme atlas, export.`,
     SITE.url,
     "Pay with card on the desk, or Venmo / Cash App / PayPal.",
     "",
-    "Educational model. Not a charting system.",
+    "Educational model. Not FDA-cleared. Empty tray is not proof a combination is safe.",
   ].join("\n");
 }
 
@@ -157,7 +157,7 @@ export function launchPosts(price = COMMERCE.founding, url = SITE.pages): Launch
         "1/",
         "FirstPass is a CYP450 desk for ketamine clinics, MAT, and pharmacy students.",
         "",
-        "Up to five-drug collision checks stay free. Founding license $" + price + " once.",
+        "Free up to five drugs on the desk. Founding license $" + price + " once.",
         "",
         "2/",
         "Three cases the desk actually draws:",
