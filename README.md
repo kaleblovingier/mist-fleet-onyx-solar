@@ -18,6 +18,8 @@ Shareable desk links: `?case=gf-oral-ketamine` loads a sample; `?pack=clinic-onb
 
 **Lab book** — eight seeded assignments (oral ketamine × grapefruit, DXM 2D6 PM, ketamine × benzo, tacrolimus × GF, xylazine × fentanyl, naltrexone precip, smoke × clozapine, clozapine × lorazepam / Beers). Free desks open free cases; Pro-host cases and receipt JSON/CSV need founding.
 
+**Watch** — pin tray drugs (5 free / 12 founding) and poll OpenFDA shortage + top recall/enforcement excerpts. Truncated teaching surface; not an alert service; PI / FDA shortage page wins. localStorage only (`firstpass.watch.v1`).
+
 1. **Oral ketamine × grapefruit** — F rises. Half-life does not. Overlay IV: the ghost is untouched.
 2. **DXM in a 2D6 poor metabolizer, q8h** — accumulation Rac ~2.7×. Dextrorphan falls.
 3. **Azathioprine × allopurinol** — xanthine oxidase, not CYP. Pancytopenia. Search `clinic` or `imuran`.
@@ -53,6 +55,7 @@ Pay $79 with card on the desk (Stripe), or Venmo / Cash App / PayPal. A signed k
 | Primary care / IM / transplant | Imuran × Zyloprim, Imdur × Viagra, Flonase × ritonavir, Ozempic × SU |
 | MAT / street-supply desks | Xylazine, nitazenes, designer benzos, naltrexone / loperamide |
 | Pharmacy students | Lab book mode (`?lab=`): three-sentence answers + founding receipt export |
+| Formulary / ops desks | Watch nav: OpenFDA shortage + recall pins for tray drugs (not an alert service) |
 | Harm-reduction and psych NPs | MDMA × SSRI, DXM in 2D6 PMs, grapefruit × oral ketamine |
 
 ## License
@@ -97,6 +100,7 @@ Scholarly apothecary: paper `#efece4`, teal `#2f5d56`, Newsreader + IBM Plex. Au
 | `src/lib/drugs/samples.ts` | Sample regimens |
 | `src/lib/drugs/permalinks.ts` | `?case=` / `?pack=` / `?lab=` / `?brief=` share links and teaching packs |
 | `src/lib/drugs/brief.ts` | Sharpest-pair regimen brief (pairs before whole-desk notes) |
+| `src/lib/drugs/watchlist.ts` | OpenFDA shortage / label watchlist (localStorage) |
 | `src/lib/drugs/lab.ts` | PharmD lab-book assignments + receipt shape |
 | `src/lib/billing/commerce.ts` | Pay rails, DMs, launch posts, invoices |
 | `src/lib/billing/stripe.server.ts` | Stripe Checkout session + paid-session key mint |

@@ -70,6 +70,7 @@ import { WindowBriefing } from "./window";
 import { WindowExtras } from "./tray";
 import { ClinicalBoard } from "./clinical";
 import { StudyPage } from "./study";
+import { WatchPage } from "./watch";
 import { RxnavBoard } from "./rxnav";
 import { LabelPage } from "./label";
 import { PrescribingStrip } from "./pi";
@@ -234,6 +235,7 @@ export function DeskApp() {
                 [
                   ["desk", "Desk"],
                   ["library", "Library"],
+                  ["watch", "Watch"],
                   ["cites", "Sources"],
                   ["atlas", "CYP map"],
                   ["study", "Learn"],
@@ -315,6 +317,8 @@ export function DeskApp() {
           <RoundsPage />
         ) : view === "study" ? (
           <StudyPage />
+        ) : view === "watch" ? (
+          <WatchPage />
         ) : view === "cites" ? (
           <CitesPage />
         ) : view === "label" ? (
