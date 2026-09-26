@@ -189,7 +189,7 @@ export function CheckBoard({
             severitySurface(leadSev),
           )}
         >
-          {lead ? SEVERITY_LABEL[lead.severity] : "Unmapped"}
+          {lead ? SEVERITY_LABEL[lead.severity] : "Not mapped"}
         </span>
       </div>
 

@@ -138,7 +138,7 @@ export function PkExplorer({ drugs, host }: { drugs: Drug[]; host: HostContext }
       ) : null}
 
       <dl className="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <Stat k="AUCR" v={fold(model.aucr)} hot={model.aucr >= 2 || model.aucr <= 0.5} />
+        <Stat k="Exposure (AUCR)" v={fold(model.aucr)} hot={model.aucr >= 2 || model.aucr <= 0.5} />
         <Stat k="Cmax" v={fold(model.cmaxFold)} hot={model.cmaxFold >= 2} />
         <Stat
           k="t½"
@@ -146,7 +146,7 @@ export function PkExplorer({ drugs, host }: { drugs: Drug[]; host: HostContext }
           hot={model.tHalfDesk / model.tHalfBase >= 1.6}
         />
         {tau > 0 ? (
-          <Stat k="Rac" v={fold(model.rac)} hot={model.rac >= 1.6} />
+          <Stat k="Build-up (Rac)" v={fold(model.rac)} hot={model.rac >= 1.6} />
         ) : model.activationName ? (
           <Stat
             k={model.activationName}
@@ -269,7 +269,7 @@ export function PkExplorer({ drugs, host }: { drugs: Drug[]; host: HostContext }
       <p className="mt-3 text-sm leading-relaxed text-fg">{model.note}</p>
       {tau > 0 ? (
         <p className="mt-1 text-xs leading-relaxed text-muted">
-          Rac {fold(model.racBase)} → {fold(model.rac)} at {tau}h. Linear superposition — not a trough
+          Build-up {fold(model.racBase)} → {fold(model.rac)} at {tau}h. Linear superposition — not a trough
           and not TDM.
         </p>
       ) : null}
