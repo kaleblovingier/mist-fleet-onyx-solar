@@ -23,6 +23,7 @@ import {
   SEVERITY_LABEL,
   type Enzyme,
   type HostContext,
+  type Severity,
 } from "@/lib/drugs/types";
 import { useDesk, usePlan, type LoadExtras } from "@/lib/drugs/store";
 import { PLAN_BY_ID } from "@/lib/billing/plans";
@@ -744,6 +745,15 @@ function RoleList({
   );
 }
 
+/** Local plain chips for the share strip — mirrors open #12 SEVERITY_PLAIN until it lands on main. */
+const RISK_SEVERITY_PLAIN: Record<Severity | "none", string> = {
+  contraindicated: "Avoid together",
+  major: "Serious concern",
+  moderate: "Use care",
+  minor: "Mild note",
+  none: "Unmapped",
+};
+
 function RiskBanner({
   report,
   selected,
@@ -800,10 +810,16 @@ function RiskBanner({
 
   async function shareLine() {
     const top = report.findings[0];
-    await write(
-      "share",
-      tweetFor(names, SEVERITY_LABEL[highest], top ? `${top.headline}: ${top.mechanism}` : ""),
+    let text = tweetFor(
+      names,
+      RISK_SEVERITY_PLAIN[highest],
+      top ? `${top.headline}: ${top.mechanism}` : "",
     );
+    // Keep an educational / not-CDS footer even if tweetFor ever drops it.
+    if (!/educational|not cds|not personal advice/i.test(text)) {
+      text += "\nEducational only — not CDS / not personal advice.";
+    }
+    await write("share", text);
   }
 
   return (
@@ -815,16 +831,16 @@ function RiskBanner({
             severitySurface(highest),
           )}
         >
-          {SEVERITY_LABEL[highest]}
+          {RISK_SEVERITY_PLAIN[highest]}
         </span>
         <div>
           <div className="text-sm font-medium text-fg">
-            {report.findings.length} collision{report.findings.length === 1 ? "" : "s"} across{" "}
-            {selected.length} drug{selected.length === 1 ? "" : "s"}
+            {report.findings.length} possible concern{report.findings.length === 1 ? "" : "s"} across{" "}
+            {selected.length} item{selected.length === 1 ? "" : "s"}
           </div>
           <div className="text-xs text-muted">
-            {report.counts.contraindicated} contra · {report.counts.major} major ·{" "}
-            {report.counts.moderate} moderate · {report.counts.minor} minor
+            {report.counts.contraindicated} avoid · {report.counts.major} serious ·{" "}
+            {report.counts.moderate} care · {report.counts.minor} mild
           </div>
         </div>
       </div>
@@ -835,7 +851,7 @@ function RiskBanner({
       </Button>
       <Button variant="secondary" size="sm" onClick={() => void copySummary()} className="h-10 min-w-24 shrink-0">
         {copied === "full" ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-        {copied === "full" ? "Copied" : plan === "free" ? "Report · Pro" : "Report"}
+        {copied === "full" ? "Copied" : plan === "free" ? "Full report · Founding" : "Report"}
       </Button>
       {plan === "lab" ? (
         <Button
