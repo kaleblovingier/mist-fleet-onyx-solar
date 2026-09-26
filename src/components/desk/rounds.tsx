@@ -46,13 +46,17 @@ export function RoundsPage() {
   const setView = useDesk((s) => s.setView);
   const plan = usePlan();
   const [setting, setSetting] = useState<RoundSetting | "all">("all");
+  const [query, setQuery] = useState("");
   const [open, setOpen] = useState<string | null>(null);
-  const [started, setStarted] = useState(false);
-
-  const rows = useMemo(
-    () => ROUNDS.filter((r) => setting === "all" || r.setting === setting),
-    [setting],
-  );
+  const normalized = query.trim().toLowerCase();
+  const rows = useMemo(() => {
+    return ROUNDS.filter((r) => {
+      if (setting !== "all" && r.setting !== setting) return false;
+      if (!normalized) return true;
+      const hay = `${r.title} ${r.stem} ${r.ask} ${r.teach} ${r.blurb} ${r.setting}`.toLowerCase();
+      return normalized.split(/\s+/).every((token) => hay.includes(token));
+    });
+  }, [setting, normalized]);
 
   const hasFilter = setting !== "all";
   const firstRun = !started && rows.length > 0;
@@ -86,112 +90,72 @@ export function RoundsPage() {
         </div>
       </section>
 
-      <section
-        aria-label="How this works"
-        className="rounded-xl bg-surface px-5 py-4 shadow-[var(--shadow-border)] sm:px-6"
-      >
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">How this works</p>
-        <ol className="mt-3 grid gap-3 sm:grid-cols-3">
-          {HOW_STEPS.map((step) => (
-            <li key={step.n} className="flex gap-3">
-              <span
-                className="flex size-7 shrink-0 items-center justify-center rounded-full bg-bg-sunken font-mono text-[11px] text-muted"
-                aria-hidden
-              >
-                {step.n}
-              </span>
-              <span className="min-w-0">
-                <span className="block text-sm font-medium text-fg">{step.title}</span>
-                <span className="mt-0.5 block text-xs leading-relaxed text-muted">{step.body}</span>
-              </span>
-            </li>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap gap-1">
+          {ROUND_SETTINGS.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => setSetting(s.id)}
+              className={cn(
+                "h-10 rounded-full px-3 text-xs font-medium",
+                setting === s.id ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+              )}
+            >
+              {s.label}
+            </button>
           ))}
-        </ol>
-      </section>
-
-      <div className="flex flex-wrap gap-1" role="group" aria-label="Rounds settings">
-        {ROUND_SETTINGS.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            onClick={() => setSetting(s.id)}
-            aria-pressed={setting === s.id}
-            className={cn(
-              "h-10 rounded-full px-3 text-xs font-medium",
-              setting === s.id ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
-            )}
-          >
-            {SETTING_PLAIN[s.id]}
-          </button>
-        ))}
-      </div>
-
-      <div className="sticky top-0 z-10 -mx-1 flex flex-wrap items-center gap-2 bg-bg/95 px-1 py-2 backdrop-blur-sm">
-        <p className="text-xs text-muted">
-          <span className="font-mono tabular-nums">{rows.length}</span> shown
-          {hasFilter ? (
-            <>
-              {" "}
-              of <span className="font-mono tabular-nums">{ROUNDS.length}</span>
-              {` · ${SETTING_PLAIN[setting]}`}
-            </>
-          ) : null}
-        </p>
-        {selected.length > 0 ? (
-          <button
-            type="button"
-            onClick={() => setView("desk")}
-            className="ml-auto h-8 rounded-full bg-ink px-3 text-[11px] font-medium text-bg sm:ml-0"
-          >
-            Open desk
-          </button>
-        ) : null}
-      </div>
-
-      {firstRun ? (
-        <div
-          role="status"
-          className="rounded-xl border border-accent/20 bg-accent-soft/40 px-5 py-4 shadow-[var(--shadow-border)] sm:px-6"
-        >
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">First pass</p>
-          <p className="mt-1 text-sm font-medium text-fg">Start with a stem — peek later.</p>
-          <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted">
-            Pick a case, say the why out loud, put the drugs on the desk, then reveal the teach. You can also jump
-            to the desk, library, or study anytime.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setView("desk")}
-              className="h-9 rounded-full bg-ink px-3 text-xs font-medium text-bg"
-            >
-              Open desk
-            </button>
-            <button
-              type="button"
-              onClick={() => setView("library")}
-              className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-muted hover:text-fg"
-            >
-              Browse library
-            </button>
-            <button
-              type="button"
-              onClick={() => setView("study")}
-              className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-muted hover:text-fg"
-            >
-              Open study
-            </button>
-          </div>
         </div>
-      ) : null}
+        <label className="relative block w-full sm:max-w-xs">
+          <span className="sr-only">Search teaching rounds</span>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search stems — grapefruit, 2D6, xylazine…"
+            className="h-10 w-full rounded-lg bg-surface-2 px-3 text-sm text-fg shadow-[var(--shadow-border)] placeholder:text-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          />
+        </label>
+      </div>
+
+      <p className="text-xs text-muted">
+        Showing {rows.length} of {ROUNDS.length}
+        {setting !== "all" ? ` · ${ROUND_SETTINGS.find((s) => s.id === setting)?.label ?? setting}` : ""}
+        {normalized ? ` · “${query.trim()}”` : ""}
+      </p>
 
       {rows.length === 0 ? (
-        <RoundsEmptyCoach
-          setting={setting}
-          onClear={() => setSetting("all")}
-          onSetting={setSetting}
-          onView={setView}
-        />
+        <div
+          role="status"
+          className="rounded-xl border border-accent/20 bg-accent-soft/40 px-5 py-6 shadow-[var(--shadow-border)]"
+        >
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">Rounds coach</p>
+          <h3 className="mt-1 font-serif text-lg tracking-tight text-fg">No cases match this filter</h3>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
+            Try another setting, clear the search, or jump back to All. Empty here only means the filter is tight — the desk map is unchanged.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                setSetting("all");
+                setQuery("");
+              }}
+            >
+              Show all rounds
+            </Button>
+            {normalized ? (
+              <Button variant="secondary" size="sm" onClick={() => setQuery("")}>
+                Clear search
+              </Button>
+            ) : null}
+            {setting !== "all" ? (
+              <Button variant="secondary" size="sm" onClick={() => setSetting("all")}>
+                Clear setting
+              </Button>
+            ) : null}
+          </div>
+        </div>
       ) : (
         <ul className="grid gap-3 lg:grid-cols-2">
           {rows.map((r) => (

@@ -13,9 +13,9 @@ const SEVERITY_FILTERS: Array<Severity | "all"> = ["all", "contraindicated", "ma
 type KindFilter = "all" | "pk" | "pd" | "geno" | "clinic" | "food";
 const KIND_FILTERS: { id: KindFilter; label: string }[] = [
   { id: "all", label: "All kinds" },
-  { id: "pk", label: "Levels" },
-  { id: "pd", label: "Effects" },
-  { id: "geno", label: "Genes" },
+  { id: "pk", label: "Levels / timing" },
+  { id: "pd", label: "Same-system effects" },
+  { id: "geno", label: "Metabolizer" },
   { id: "clinic", label: "Clinic" },
   { id: "food", label: "Food" },
 ];
