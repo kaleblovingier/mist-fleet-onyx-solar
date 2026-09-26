@@ -48,6 +48,7 @@ export function RoundsPage() {
   const [setting, setSetting] = useState<RoundSetting | "all">("all");
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState<string | null>(null);
+  const [started, setStarted] = useState(false);
   const normalized = query.trim().toLowerCase();
   const rows = useMemo(() => {
     return ROUNDS.filter((r) => {
