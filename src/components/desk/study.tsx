@@ -1,7 +1,20 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Download } from "lucide-react";
 import { DRUG_BY_ID } from "@/lib/drugs/catalog";
 import { analyze } from "@/lib/drugs/engine";
 import { parseDoses } from "@/lib/drugs/dosing";
+import {
+  LAB_ASSIGNMENTS,
+  buildLabUrl,
+  labNeedsPro,
+  labReceiptCsv,
+  readLabBook,
+  sampleForLab,
+  writeLabAnswer,
+  type LabAssignment,
+  type LabReceipt,
+} from "@/lib/drugs/lab";
+import { buildLabPermalink } from "@/lib/drugs/permalinks";
 import {
   STUDY_LANES,
   STUDY_PILES,
@@ -13,6 +26,7 @@ import {
 } from "@/lib/drugs/study";
 import { useDesk, usePlan } from "@/lib/drugs/store";
 import { LANE_PLATE } from "@/lib/drugs/visuals";
+import { NOT_CLEARED, PI_FOOTER, SOFTWARE } from "@/lib/regulatory";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -67,10 +81,27 @@ export function StudyPage() {
   const clearStudy = useDesk((s) => s.clearStudy);
   const load = useDesk((s) => s.load);
   const setView = useDesk((s) => s.setView);
+  const openCheckout = useDesk((s) => s.openCheckout);
   const plan = usePlan();
   const [lane, setLane] = useState<StudyLane>(selected.length ? "desk" : "drill");
   const [pile, setPile] = useState<StudyPile>("all");
   const [epoch, setEpoch] = useState(0);
+  const [labId, setLabId] = useState<string | null>(() => labIdFromSearch() ?? LAB_ASSIGNMENTS[0]?.id ?? null);
+  const [labText, setLabText] = useState("");
+  const [labSavedAt, setLabSavedAt] = useState<string | null>(null);
+
+  const assignment = useMemo(
+    () => LAB_ASSIGNMENTS.find((a) => a.id === labId) ?? LAB_ASSIGNMENTS[0] ?? null,
+    [labId],
+  );
+
+  useEffect(() => {
+    if (!assignment) return;
+    const book = readLabBook();
+    const row = book[assignment.id];
+    setLabText(row?.text ?? "");
+    setLabSavedAt(row?.updatedAt ?? null);
+  }, [assignment]);
 
   const findings = useMemo(
     () =>
@@ -81,6 +112,7 @@ export function StudyPage() {
       ).findings,
     [selected, phenotypes, smoking, ketamineRoute, cannabisRoute, alcohol, age, kidney, preg, doses],
   );
+  const leadHeadline = findings[0]?.headline ?? null;
   const source = useMemo(() => cardsFor(lane, selected, findings), [lane, selected, findings]);
   const key = `${lane}|${pile}|${epoch}|${source.map((c) => c.id).join(",")}`;
   const [frozen, setFrozen] = useState({ key: "", deck: [] as StudyCard[] });
@@ -109,9 +141,85 @@ export function StudyPage() {
     setCursor({ key, index: next, revealed: false, picked: null });
   }
 
-  function resetMarks() {
-    clearStudy();
-    setEpoch((n) => n + 1);
+  function selectAssignment(next: LabAssignment) {
+    const needsHost = labNeedsPro(next);
+    if (needsHost && plan === "free") {
+      openCheckout(
+        "lab",
+        "That lab assignment uses host factors (phenotype, smoke, or similar). Founding opens them.",
+        "life",
+      );
+      return;
+    }
+    const sample = sampleForLab(next);
+    if (!sample) return;
+    const ok = load(sample.drugIds, {
+      phenotypes: sample.phenotypes,
+      smoking: sample.smoking,
+      ketamineRoute: sample.ketamineRoute,
+      cannabisRoute: sample.cannabisRoute,
+      alcohol: sample.alcohol,
+      doses: sample.doses,
+    });
+    if (!ok && needsHost) return;
+    setLabId(next.id);
+    setLane("desk");
+    setView("study");
+    const url = new URL(window.location.href);
+    url.searchParams.set("lab", next.id);
+    url.searchParams.delete("case");
+    url.searchParams.delete("sample");
+    url.searchParams.delete("pack");
+    window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
+  }
+
+  function persistLabText(value: string) {
+    setLabText(value);
+    if (!assignment) return;
+    const saved = writeLabAnswer(assignment.id, value);
+    setLabSavedAt(saved.updatedAt);
+  }
+
+  function buildReceipt(): LabReceipt | null {
+    if (!assignment) return null;
+    const sample = sampleForLab(assignment);
+    const drugs = (sample?.drugIds ?? selected).map((id) => DRUG_BY_ID[id]?.name ?? id);
+    return {
+      assignmentId: assignment.id,
+      title: assignment.title,
+      sampleId: assignment.sampleId,
+      drugs,
+      leadHeadline,
+      studentText: labText.trim(),
+      ts: new Date().toISOString(),
+      softwareVersion: SOFTWARE.version,
+      disclaimer: `${SOFTWARE.name} ${SOFTWARE.version} lab receipt. ${NOT_CLEARED} Educational only — not a dose, not a chart note, not a prescription. ${PI_FOOTER}`,
+    };
+  }
+
+  function exportReceipt() {
+    // Match desk JSON/CSV: founding / lab license (plan === "lab"). Pro can upgrade.
+    if (plan !== "lab") {
+      openCheckout("lab", "Lab-book receipt export is a founding / lab surface. $79 once.", "life");
+      return;
+    }
+    const receipt = buildReceipt();
+    if (!receipt) return;
+    const blob = new Blob([JSON.stringify(receipt, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `firstpass-lab-${receipt.assignmentId}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    const csvBlob = new Blob([labReceiptCsv(receipt)], { type: "text/csv" });
+    const csvUrl = URL.createObjectURL(csvBlob);
+    const csvA = document.createElement("a");
+    csvA.href = csvUrl;
+    csvA.download = `firstpass-lab-${receipt.assignmentId}.csv`;
+    csvA.click();
+    URL.revokeObjectURL(csvUrl);
   }
 
   return (
@@ -148,30 +256,109 @@ export function StudyPage() {
         </div>
       </section>
 
-      <section
-        aria-label="How this works"
-        className="rounded-xl bg-surface px-5 py-4 shadow-[var(--shadow-border)] sm:px-6"
-      >
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">How this works</p>
-        <ol className="mt-3 grid gap-3 sm:grid-cols-3">
-          {HOW_STEPS.map((step) => (
-            <li key={step.n} className="flex gap-3">
-              <span
-                className="flex size-7 shrink-0 items-center justify-center rounded-full bg-bg-sunken font-mono text-[11px] text-muted"
-                aria-hidden
+      {assignment ? (
+        <section className="rounded-xl bg-surface px-5 py-5 shadow-[var(--shadow-border)] sm:px-6">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">Lab book</p>
+              <h3 className="mt-2 font-serif text-xl tracking-tight text-fg">{assignment.title}</h3>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{assignment.prompt}</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {labNeedsPro(assignment) ? (
+                <Badge tone="warn">Pro host</Badge>
+              ) : (
+                <Badge tone="ok">Free</Badge>
+              )}
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => {
+                  void navigator.clipboard?.writeText(buildLabPermalink(assignment.id));
+                }}
               >
-                {step.n}
-              </span>
-              <span className="min-w-0">
-                <span className="block text-sm font-medium text-fg">{step.title}</span>
-                <span className="mt-0.5 block text-xs leading-relaxed text-muted">{step.body}</span>
-              </span>
-            </li>
-          ))}
-        </ol>
-      </section>
+                Copy ?lab=
+              </Button>
+            </div>
+          </div>
 
-      <div className="flex flex-wrap items-center gap-1" role="group" aria-label="Study lanes">
+          <div className="mt-4 flex flex-wrap gap-1">
+            {LAB_ASSIGNMENTS.map((a) => {
+              const locked = labNeedsPro(a) && plan === "free";
+              return (
+                <button
+                  key={a.id}
+                  type="button"
+                  onClick={() => selectAssignment(a)}
+                  className={cn(
+                    "h-10 rounded-full px-3 text-xs font-medium",
+                    labId === a.id ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
+                  )}
+                  title={locked ? "Host factors — founding / Pro" : a.title}
+                >
+                  {a.title}
+                  {locked ? " · Pro" : ""}
+                </button>
+              );
+            })}
+          </div>
+
+          <label className="mt-4 block text-xs font-medium text-muted" htmlFor="lab-answer">
+            Your three-sentence answer (saved on this browser)
+          </label>
+          <textarea
+            id="lab-answer"
+            value={labText}
+            rows={4}
+            placeholder="Perpetrator · victim · direction of effect. No milligram."
+            onChange={(e) => persistLabText(e.target.value)}
+            className={cn(
+              "mt-1.5 flex w-full rounded-md bg-bg-sunken px-3 py-2.5 text-sm text-fg shadow-[var(--shadow-border)]",
+              "placeholder:text-subtle",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40",
+            )}
+          />
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <Button size="sm" onClick={exportReceipt}>
+              <Download className="size-3.5" />
+              {plan === "lab" ? "Export receipt" : "Export receipt · Lab"}
+            </Button>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => {
+                const sample = sampleForLab(assignment);
+                if (sample) {
+                  load(sample.drugIds, {
+                    phenotypes: sample.phenotypes,
+                    smoking: sample.smoking,
+                    ketamineRoute: sample.ketamineRoute,
+                    cannabisRoute: sample.cannabisRoute,
+                    alcohol: sample.alcohol,
+                    doses: sample.doses,
+                  });
+                  setLane("desk");
+                  setView("study");
+                }
+              }}
+            >
+              Load on desk
+            </Button>
+            <p className="font-mono text-[11px] text-muted">
+              {labSavedAt ? `Saved ${new Date(labSavedAt).toLocaleString()}` : "Not saved yet"}
+              {" · "}
+              <span className="font-mono">{buildLabUrl(assignment.id).includes("lab=") ? `?lab=${assignment.id}` : assignment.id}</span>
+            </p>
+          </div>
+          <p className="mt-3 text-[11px] leading-relaxed text-subtle">
+            Receipt includes assignment id, title, sample, drugs, lead headline if the desk has one, your
+            text, timestamp, and software version. {NOT_CLEARED} Educational only — not PHI, not a chart
+            note, not a dose.
+          </p>
+        </section>
+      ) : null}
+
+      <div className="flex flex-wrap items-center gap-1">
         {STUDY_LANES.map((s) => (
           <button
             key={s.id}
@@ -254,18 +441,15 @@ export function StudyPage() {
       ) : null}
 
       {!card ? (
-        <StudyEmptyCoach
-          lane={lane}
-          pile={pile}
-          selectedCount={selected.length}
-          onLane={(id) => {
-            setLane(id);
-            setPile("all");
-          }}
-          onPile={setPile}
-          onReset={resetMarks}
-          onView={setView}
-        />
+        <p className="rounded-xl bg-surface px-5 py-8 text-sm text-muted shadow-[var(--shadow-border)]">
+          {pile === "miss"
+            ? "Nothing missed in this lane. Mark a miss, then come back."
+            : pile === "open"
+              ? "Nothing unseen here. Switch to All, or reset marks to start over."
+              : lane === "desk"
+                ? "Nothing on the desk yet. Load a lab assignment, a pair, or switch to Rounds, Named pairs, or CYP map."
+                : "No cards in this lane."}
+        </p>
       ) : (
         <StudyCardView
           card={card}
