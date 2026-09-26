@@ -24,10 +24,10 @@ export const PAY_RAILS = [
 ] as const;
 
 /** Public URLs. Override the live desk with VITE_PUBLIC_URL when Vercel is linked. */
-const PAGES_URL = "https://kaleblovingier.github.io/mist-fleet-onyx-solar/";
+const PAGES_URL = "https://kaleblovingier.github.io/FirstPassInteractions/";
 
 export const SITE = {
-  repo: "https://github.com/kaleblovingier/mist-fleet-onyx-solar",
+  repo: "https://github.com/kaleblovingier/FirstPassInteractions",
   pages: PAGES_URL,
   gamma: "https://gamma.app/docs/c1sxd9i8iyv80eq",
   gammaCard: "https://gamma.app/docs/h9grlpif6t8ogmt",

@@ -8,8 +8,8 @@ The core checker stays free for up to five drugs, including CYP / PD collision c
 
 Intended use, warnings, CDS criteria, and residual risk live on the in-app **IFU** tab.
 
-Pitch: [github.com/kaleblovingier/mist-fleet-onyx-solar](https://github.com/kaleblovingier/mist-fleet-onyx-solar)
-Pages (after Settings → Pages → main `/docs`): [kaleblovingier.github.io/mist-fleet-onyx-solar](https://kaleblovingier.github.io/mist-fleet-onyx-solar/)
+Pitch: [github.com/kaleblovingier/FirstPassInteractions](https://github.com/kaleblovingier/FirstPassInteractions)
+Pages: [kaleblovingier.github.io/FirstPassInteractions](https://kaleblovingier.github.io/FirstPassInteractions/)
 Deck: [gamma.app/docs/c1sxd9i8iyv80eq](https://gamma.app/docs/c1sxd9i8iyv80eq)
 
 ## Try these

@@ -6,7 +6,13 @@ import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
 import { parseDoses } from "@/lib/drugs/dosing";
 import { applyHost, FIRST_PASS_NMDA } from "@/lib/drugs/host";
 import { treesFor } from "@/lib/drugs/metabolites";
-import { SAMPLE_LANES, sampleNeedsPro, samplesInLane, type SampleLane } from "@/lib/drugs/samples";
+import {
+  SAMPLE_LANES,
+  SAMPLE_REGIMENS,
+  sampleNeedsPro,
+  samplesInLane,
+  type SampleLane,
+} from "@/lib/drugs/samples";
 import { CLASS_TILES, PLATES, plateForDrug, plateForSample } from "@/lib/drugs/visuals";
 import {
   ALCOHOL_LABEL,
@@ -80,6 +86,23 @@ export function DeskApp() {
   const remove = useDesk((s) => s.remove);
   const clear = useDesk((s) => s.clear);
   const load = useDesk((s) => s.load);
+  useEffect(() => {
+    if (!hydrated) return;
+    const url = new URL(window.location.href);
+    const sampleId = url.searchParams.get("sample");
+    const sample = SAMPLE_REGIMENS.find((item) => item.id === sampleId);
+    if (!sample) return;
+    load(sample.drugIds, {
+      phenotypes: sample.phenotypes,
+      smoking: sample.smoking,
+      ketamineRoute: sample.ketamineRoute,
+      cannabisRoute: sample.cannabisRoute,
+      alcohol: sample.alcohol,
+      doses: sample.doses,
+    });
+    url.searchParams.delete("sample");
+    window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
+  }, [hydrated, load]);
   const phenotypes = useDesk((s) => s.phenotypes);
   const smoking = useDesk((s) => s.smoking);
   const ketamineRoute = useDesk((s) => s.ketamineRoute);
