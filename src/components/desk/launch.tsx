@@ -23,8 +23,9 @@ export function LaunchDesk() {
         <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Public rails</p>
         <h2 className="mt-2 font-serif text-xl tracking-tight text-fg">Pitch page, source, pay</h2>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
-          Post these yourself. Do not cold-email the Hunt directory. Up to five-drug collision
-          checks stay free; founding is $79 once. Educational — not a charting system.
+          Post these yourself. Do not cold-email the Hunt directory. Free: up to five-drug
+          collision checks. Founding ($79 once) unlocks host factors, atlas, and export.
+          Educational — not a charting system.
         </p>
         <ul className="mt-4 space-y-2 text-sm">
           <li>
