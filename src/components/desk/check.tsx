@@ -14,9 +14,9 @@ import { severitySurface } from "./severity";
 const TIERS: Array<Severity | "all"> = ["all", "contraindicated", "major", "moderate", "minor"];
 
 const KIND_LABEL: Record<Finding["kind"], string> = {
-  pk: "Pharmacokinetic",
-  pd: "Pharmacodynamic",
-  geno: "Phenotype",
+  pk: "Levels",
+  pd: "Effects",
+  geno: "Genes",
   clinic: "Clinic",
 };
 
@@ -31,11 +31,20 @@ function ordered(findings: Finding[]) {
 
 function roleText(e: EnzymeRole) {
   if (e.kind === "substrate") {
-    const act = e.pathway === "activation" ? " · activation" : "";
-    const nti = e.nti ? " · narrow index" : "";
-    return `${e.sensitivity} ${e.enzyme} substrate${act}${nti}`;
+    const how = e.pathway === "activation" ? "activated by" : "broken down by";
+    const sens =
+      e.sensitivity === "sensitive"
+        ? " · sensitive"
+        : e.sensitivity === "major"
+          ? " · major pathway"
+          : " · minor pathway";
+    const nti = e.nti ? " · narrow window" : "";
+    return `${how} ${e.enzyme}${sens}${nti}`;
   }
-  return `${e.strength} ${e.enzyme} ${e.kind}`;
+  if (e.kind === "inhibitor") {
+    return `${e.strength} slowdown · ${e.enzyme}`;
+  }
+  return `${e.strength} speed-up · ${e.enzyme}`;
 }
 
 function rolesFor(id: string, findings: Finding[]) {
@@ -92,21 +101,21 @@ function actors(f: Finding): { left: string; verb: string; right: string } {
     const verb = induces
       ? activation
         ? "speeds activation of"
-        : "induces clearance of"
+        : "speeds clearance of"
       : activation
         ? "blocks activation of"
-        : "inhibits clearance of";
+        : "slows clearance of";
     return { left: names[0], verb, right: names[1] };
   }
   if (f.kind === "pk" && f.tags.includes("competition") && names.length >= 2) {
-    return { left: names[0], verb: "shares a substrate with", right: names[1] };
+    return { left: names[0], verb: "shares a pathway with", right: names[1] };
   }
   if (f.tags.includes("phenoconversion") && names.length >= 2) {
     const rest = [...new Set(names.slice(1))].filter((n) => n !== names[0]);
-    return { left: names[0], verb: "phenoconverts", right: (rest.length ? rest : [...new Set(names.slice(1))]).join(" · ") };
+    return { left: names[0], verb: "rewrites the pathway for", right: (rest.length ? rest : [...new Set(names.slice(1))]).join(" · ") };
   }
   if (f.kind === "geno" && names[0]) {
-    return { left: f.enzymes[0] ? `${f.enzymes[0]} phenotype` : "Phenotype", verb: "rewrites", right: names[0] };
+    return { left: f.enzymes[0] ? `${f.enzymes[0]} gene status` : "Gene status", verb: "changes how the body handles", right: names[0] };
   }
   if (names.length >= 2) return { left: names[0], verb: "with", right: names.slice(1).join(" · ") };
   return { left: names[0] ?? f.headline, verb: "", right: "" };
@@ -173,13 +182,14 @@ export function CheckBoard({
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
             {foodOutranks
-              ? "The main concern shown is a food or drink, listed below the names. It is an educational map, not a dose tool; current product labeling and a qualified clinician guide care decisions."
+              ? "The main concern shown is a food or drink, listed below the names. This is an educational map, not a dose tool — product labeling and a clinician still guide care."
               : rows.length === 0
-                ? "No mapped interaction appeared for these names. This checker can miss risks, so no result does not mean a combination is safe."
+                ? ids.length < 2
+                  ? "Add another medicine, supplement, or substance to compare. An empty board is not a green light — this checker can miss risks."
+                  : "No mapped interaction appeared for these names. Empty here is not the same as safe: the map can miss collisions, and labels still govern."
                 : regimen
-                  ? "You added more than two names, so this is a full list, not a single pair. The desk ranks every pair by the strongest mapped finding and leads with that row — not the order you typed. Start with the everyday-language line. Severity labels are teaching categories, not a personal prediction of harm."
-                  : "A possible concern is mapped. Start with the everyday-language line; expand a row for clinical details and sources. Severity labels are teaching categories, not a personal prediction of harm."}
-            {ids.length < 2 ? " Add another medicine or substance to compare." : ""}
+                  ? "You added more than two names, so this is a full list, not a single pair. The desk ranks every pair by the strongest mapped finding and leads with that row — not the order you typed. Start with the everyday-language line. Severity labels are teaching bins, not a personal prediction of harm."
+                  : "A possible concern is mapped. Start with the everyday-language line; expand a row for clinical detail and sources. Severity labels are teaching bins, not a personal prediction of harm."}
           </p>
           {plain ? <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fg">{plain}</p> : null}
         </div>
@@ -189,7 +199,7 @@ export function CheckBoard({
             severitySurface(leadSev),
           )}
         >
-          {lead ? SEVERITY_LABEL[lead.severity] : "Not mapped"}
+          {lead ? SEVERITY_LABEL[lead.severity] : "No mapped hit"}
         </span>
       </div>
 
@@ -202,7 +212,10 @@ export function CheckBoard({
       {rows.length > 0 ? (
         <>
           <p className="text-xs leading-relaxed text-muted">
-            Severity labels organize the checker’s findings; they do not estimate an individual’s risk.
+            Severity chips are teaching bins — they do not estimate one person’s risk. Row chips:{" "}
+            <span className="text-fg">Levels</span> (how much stays),{" "}
+            <span className="text-fg">Effects</span> (how risks stack),{" "}
+            <span className="text-fg">Genes</span> (phenotype rewrite).
           </p>
           <div className="flex flex-wrap gap-1">
             {TIERS.map((t) => (
@@ -232,7 +245,12 @@ export function CheckBoard({
       {rows.length === 0 && quietEnzymes ? (
         <p className="text-xs leading-relaxed text-muted">{quietEnzymes}</p>
       ) : filtered.length === 0 && rows.length > 0 ? (
-        <p className="rounded-md bg-bg-sunken px-3 py-3 text-sm text-muted">Nothing at this tier.</p>
+        <div className="rounded-md border border-border bg-bg-sunken px-3 py-3">
+          <p className="text-sm font-medium text-fg">Nothing in this severity slice</p>
+          <p className="mt-1 text-sm leading-relaxed text-muted">
+            Try All, or another chip. Hiding a slice is not a green light — only this filter is empty.
+          </p>
+        </div>
       ) : grouped ? (
         <div className="space-y-4">
           {visibleGroups.map((g) => (
@@ -258,8 +276,8 @@ export function CheckBoard({
           {split.desk.length > 0 ? (
             <div className="space-y-2">
               <div className="flex items-baseline justify-between gap-3">
-                <p className="text-sm font-medium text-fg">Across the desk</p>
-                <p className="shrink-0 font-mono text-[10px] uppercase tracking-wide text-subtle">Not one pair</p>
+                <p className="text-sm font-medium text-fg">Whole-regimen notes</p>
+                <p className="shrink-0 font-mono text-[10px] uppercase tracking-wide text-subtle">Not a single pair</p>
               </div>
               <ol className="space-y-2">
                 {split.desk.map((f) => (
@@ -306,8 +324,8 @@ export function CheckBoard({
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Food, drink, alcohol</p>
             <p className="mt-1 text-xs leading-relaxed text-muted">
-              Not on the desk. Same map, run against grapefruit, ethanol, dairy, St. John’s wort, leafy greens, coffee,
-              calcium, and tyramine foods. Add one only if you want it on the desk.
+              Not on your tray yet — same checker, run against grapefruit, alcohol, dairy, St. John’s wort, leafy greens,
+              coffee, calcium, and tyramine foods. Add one only if you want it on the desk.
             </p>
           </div>
           <ol className="space-y-2">
@@ -349,9 +367,10 @@ export function CheckBoard({
       {lanes.length > 0 ? (
         <div className="space-y-3 border-t border-border pt-3">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">If the host changes</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">If the person changes</p>
             <p className="mt-1 text-xs leading-relaxed text-muted">
-              Not the person in front of you unless you flip the flag. Pregnancy, CKD, older adult, daily smoke.
+              What changes if the host is different — pregnancy, reduced kidney function, older adult, or daily smoke.
+              Not the person in front of you unless you flip that flag.
             </p>
           </div>
           {lanes.map((lane) => (
@@ -397,7 +416,7 @@ function RoleGrid({ ids, rows }: { ids: string[]; rows: Finding[] }) {
                 ))}
               </ul>
             ) : (
-              <p className="mt-1.5 text-xs text-muted">No CYP or P-gp role on this map.</p>
+              <p className="mt-1.5 text-xs text-muted">No enzyme role mapped here.</p>
             )}
           </div>
         );
@@ -424,9 +443,11 @@ function quietLine(ids: string[], findings: Finding[]) {
   }
   const hit = new Set<string>(findings.flatMap((f) => f.enzymes));
   const quiet = [...seen].filter((e) => !hit.has(e));
-  if (seen.size === 0) return "No CYP or P-gp role was on the map for this list. Pharmacodynamic flags were still compared.";
+  if (seen.size === 0) {
+    return "No enzyme role was on the map for this list. Effect-stacking flags were still compared.";
+  }
   if (quiet.length === 0) return "";
-  return `Also compared, no collision: ${quiet.join(", ")}.`;
+  return `Also checked, no collision on: ${quiet.join(", ")}.`;
 }
 
 function CheckRow({
