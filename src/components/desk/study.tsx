@@ -32,6 +32,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Plate } from "./plate";
 
+function labIdFromSearch(): string | null {
+  if (typeof window === "undefined") return null;
+  return new URLSearchParams(window.location.search).get("lab");
+}
+
 /** Everyday lane labels — ids/order stay in STUDY_LANES. */
 const LANE_PLAIN: Record<StudyLane, string> = {
   drill: "Teaching rounds",
@@ -86,6 +91,10 @@ export function StudyPage() {
   const [lane, setLane] = useState<StudyLane>(selected.length ? "desk" : "drill");
   const [pile, setPile] = useState<StudyPile>("all");
   const [epoch, setEpoch] = useState(0);
+  const resetMarks = () => {
+    clearStudy();
+    setEpoch((n) => n + 1);
+  };
   const [labId, setLabId] = useState<string | null>(() => labIdFromSearch() ?? LAB_ASSIGNMENTS[0]?.id ?? null);
   const [labText, setLabText] = useState("");
   const [labSavedAt, setLabSavedAt] = useState<string | null>(null);
