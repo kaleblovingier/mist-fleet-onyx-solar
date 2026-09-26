@@ -23,7 +23,10 @@ export function StripeReturn({ ready }: { ready: boolean }) {
       window.history.replaceState({}, "", url.pathname + url.search + url.hash);
     };
     if (cancel) {
-      openCheckout("lab", "Card checkout was cancelled. Venmo, Cash App, and PayPal still close a sale.");
+      openCheckout(
+        "lab",
+        "Card checkout was cancelled — no charge. You can try again, or pay with Venmo, Cash App, or PayPal and redeem a key when it arrives.",
+      );
       clean();
       return;
     }
@@ -32,7 +35,11 @@ export function StripeReturn({ ready }: { ready: boolean }) {
       if (res.ok) {
         activate({ plan: res.plan, license: res.license, lifetime: res.lifetime });
       } else {
-        openCheckout("lab", res.reason ?? "Payment did not clear.");
+        openCheckout(
+          "lab",
+          res.reason ??
+            "Payment did not clear yet. If you were charged, wait a moment or paste the key from your email under Redeem.",
+        );
       }
       clean();
     })();
