@@ -38,7 +38,7 @@ export function StripeReturn({ ready }: { ready: boolean }) {
         openCheckout(
           "lab",
           res.reason ??
-            "Payment did not clear. Try again, or pay via Venmo / Cash App / PayPal and redeem the key you are sent.",
+            "Payment did not clear yet. If you were charged, wait a moment or paste the key from your email under Redeem.",
         );
       }
       clean();

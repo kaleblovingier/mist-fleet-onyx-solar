@@ -81,7 +81,7 @@ export const COMMERCE = {
   payUrl: (import.meta.env.VITE_PAY_URL as string | undefined)?.trim() || OPERATOR.venmoUrl,
   operatorContact: (import.meta.env.VITE_OPERATOR_CONTACT as string | undefined)?.trim() || OPERATOR.email,
   pitch:
-    "A medicine-interaction learning desk for ketamine clinics, MAT and harm-reduction teams, and pharmacy students. Checking up to five medicines stays free. Patient factors, deeper enzyme maps, and export need a license.",
+    "A medicine-interaction learning desk for ketamine clinics, MAT and harm-reduction teams, and pharmacy students. Free forever: check up to five medicines. Founding lifetime ($79 once) unlocks host factors, the enzyme atlas, metabolite maps, and export — yours on this desk.",
 };
 
 export const BUYERS = [

@@ -37,18 +37,42 @@ export function PlansPage() {
         <div className="grid lg:grid-cols-[240px_minmax(0,1fr)]">
           <Plate src="/plates/heme.jpg" alt="" className="h-40 w-full lg:h-full min-h-40" />
           <div className="px-5 py-6 sm:px-8">
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Licenses</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Free vs founding</p>
             <h1 className="mt-3 font-serif text-3xl tracking-tight text-fg sm:text-4xl">
-              ${COMMERCE.founding} once. The desk is yours.
+              Five-drug checks stay free. Founding is ${COMMERCE.founding} once.
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">{COMMERCE.pitch}</p>
+            <ul className="mt-4 grid gap-2 text-sm text-muted sm:grid-cols-2">
+              <li className="rounded-md bg-bg-sunken px-3 py-2">
+                <span className="font-medium text-fg">Free desk</span>
+                <span className="mt-0.5 block text-xs leading-relaxed">
+                  Up to five medicines, interaction cards, concentration sketch, and heatmap — no card
+                  required.
+                </span>
+              </li>
+              <li className="rounded-md bg-bg-sunken px-3 py-2">
+                <span className="font-medium text-fg">Founding · ${COMMERCE.founding} lifetime</span>
+                <span className="mt-0.5 block text-xs leading-relaxed">
+                  Host factors, enzyme atlas, metabolite maps, full report, and JSON/CSV export —
+                  yours for life on this desk.
+                </span>
+              </li>
+            </ul>
             <div className="mt-5 flex flex-wrap gap-2">
-              <Button onClick={() => openCheckout("lab", "Founding lifetime — Pro plus export.", "life")}>
-                Buy founding · ${COMMERCE.founding}
+              <Button
+                onClick={() =>
+                  openCheckout(
+                    "lab",
+                    "Founding lifetime ($79 once) — Pro tools plus export, yours forever on this desk.",
+                    "life",
+                  )
+                }
+              >
+                Unlock founding · ${COMMERCE.founding}
               </Button>
               {current === "free" ? (
                 <Button variant="secondary" onClick={startPreview}>
-                  7-day preview
+                  Try 7 days free
                 </Button>
               ) : null}
             </div>
@@ -75,13 +99,13 @@ export function PlansPage() {
       {current !== "free" ? (
         <p className="rounded-lg bg-ok-soft px-4 py-3 text-sm text-ok">
           {previewing
-            ? "Pro preview is active on this desk."
+            ? "Pro preview is active — host factors and atlas are open while it lasts."
             : lifetime
-              ? "Founding lifetime is live."
-              : `${current === "lab" ? "Lab" : "Pro"} is live.`}
-          {license ? ` ${license}.` : ""}{" "}
+              ? "Founding lifetime is live — host factors, atlas, and export are yours."
+              : `${current === "lab" ? "Lab" : "Pro"} is live on this desk.`}
+          {license ? ` Key ${license}.` : ""}{" "}
           <button type="button" className="underline" onClick={downgrade}>
-            Return to free
+            Return to free desk
           </button>
         </p>
       ) : null}
@@ -93,10 +117,10 @@ export function PlansPage() {
           const cta =
             p.id === "free"
               ? current === "free"
-                ? "Current desk"
-                : "Use free desk"
+                ? "You're on the free desk"
+                : "Switch to free desk"
               : interval === "life"
-                ? `Founding · $${priceFor(p.id === "pro" ? "pro" : "lab", "life")}`
+                ? `Founding · $${priceFor(p.id === "pro" ? "pro" : "lab", "life")} lifetime`
                 : `Unlock ${p.name}`;
           return (
             <li
@@ -135,7 +159,13 @@ export function PlansPage() {
                   <Button
                     className="w-full"
                     onClick={() =>
-                      openCheckout(interval === "life" ? "lab" : p.id, interval === "life" ? "Founding lifetime." : p.name, interval)
+                      openCheckout(
+                        interval === "life" ? "lab" : p.id,
+                        interval === "life"
+                          ? "Founding lifetime ($79 once) — host factors, atlas, and export."
+                          : p.name,
+                        interval,
+                      )
                     }
                   >
                     {cta}
@@ -334,8 +364,8 @@ export function CheckoutDrawer() {
 
         <p className="mt-4 text-sm leading-relaxed text-muted">
           {cardLive
-            ? "Prefer card? Stripe is live below — a signed key is minted only after payment confirms. Venmo, Cash App, and PayPal still work if you would rather write."
-            : "Card checkout is not live on this desk yet. Use a pay rail below. After payment clears you get a signed key by email or text — paste it under Redeem. Nothing unlocks until that key verifies."}
+            ? "Pay with card on Stripe. A signed key is minted only after Stripe confirms payment — there is no fake checkout. Prefer Venmo, Cash App, or PayPal? Use the buttons below, then paste your key when it arrives."
+            : "Card checkout is not live on this desk yet. Pay with Venmo, Cash App, or PayPal below. After payment clears, you get a signed key by email or text — paste it under Redeem. Nothing unlocks until that key verifies."}
         </p>
 
         <div className="mt-4 grid grid-cols-3 gap-1">

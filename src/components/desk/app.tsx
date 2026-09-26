@@ -445,7 +445,10 @@ export function DeskApp() {
                       {pro ? (
                         <StackMeters stacks={report.stacks} />
                       ) : report.stacks.some((s) => s.score > 0) ? (
-                        <Paywall gate="stacks">
+                        <Paywall
+                          title="Stack-load meters need founding"
+                          blurb="Serotonin, CNS, QT, pressor, and NMDA meters unlock with founding ($79 lifetime) or Pro."
+                        >
                           <StackMeters stacks={report.stacks} />
                         </Paywall>
                       ) : null}
@@ -468,7 +471,10 @@ export function DeskApp() {
                   {pro ? (
                     <MetaboliteCard ids={selected} />
                   ) : treesFor(selected).length > 0 ? (
-                    <Paywall gate="metabolites">
+                    <Paywall
+                      title="Metabolite maps need founding"
+                      blurb="Norketamine, 11-OH-THC, morphine, dextrorphan — the parent is only half the story. Included in founding ($79 lifetime)."
+                    >
                       <MetaboliteCard ids={selected} />
                     </Paywall>
                   ) : null}
@@ -498,7 +504,10 @@ export function DeskApp() {
                   {pro ? (
                     <StackMeters stacks={report.stacks} />
                   ) : report.stacks.some((s) => s.score > 0) ? (
-                    <Paywall gate="stacks">
+                    <Paywall
+                      title="Stack-load meters need founding"
+                      blurb="Serotonin, CNS, QT, pressor, and NMDA meters unlock with founding ($79 lifetime) or Pro."
+                    >
                       <StackMeters stacks={report.stacks} />
                     </Paywall>
                   ) : null}
@@ -515,7 +524,10 @@ export function DeskApp() {
                   {pro ? (
                     <MetaboliteCard ids={selected} />
                   ) : treesFor(selected).length > 0 ? (
-                    <Paywall gate="metabolites">
+                    <Paywall
+                      title="Metabolite maps need founding"
+                      blurb="Norketamine, 11-OH-THC, morphine, dextrorphan — the parent is only half the story. Included in founding ($79 lifetime)."
+                    >
                       <MetaboliteCard ids={selected} />
                     </Paywall>
                   ) : null}
@@ -551,7 +563,10 @@ export function DeskApp() {
               ) : (
                 <>
                   <KetamineRouteCard />
-                  <Paywall gate="host">
+                  <Paywall
+                    title="Host factors unlock with founding"
+                    blurb="Phenotype, smoke, alcohol pattern, cannabis route, age, kidney, and pregnancy teaching cards. Ketamine route stays free for the oral demo; five-drug checks stay free."
+                  >
                     <PhenotypeCard hideKetamineRoute />
                   </Paywall>
                 </>
@@ -898,7 +913,11 @@ function RiskBanner({
 
   async function copySummary() {
     if (plan === "free") {
-      openCheckout("lab", foundingGateCopy("report").reason, "life");
+      openCheckout(
+        "lab",
+        "The full collision report unlocks with founding ($79 lifetime) — host factors, atlas, and export included.",
+        "life",
+      );
       return;
     }
     const lines = [

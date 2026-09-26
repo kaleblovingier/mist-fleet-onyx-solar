@@ -64,7 +64,7 @@ export function Paywall({
             Plans
           </Button>
           <Button size="sm" variant="secondary" onClick={startPreview}>
-            7-day preview
+            Try 7 days free
           </Button>
         </div>
         <p className="max-w-xs text-[11px] leading-relaxed text-muted">
