@@ -104,7 +104,10 @@ export function DeskApp() {
     if (resolved.kind === "none") return;
     setActiveCaseId(resolved.caseId);
     setActivePackId(resolved.packId);
-    // Keep query string so shared ?case= / ?pack= links stay copyable.
+    if (resolved.kind === "lab") {
+      useDesk.getState().setView("study");
+    }
+    // Keep query string so shared ?case= / ?pack= / ?lab= links stay copyable.
   }, [hydrated, load]);
 
   // Rounds (and other surfaces) may set ?pack= / ?case= after boot — resync strip state.
