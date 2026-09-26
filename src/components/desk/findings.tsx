@@ -13,9 +13,9 @@ const SEVERITY_FILTERS: Array<Severity | "all"> = ["all", "contraindicated", "ma
 type KindFilter = "all" | "pk" | "pd" | "geno" | "clinic" | "food";
 const KIND_FILTERS: { id: KindFilter; label: string }[] = [
   { id: "all", label: "All kinds" },
-  { id: "pk", label: "PK" },
-  { id: "pd", label: "PD" },
-  { id: "geno", label: "Phenotype" },
+  { id: "pk", label: "Levels" },
+  { id: "pd", label: "Effects" },
+  { id: "geno", label: "Genes" },
   { id: "clinic", label: "Clinic" },
   { id: "food", label: "Food" },
 ];
@@ -39,8 +39,20 @@ export function FindingList({ findings }: { findings: Finding[] }) {
 
   if (findings.length === 0) return null;
 
+  const filteredOut = findings.length > 0 && visible.length === 0;
+
   return (
     <section className="space-y-3">
+      <div className="rounded-xl border border-accent/15 bg-accent-soft/30 p-3 sm:p-4">
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">What this means</p>
+        <p className="mt-1.5 text-sm leading-relaxed text-fg">
+          Each card is a teaching collision on this tray — how levels might move, or how effects might stack.
+          Labels like Serious concern are this checker’s bins, not a prediction of harm for one person.
+        </p>
+        <p className="mt-1.5 text-xs leading-relaxed text-muted">
+          An empty list after filters is not the same as safe. Clear filters or add another medicine if you expected a hit.
+        </p>
+      </div>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="font-serif text-lg tracking-tight text-fg">Collisions</h2>
         <div className="flex flex-wrap gap-1">
@@ -59,9 +71,6 @@ export function FindingList({ findings }: { findings: Finding[] }) {
           ))}
         </div>
       </div>
-      <p className="text-xs leading-relaxed text-muted">
-        Possible concerns in the selected items. Severity labels describe this checker’s categories, not a personal prediction of harm.
-      </p>
       <div className="flex flex-wrap gap-1">
         {KIND_FILTERS.map((k) => (
           <button
@@ -77,10 +86,23 @@ export function FindingList({ findings }: { findings: Finding[] }) {
           </button>
         ))}
       </div>
-      {visible.length === 0 ? (
-        <p className="rounded-lg bg-surface px-4 py-6 text-sm text-muted shadow-[var(--shadow-border)]">
-          No findings at this severity.
-        </p>
+      {filteredOut ? (
+        <div className="rounded-lg border border-border bg-surface px-4 py-5 shadow-[var(--shadow-border)]">
+          <p className="text-sm font-medium text-fg">Nothing in this filter</p>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted">
+            Try All, or tap Levels / Effects / Genes. Empty here is not a green light — only this slice is hidden.
+          </p>
+          <button
+            type="button"
+            className="mt-3 h-9 rounded-full bg-ink px-3 text-xs font-medium text-bg"
+            onClick={() => {
+              setFilter("all");
+              setKind("all");
+            }}
+          >
+            Clear filters
+          </button>
+        </div>
       ) : (
         <ol className="space-y-2">
           {visible.map((f) => (
@@ -180,12 +202,12 @@ function FindingCard({ finding }: { finding: Finding }) {
               {finding.tags.includes("food")
                 ? "Food"
                 : finding.kind === "pk"
-                  ? "Pharmacokinetic"
+                  ? "Levels"
                   : finding.kind === "geno"
-                    ? "Phenotype"
+                    ? "Genes"
                     : finding.kind === "clinic"
                       ? "Clinic"
-                      : "Pharmacodynamic"}
+                      : "Effects"}
             </Badge>
             {finding.enzymes.map((e) => (
               <Badge key={e} tone="default">
