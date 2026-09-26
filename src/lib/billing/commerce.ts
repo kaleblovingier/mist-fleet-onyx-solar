@@ -23,6 +23,29 @@ export const PAY_RAILS = [
   { id: "paypal", label: "PayPal", handle: OPERATOR.paypal, href: OPERATOR.paypalUrl },
 ] as const;
 
+/** Buyer-facing three-step path when Stripe is deferred (Venmo / Cash App / PayPal). */
+export const MANUAL_UNLOCK_STEPS = [
+  {
+    n: "1",
+    title: "Pay $79 once",
+    detail: "Venmo, Cash App, or PayPal — open a rail below and send founding.",
+  },
+  {
+    n: "2",
+    title: "Get your key",
+    detail: "After payment clears, you get a signed key by email or text (FP-LIFE-…). Nothing unlocks by itself.",
+  },
+  {
+    n: "3",
+    title: "Redeem on this desk",
+    detail: "Paste the key below and hit Redeem. Host factors, enzyme atlas, and export open on this browser.",
+  },
+] as const;
+
+/** Soft unlock note — no clinical claims; PI / Safety page still govern. */
+export const FOUNDING_UNLOCKS =
+  "Founding unlocks host factors, enzyme atlas, metabolite maps, full report, and JSON/CSV export — $79 once. Educational model; not FDA-cleared.";
+
 /** Public URLs. Override the live desk with VITE_PUBLIC_URL when Vercel is linked. */
 const PAGES_URL = "https://kaleblovingier.github.io/FirstPassInteractions/";
 
@@ -85,7 +108,7 @@ export const BUYERS = [
 ] as const;
 
 export function payClose(price = COMMERCE.founding) {
-  return `Pay $${price} via Venmo @${OPERATOR.venmo}, Cash App $${OPERATOR.cashApp}, or PayPal ${OPERATOR.email} (card on the desk when Stripe is live). After payment clears, you get a signed license key by email or text — paste it under Pro → Redeem.`;
+  return `Pay $${price} once via Venmo @${OPERATOR.venmo}, Cash App $${OPERATOR.cashApp}, or PayPal ${OPERATOR.email} (card on the desk when Stripe is live). After it clears you get a signed key by email or text — paste it under Plans → Redeem. Three steps: pay → get key → redeem.`;
 }
 
 export function salesDm(price = COMMERCE.founding) {
@@ -126,12 +149,12 @@ export function launchTweet(price = COMMERCE.founding) {
   return [
     "FirstPass is a CYP450 desk for ketamine clinics, MAT, and pharmacy students.",
     "",
-    "Up to five-drug collision checks stay free.",
+    "Free up to five drugs on the desk.",
     `Founding license $${price} once — host factors, enzyme atlas, export.`,
     SITE.url,
     "Pay with card on the desk, or Venmo / Cash App / PayPal.",
     "",
-    "Educational model. Not a charting system.",
+    "Educational model. Not FDA-cleared. Empty tray is not proof a combination is safe.",
   ].join("\n");
 }
 
@@ -157,7 +180,7 @@ export function launchPosts(price = COMMERCE.founding, url = SITE.pages): Launch
         "1/",
         "FirstPass is a CYP450 desk for ketamine clinics, MAT, and pharmacy students.",
         "",
-        "Up to five-drug collision checks stay free. Founding license $" + price + " once.",
+        "Free up to five drugs on the desk. Founding license $" + price + " once.",
         "",
         "2/",
         "Three cases the desk actually draws:",
@@ -267,7 +290,7 @@ export function fulfillKey(opts: { key: string; soldTo?: string }) {
     "",
     opts.key,
     "",
-    "Open the desk. If you paid by card you are already licensed on the browser that returned from Stripe — keep this key for another machine. Otherwise: Pro → paste the key → Redeem.",
+    "Open the desk. If you paid by card you are already licensed on the browser that returned from Stripe — keep this key for another machine. Otherwise: Plans → paste the key → Redeem (pay → key → redeem).",
     "",
     SITE.url,
     "",
@@ -298,7 +321,7 @@ export function invoiceText(opts: {
     `Write: ${OPERATOR.email} · ${OPERATOR.phone}`,
     "",
     "After payment you receive a key like FP-LIFE-A1B2C3D4-9F3C2A1B.",
-    "Paste it under Pro → Redeem on the desk.",
+    "Paste it under Plans → Redeem on the desk (pay → key → redeem).",
     opts.keyHint ? `Key: ${opts.keyHint}` : "",
   ]
     .filter((l) => l !== "")
