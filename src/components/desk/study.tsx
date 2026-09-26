@@ -18,6 +18,39 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Plate } from "./plate";
 
+/** Everyday lane labels — ids/order stay in STUDY_LANES. */
+const LANE_PLAIN: Record<StudyLane, string> = {
+  drill: "Teaching rounds",
+  boards: "Classic pairs",
+  cyp: "Enzyme map",
+  desk: "This desk",
+};
+
+/** Everyday pile labels — ids/order stay in STUDY_PILES. */
+const PILE_PLAIN: Record<StudyPile, string> = {
+  all: "All",
+  open: "Not yet",
+  miss: "Review",
+};
+
+const HOW_STEPS = [
+  {
+    n: "1",
+    title: "Pick a lane",
+    body: "Teaching rounds, classic pairs, the enzyme map, or whatever is on this desk.",
+  },
+  {
+    n: "2",
+    title: "Say it first",
+    body: "Name the mechanism out loud, then reveal or pick an answer.",
+  },
+  {
+    n: "3",
+    title: "Mark and drill",
+    body: "Got it or Review — then filter to Review only and run those again.",
+  },
+] as const;
+
 export function StudyPage() {
   const selected = useDesk((s) => s.selected);
   const doses = useDesk((s) => s.doses);
@@ -33,6 +66,7 @@ export function StudyPage() {
   const markStudy = useDesk((s) => s.markStudy);
   const clearStudy = useDesk((s) => s.clearStudy);
   const load = useDesk((s) => s.load);
+  const setView = useDesk((s) => s.setView);
   const plan = usePlan();
   const [lane, setLane] = useState<StudyLane>(selected.length ? "desk" : "drill");
   const [pile, setPile] = useState<StudyPile>("all");
@@ -69,9 +103,15 @@ export function StudyPage() {
   const unseen = source.length - known - missed;
   const knownPct = source.length ? Math.round((known / source.length) * 100) : 0;
   const missPct = source.length ? Math.round((missed / source.length) * 100) : 0;
+  const firstRun = source.length > 0 && known + missed === 0;
 
   function jump(next: number) {
     setCursor({ key, index: next, revealed: false, picked: null });
+  }
+
+  function resetMarks() {
+    clearStudy();
+    setEpoch((n) => n + 1);
   }
 
   return (
@@ -80,21 +120,27 @@ export function StudyPage() {
         <div className="grid sm:grid-cols-[220px_minmax(0,1fr)]">
           <Plate src={LANE_PLATE.clinic} alt="" className="h-36 w-full min-h-36 sm:h-full" />
           <div className="px-5 py-5 sm:px-6">
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Study</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Study coach</p>
             <h2 className="mt-2 font-serif text-2xl tracking-tight text-fg">
-              Say the mechanism before you reveal it.
+              Practice the why before you peek.
             </h2>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
-              For pharmacy and medical trainees. Rounds are preceptor stems. Named pairs are the labeled
-              collisions. CYP cards are the formulary map and FDA fold-change grades. Desk cards are whatever
-              pair is loaded. Mark a miss, then drill only those. Not an exam key, not a milligram, not a
-              prescription. The Prescribing Information still wins.
+              Short flashcards for pharmacy and medical trainees. Say the enzyme story out loud, then reveal.
+              Mark Got it or Review, and drill only the ones you missed. Not an exam key, not dosing advice,
+              not a prescription — the Prescribing Information still wins.
             </p>
             <p className="mt-3 font-mono text-[11px] uppercase tracking-wide text-muted">
-              {known} known · {missed} missed · {unseen} unseen
+              {known} got it · {missed} review · {unseen} not yet
               {plan === "free" ? " · five-drug desks stay free" : ""}
             </p>
-            <div className="mt-3 flex h-1.5 overflow-hidden rounded-full bg-bg-sunken" aria-hidden>
+            <div
+              className="mt-3 flex h-1.5 overflow-hidden rounded-full bg-bg-sunken"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={knownPct}
+              aria-label={`${knownPct}% marked got it, ${missPct}% marked review`}
+            >
               <div className="h-full bg-ok" style={{ width: `${knownPct}%` }} />
               <div className="h-full bg-warn" style={{ width: `${missPct}%` }} />
             </div>
@@ -102,33 +148,54 @@ export function StudyPage() {
         </div>
       </section>
 
-      <div className="flex flex-wrap items-center gap-1">
+      <section
+        aria-label="How this works"
+        className="rounded-xl bg-surface px-5 py-4 shadow-[var(--shadow-border)] sm:px-6"
+      >
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">How this works</p>
+        <ol className="mt-3 grid gap-3 sm:grid-cols-3">
+          {HOW_STEPS.map((step) => (
+            <li key={step.n} className="flex gap-3">
+              <span
+                className="flex size-7 shrink-0 items-center justify-center rounded-full bg-bg-sunken font-mono text-[11px] text-muted"
+                aria-hidden
+              >
+                {step.n}
+              </span>
+              <span className="min-w-0">
+                <span className="block text-sm font-medium text-fg">{step.title}</span>
+                <span className="mt-0.5 block text-xs leading-relaxed text-muted">{step.body}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <div className="flex flex-wrap items-center gap-1" role="group" aria-label="Study lanes">
         {STUDY_LANES.map((s) => (
           <button
             key={s.id}
             type="button"
             onClick={() => setLane(s.id)}
+            aria-pressed={lane === s.id}
             className={cn(
               "h-10 rounded-full px-3 text-xs font-medium",
               lane === s.id ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
             )}
           >
-            {s.label}
+            {LANE_PLAIN[s.id]}
           </button>
         ))}
         <button
           type="button"
-          onClick={() => {
-            clearStudy();
-            setEpoch((n) => n + 1);
-          }}
+          onClick={resetMarks}
           className="h-10 rounded-full px-3 text-xs font-medium text-muted hover:text-fg"
         >
           Reset marks
         </button>
       </div>
 
-      <div className="flex flex-wrap items-center gap-1">
+      <div className="flex flex-wrap items-center gap-1" role="group" aria-label="Study piles">
         {STUDY_PILES.map((s) => {
           const n = s.id === "all" ? source.length : s.id === "open" ? unseen : missed;
           return (
@@ -136,27 +203,69 @@ export function StudyPage() {
               key={s.id}
               type="button"
               onClick={() => setPile(s.id)}
+              aria-pressed={pile === s.id}
               className={cn(
                 "h-10 rounded-full px-3 text-xs font-medium",
                 pile === s.id ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
               )}
             >
-              {s.label} {n}
+              {PILE_PLAIN[s.id]}{" "}
+              <span className="font-mono tabular-nums opacity-70">{n}</span>
             </button>
           );
         })}
       </div>
 
+      {firstRun && card ? (
+        <div
+          role="status"
+          className="rounded-xl border border-accent/20 bg-accent-soft/40 px-5 py-4 shadow-[var(--shadow-border)] sm:px-6"
+        >
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">First pass</p>
+          <p className="mt-1 text-sm font-medium text-fg">No marks yet — that is fine.</p>
+          <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted">
+            Work one card, mark Got it or Review, then filter to Review when you want a tighter drill. You can
+            also jump to the desk, library, or rounds anytime.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setView("desk")}
+              className="h-9 rounded-full bg-ink px-3 text-xs font-medium text-bg"
+            >
+              Open desk
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("library")}
+              className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-muted hover:text-fg"
+            >
+              Browse library
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("rounds")}
+              className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-muted hover:text-fg"
+            >
+              Open rounds
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       {!card ? (
-        <p className="rounded-xl bg-surface px-5 py-8 text-sm text-muted shadow-[var(--shadow-border)]">
-          {pile === "miss"
-            ? "Nothing missed in this lane. Mark a miss, then come back."
-            : pile === "open"
-              ? "Nothing unseen here. Switch to All, or reset marks to start over."
-              : lane === "desk"
-                ? "Nothing on the desk yet. Load a pair, or switch to Rounds, Named pairs, or CYP map."
-                : "No cards in this lane."}
-        </p>
+        <StudyEmptyCoach
+          lane={lane}
+          pile={pile}
+          selectedCount={selected.length}
+          onLane={(id) => {
+            setLane(id);
+            setPile("all");
+          }}
+          onPile={setPile}
+          onReset={resetMarks}
+          onView={setView}
+        />
       ) : (
         <StudyCardView
           card={card}
@@ -178,6 +287,131 @@ export function StudyPage() {
           }}
         />
       )}
+    </div>
+  );
+}
+
+function StudyEmptyCoach({
+  lane,
+  pile,
+  selectedCount,
+  onLane,
+  onPile,
+  onReset,
+  onView,
+}: {
+  lane: StudyLane;
+  pile: StudyPile;
+  selectedCount: number;
+  onLane: (id: StudyLane) => void;
+  onPile: (id: StudyPile) => void;
+  onReset: () => void;
+  onView: (view: "desk" | "library" | "rounds") => void;
+}) {
+  const missEmpty = pile === "miss";
+  const openEmpty = pile === "open";
+  const deskEmpty = lane === "desk" && pile === "all";
+
+  const headline = missEmpty
+    ? "Nothing in Review for this lane"
+    : openEmpty
+      ? "Nothing left unmarked here"
+      : deskEmpty
+        ? selectedCount
+          ? "No study cards for this desk yet"
+          : "This desk lane needs a pair first"
+        : "No cards in this lane";
+
+  const body = missEmpty
+    ? "Mark a miss on a card, then come back to drill only those. Or switch to All to keep going."
+    : openEmpty
+      ? "You have seen everything in this pile. Switch to All, open Review, or reset marks for a fresh pass."
+      : deskEmpty
+        ? selectedCount
+          ? "The items on the desk did not yield a flashcard here. Try Teaching rounds or Classic pairs, or open the desk to add a teaching partner."
+          : "Load a pair on the desk, or switch to Teaching rounds / Classic pairs to practice without a tray."
+        : "Try another lane, or open rounds and the library for a different teaching path.";
+
+  return (
+    <div role="status" className="rounded-xl bg-surface px-5 py-8 shadow-[var(--shadow-border)] sm:px-6">
+      <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">Study coach</p>
+      <p className="mt-2 text-sm font-medium text-fg">{headline}</p>
+      <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted">{body}</p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {missEmpty || openEmpty ? (
+          <>
+            <button
+              type="button"
+              onClick={() => onPile("all")}
+              className="h-9 rounded-full bg-ink px-3 text-xs font-medium text-bg"
+            >
+              Show all
+            </button>
+            {missEmpty ? null : (
+              <button
+                type="button"
+                onClick={() => onPile("miss")}
+                className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-muted hover:text-fg"
+              >
+                Open Review
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onReset}
+              className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-muted hover:text-fg"
+            >
+              Reset marks
+            </button>
+          </>
+        ) : null}
+        {deskEmpty || (!missEmpty && !openEmpty) ? (
+          <>
+            <button
+              type="button"
+              onClick={() => onLane("drill")}
+              className="h-9 rounded-full bg-ink px-3 text-xs font-medium text-bg"
+            >
+              Try teaching rounds
+            </button>
+            <button
+              type="button"
+              onClick={() => onLane("boards")}
+              className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-muted hover:text-fg"
+            >
+              Classic pairs
+            </button>
+            <button
+              type="button"
+              onClick={() => onLane("cyp")}
+              className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-muted hover:text-fg"
+            >
+              Enzyme map
+            </button>
+          </>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => onView("desk")}
+          className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-muted hover:text-fg"
+        >
+          Open desk
+        </button>
+        <button
+          type="button"
+          onClick={() => onView("library")}
+          className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-muted hover:text-fg"
+        >
+          Browse library
+        </button>
+        <button
+          type="button"
+          onClick={() => onView("rounds")}
+          className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-muted hover:text-fg"
+        >
+          Open rounds
+        </button>
+      </div>
     </div>
   );
 }
@@ -216,7 +450,7 @@ function StudyCardView({
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">{card.kicker}</p>
         <p className="font-mono text-[11px] text-muted">
           {n} / {total}
-          {mark ? ` · ${mark === "got" ? "known" : "missed"}` : ""}
+          {mark ? ` · ${mark === "got" ? "got it" : "review"}` : ""}
         </p>
       </div>
       <h3 className="mt-2 font-serif text-2xl tracking-tight text-fg">{card.title}</h3>
@@ -275,10 +509,10 @@ function StudyCardView({
         {revealed && !card.choices ? (
           <>
             <Button size="sm" variant={mark === "got" ? "default" : "secondary"} onClick={() => onMark("got")}>
-              I knew it
+              Got it
             </Button>
             <Button size="sm" variant={mark === "miss" ? "danger" : "secondary"} onClick={() => onMark("miss")}>
-              I missed it
+              Review
             </Button>
           </>
         ) : null}
@@ -293,7 +527,7 @@ function StudyCardView({
         <Button size="sm" variant="ghost" onClick={onNext} disabled={n >= total}>
           Next
         </Button>
-        {mark ? <Badge tone={mark === "got" ? "ok" : "warn"}>{mark === "got" ? "Known" : "Missed"}</Badge> : null}
+        {mark ? <Badge tone={mark === "got" ? "ok" : "warn"}>{mark === "got" ? "Got it" : "Review"}</Badge> : null}
       </div>
     </article>
   );
