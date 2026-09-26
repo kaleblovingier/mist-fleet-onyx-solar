@@ -253,3 +253,20 @@ export const SEVERITY_LABEL: Record<Severity | "none", string> = {
   minor: "Mild note",
   none: "Not mapped",
 };
+
+/** Shorter chips for the desk — still educational categories, not a harm prediction. */
+export const SEVERITY_PLAIN: Record<Severity | "none", string> = {
+  contraindicated: "Avoid together",
+  major: "Serious concern",
+  moderate: "Use care",
+  minor: "Mild note",
+  none: "Unmapped",
+};
+
+export const SEVERITY_HINT: Record<Severity | "none", string> = {
+  contraindicated: "This checker’s strongest category — often labeled avoid or contraindicated on a PI.",
+  major: "A serious teaching collision. Read the PI; this desk does not dose or decide care.",
+  moderate: "Worth a careful look. Context and the official label still govern.",
+  minor: "A milder flag. Useful for teaching; not a green light.",
+  none: "No severity mapped for this row yet.",
+};

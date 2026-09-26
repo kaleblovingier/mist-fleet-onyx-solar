@@ -34,6 +34,11 @@ import {
   type HostContext,
 } from "@/lib/drugs/types";
 import { useDesk, usePlan, type LoadExtras } from "@/lib/drugs/store";
+import {
+  labelForIds,
+  popUndo,
+  readHistory,
+} from "@/lib/drugs/tray-history";
 import { PLAN_BY_ID } from "@/lib/billing/plans";
 import { OPERATOR, SITE, tweetFor } from "@/lib/billing/commerce";
 import { cn } from "@/lib/utils";
@@ -97,8 +102,21 @@ export function DeskApp() {
   }, []);
   const selected = hydrated ? selectedRaw : [];
   const remove = useDesk((s) => s.remove);
-  const clear = useDesk((s) => s.clear);
+  const clearRaw = useDesk((s) => s.clear);
   const load = useDesk((s) => s.load);
+  const [trayTick, setTrayTick] = useState(0);
+  const bumpTray = () => setTrayTick((n) => n + 1);
+  const clear = () => {
+    clearRaw();
+    bumpTray();
+  };
+  const undoTray = () => {
+    const snap = popUndo();
+    if (!snap?.ids.length) return;
+    load(snap.ids, snap.ketamineRoute ? { ketamineRoute: snap.ketamineRoute } : undefined);
+    bumpTray();
+  };
+  const trayHistory = useMemo(() => readHistory(), [trayTick, hydrated]);
   useEffect(() => {
     if (!hydrated || permalinkApplied.current) return;
     permalinkApplied.current = true;
@@ -402,6 +420,10 @@ export function DeskApp() {
                   onLoad={load}
                   onLoadSample={(id) => loadSample(id, null)}
                   ready={hydrated}
+                  undo={trayHistory.undo}
+                  recent={trayHistory.recent}
+                  onUndo={undoTray}
+                  onTrayBump={bumpTray}
                 />
               ) : selected.length === 1 ? (
                 <>
@@ -561,10 +583,18 @@ function EmptyState({
   onLoad,
   onLoadSample,
   ready,
+  undo,
+  recent,
+  onUndo,
+  onTrayBump,
 }: {
   onLoad: (ids: string[], extras?: LoadExtras) => void;
   onLoadSample: (sampleId: string) => void;
   ready: boolean;
+  undo: ReturnType<typeof readHistory>["undo"];
+  recent: ReturnType<typeof readHistory>["recent"];
+  onUndo: () => void;
+  onTrayBump: () => void;
 }) {
   const [lane, setLane] = useState<SampleLane | "all">("all");
   const plan = usePlan();
@@ -589,6 +619,40 @@ function EmptyState({
             ? "Explore educational examples involving opioid-treatment medicines and other substances. These notes are not a treatment plan; a qualified clinician and current product labeling must guide care."
             : "Add two or more medicines, supplements, foods, or other substances to see possible concerns in everyday language, with clinical details and sources for review. This is a learning aid for clinicians and supervised education—not personal medical advice. It can miss interactions; no result does not mean a combination is safe."}
         </p>
+        {undo || recent.length > 0 ? (
+          <div className="mt-4 flex flex-col gap-3 rounded-lg bg-bg px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-fg">Your recent trays</p>
+              <p className="mt-0.5 text-xs text-muted">
+                Stored only on this browser — no account sync. Handy after Clear or when hopping between teaching pairs.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {undo ? (
+                <Button variant="secondary" size="sm" disabled={!ready} onClick={onUndo}>
+                  <RotateCcw className="size-3.5" />
+                  Undo clear
+                </Button>
+              ) : null}
+              {recent.slice(0, 4).map((snap) => (
+                <Button
+                  key={`${snap.ts}-${snap.ids.join("-")}`}
+                  variant="ghost"
+                  size="sm"
+                  disabled={!ready}
+                  className="max-w-[14rem] truncate text-muted"
+                  title={labelForIds(snap.ids)}
+                  onClick={() => {
+                    onLoad(snap.ids, snap.ketamineRoute ? { ketamineRoute: snap.ketamineRoute } : undefined);
+                    onTrayBump();
+                  }}
+                >
+                  {labelForIds(snap.ids)}
+                </Button>
+              ))}
+            </div>
+          </div>
+        ) : null}
         {lane !== "mat" ? (
           <ol className="mt-5 grid gap-3 sm:grid-cols-3">
             {[
