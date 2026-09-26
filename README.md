@@ -28,7 +28,7 @@ Shareable desk links: `?case=gf-oral-ketamine` loads a sample; `?pack=clinic-onb
 6. **Activated charcoal × levothyroxine** — the binder. The dose never arrives. Metamucil does the same.
 7. **Valproate, then flip Pregnant** — teratogen card. Search `pubmed` or open Cites for Bailey, Mega, Krantz, Hunter.
 8. **Lorazepam, flip Geriatric** — Beers 2023. Search `beers`.
-9. **Paroxetine × codeine** — 2D6 phenoconversion. NM on the lab, PM-like on the enzyme. Search `phenoconversion`.
+9. **Paroxetine × codeine** — 2D6 phenoconversion. NM on the lab, PM-like on the enzyme. Open **Clinical → Pheno** or **Study → Phenoconversion** for the before/after perpetrator two-panel (same tray, blocker off vs on). Search `phenoconversion`.
 10. **MDMA × sertraline** — Hunter screen. Clonus, not NMS. Search `hunter`.
 11. **Methadone + oxycodone** — MME sketch plus live OpenFDA labels / NIH RxClass. Search `mme` / tap **Ask live sources**.
 12. **Methadone cup** — opiate EIA stays negative. Search `uds`. EDDP is how an OTP proves they swallowed it.
@@ -78,7 +78,7 @@ Scholarly apothecary: paper `#efece4`, teal `#2f5d56`, Newsreader + IBM Plex. Au
 | `src/lib/drugs/pubmed.ts` | Curated PMIDs |
 | `src/lib/drugs/pubmed.server.ts` | NCBI E-utilities live search |
 | `src/lib/drugs/clinic.ts` | Pregnancy / Beers / renal / boxed teaching cards |
-| `src/lib/drugs/pheno-convert.ts` | Phenoconversion (inhibitor rewrites genotype) |
+| `src/lib/drugs/pheno-convert.ts` | Phenoconversion (inhibitor rewrites genotype; before/after perpetrator panels on Clinical Pheno + Study) |
 | `src/lib/drugs/reversal.ts` | Antidote / will-not-reverse teaching map |
 | `src/lib/drugs/mme.ts` | CDC 2022 oral MME factors |
 | `src/lib/drugs/syndrome.ts` | Hunter criteria vs NMS |
