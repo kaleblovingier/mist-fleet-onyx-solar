@@ -903,7 +903,7 @@ function RiskBanner({
   caseId: string | null;
   packId: PackId | null;
 }) {
-  const [copied, setCopied] = useState<"full" | "share" | "plain" | null>(null);
+  const [copied, setCopied] = useState<"full" | "share" | "plain" | "link" | null>(null);
   const openCheckout = useDesk((s) => s.openCheckout);
   const license = useDesk((s) => s.license);
   const highest = report.highest;
@@ -912,7 +912,7 @@ function RiskBanner({
   ).join(", ");
   const names = selected.map((id) => DRUG_BY_ID[id]?.name).filter(Boolean).join(" + ");
 
-  async function write(kind: "full" | "share" | "plain", text: string) {
+  async function write(kind: "full" | "share" | "plain" | "link", text: string) {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(kind);
