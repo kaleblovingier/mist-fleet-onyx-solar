@@ -41,6 +41,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DrugSearch } from "./search";
 import { FindingList } from "./findings";
+import { DeskCoach } from "./coach";
 import { CheckBoard } from "./check";
 import { CypHeatmap } from "./heatmap";
 import { EnzymeAtlas } from "./atlas";
@@ -290,11 +291,11 @@ export function DeskApp() {
         <div className="border-b border-border bg-ok-soft">
           <div className="mx-auto flex max-w-6xl items-start justify-between gap-3 px-4 py-3 sm:items-center sm:px-6">
             <p className="text-sm leading-relaxed text-ok">
-              License is live on this desk. Host factors, atlas, and export are open.
+              You're in. Host factors, the enzyme atlas, and export are open on this desk.
               {license ? (
                 <>
                   {" "}
-                  Key <span className="font-mono">{license}</span>
+                  Keep key <span className="font-mono">{license}</span> for another machine.
                 </>
               ) : null}
             </p>
@@ -426,9 +427,7 @@ export function DeskApp() {
                       <FindingList findings={report.findings} />
                     </>
                   ) : (
-                    <p className="text-sm leading-relaxed text-muted">
-                      One item is on the desk. Add a second medicine or substance, or flip smoke, alcohol, or a non-normal metabolizer, to surface mapped findings.
-                    </p>
+                    <DeskCoach ids={selected} findingsCount={report.findings.length} />
                   )}
                   <PkExplorer drugs={hostDrugs} host={host} />
                   <FirstPassMap
@@ -489,7 +488,9 @@ export function DeskApp() {
                       <CollisionMap selected={selected} findings={report.findings} />
                       <FindingList findings={report.findings} />
                     </>
-                  ) : null}
+                  ) : (
+                    <DeskCoach ids={selected} findingsCount={report.findings.length} />
+                  )}
                   <Dossier ids={selected} host={host} />
                   <PkExplorer drugs={hostDrugs} host={host} />
                   {pro ? (
@@ -535,8 +536,8 @@ export function DeskApp() {
                 <>
                   <KetamineRouteCard />
                   <Paywall
-                    title="Host factors are Pro"
-                    blurb="Phenotype, smoke, alcohol pattern, cannabis route, age, kidney, and pregnancy change the score. Ketamine route stays free for the oral teaching demo. Up to five-drug PK stays free."
+                    title="Host factors unlock with founding"
+                    blurb="Phenotype, smoke, alcohol pattern, cannabis route, age, kidney, and pregnancy teaching cards. Ketamine route stays free for the oral demo; five-drug checks stay free."
                   >
                     <PhenotypeCard hideKetamineRoute />
                   </Paywall>
@@ -842,7 +843,11 @@ function RiskBanner({
 
   async function copySummary() {
     if (plan === "free") {
-      openCheckout("lab", "The full collision report is a licensed surface. Founding is $79 once.", "life");
+      openCheckout(
+        "lab",
+        "The full collision report unlocks with founding ($79 lifetime) — host factors, atlas, and export included.",
+        "life",
+      );
       return;
     }
     const lines = [
@@ -985,7 +990,13 @@ function StatsCard({
       </dl>
       <div className="mt-3 text-[11px] text-muted">
         Ceiling {highest === "none" ? "—" : SEVERITY_LABEL[highest as never] ?? highest}
-        {license ? ` · ${license}` : plan === "free" ? ` · founding $79 · ${OPERATOR.payLine}` : previewing ? " · buy before it lapses" : ""}
+        {license
+          ? ` · ${license}`
+          : plan === "free"
+            ? ` · free · founding $79 lifetime unlocks host factors / atlas / export`
+            : previewing
+              ? " · buy before the preview ends"
+              : ""}
       </div>
     </div>
   );
@@ -1116,13 +1127,18 @@ function HowCard() {
 
 function Disclaimer() {
   return (
-    <p className="px-1 text-[11px] leading-relaxed text-subtle">
-      {SOFTWARE.name} {SOFTWARE.version} is an educational clinical decision-support aid for clinicians
-      and supervised learning. {NOT_CLEARED} It can miss risks; an empty result is not proof that a
-      combination is safe. It does not identify product contents, diagnose, or tell anyone what to
-      start, stop, or change. For care decisions, consult a qualified clinician and current FDA-approved
-      labeling. Street-supply entries are teaching examples, not product identification.
-    </p>
+    <div className="rounded-lg bg-bg-sunken/60 px-3 py-3">
+      <p className="text-[11px] font-medium uppercase tracking-wide text-muted">About this desk</p>
+      <p className="mt-1.5 text-[11px] leading-relaxed text-subtle">
+        Built for learning and clinical review — not a personal treatment guide.{" "}
+        {SOFTWARE.name} {SOFTWARE.version} is an educational clinical decision-support aid for
+        clinicians and supervised learning. {NOT_CLEARED} It can miss risks; an empty result is not
+        proof that a combination is safe. It does not identify product contents, diagnose, or tell
+        anyone what to start, stop, or change. For care decisions, consult a qualified clinician and
+        current FDA-approved labeling. Street-supply entries are teaching examples, not product
+        identification.
+      </p>
+    </div>
   );
 }
 
