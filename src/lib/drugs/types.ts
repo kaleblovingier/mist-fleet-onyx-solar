@@ -224,11 +224,11 @@ export const STACK_AXES = ["serotonin", "cns", "qt", "pressor", "nmda"] as const
 export type StackAxis = (typeof STACK_AXES)[number];
 
 export const STACK_LABEL: Record<StackAxis, string> = {
-  serotonin: "Serotonin",
-  cns: "CNS / airway",
-  qt: "QT",
-  pressor: "Pressor",
-  nmda: "NMDA",
+  serotonin: "Serotonin mood",
+  cns: "Sedation / breathing",
+  qt: "Heart rhythm (QT)",
+  pressor: "Blood pressure",
+  nmda: "NMDA / ketamine",
 };
 
 export interface StackBar {
@@ -247,11 +247,11 @@ export const SEVERITY_RANK: Record<Severity | "none", number> = {
 };
 
 export const SEVERITY_LABEL: Record<Severity | "none", string> = {
-  contraindicated: "Contraindicated",
-  major: "Major",
-  moderate: "Moderate",
-  minor: "Minor",
-  none: "Unmapped",
+  contraindicated: "Avoid together",
+  major: "Serious concern",
+  moderate: "Use care",
+  minor: "Mild note",
+  none: "Not mapped",
 };
 
 /** Shorter chips for the desk — still educational categories, not a harm prediction. */

@@ -13,9 +13,9 @@ const SEVERITY_FILTERS: Array<Severity | "all"> = ["all", "contraindicated", "ma
 type KindFilter = "all" | "pk" | "pd" | "geno" | "clinic" | "food";
 const KIND_FILTERS: { id: KindFilter; label: string }[] = [
   { id: "all", label: "All kinds" },
-  { id: "pk", label: "PK" },
-  { id: "pd", label: "PD" },
-  { id: "geno", label: "Phenotype" },
+  { id: "pk", label: "Clearance" },
+  { id: "pd", label: "Same-effect" },
+  { id: "geno", label: "Genetics" },
   { id: "clinic", label: "Clinic" },
   { id: "food", label: "Food" },
 ];
@@ -81,7 +81,7 @@ export function FindingList({ findings }: { findings: Finding[] }) {
       </div>
       {visible.length === 0 ? (
         <p className="rounded-lg bg-surface px-4 py-6 text-sm text-muted shadow-[var(--shadow-border)]">
-          No findings at this severity.
+          Nothing at this concern level. Try “All” or another filter.
         </p>
       ) : (
         <ol className="space-y-2">
