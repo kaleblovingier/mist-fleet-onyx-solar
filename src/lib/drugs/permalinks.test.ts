@@ -146,3 +146,21 @@ test("applyPermalink loads brief ids", () => {
   assert.equal(resolved.kind, "brief");
   assert.deepEqual(loaded, ["ketamine", "alprazolam"]);
 });
+
+test("pharmd pack loads first free teaching case", () => {
+  const resolved = parsePermalink("?pack=pharmd");
+  assert.equal(resolved.kind, "pack");
+  assert.equal(resolved.packId, "pharmd");
+  assert.equal(resolved.caseId, PACKS.pharmd.caseIds[0]);
+  assert.equal(resolved.caseId, "gf-oral-ketamine");
+  assert.ok(resolved.ids.length >= 2);
+});
+
+test("pharmd pack cases stay free-friendly", () => {
+  assert.equal(PACKS.pharmd.title, "PharmD lab");
+  for (const id of PACKS.pharmd.caseIds) {
+    const sample = parsePermalink(`?case=${id}`).sample;
+    assert.ok(sample, id);
+    assert.equal(sampleNeedsPro(sample!), false, `${id} should not require Pro host extras`);
+  }
+});

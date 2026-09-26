@@ -6,7 +6,7 @@ import { DRUG_BY_ID } from "./catalog";
 import { buildBriefUrl as briefUrlFromIds } from "./brief";
 import { isVirtual } from "./host";
 
-export type PackId = "clinic-onboard" | "mat-cup";
+export type PackId = "clinic-onboard" | "mat-cup" | "pharmd";
 
 export interface PackMeta {
   id: PackId;
@@ -28,6 +28,12 @@ export const PACKS: Record<PackId, PackMeta> = {
     title: "MAT / street cup",
     blurb: "Xylazine, naltrexone precip, Imodium P-gp, designer benzo — fits the free five-drug cap.",
     caseIds: ["xylazine-fentanyl", "naltrexone-opioid", "loperamide-quinidine", "bromazolam-oxy"],
+  },
+  pharmd: {
+    id: "pharmd",
+    title: "PharmD lab",
+    blurb: "Free teaching pairs for students — oral first-pass, airway stack, transplant food, street α2. No exam key.",
+    caseIds: ["gf-oral-ketamine", "ketamine-benzo", "tacrolimus-gf", "xylazine-fentanyl"],
   },
 };
 
@@ -81,7 +87,7 @@ function applyFlip(extras: LoadExtras, flip: boolean): LoadExtras {
 }
 
 function isPackId(value: string | null): value is PackId {
-  return value === "clinic-onboard" || value === "mat-cup";
+  return value != null && Object.prototype.hasOwnProperty.call(PACKS, value);
 }
 
 function emptyResolved(flip: boolean): PermalinkResolved {
@@ -101,7 +107,7 @@ function emptyResolved(flip: boolean): PermalinkResolved {
 /**
  * Parse desk share params.
  * - `case` (preferred) or legacy `sample`: sample regimen id
- * - `pack`: clinic-onboard | mat-cup
+ * - `pack`: clinic-onboard | mat-cup | pharmd
  * - `lab`: PharmD lab-book assignment id (loads sample + Study view)
  * - `brief`: comma-separated catalog ids (loads onto desk; stays on desk view)
  * - `flip=1`: invert ketamine route for first-pass contrast

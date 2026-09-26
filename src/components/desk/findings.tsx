@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { ChevronDown, ExternalLink } from "lucide-react";
 import { DRUG_BY_ID } from "@/lib/drugs/catalog";
 import { basisFor } from "@/lib/drugs/basis";
+import { findingsOnTray, partitionFindings } from "@/lib/drugs/brief";
 import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
 import type { Finding, Severity } from "@/lib/drugs/types";
 import { SEVERITY_LABEL } from "@/lib/drugs/types";
@@ -26,16 +27,24 @@ function matchesKind(f: Finding, kind: KindFilter) {
   return f.kind === kind;
 }
 
-export function FindingList({ findings }: { findings: Finding[] }) {
+export function FindingList({
+  findings,
+  trayIds,
+}: {
+  findings: Finding[];
+  /** When set, only show findings whose real drugs are all on the tray. */
+  trayIds?: string[];
+}) {
   const [filter, setFilter] = useState<Severity | "all">("all");
   const [kind, setKind] = useState<KindFilter>("all");
-  const visible = useMemo(
-    () =>
-      findings.filter(
-        (f) => (filter === "all" || f.severity === filter) && matchesKind(f, kind),
-      ),
-    [findings, filter, kind],
-  );
+  const { pairs, deskNotes } = useMemo(() => {
+    const scoped = trayIds ? findingsOnTray(findings, trayIds) : findings;
+    const filtered = scoped.filter(
+      (f) => (filter === "all" || f.severity === filter) && matchesKind(f, kind),
+    );
+    return partitionFindings(filtered);
+  }, [findings, trayIds, filter, kind]);
+  const visibleCount = pairs.length + deskNotes.length;
 
   if (findings.length === 0) return null;
 
@@ -77,16 +86,37 @@ export function FindingList({ findings }: { findings: Finding[] }) {
           </button>
         ))}
       </div>
-      {visible.length === 0 ? (
+      {visibleCount === 0 ? (
         <p className="rounded-lg bg-surface px-4 py-6 text-sm text-muted shadow-[var(--shadow-border)]">
           No findings at this severity.
         </p>
       ) : (
-        <ol className="space-y-2">
-          {visible.map((f) => (
-            <FindingCard key={f.id} finding={f} />
-          ))}
-        </ol>
+        <div className="space-y-4">
+          {pairs.length > 0 ? (
+            <div className="space-y-2">
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+                Pairs (worst first)
+              </p>
+              <ol className="space-y-2">
+                {pairs.map((f) => (
+                  <FindingCard key={f.id} finding={f} />
+                ))}
+              </ol>
+            </div>
+          ) : null}
+          {deskNotes.length > 0 ? (
+            <div className="space-y-2">
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+                Whole-desk notes
+              </p>
+              <ol className="space-y-2">
+                {deskNotes.map((f) => (
+                  <FindingCard key={f.id} finding={f} />
+                ))}
+              </ol>
+            </div>
+          ) : null}
+        </div>
       )}
     </section>
   );

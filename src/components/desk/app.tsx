@@ -428,7 +428,7 @@ export function DeskApp() {
                           <StackMeters stacks={report.stacks} />
                         </Paywall>
                       ) : null}
-                      <FindingList findings={report.findings} />
+                      <FindingList findings={report.findings} trayIds={selected} />
                     </>
                   ) : (
                     <p className="text-sm text-muted">
@@ -493,7 +493,7 @@ export function DeskApp() {
                   {report.findings.length > 0 ? (
                     <>
                       <CollisionMap selected={selected} findings={report.findings} />
-                      <FindingList findings={report.findings} />
+                      <FindingList findings={report.findings} trayIds={selected} />
                     </>
                   ) : null}
                   <Dossier ids={selected} host={host} />

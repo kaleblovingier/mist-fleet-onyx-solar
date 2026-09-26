@@ -14,7 +14,7 @@ Deck: [gamma.app/docs/c1sxd9i8iyv80eq](https://gamma.app/docs/c1sxd9i8iyv80eq)
 
 ## Try these
 
-Shareable desk links: `?case=gf-oral-ketamine` loads a sample; `?pack=clinic-onboard` or `?pack=mat-cup` opens a teaching pack (first case loads; the pack strip jumps the rest). `?lab=gf-oral-ketamine` opens Study with a PharmD lab-book assignment (three-sentence answer + receipt export on founding / lab). `?brief=ketamine,alprazolam` loads those catalog ids onto the desk and pairs with **Copy brief** (free teaching hook — sharpest pair first, not the founding Report). Add `&flip=1` to invert the ketamine route for oral↔IV contrast. Legacy `?sample=` still works.
+Shareable desk links: `?case=gf-oral-ketamine` loads a sample; `?pack=clinic-onboard`, `?pack=mat-cup`, or `?pack=pharmd` opens a teaching pack (first case loads; the pack strip jumps the rest). `?lab=gf-oral-ketamine` opens Study with a PharmD lab-book assignment (three-sentence answer + receipt export on founding / lab). `?brief=ketamine,alprazolam` loads those catalog ids onto the desk and pairs with **Copy brief** (free teaching hook — sharpest pair first, not the founding Report). Add `&flip=1` to invert the ketamine route for oral↔IV contrast. Legacy `?sample=` still works.
 
 **Lab book** — eight seeded assignments (oral ketamine × grapefruit, DXM 2D6 PM, ketamine × benzo, tacrolimus × GF, xylazine × fentanyl, naltrexone precip, smoke × clozapine, clozapine × lorazepam / Beers). Free desks open free cases; Pro-host cases and receipt JSON/CSV need founding.
 
