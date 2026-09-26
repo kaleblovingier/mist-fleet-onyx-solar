@@ -359,7 +359,7 @@ export function DeskApp() {
                     </>
                   ) : (
                     <p className="text-sm text-muted">
-                      Add a second drug, flip smoke, alcohol, or a non-normal metabolizer to run the map.
+                      Add a second drug, flip smoke, alcohol, or a non-normal metabolizer to check interactions.
                     </p>
                   )}
                   <PkExplorer drugs={hostDrugs} host={host} />
@@ -570,7 +570,7 @@ function EmptyState({
             Browse drug library
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setLane("mat")}>
-            MAT / OTP board
+            Opioid treatment (MAT / OTP) board
           </Button>
           <Button variant="secondary" size="sm" onClick={() => setLane("clinic")}>
             Clinic staples

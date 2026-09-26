@@ -24,15 +24,15 @@ export interface SampleRegimen {
 
 export const SAMPLE_LANES: { id: SampleLane | "all"; label: string }[] = [
   { id: "all", label: "All" },
-  { id: "nmda", label: "NMDA" },
-  { id: "entactogen", label: "Entactogen" },
-  { id: "gaba", label: "GABA" },
-  { id: "phenotype", label: "Phenotype" },
-  { id: "smoke", label: "Smoke" },
-  { id: "mat", label: "MAT" },
-  { id: "food", label: "Food" },
-  { id: "street", label: "Street" },
-  { id: "clinic", label: "Clinic" },
+  { id: "nmda", label: "Ketamine & related" },
+  { id: "entactogen", label: "MDMA & stimulants" },
+  { id: "gaba", label: "Sedatives & alcohol" },
+  { id: "phenotype", label: "Metabolizer status" },
+  { id: "smoke", label: "Smoking effects" },
+  { id: "mat", label: "Opioid treatment (MAT)" },
+  { id: "food", label: "Food & herbs" },
+  { id: "street", label: "Street supply" },
+  { id: "clinic", label: "Clinic staples" },
 ];
 
 /** Window-first order when the MAT / OTP board is open. */
@@ -74,7 +74,7 @@ export const SAMPLE_REGIMENS: SampleRegimen[] = [
   {
     id: "ketamine-3a4",
     title: "Oral ketamine + clarithromycin",
-    blurb: "First-pass 3A4 trap — much hotter than IV",
+    blurb: "Swallowed ketamine meets a gut enzyme; often stronger interaction than IV",
     drugIds: ["ketamine", "clarithromycin"],
     lane: "nmda",
     ketamineRoute: "oral",
