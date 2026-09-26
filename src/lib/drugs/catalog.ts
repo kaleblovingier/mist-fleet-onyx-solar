@@ -1,6 +1,7 @@
 import type { Drug, Enzyme, EnzymeRole, ItemKind, PdFlag, Strength, SubstrateSensitivity } from "./types";
 import { CLINIC_BEERS, CLINIC_PREG_AVOID } from "./clinic";
 import { CLINIC_FORMULARY } from "./catalog-clinic";
+import { MODERN_FORMULARY } from "./catalog-modern";
 import { hasDrugbank } from "./drugbank";
 import { hasPgx } from "./pgx";
 import { hasCite } from "./pubmed";
@@ -2421,11 +2422,17 @@ const raw: Drug[] = [
 ];
 
 const coreIds = new Set(raw.map((d) => d.id));
-export const DRUGS: Drug[] = [...raw, ...CLINIC_FORMULARY.filter((d) => !coreIds.has(d.id))];
+const clinicExtra = CLINIC_FORMULARY.filter((d) => !coreIds.has(d.id));
+const afterClinic = new Set([...coreIds, ...clinicExtra.map((d) => d.id)]);
+export const DRUGS: Drug[] = [
+  ...raw,
+  ...clinicExtra,
+  ...MODERN_FORMULARY.filter((d) => !afterClinic.has(d.id)),
+];
 export const DRUG_BY_ID: Record<string, Drug> = Object.fromEntries(DRUGS.map((x) => [x.id, x]));
 
 const PSYCH_CLS =
-  /SSRI|SNRI|MAOI|antipsychotic|antidepressant|Benzodiazepine|Opioid|Gabapentinoid|Mood stabilizer|NMDA|Dissociative|Psychedelic|Entactogen|Stimulant|Cannabinoid|Alcohol|GHB|Z-hypnotic|Anxiolytic|ADHD|NRI|Nicotine|Methylxanthine|Tricyclic|NaSSA|SARI|NDRI|hypnotic|orexin|Melatonin|kratom|GABA|MAT|Wake-promoting|Pineal|Partial opioid|Opioid antagonist|Atypical opioid|aldehyde|NMDA \/ GABA|nicotinic|Anticonvulsant|Central muscle|AChE|α2-agonist|Nitazene|Designer benzodiazepine|Thienodiazepine|Cathinone|Arylcyclohexylamine|GHB prodrug|Alkyl nitrite|Antidiarrheal|Sedating antihistamine|Veterinary|Barbiturate|NNRTI|NBOMe|Salvinorin|Tropane|H2 blocker|Carbamate|oneirogen|pyrovalerone|NRI analgesic|IV anesthetic|NK1|SPAR|mixed opioid|7-OH|Diacetylmorphine|Street pressed|Local anesthetic/i;
+  /SSRI|SNRI|MAOI|antipsychotic|antidepressant|Benzodiazepine|Opioid|Gabapentinoid|Mood stabilizer|NMDA|Dissociative|Psychedelic|Entactogen|Stimulant|Cannabinoid|Alcohol|GHB|Z-hypnotic|Anxiolytic|ADHD|NRI|Nicotine|Methylxanthine|Tricyclic|NaSSA|SARI|NDRI|hypnotic|orexin|Melatonin|kratom|GABA|MAT|Wake-promoting|Pineal|Partial opioid|Opioid antagonist|Atypical opioid|aldehyde|NMDA \/ GABA|nicotinic|Anticonvulsant|Central muscle|AChE|α2-agonist|Nitazene|Designer benzodiazepine|Thienodiazepine|Cathinone|neuroactive steroid|Arylcyclohexylamine|GHB prodrug|Alkyl nitrite|Antidiarrheal|Sedating antihistamine|Veterinary|Barbiturate|NNRTI|NBOMe|Salvinorin|Tropane|H2 blocker|Carbamate|oneirogen|pyrovalerone|NRI analgesic|IV anesthetic|NK1|SPAR|mixed opioid|7-OH|Diacetylmorphine|Street pressed|Local anesthetic/i;
 
 export function isPsych(drug: Drug): boolean {
   if (PSYCH_CLS.test(drug.cls)) return true;
@@ -3004,7 +3011,7 @@ export function familyOf(drug: Drug): Exclude<FamilyId, "all"> {
   )
     return "psych";
   if (
-    /Macrolide|Azole|Fluoroquinolone|HIV|Rifamycin|NNRTI|NRTI|INSTI|antiviral|H2 blocker|PK booster|Oxazolidinone|Sulfonamide|Antimycobacterial|HCV|DAA|Allylamine|Beta-lactam|Tetracycline|Cephalosporin|Carbapenem|Aminoglycoside|Glycopeptide|Penicillin|Antimalarial|Echinocandin|Nitroimidazole|Lincosamide|Polymyxin|Monobactam|Protease inhibitor|Anthelmintic|Nitrofuran|Lipopeptide/i.test(
+    /Macrolide|Azole|Fluoroquinolone|HIV|Rifamycin|NNRTI|NRTI|INSTI|antiviral|CMV |capsid inhibitor|JAK |TYK2 |PDE4 |H2 blocker|PK booster|Oxazolidinone|Sulfonamide|Antimycobacterial|HCV|DAA|Allylamine|Beta-lactam|Tetracycline|Cephalosporin|Carbapenem|Aminoglycoside|Glycopeptide|Penicillin|Antimalarial|Echinocandin|Nitroimidazole|Lincosamide|Polymyxin|Monobactam|Protease inhibitor|Anthelmintic|Nitrofuran|Lipopeptide/i.test(
       drug.cls,
     )
   )
