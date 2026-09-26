@@ -3,8 +3,8 @@ import { ChevronDown, ExternalLink } from "lucide-react";
 import { DRUG_BY_ID } from "@/lib/drugs/catalog";
 import { basisFor } from "@/lib/drugs/basis";
 import { conditionLanes, foodBeside, sameShelf } from "@/lib/drugs/also";
-import { maxDrugs } from "@/lib/billing/plans";
 import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
+import { maxDrugs } from "@/lib/billing/plans";
 import { useDesk, usePlan } from "@/lib/drugs/store";
 import type { EnzymeRole, Finding, HostContext, Severity } from "@/lib/drugs/types";
 import { SEVERITY_LABEL } from "@/lib/drugs/types";
@@ -47,6 +47,42 @@ function rolesFor(id: string, findings: Finding[]) {
   return rows.map(roleText);
 }
 
+function uniqueIds(f: Finding) {
+  return [...new Set(f.drugIds.filter((id) => DRUG_BY_ID[id]))];
+}
+
+function pairKeyOf(f: Finding) {
+  const ids = uniqueIds(f);
+  if (ids.length === 2) return [...ids].sort().join("|");
+  return "";
+}
+
+function groupTitle(f: Finding) {
+  const a = actors(f);
+  if (a.verb && a.right) return `${a.left} · ${a.right}`;
+  const names = uniqueIds(f).map((id) => DRUG_BY_ID[id]?.name ?? id);
+  return names.join(" · ") || f.headline;
+}
+
+function regimenGroups(findings: Finding[]) {
+  const map = new Map<string, Finding[]>();
+  const desk: Finding[] = [];
+  for (const f of findings) {
+    const key = pairKeyOf(f);
+    if (!key) {
+      desk.push(f);
+      continue;
+    }
+    const list = map.get(key) ?? [];
+    list.push(f);
+    map.set(key, list);
+  }
+  const pairs = [...map.entries()]
+    .map(([key, rows]) => ({ key, title: groupTitle(rows[0]), rows: ordered(rows) }))
+    .sort((a, b) => rank(b.rows[0]) - rank(a.rows[0]) || a.title.localeCompare(b.title));
+  return { pairs, desk: ordered(desk) };
+}
+
 function actors(f: Finding): { left: string; verb: string; right: string } {
   const names = f.drugIds.map((id) => DRUG_BY_ID[id]?.name ?? id);
   const induces = f.tags.includes("inducer");
@@ -66,7 +102,8 @@ function actors(f: Finding): { left: string; verb: string; right: string } {
     return { left: names[0], verb: "shares a substrate with", right: names[1] };
   }
   if (f.tags.includes("phenoconversion") && names.length >= 2) {
-    return { left: names[0], verb: "phenoconverts", right: names.slice(1).join(" · ") };
+    const rest = [...new Set(names.slice(1))].filter((n) => n !== names[0]);
+    return { left: names[0], verb: "phenoconverts", right: (rest.length ? rest : [...new Set(names.slice(1))]).join(" · ") };
   }
   if (f.kind === "geno" && names[0]) {
     return { left: f.enzymes[0] ? `${f.enzymes[0]} phenotype` : "Phenotype", verb: "rewrites", right: names[0] };
@@ -110,8 +147,11 @@ export function CheckBoard({
     setOpenId(rows[0]?.id ?? food[0]?.id ?? null);
   }
   const filtered = tier === "all" ? rows : rows.filter((f) => f.severity === tier);
+  const split = regimenGroups(filtered);
+  const grouped = ids.length >= 3 && split.pairs.length > 1;
+  const visibleGroups = showAll ? split.pairs : split.pairs.slice(0, 4);
   const visible = showAll ? filtered : filtered.slice(0, 5);
-  const hidden = filtered.length - visible.length;
+  const hidden = grouped ? split.pairs.length - visibleGroups.length : filtered.length - visible.length;
   const foodShown = showFood ? food : food.slice(0, 4);
   const pairLead = rows[0];
   const foodLead = food[0];
@@ -119,7 +159,9 @@ export function CheckBoard({
     pairLead && foodLead ? (rank(foodLead) > rank(pairLead) ? foodLead : pairLead) : (pairLead ?? foodLead);
   const leadSev: Severity | "none" = lead?.severity ?? "none";
   const foodOutranks = Boolean(pairLead && foodLead && rank(foodLead) > rank(pairLead));
+  const regimen = ids.length >= 3;
   const quietEnzymes = quietLine(ids, [...rows, ...food]);
+  const plain = lead ? plainLanguageSummary(lead) : "";
 
   return (
     <section className="space-y-3 rounded-xl bg-surface px-4 py-4 shadow-[var(--shadow-border)] sm:px-5 sm:py-5">
@@ -131,12 +173,15 @@ export function CheckBoard({
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
             {foodOutranks
-              ? "The main concern shown is a food or drink, listed below the pair. It is an educational map, not a dose tool; current product labeling and a qualified clinician guide care decisions."
+              ? "The main concern shown is a food or drink, listed below the names. It is an educational map, not a dose tool; current product labeling and a qualified clinician guide care decisions."
               : rows.length === 0
-              ? "No mapped interaction appeared for these names. This checker can miss risks, so no result does not mean a combination is safe."
-              : "Possible concern found. Start with the everyday-language summary; expand a row for clinical details and sources. These categories are not a personal prediction of harm."}
+                ? "No mapped interaction appeared for these names. This checker can miss risks, so no result does not mean a combination is safe."
+                : regimen
+                  ? "This is a regimen, not one pair. Pairs are ranked by the sharpest row, not by the order you added them. Start with the everyday-language summary. These categories are not a personal prediction of harm."
+                  : "Possible concern found. Start with the everyday-language summary; expand a row for clinical details and sources. These categories are not a personal prediction of harm."}
             {ids.length < 2 ? " Add another medicine or substance to compare." : ""}
           </p>
+          {plain ? <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fg">{plain}</p> : null}
         </div>
         <span
           className={cn(
@@ -182,35 +227,53 @@ export function CheckBoard({
         </>
       ) : null}
 
-      <div className="grid gap-2 sm:grid-cols-2">
-        {ids.map((id) => {
-          const drug = DRUG_BY_ID[id];
-          if (!drug) return null;
-          const roles = rolesFor(id, rows);
-          return (
-            <div key={id} className="rounded-md bg-bg-sunken px-3 py-2.5">
-              <p className="text-sm font-medium text-fg">{drug.name}</p>
-              <p className="text-[11px] text-muted">{drug.cls}</p>
-              {roles.length ? (
-                <ul className="mt-1.5 space-y-0.5">
-                  {roles.map((r, i) => (
-                    <li key={`${id}-${i}`} className="text-xs leading-relaxed text-fg">
-                      {r}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="mt-1.5 text-xs text-muted">No CYP or P-gp role on this map.</p>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      {!regimen ? <RoleGrid ids={ids} rows={rows} /> : null}
 
       {rows.length === 0 && quietEnzymes ? (
         <p className="text-xs leading-relaxed text-muted">{quietEnzymes}</p>
       ) : filtered.length === 0 && rows.length > 0 ? (
         <p className="rounded-md bg-bg-sunken px-3 py-3 text-sm text-muted">Nothing at this tier.</p>
+      ) : grouped ? (
+        <div className="space-y-4">
+          {visibleGroups.map((g) => (
+            <div key={g.key} className="space-y-2">
+              <div className="flex items-baseline justify-between gap-3">
+                <p className="text-sm font-medium text-fg">{g.title}</p>
+                <p className="shrink-0 font-mono text-[10px] uppercase tracking-wide text-subtle">
+                  {g.rows.length === 1 ? "1 row" : `${g.rows.length} rows`}
+                </p>
+              </div>
+              <ol className="space-y-2">
+                {g.rows.map((f) => (
+                  <CheckRow
+                    key={f.id}
+                    finding={f}
+                    open={openId === f.id}
+                    onToggle={() => setOpenId((id) => (id === f.id ? null : f.id))}
+                  />
+                ))}
+              </ol>
+            </div>
+          ))}
+          {split.desk.length > 0 ? (
+            <div className="space-y-2">
+              <div className="flex items-baseline justify-between gap-3">
+                <p className="text-sm font-medium text-fg">Across the desk</p>
+                <p className="shrink-0 font-mono text-[10px] uppercase tracking-wide text-subtle">Not one pair</p>
+              </div>
+              <ol className="space-y-2">
+                {split.desk.map((f) => (
+                  <CheckRow
+                    key={f.id}
+                    finding={f}
+                    open={openId === f.id}
+                    onToggle={() => setOpenId((id) => (id === f.id ? null : f.id))}
+                  />
+                ))}
+              </ol>
+            </div>
+          ) : null}
+        </div>
       ) : rows.length > 0 ? (
         <ol className="space-y-2">
           {visible.map((f) => (
@@ -230,11 +293,13 @@ export function CheckBoard({
           onClick={() => setShowAll(true)}
           className="h-11 rounded-full px-3 text-xs font-medium text-muted hover:text-fg"
         >
-          {hidden} more in this check
+          {hidden} more {grouped ? "pairs" : "in this check"}
         </button>
       ) : null}
 
       {rows.length > 0 && quietEnzymes ? <p className="text-xs leading-relaxed text-muted">{quietEnzymes}</p> : null}
+
+      {regimen ? <RoleGrid ids={ids} rows={rows} /> : null}
 
       {food.length > 0 ? (
         <div className="space-y-2 border-t border-border pt-3">
@@ -242,7 +307,7 @@ export function CheckBoard({
             <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Food, drink, alcohol</p>
             <p className="mt-1 text-xs leading-relaxed text-muted">
               Not on the desk. Same map, run against grapefruit, ethanol, dairy, St. John’s wort, leafy greens, coffee,
-              calcium, and tyramine foods. Add one only if you want it in the pair.
+              calcium, and tyramine foods. Add one only if you want it on the desk.
             </p>
           </div>
           <ol className="space-y-2">
@@ -312,6 +377,35 @@ export function CheckBoard({
   );
 }
 
+function RoleGrid({ ids, rows }: { ids: string[]; rows: Finding[] }) {
+  return (
+    <div className="grid gap-2 sm:grid-cols-2">
+      {ids.map((id) => {
+        const drug = DRUG_BY_ID[id];
+        if (!drug) return null;
+        const roles = rolesFor(id, rows);
+        return (
+          <div key={id} className="rounded-md bg-bg-sunken px-3 py-2.5">
+            <p className="text-sm font-medium text-fg">{drug.name}</p>
+            <p className="text-[11px] text-muted">{drug.cls}</p>
+            {roles.length ? (
+              <ul className="mt-1.5 space-y-0.5">
+                {roles.map((r, i) => (
+                  <li key={`${id}-${i}`} className="text-xs leading-relaxed text-fg">
+                    {r}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-1.5 text-xs text-muted">No CYP or P-gp role on this map.</p>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function actorLine(f: Finding) {
   const a = actors(f);
   if (!a.verb) return a.left;
@@ -330,7 +424,7 @@ function quietLine(ids: string[], findings: Finding[]) {
   }
   const hit = new Set<string>(findings.flatMap((f) => f.enzymes));
   const quiet = [...seen].filter((e) => !hit.has(e));
-  if (seen.size === 0) return "No CYP or P-gp role was on the map for this pair. Pharmacodynamic flags were still compared.";
+  if (seen.size === 0) return "No CYP or P-gp role was on the map for this list. Pharmacodynamic flags were still compared.";
   if (quiet.length === 0) return "";
   return `Also compared, no collision: ${quiet.join(", ")}.`;
 }

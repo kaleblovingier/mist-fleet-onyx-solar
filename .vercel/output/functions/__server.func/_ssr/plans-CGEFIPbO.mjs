@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/plans-DkYlOxq4.js
+//#region node_modules/.nitro/vite/services/ssr/assets/plans-CGEFIPbO.js
 /** Public pay / write lines — the operator asked these onto the desk. */
 var OPERATOR = {
 	name: "Kaleb Lovingier",
@@ -35,8 +35,8 @@ var PAY_RAILS = [
 	}
 ];
 var SITE = {
-	repo: "https://github.com/kaleblovingier/mist-fleet-onyx-solar",
-	pages: "https://kaleblovingier.github.io/mist-fleet-onyx-solar/",
+	repo: "https://github.com/kaleblovingier/FirstPassInteractions",
+	pages: "https://kaleblovingier.github.io/FirstPassInteractions/",
 	gamma: "https://gamma.app/docs/c1sxd9i8iyv80eq",
 	gammaCard: "https://gamma.app/docs/h9grlpif6t8ogmt",
 	/** Live desk. Prefer VITE_PUBLIC_URL; else the Vercel desk — never the bare repo. */

@@ -3,7 +3,7 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { v as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as TSS_SERVER_FUNCTION, r as getServerFnById, t as createServerFn } from "./ssr.mjs";
 import { r as CONNECTOR_TOKEN_READY_EVENT } from "./types-DXXiBr9d.mjs";
-import { _ as priceFor, a as PLANS, b as tweetFor, c as TRY_THREE, d as fulfillKeys, f as invoiceText, g as payClose, h as maxDrugs, i as PAY_RAILS, l as buyerDm, m as launchTweet, n as COMMERCE, o as PLAN_BY_ID, p as launchPosts, r as OPERATOR, s as SITE, t as BUYERS, u as fulfillKey, v as requestLicense, y as salesDm } from "./plans-DkYlOxq4.mjs";
+import { _ as priceFor, a as PLANS, b as tweetFor, c as TRY_THREE, d as fulfillKeys, f as invoiceText, g as payClose, h as maxDrugs, i as PAY_RAILS, l as buyerDm, m as launchTweet, n as COMMERCE, o as PLAN_BY_ID, p as launchPosts, r as OPERATOR, s as SITE, t as BUYERS, u as fulfillKey, v as requestLicense, y as salesDm } from "./plans-CGEFIPbO.mjs";
 import { C as searchCites, D as tdmOnDesk, E as tdmHostNote, S as pubmedUrl, T as stahlFor, _ as hasStahl, a as DRUGS, b as pgxFor, c as citesFor, d as drugbankUrl, f as familyOf, g as hasPgx, h as hasClinic, i as DRUGBANK, l as clinicFor, m as hasCite, n as CITE_TAGS, o as DRUG_BY_ID, p as fentanylPatchMme, r as CLINIC, s as FAMILIES, t as CITES, u as drugbankSearchUrl, v as methadoneFactor, w as searchDrugs, x as pubmedSearchUrl, y as mmeOnDesk } from "./catalog-DDHUkv_i.mjs";
 import { a as comboOnDesk, d as wikiResourcesFor, n as PW_STATIC_RESOURCES, o as comboTone, t as PW_PRINCIPLES, u as wikiOnDesk } from "./psychonaut-lk1QLUaU.mjs";
 import { _ as ChevronDown, a as Share2, c as Plus, d as KeyRound, f as ExternalLink, g as ClipboardCopy, h as Copy, i as SquareCheckBig, l as Lock, m as CreditCard, o as Search, p as Download, r as Square, s as RotateCcw, t as X, u as LoaderCircle, v as Check } from "../_libs/lucide-react.mjs";
@@ -12,7 +12,7 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as Slot } from "../_libs/radix-ui__react-slot.mjs";
 import { a as CartesianGrid, i as Line, n as YAxis, o as ResponsiveContainer, r as XAxis, s as Tooltip, t as LineChart } from "../_libs/recharts+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-Bg5zdB6Y.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CUx2HQe-.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function isLoginRequired(result) {
@@ -6921,12 +6921,12 @@ function Badge({ className, tone, ...props }) {
 *  Not FDA-cleared. Not FDA-approved. The Prescribing Information governs. */
 var SOFTWARE = {
 	name: "FirstPass",
-	version: "1.9.0",
-	released: "2026-09-24",
+	version: "1.10.0",
+	released: "2026-09-25",
 	manufacturer: "Kaleb Lovingier",
 	email: "kaleblovingier@gmail.com",
 	phone: "360-707-8923",
-	udi: "FP-SW-1.9.0"
+	udi: "FP-SW-1.10.0"
 };
 var INTENDED_USE = `FirstPass is clinical decision support software intended for use by licensed healthcare professionals to display mapped cytochrome P450 and pharmacodynamic interaction information, FDA-label excerpts (OpenFDA / DailyMed), published scale scores, labeled dose ranges and dose-caps, and cited literature so the healthcare professional can independently review the basis of any recommendation before acting. This desk may be used in educational harm-reduction and recreational-safety review for licensed healthcare professionals and trained safety staff, including analysis of stimulant, sedative, dissociative, and street-supply combinations. Where local drug-checking services are available, purity and content testing services are complementary harm-reduction tools; they are not urine testing, not patient-directed dosing guidance, and not a substitute for the relevant FDA-approved Prescribing Information or local protocols. It is not intended for patient self-treatment, recreational dosing, or direct medical decision-making without independent review of the relevant FDA-approved Prescribing Information and local protocols. It is not intended to diagnose, treat, mitigate, or prevent disease, to generate a prescription, or to replace the FDA-approved Prescribing Information. Displayed dose ranges paraphrase FDA-approved labeling; a user-entered milligram is checked against those rails. The desk does not pick a milligram.`;
 var INDICATIONS = [
@@ -6938,6 +6938,7 @@ var INDICATIONS = [
 	"Displaying harm-reduction teaching (overdose response, test-strip limits, never-use-alone, recovery position, DanceSafe reagent instructions, PsychonautWiki / TripSit / SAMHSA / CDC paraphrases, and live wiki intros with dosage and route-how-to stripped) so the healthcare professional can independently review the basis. Not a protocol and not a milligram.",
 	"Leading a pair check with the perpetrator, the victim, the direction of effect, the enzyme or receptor, and a source that can be opened. Contraindicated is its own tier, above major. The check does not pick a milligram.",
 	"Showing food, drink, and alcohol rows for the names already on the desk, and pregnancy, CKD, older-adult, and daily-smoke rows labeled as a different host. Those rows are the same map. They are not a clearance and not a milligram.",
+	"Ranking a regimen into pairs by the sharpest collision, and leading with a plain-language sentence of that row. The sentence does not pick a milligram or a next step.",
 	"Displaying study cards (rounds, named labeled pairs, formulary CYP roles, FDA fold-change grades, and mechanism cards from the selected pair) so a healthcare trainee can rehearse the basis, mark misses, and review them. Not an exam key and not a milligram.",
 	"Linking CPIC / ClinPGx tables, PubMed PMIDs, DrugBank accessions, NIH RxClass, LactMed paraphrases, and ClinicalTrials.gov records for independent review."
 ];
@@ -7586,6 +7587,7 @@ function huddleText(brief) {
 function DrugSearch() {
 	const selected = useDesk((s) => s.selected);
 	const add = useDesk((s) => s.add);
+	const setView = useDesk((s) => s.setView);
 	const plan = usePlan();
 	const cap = maxDrugs(plan);
 	const [q, setQ] = (0, import_react.useState)("");
@@ -7622,14 +7624,14 @@ function DrugSearch() {
 		setOpen(false);
 		inputRef.current?.focus();
 	}
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		ref: rootRef,
 		className: "relative",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 				className: "sr-only",
 				htmlFor: "drug-search",
-				children: "Search drugs"
+				children: "Search medicines and other substances"
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-subtle" }),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -7642,6 +7644,11 @@ function DrugSearch() {
 					setOpen(true);
 				},
 				onFocus: () => setOpen(true),
+				role: "combobox",
+				"aria-autocomplete": "list",
+				"aria-expanded": open && !full && (results.length > 0 || Boolean(q.trim())),
+				"aria-controls": "drug-search-results",
+				"aria-activedescendant": open && results[active] ? `drug-option-${results[active].id}` : void 0,
 				onKeyDown: (e) => {
 					if (e.key === "ArrowDown") {
 						e.preventDefault();
@@ -7658,7 +7665,7 @@ function DrugSearch() {
 						e.target.blur();
 					}
 				},
-				placeholder: full ? "Regimen full · remove a drug to add another" : selected.length === 1 ? `Second drug to check against ${DRUG_BY_ID[selected[0]]?.name ?? "this"}` : mat ? "Paxlovid, Phenergan, UDS, COWS…" : "Check a pair — simvastatin, clarithromycin…",
+				placeholder: full ? `${cap} items added · remove one to add another` : selected.length === 1 ? "Search another item to compare" : mat ? "Search medicines or substances" : "Search a medicine or substance",
 				className: "h-12 w-full rounded-lg bg-surface-2 pl-10 pr-10 text-sm text-fg shadow-[var(--shadow-border)] placeholder:text-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 disabled:opacity-60",
 				autoComplete: "off",
 				spellCheck: false
@@ -7666,7 +7673,7 @@ function DrugSearch() {
 			q ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 				type: "button",
 				"aria-label": "Clear search",
-				className: "absolute right-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-sm text-subtle hover:bg-bg-sunken hover:text-fg",
+				className: "absolute right-1 top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-sm text-subtle hover:bg-bg-sunken hover:text-fg",
 				onClick: () => {
 					setQ("");
 					inputRef.current?.focus();
@@ -7677,9 +7684,12 @@ function DrugSearch() {
 				children: "/"
 			}),
 			open && results.length > 0 && !full ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+				id: "drug-search-results",
 				role: "listbox",
+				"aria-label": "Matching medicines and substances",
 				className: "absolute z-30 mt-2 max-h-80 w-full overflow-auto rounded-lg bg-surface-2 py-1 shadow-[var(--shadow-border)]",
 				children: results.map((drug, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					id: `drug-option-${drug.id}`,
 					type: "button",
 					role: "option",
 					"aria-selected": i === active,
@@ -7708,13 +7718,36 @@ function DrugSearch() {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "shrink-0 font-mono text-[10px] uppercase tracking-wide text-subtle",
-							children: drug.enzymes.filter((e) => e.kind !== "substrate").slice(0, 2).map((e) => e.enzyme.replace("CYP", "")).join(" ") || drug.enzymes[0]?.enzyme.replace("CYP", "") || "PD"
+							title: "Mapped enzyme involvement; see the result details for an explanation.",
+							children: drug.enzymes.filter((e) => e.kind !== "substrate").slice(0, 2).map((e) => e.enzyme).join(" ") || drug.enzymes[0]?.enzyme || (drug.kind === "drug" ? "Medicine" : drug.kind)
 						})
 					]
 				}) }, drug.id))
+			}) : null,
+			open && !full && q.trim() && results.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				role: "status",
+				className: "absolute z-30 mt-2 w-full rounded-lg bg-surface-2 px-4 py-3 text-sm leading-relaxed text-muted shadow-[var(--shadow-border)]",
+				children: [
+					"No match for “",
+					q.trim(),
+					"”. Try a generic name, brand, or common name, or check the spelling.",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "mt-1 block text-xs",
+						children: "No match does not mean an interaction is absent or a combination is safe."
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						className: "mt-2 min-h-10 rounded-md px-2 text-sm font-medium text-accent underline underline-offset-2 hover:bg-accent-soft",
+						onClick: () => setView("library"),
+						children: "Browse the full library"
+					})
+				]
 			}) : null
 		]
-	});
+	}), selected.length < 2 && !q ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		className: "mt-2 px-1 text-xs leading-relaxed text-muted",
+		children: "Search by generic, brand, or common name. Add two or more items to see mapped pair findings."
+	}) : null] });
 }
 /** Independent-review basis for a collision — CDS criterion 4. */
 var BOXED = {
@@ -7899,6 +7932,10 @@ function FindingList({ findings }) {
 					}, f))
 				})]
 			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs leading-relaxed text-muted",
+				children: "Possible concerns in the selected items. Severity labels describe this checker’s categories, not a personal prediction of harm."
+			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "flex flex-wrap gap-1",
 				children: KIND_FILTERS.map((k) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
@@ -7955,7 +7992,7 @@ function FindingCard({ finding }) {
 						className: "rounded-md bg-bg-sunken px-3 py-2.5",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 							className: "font-mono text-[10px] uppercase tracking-wide text-muted",
-							children: "Plain English"
+							children: "Everyday-language summary"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 							className: "mt-2 text-sm leading-relaxed text-fg",
 							children: plainSummary
@@ -7965,7 +8002,7 @@ function FindingCard({ finding }) {
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "font-mono text-[10px] uppercase tracking-wide text-muted",
-								children: "Clinician / student detail"
+								children: "Clinical detail"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "mt-2 text-sm leading-relaxed text-fg",
@@ -7982,7 +8019,7 @@ function FindingCard({ finding }) {
 					className: "space-y-2 rounded-md bg-bg-sunken px-3 py-2.5",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "font-mono text-[10px] uppercase tracking-wide text-muted",
-						children: "Independent review"
+						children: "Sources to check"
 					}), basisFor(finding).map((b) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 							className: "text-xs font-medium text-fg",
@@ -8184,6 +8221,41 @@ function rolesFor(id, findings) {
 	const relevant = hit.size ? drug.enzymes.filter((e) => hit.has(e.enzyme)) : drug.enzymes;
 	return (relevant.length ? relevant : drug.enzymes).slice(0, 4).map(roleText);
 }
+function uniqueIds(f) {
+	return [...new Set(f.drugIds.filter((id) => DRUG_BY_ID[id]))];
+}
+function pairKeyOf(f) {
+	const ids = uniqueIds(f);
+	if (ids.length === 2) return [...ids].sort().join("|");
+	return "";
+}
+function groupTitle(f) {
+	const a = actors(f);
+	if (a.verb && a.right) return `${a.left} · ${a.right}`;
+	return uniqueIds(f).map((id) => DRUG_BY_ID[id]?.name ?? id).join(" · ") || f.headline;
+}
+function regimenGroups(findings) {
+	const map = /* @__PURE__ */ new Map();
+	const desk = [];
+	for (const f of findings) {
+		const key = pairKeyOf(f);
+		if (!key) {
+			desk.push(f);
+			continue;
+		}
+		const list = map.get(key) ?? [];
+		list.push(f);
+		map.set(key, list);
+	}
+	return {
+		pairs: [...map.entries()].map(([key, rows]) => ({
+			key,
+			title: groupTitle(rows[0]),
+			rows: ordered(rows)
+		})).sort((a, b) => rank(b.rows[0]) - rank(a.rows[0]) || a.title.localeCompare(b.title)),
+		desk: ordered(desk)
+	};
+}
 function actors(f) {
 	const names = f.drugIds.map((id) => DRUG_BY_ID[id]?.name ?? id);
 	const induces = f.tags.includes("inducer");
@@ -8202,11 +8274,14 @@ function actors(f) {
 		verb: "shares a substrate with",
 		right: names[1]
 	};
-	if (f.tags.includes("phenoconversion") && names.length >= 2) return {
-		left: names[0],
-		verb: "phenoconverts",
-		right: names.slice(1).join(" · ")
-	};
+	if (f.tags.includes("phenoconversion") && names.length >= 2) {
+		const rest = [...new Set(names.slice(1))].filter((n) => n !== names[0]);
+		return {
+			left: names[0],
+			verb: "phenoconverts",
+			right: (rest.length ? rest : [...new Set(names.slice(1))]).join(" · ")
+		};
+	}
 	if (f.kind === "geno" && names[0]) return {
 		left: f.enzymes[0] ? `${f.enzymes[0]} phenotype` : "Phenotype",
 		verb: "rewrites",
@@ -8249,15 +8324,20 @@ function CheckBoard({ ids, findings, counts, host }) {
 		setOpenId(rows[0]?.id ?? food[0]?.id ?? null);
 	}
 	const filtered = tier === "all" ? rows : rows.filter((f) => f.severity === tier);
+	const split = regimenGroups(filtered);
+	const grouped = ids.length >= 3 && split.pairs.length > 1;
+	const visibleGroups = showAll ? split.pairs : split.pairs.slice(0, 4);
 	const visible = showAll ? filtered : filtered.slice(0, 5);
-	const hidden = filtered.length - visible.length;
+	const hidden = grouped ? split.pairs.length - visibleGroups.length : filtered.length - visible.length;
 	const foodShown = showFood ? food : food.slice(0, 4);
 	const pairLead = rows[0];
 	const foodLead = food[0];
 	const lead = pairLead && foodLead ? rank(foodLead) > rank(pairLead) ? foodLead : pairLead : pairLead ?? foodLead;
 	const leadSev = lead?.severity ?? "none";
 	const foodOutranks = Boolean(pairLead && foodLead && rank(foodLead) > rank(pairLead));
+	const regimen = ids.length >= 3;
 	const quietEnzymes = quietLine(ids, [...rows, ...food]);
+	const plain = lead ? plainLanguageSummary(lead) : "";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 		className: "space-y-3 rounded-xl bg-surface px-4 py-4 shadow-[var(--shadow-border)] sm:px-5 sm:py-5",
 		children: [
@@ -8276,8 +8356,12 @@ function CheckBoard({ ids, findings, counts, host }) {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 							className: "mt-2 max-w-2xl text-sm leading-relaxed text-muted",
-							children: [foodOutranks ? "The sharper row is food or drink, not the two names. It sits under the pair and is not on the desk. Not a milligram. If the label disagrees, the label wins." : rows.length === 0 ? "No collision between the names on the desk. Food, drink, and a different host are below — same map, not a second list. That is not a clearance." : "Who acts, who is affected, and which way it moves. Food and drink for this list sit under the pair, even when they are not on the desk. Contraindicated is its own tier. Not a milligram. If the label disagrees, the label wins.", ids.length < 2 ? " Add a second drug when you have one." : ""]
-						})
+							children: [foodOutranks ? "The main concern shown is a food or drink, listed below the names. It is an educational map, not a dose tool; current product labeling and a qualified clinician guide care decisions." : rows.length === 0 ? "No mapped interaction appeared for these names. This checker can miss risks, so no result does not mean a combination is safe." : regimen ? "This is a regimen, not one pair. Pairs are ranked by the sharpest row, not by the order you added them. Start with the everyday-language summary. These categories are not a personal prediction of harm." : "Possible concern found. Start with the everyday-language summary; expand a row for clinical details and sources. These categories are not a personal prediction of harm.", ids.length < 2 ? " Add another medicine or substance to compare." : ""]
+						}),
+						plain ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-2 max-w-2xl text-sm leading-relaxed text-fg",
+							children: plain
+						}) : null
 					]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 					className: cn("inline-flex min-h-10 items-center justify-center rounded-md px-3 font-mono text-[11px] font-medium uppercase tracking-wider", severitySurface(leadSev)),
@@ -8288,7 +8372,10 @@ function CheckBoard({ ids, findings, counts, host }) {
 				className: "rounded-md bg-bg-sunken px-3 py-2 text-sm leading-relaxed text-fg",
 				children: [shelf, ". Same shelf is not a collision by itself."]
 			}) : null,
-			rows.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			rows.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs leading-relaxed text-muted",
+				children: "Severity labels organize the checker’s findings; they do not estimate an individual’s risk."
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "flex flex-wrap gap-1",
 				children: TIERS.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					type: "button",
@@ -8299,44 +8386,58 @@ function CheckBoard({ ids, findings, counts, host }) {
 					className: cn("h-10 rounded-full px-3 text-xs font-medium", tier === t ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg"),
 					children: t === "all" ? `All ${rows.length}` : `${SEVERITY_LABEL[t]} ${counts[t]}`
 				}, t))
+			})] }) : null,
+			!regimen ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RoleGrid, {
+				ids,
+				rows
 			}) : null,
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "grid gap-2 sm:grid-cols-2",
-				children: ids.map((id) => {
-					const drug = DRUG_BY_ID[id];
-					if (!drug) return null;
-					const roles = rolesFor(id, rows);
-					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "rounded-md bg-bg-sunken px-3 py-2.5",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-sm font-medium text-fg",
-								children: drug.name
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-[11px] text-muted",
-								children: drug.cls
-							}),
-							roles.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
-								className: "mt-1.5 space-y-0.5",
-								children: roles.map((r, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-									className: "text-xs leading-relaxed text-fg",
-									children: r
-								}, `${id}-${i}`))
-							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "mt-1.5 text-xs text-muted",
-								children: "No CYP or P-gp role on this map."
-							})
-						]
-					}, id);
-				})
-			}),
 			rows.length === 0 && quietEnzymes ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-xs leading-relaxed text-muted",
 				children: quietEnzymes
 			}) : filtered.length === 0 && rows.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "rounded-md bg-bg-sunken px-3 py-3 text-sm text-muted",
 				children: "Nothing at this tier."
+			}) : grouped ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "space-y-4",
+				children: [visibleGroups.map((g) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-baseline justify-between gap-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm font-medium text-fg",
+							children: g.title
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "shrink-0 font-mono text-[10px] uppercase tracking-wide text-subtle",
+							children: g.rows.length === 1 ? "1 row" : `${g.rows.length} rows`
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
+						className: "space-y-2",
+						children: g.rows.map((f) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckRow, {
+							finding: f,
+							open: openId === f.id,
+							onToggle: () => setOpenId((id) => id === f.id ? null : f.id)
+						}, f.id))
+					})]
+				}, g.key)), split.desk.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-baseline justify-between gap-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm font-medium text-fg",
+							children: "Across the desk"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "shrink-0 font-mono text-[10px] uppercase tracking-wide text-subtle",
+							children: "Not one pair"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
+						className: "space-y-2",
+						children: split.desk.map((f) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckRow, {
+							finding: f,
+							open: openId === f.id,
+							onToggle: () => setOpenId((id) => id === f.id ? null : f.id)
+						}, f.id))
+					})]
+				}) : null]
 			}) : rows.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
 				className: "space-y-2",
 				children: visible.map((f) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckRow, {
@@ -8349,11 +8450,19 @@ function CheckBoard({ ids, findings, counts, host }) {
 				type: "button",
 				onClick: () => setShowAll(true),
 				className: "h-11 rounded-full px-3 text-xs font-medium text-muted hover:text-fg",
-				children: [hidden, " more in this check"]
+				children: [
+					hidden,
+					" more ",
+					grouped ? "pairs" : "in this check"
+				]
 			}) : null,
 			rows.length > 0 && quietEnzymes ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-xs leading-relaxed text-muted",
 				children: quietEnzymes
+			}) : null,
+			regimen ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RoleGrid, {
+				ids,
+				rows
 			}) : null,
 			food.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "space-y-2 border-t border-border pt-3",
@@ -8363,7 +8472,7 @@ function CheckBoard({ ids, findings, counts, host }) {
 						children: "Food, drink, alcohol"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "mt-1 text-xs leading-relaxed text-muted",
-						children: "Not on the desk. Same map, run against grapefruit, ethanol, dairy, St. John’s wort, leafy greens, coffee, calcium, and tyramine foods. Add one only if you want it in the pair."
+						children: "Not on the desk. Same map, run against grapefruit, ethanol, dairy, St. John’s wort, leafy greens, coffee, calcium, and tyramine foods. Add one only if you want it on the desk."
 					})] }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
 						className: "space-y-2",
@@ -8416,6 +8525,39 @@ function CheckBoard({ ids, findings, counts, host }) {
 		]
 	});
 }
+function RoleGrid({ ids, rows }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "grid gap-2 sm:grid-cols-2",
+		children: ids.map((id) => {
+			const drug = DRUG_BY_ID[id];
+			if (!drug) return null;
+			const roles = rolesFor(id, rows);
+			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "rounded-md bg-bg-sunken px-3 py-2.5",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-sm font-medium text-fg",
+						children: drug.name
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-[11px] text-muted",
+						children: drug.cls
+					}),
+					roles.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+						className: "mt-1.5 space-y-0.5",
+						children: roles.map((r, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
+							className: "text-xs leading-relaxed text-fg",
+							children: r
+						}, `${id}-${i}`))
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1.5 text-xs text-muted",
+						children: "No CYP or P-gp role on this map."
+					})
+				]
+			}, id);
+		})
+	});
+}
 function actorLine(f) {
 	const a = actors(f);
 	if (!a.verb) return a.left;
@@ -8430,7 +8572,7 @@ function quietLine(ids, findings) {
 	for (const id of ids) for (const e of DRUG_BY_ID[id]?.enzymes ?? []) seen.add(e.enzyme);
 	const hit = new Set(findings.flatMap((f) => f.enzymes));
 	const quiet = [...seen].filter((e) => !hit.has(e));
-	if (seen.size === 0) return "No CYP or P-gp role was on the map for this pair. Pharmacodynamic flags were still compared.";
+	if (seen.size === 0) return "No CYP or P-gp role was on the map for this list. Pharmacodynamic flags were still compared.";
 	if (quiet.length === 0) return "";
 	return `Also compared, no collision: ${quiet.join(", ")}.`;
 }
@@ -8467,9 +8609,9 @@ function CheckRow({ finding, open, onToggle, action }) {
 								a.right
 							]
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-							className: "mt-0.5 block text-xs text-muted",
-							children: [finding.effect ? `${finding.effect} · ` : "", finding.mechanism]
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "mt-1 block text-xs leading-relaxed text-muted",
+							children: plainLanguageSummary(finding)
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 							className: "mt-1 flex flex-wrap gap-1.5",
@@ -8496,8 +8638,24 @@ function CheckRow({ finding, open, onToggle, action }) {
 			className: "space-y-2 border-t border-border px-3 py-3",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "font-mono text-[10px] uppercase tracking-wide text-muted",
+					children: "Clinical detail"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "text-sm leading-relaxed text-fg",
 					children: finding.clinical
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "text-xs leading-relaxed text-muted",
+					children: [
+						"Mechanism: ",
+						finding.mechanism,
+						finding.effect ? ` · ${finding.effect}` : ""
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "font-mono text-[10px] uppercase tracking-wide text-muted",
+					children: "Sources to check"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "flex flex-wrap gap-2",
@@ -21663,6 +21821,23 @@ function DeskApp() {
 	const remove = useDesk((s) => s.remove);
 	const clear = useDesk((s) => s.clear);
 	const load = useDesk((s) => s.load);
+	(0, import_react.useEffect)(() => {
+		if (!hydrated) return;
+		const url = new URL(window.location.href);
+		const sampleId = url.searchParams.get("sample");
+		const sample = SAMPLE_REGIMENS.find((item) => item.id === sampleId);
+		if (!sample) return;
+		load(sample.drugIds, {
+			phenotypes: sample.phenotypes,
+			smoking: sample.smoking,
+			ketamineRoute: sample.ketamineRoute,
+			cannabisRoute: sample.cannabisRoute,
+			alcohol: sample.alcohol,
+			doses: sample.doses
+		});
+		url.searchParams.delete("sample");
+		window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
+	}, [hydrated, load]);
 	const phenotypes = useDesk((s) => s.phenotypes);
 	const smoking = useDesk((s) => s.smoking);
 	const ketamineRoute = useDesk((s) => s.ketamineRoute);
@@ -21752,8 +21927,8 @@ function DeskApp() {
 									children: lifetime ? "founding" : plan
 								}) : null]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted",
-								children: "CYP450 desk · not FDA-cleared"
+								className: "mt-1 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.12em] text-muted",
+								children: "CYP450 · not FDA-cleared"
 							})] })]
 						}), hydrated && !pro ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 							size: "sm",
@@ -21762,22 +21937,24 @@ function DeskApp() {
 							children: "Unlock"
 						}) : null]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex min-w-0 items-center gap-2",
+						className: "flex w-full min-w-0 items-center gap-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
-							className: "flex min-w-0 flex-1 items-center gap-1 overflow-x-auto rounded-full bg-bg-sunken p-1 sm:flex-none",
+							"aria-label": "Main navigation",
+							className: "flex w-full flex-wrap items-center justify-center gap-1 rounded-xl bg-bg-sunken p-1 sm:w-auto sm:flex-nowrap sm:justify-start sm:rounded-full",
 							children: [
 								["desk", "Desk"],
-								["library", "Materia"],
-								["cites", "Cites"],
-								["atlas", "Atlas"],
-								["study", "Study"],
-								["rounds", "Rounds"],
-								["label", "IFU"],
-								["plans", "Pro"]
+								["library", "Library"],
+								["cites", "Sources"],
+								["atlas", "CYP map"],
+								["study", "Learn"],
+								["rounds", "Cases"],
+								["label", "Safety"],
+								["plans", "Plans"]
 							].map(([id, label]) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								type: "button",
 								onClick: () => setView(id),
-								className: cn("h-9 shrink-0 rounded-full px-2.5 text-xs font-medium sm:px-4 sm:text-sm", view === id ? "bg-surface-2 text-fg shadow-[var(--shadow-border)]" : "text-muted hover:text-fg"),
+								"aria-current": view === id ? "page" : void 0,
+								className: cn("h-11 shrink-0 rounded-full px-2 text-xs font-medium sm:h-9 sm:px-4 sm:text-sm", view === id ? "bg-surface-2 text-fg shadow-[var(--shadow-border)]" : "text-muted hover:text-fg"),
 								children: label
 							}, id))
 						}), hydrated && !pro ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
@@ -21794,23 +21971,22 @@ function DeskApp() {
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-						className: "text-sm leading-relaxed text-fg",
-						children: [
-							"For licensed healthcare professionals. ",
-							SOFTWARE.name,
-							" is not FDA-cleared. The Prescribing Information is the authority — independently review the basis of every recommendation before acting. If local drug-checking services are available, use them for purity and content testing; they are not urine testing and not a dose tool."
-						]
+						className: "max-w-3xl text-sm leading-relaxed text-fg",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "font-medium",
+							children: "For clinicians and supervised learning."
+						}), " Not for personal treatment, dose changes, or deciding whether to combine substances. This educational checker can miss risks and cannot test what is in a product. If someone is seriously unwell or may be overdosing, contact local emergency services or a poison center now; do not wait for this checker."]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex shrink-0 flex-wrap gap-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 							variant: "secondary",
 							size: "sm",
 							onClick: () => setView("label"),
-							children: "Open IFU"
+							children: "Safety notes"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 							size: "sm",
 							onClick: ackHcp,
-							children: "I understand"
+							children: "Continue"
 						})]
 					})]
 				})
@@ -21840,7 +22016,7 @@ function DeskApp() {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
 				className: "mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6",
 				children: view === "plans" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlansPage, {}) : view === "foundry" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Foundry, {}) : view === "rounds" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RoundsPage, {}) : view === "study" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StudyPage, {}) : view === "cites" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CitesPage, {}) : view === "label" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LabelPage, {}) : view === "atlas" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EnzymeAtlas, {}) : view === "library" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Formulary, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "grid gap-5 lg:grid-cols-[minmax(0,1fr)_260px]",
+					className: "grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_260px]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "space-y-4",
 						children: [
@@ -22073,10 +22249,10 @@ function EmptyState({ onLoad, ready }) {
 				className: "absolute inset-x-0 bottom-0 bg-ink px-5 py-4 sm:px-8 sm:py-5",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "font-mono text-[11px] uppercase tracking-[0.2em] text-accent-fg/70",
-					children: "Psychoactive interaction desk"
+					children: "Educational interaction checker"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 					className: "mt-2 max-w-xl font-serif text-3xl leading-tight tracking-tight text-accent-fg sm:text-4xl",
-					children: "Map ketamine, entactogens, and the rest of the stack."
+					children: "Explore possible medicine and substance interactions."
 				})]
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -22084,8 +22260,40 @@ function EmptyState({ onLoad, ready }) {
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "max-w-xl text-sm leading-relaxed text-muted",
-					children: lane === "mat" ? "Built for the dosing window. Put methadone, a film, or Vivitrol on the desk, then tap today's extra. OTP tab: occupancy vs COWS, Vivitrol washout, 2024 take-homes, naloxone, ECG, ID screens. The briefing writes watch / counsel / consider. Live PI sits under it. Not a treatment order — the label wins." : "FirstPass is clinical decision support for licensed healthcare professionals and educational harm-reduction review — CYP450 maps, FDA-label excerpts, and published scales to independently assess recreational-safety and street-supply risks. If local drug-checking services are available, use them for purity and content testing; they are not urine testing, not a dose tool, and not a substitute for the label. It is not FDA-cleared, not patient-directed, and not a dose or self-treatment tool. The Prescribing Information is the authority. Up to five drugs stay free. Open IFU for intended use."
+					children: lane === "mat" ? "Explore educational examples involving opioid-treatment medicines and other substances. These notes are not a treatment plan; a qualified clinician and current product labeling must guide care." : "Add two or more medicines, supplements, foods, or other substances to see possible concerns in everyday language, with clinical details and sources for review. This is a learning aid for clinicians and supervised education—not personal medical advice. It can miss interactions; no result does not mean a combination is safe."
 				}),
+				lane !== "mat" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
+					className: "mt-5 grid gap-3 sm:grid-cols-3",
+					children: [
+						[
+							"1",
+							"Search",
+							"Use a generic name, brand, or common name."
+						],
+						[
+							"2",
+							"Add another",
+							"Choose a second item to check the pair."
+						],
+						[
+							"3",
+							"Review",
+							"Start with the everyday-language summary; open sources for context."
+						]
+					].map(([step, title, detail]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+						className: "flex gap-3 rounded-lg bg-bg px-3 py-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-soft font-mono text-xs text-accent",
+							children: step
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "block text-sm font-medium text-fg",
+							children: title
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "mt-0.5 block text-xs leading-relaxed text-muted",
+							children: detail
+						})] })]
+					}, step))
+				}) : null,
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "mt-4 flex flex-wrap gap-2",
 					children: [
@@ -22116,7 +22324,7 @@ function EmptyState({ onLoad, ready }) {
 							variant: "secondary",
 							size: "sm",
 							onClick: () => setView("library"),
-							children: "Browse the materia"
+							children: "Browse drug library"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 							variant: "secondary",
@@ -22187,8 +22395,18 @@ function EmptyState({ onLoad, ready }) {
 						children: l.label
 					}, l.id))
 				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-6",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						className: "font-serif text-lg tracking-tight text-fg",
+						children: lane === "all" ? "Try an example" : `Examples: ${SAMPLE_LANES.find((item) => item.id === lane)?.label ?? lane}`
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 text-xs leading-relaxed text-muted",
+						children: "Examples load into the checker so you can see how its summaries and source links work."
+					})]
+				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
-					className: "mt-4 grid gap-2 sm:grid-cols-2",
+					className: "mt-3 grid gap-2 sm:grid-cols-2",
 					children: shown.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 						type: "button",
 						disabled: !ready,
@@ -22580,9 +22798,9 @@ function Disclaimer() {
 			SOFTWARE.name,
 			" ",
 			SOFTWARE.version,
-			" is clinical decision support for licensed healthcare professionals and educational harm-reduction / recreational-safety review. ",
+			" is an educational clinical decision-support aid for clinicians and supervised learning. ",
 			NOT_CLEARED,
-			" The FDA-approved Prescribing Information is the authority. Every collision names its basis (FDA boxed warning, PI excerpt, CPIC, PMID, or desk map) so you can independently review it. Not a dose, not a chart, not TDM, not a patient-directed treatment tool, and not a substitute for professional judgment. Street-supply rows are teaching maps. Always open DailyMed before acting."
+			" It can miss risks; an empty result is not proof that a combination is safe. It does not identify product contents, diagnose, or tell anyone what to start, stop, or change. For care decisions, consult a qualified clinician and current FDA-approved labeling. Street-supply entries are teaching examples, not product identification."
 		]
 	});
 }
