@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
 import { searchDrugs } from "@/lib/drugs/catalog";
+import { availableQuickChips } from "@/lib/drugs/quick-chips";
 import { isMatDesk } from "@/lib/drugs/window";
 import { plateForDrug } from "@/lib/drugs/visuals";
 import { useDesk, usePlan } from "@/lib/drugs/store";
@@ -194,7 +195,30 @@ export function DrugSearch() {
           </p>
         ) : null}
       </div>
-      {selected.length < 2 && !q ? (
+      {!q && !full ? (
+        <div className="mt-2 space-y-2 px-1">
+          {selected.length < 2 ? (
+            <p className="text-xs leading-relaxed text-muted">
+              Press <kbd className="rounded-xs bg-bg-sunken px-1 font-mono text-[10px]">/</kbd> to focus.
+              Search a name, or tap a starter below — add two items to see mapped pair findings.
+            </p>
+          ) : null}
+          <div className="flex flex-wrap gap-1.5" aria-label="Quick-add teaching starters">
+            {availableQuickChips(selected).map((chip) => (
+              <button
+                key={chip.id}
+                type="button"
+                title={chip.hint}
+                onClick={() => pick(chip.id)}
+                className="h-9 rounded-full bg-bg-sunken px-3 text-xs font-medium text-fg hover:bg-accent-soft"
+              >
+                {chip.label}
+                <span className="ml-1.5 text-[10px] font-normal text-muted">{chip.hint}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : selected.length < 2 && !q ? (
         <p className="mt-2 px-1 text-xs leading-relaxed text-muted">
           Search by generic, brand, or common name. Add two or more items to see mapped pair findings.
         </p>

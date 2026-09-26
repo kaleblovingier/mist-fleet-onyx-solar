@@ -3,6 +3,7 @@ import { Copy, Check, RotateCcw, Download, Share2 } from "lucide-react";
 import { DRUG_BY_ID, DRUGS } from "@/lib/drugs/catalog";
 import { analyze } from "@/lib/drugs/engine";
 import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
+import { plainWordsReport } from "@/lib/drugs/quick-chips";
 import { parseDoses } from "@/lib/drugs/dosing";
 import { applyHost, FIRST_PASS_NMDA } from "@/lib/drugs/host";
 import { treesFor } from "@/lib/drugs/metabolites";
@@ -755,7 +756,7 @@ function RiskBanner({
   host: HostContext;
   plan: ReturnType<typeof usePlan>;
 }) {
-  const [copied, setCopied] = useState<"full" | "share" | null>(null);
+  const [copied, setCopied] = useState<"full" | "share" | "plain" | null>(null);
   const openCheckout = useDesk((s) => s.openCheckout);
   const license = useDesk((s) => s.license);
   const highest = report.highest;
@@ -764,7 +765,7 @@ function RiskBanner({
   ).join(", ");
   const names = selected.map((id) => DRUG_BY_ID[id]?.name).filter(Boolean).join(" + ");
 
-  async function write(kind: "full" | "share", text: string) {
+  async function write(kind: "full" | "share" | "plain", text: string) {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(kind);
@@ -806,6 +807,21 @@ function RiskBanner({
     );
   }
 
+  async function copyPlain() {
+    await write(
+      "plain",
+      plainWordsReport(
+        names,
+        report.findings.map((f) => ({
+          severity: SEVERITY_LABEL[f.severity],
+          headline: f.headline,
+          plain: plainLanguageSummary(f),
+        })),
+        SEVERITY_LABEL[highest],
+      ),
+    );
+  }
+
   return (
     <div className="flex flex-col gap-3 rounded-xl bg-surface p-3 shadow-[var(--shadow-border)] sm:flex-row sm:items-center sm:justify-between sm:p-4">
       <div className="flex items-center gap-3">
@@ -829,6 +845,10 @@ function RiskBanner({
         </div>
       </div>
       <div className="flex flex-wrap gap-2">
+      <Button variant="secondary" size="sm" onClick={() => void copyPlain()} className="h-10 min-w-28 shrink-0">
+        {copied === "plain" ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+        {copied === "plain" ? "Copied" : "Plain words"}
+      </Button>
       <Button variant="secondary" size="sm" onClick={() => void shareLine()} className="h-10 min-w-24 shrink-0">
         {copied === "share" ? <Check className="size-3.5" /> : <Share2 className="size-3.5" />}
         {copied === "share" ? "Copied" : "Share"}
