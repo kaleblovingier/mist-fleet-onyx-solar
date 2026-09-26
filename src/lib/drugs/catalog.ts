@@ -2,6 +2,7 @@ import type { Drug, Enzyme, EnzymeRole, ItemKind, PdFlag, Strength, SubstrateSen
 import { CLINIC_BEERS, CLINIC_PREG_AVOID } from "./clinic";
 import { CLINIC_FORMULARY } from "./catalog-clinic";
 import { MODERN_FORMULARY } from "./catalog-modern";
+import { MODERN_WAVE2_FORMULARY } from "./catalog-modern-wave2";
 import { hasDrugbank } from "./drugbank";
 import { hasPgx } from "./pgx";
 import { hasCite } from "./pubmed";
@@ -2424,10 +2425,12 @@ const raw: Drug[] = [
 const coreIds = new Set(raw.map((d) => d.id));
 const clinicExtra = CLINIC_FORMULARY.filter((d) => !coreIds.has(d.id));
 const afterClinic = new Set([...coreIds, ...clinicExtra.map((d) => d.id)]);
+const afterModern = new Set([...afterClinic, ...MODERN_FORMULARY.map((d) => d.id)]);
 export const DRUGS: Drug[] = [
   ...raw,
   ...clinicExtra,
   ...MODERN_FORMULARY.filter((d) => !afterClinic.has(d.id)),
+  ...MODERN_WAVE2_FORMULARY.filter((d) => !afterModern.has(d.id)),
 ];
 export const DRUG_BY_ID: Record<string, Drug> = Object.fromEntries(DRUGS.map((x) => [x.id, x]));
 
@@ -3007,11 +3010,11 @@ export function familyOf(drug: Drug): Exclude<FamilyId, "all"> {
   if (
     drug.pd.includes("ssri-snri") ||
     drug.pd.includes("maoi") ||
-    /antipsychotic|antidepressant|Mood|Tricyclic|NaSSA|SARI|NDRI|Anxiolytic/i.test(drug.cls)
+    /antipsychotic|antidepressant|Mood|Tricyclic|NaSSA|SARI|NDRI|Anxiolytic|NK3|NK1\/NK3|CGRP|Wake|H3 antagonist|Melatonin receptor|NMDA \/ NDRI/i.test(drug.cls)
   )
     return "psych";
   if (
-    /Macrolide|Azole|Fluoroquinolone|HIV|Rifamycin|NNRTI|NRTI|INSTI|antiviral|CMV |capsid inhibitor|JAK |TYK2 |PDE4 |H2 blocker|PK booster|Oxazolidinone|Sulfonamide|Antimycobacterial|HCV|DAA|Allylamine|Beta-lactam|Tetracycline|Cephalosporin|Carbapenem|Aminoglycoside|Glycopeptide|Penicillin|Antimalarial|Echinocandin|Nitroimidazole|Lincosamide|Polymyxin|Monobactam|Protease inhibitor|Anthelmintic|Nitrofuran|Lipopeptide/i.test(
+    /Macrolide|Azole|Fluoroquinolone|HIV|Rifamycin|NNRTI|NRTI|INSTI|antiviral|CMV |capsid inhibitor|JAK |TYK2 |PDE4 |H2 blocker|PK booster|Oxazolidinone|Sulfonamide|Antimycobacterial|HCV|DAA|Allylamine|Beta-lactam|Tetracycline|Cephalosporin|Carbapenem|Aminoglycoside|Glycopeptide|Penicillin|Antimalarial|Echinocandin|Nitroimidazole|Lincosamide|Polymyxin|Monobactam|Protease inhibitor|Anthelmintic|Nitrofuran|Lipopeptide|Orthopox|Pleuromutilin|Aminomethylcycline|Triterpenoid|attachment inhibitor|Echinocandin/i.test(
       drug.cls,
     )
   )
@@ -3021,13 +3024,13 @@ export function familyOf(drug: Drug): Exclude<FamilyId, "all"> {
     drug.pd.includes("statin") ||
     drug.pd.includes("beta-blocker") ||
     drug.pd.includes("ndhp-ccb") ||
-    /Statin|CCB|Beta|ARB|ACE|antiarrhythmic|DOAC|Vitamin K|Cardiac|diuretic|Alpha-1|Fibrate|PDE5|Nitrate|SGLT2|GLP-1|GIP|DPP-4|Antianginal|Mineralocorticoid|P2Y12|thiazide|LMWH|Insulin|ARNI|Heparin/i.test(
+    /Statin|CCB|Beta|ARB|ACE|antiarrhythmic|DOAC|Vitamin K|Cardiac|diuretic|Alpha-1|Fibrate|PDE5|Nitrate|SGLT2|GLP-1|GIP|DPP-4|Antianginal|Mineralocorticoid|P2Y12|thiazide|LMWH|Insulin|ARNI|Heparin|myosin inhibitor|sGC |ERA \(|mineralocorticoid|NaV1.8|Factor Xa reversal|Dabigatran reversal|MC4R|Amylin|Triple GIP|non-peptide GLP/i.test(
       drug.cls,
     )
   )
     return "cardio";
   if (
-    /TKI|kinase inhibitor|Platinum|Taxane|Anthracycline|Topoisomerase|alkylator|Checkpoint|PARP|BCL-2|CDK4|BTK |EGFR |VEGF |HER2 |SERM|SERD|Aromatase|GnRH|Vinca|microtubule|Proteasome|CELMoD|\bADC\b|chemotherap|cytotoxic|Differentiating|BRAF|MEK|KRAS|PI3K|FLT3|ALK \/|NTRK|Supportive oncology|Classical chemotherapy|CYP17|Antiandrogen|Androgen receptor/i.test(
+    /TKI|kinase inhibitor|Platinum|Taxane|Anthracycline|Topoisomerase|alkylator|Checkpoint|PARP|BCL-2|CDK4|BTK |EGFR |VEGF |HER2 |SERM|SERD|Aromatase|GnRH|Vinca|microtubule|Proteasome|CELMoD|\bADC\b|chemotherap|cytotoxic|Differentiating|BRAF|MEK|KRAS|PI3K|FLT3|ALK \/|NTRK|Supportive oncology|Classical chemotherapy|CYP17|Antiandrogen|Androgen receptor|KRAS G12C/i.test(
       drug.cls,
     )
   )

@@ -31,6 +31,9 @@ Deck: [gamma.app/docs/c1sxd9i8iyv80eq](https://gamma.app/docs/c1sxd9i8iyv80eq)
 15. **N-Pyrrolidino etonitazene × bromazolam** — hot nitazene × designer benzo. Search `nitazene` / `npe`.
 16. **Letermovir × tacrolimus** — CMV prophylaxis raises calcineurin. Search `prevymis`.
 17. **Daridorexant × ritonavir** — Quviviq meets a strong 3A4 booster. Search `quviviq`.
+18. **Auvelity × phenelzine** — DXM/bupropion combo meets an irreversible MAOI. Search `auvelity`.
+19. **Acrylfentanyl × bromazolam** — illicit fentanyl analog × designer benzo. Search `acrylfentanyl`.
+20. **Mavacamten × fluconazole** — Camzyos REMS victim teaching. Search `camzyos`.
 
 ## Pay / write
 
