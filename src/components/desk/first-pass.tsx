@@ -6,17 +6,29 @@ export function FirstPassMap({
   cannabisRoute,
   showKetamine,
   showCannabis,
+  trayIds = [],
 }: {
   ketamineRoute: KetamineRoute;
   cannabisRoute: CannabisRoute;
   showKetamine: boolean;
   showCannabis: boolean;
+  /** Desk selection — only name perpetrators that are actually on the tray. */
+  trayIds?: string[];
 }) {
   if (!showKetamine && !showCannabis) return null;
   const oral =
     (showKetamine && ketamineRoute === "oral") || (showCannabis && cannabisRoute === "oral");
   const skip =
     (showKetamine && ketamineRoute === "iv") || (showCannabis && cannabisRoute === "smoked");
+  const tray = new Set(trayIds);
+  const namedPerps = [
+    tray.has("clarithromycin") ? "Clarithromycin" : null,
+    tray.has("grapefruit") ? "grapefruit" : null,
+  ].filter(Boolean) as string[];
+  const oralKetamineNote =
+    namedPerps.length > 0
+      ? `Oral ketamine is a 3A4 victim. ${namedPerps.join(" and ")} light${namedPerps.length === 1 ? "s" : ""} this path up.`
+      : "Oral ketamine is a 3A4 victim. A strong gut/hepatic 3A4 inhibitor lights this path up — add one to the tray to map it.";
 
   return (
     <section className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)] sm:p-5">
@@ -35,7 +47,7 @@ export function FirstPassMap({
           steps={["Mouth", "Gut 3A4", "Portal", "Liver 2B6/3A4", "Systemic"]}
           note={
             showKetamine && ketamineRoute === "oral"
-              ? "Oral ketamine is a 3A4 victim. Clarithromycin and grapefruit light this path up."
+              ? oralKetamineNote
               : showCannabis && cannabisRoute === "oral"
                 ? "Edible THC becomes 11-OH-THC here. Smoked THC barely does."
                 : "Swallowing puts the whole cytochrome gauntlet between dose and brain."
