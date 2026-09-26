@@ -224,11 +224,11 @@ export const STACK_AXES = ["serotonin", "cns", "qt", "pressor", "nmda"] as const
 export type StackAxis = (typeof STACK_AXES)[number];
 
 export const STACK_LABEL: Record<StackAxis, string> = {
-  serotonin: "Serotonin",
-  cns: "CNS / airway",
-  qt: "QT",
-  pressor: "Pressor",
-  nmda: "NMDA",
+  serotonin: "Serotonin mood",
+  cns: "Sedation / breathing",
+  qt: "Heart rhythm (QT)",
+  pressor: "Blood pressure",
+  nmda: "NMDA / ketamine",
 };
 
 export interface StackBar {

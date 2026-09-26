@@ -349,8 +349,8 @@ export function DeskApp() {
                         <StackMeters stacks={report.stacks} />
                       ) : report.stacks.some((s) => s.score > 0) ? (
                         <Paywall
-                          title="Stack load is Pro"
-                          blurb="Serotonin, CNS, QT, pressor, and NMDA meters come with the host license."
+                          title="Effect stacks are Pro"
+                          blurb="Serotonin mood, sedation, heart rhythm, blood pressure, and NMDA meters come with the host license."
                         >
                           <StackMeters stacks={report.stacks} />
                         </Paywall>
@@ -410,8 +410,8 @@ export function DeskApp() {
                     <StackMeters stacks={report.stacks} />
                   ) : report.stacks.some((s) => s.score > 0) ? (
                     <Paywall
-                      title="Stack load is Pro"
-                      blurb="Serotonin, CNS, QT, pressor, and NMDA meters come with the host license."
+                      title="Effect stacks are Pro"
+                      blurb="Serotonin mood, sedation, heart rhythm, blood pressure, and NMDA meters come with the host license."
                     >
                       <StackMeters stacks={report.stacks} />
                     </Paywall>
