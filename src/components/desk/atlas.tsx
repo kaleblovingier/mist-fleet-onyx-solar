@@ -10,15 +10,15 @@ import { ENZYME_PLATE } from "@/lib/drugs/visuals";
 import { Plate } from "./plate";
 
 const BLURBS: Record<Enzyme, string> = {
-  CYP1A2: "Induced by smoking. Classic victims: tizanidine, theophylline, clozapine, caffeine.",
-  CYP2B6: "Bupropion and methadone live here. Efavirenz and rifampin induce it.",
-  CYP2C8: "Gemfibrozil is the signature strong inhibitor; repaglinide is the sensitive substrate.",
-  CYP2C9: "S-warfarin, phenytoin, and many NSAIDs/sulfonylureas. Fluconazole and amiodarone inhibit. 2C9 PMs look like a strong inhibitor.",
-  CYP2C19: "Clopidogrel activation, PPIs, citalopram. Fluvoxamine and fluconazole inhibit strongly.",
-  CYP2D6: "Not meaningfully inducible. Codeine/tamoxifen activation; paroxetine, fluoxetine, bupropion inhibit.",
-  CYP2E1: "Ethanol-inducible; minor acetaminophen bioactivation to NAPQI.",
-  CYP3A4: "The workhorse — ~50% of drugs. Strong inhibitors (azoles, ritonavir, clarithromycin) and inducers (rifampin, carbamazepine) dominate collision maps.",
-  "P-gp": "Efflux transporter (ABCB1). Digoxin, dabigatran, colchicine, many DOACs. Often travels with CYP3A4.",
+  CYP1A2: "Smoking turns this pathway up. Drugs that depend on it (tizanidine, theophylline, clozapine, caffeine) can drop when someone lights up every day.",
+  CYP2B6: "Home to bupropion and methadone clearance. Strong inducers like efavirenz or rifampin can steal the effect.",
+  CYP2C8: "Gemfibrozil is the classic strong blocker here; repaglinide is the sensitive victim used in teaching maps.",
+  CYP2C9: "Clears S-warfarin, phenytoin, and many NSAIDs or sulfonylureas. Fluconazole and amiodarone slow it. A poor metabolizer looks like a strong inhibitor already on board.",
+  CYP2C19: "Activates clopidogrel and clears many PPIs and citalopram. Fluvoxamine and fluconazole are strong blockers.",
+  CYP2D6: "Usually not inducible. Needed to activate codeine or tamoxifen; blocked by paroxetine, fluoxetine, or bupropion.",
+  CYP2E1: "Alcohol can induce it. A minor path that turns acetaminophen into the reactive NAPQI metabolite.",
+  CYP3A4: "Clears about half of medicines. Strong blockers (azoles, ritonavir, clarithromycin) and inducers (rifampin, carbamazepine) drive most collision maps.",
+  "P-gp": "An efflux pump (ABCB1) that pushes drugs back out — digoxin, dabigatran, colchicine, many DOACs. Often moves with CYP3A4.",
 };
 
 export function EnzymeAtlas() {
@@ -58,7 +58,7 @@ export function EnzymeAtlas() {
             <h2 className="mt-2 font-serif text-2xl tracking-tight text-fg">{enzyme}</h2>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fg">{BLURBS[enzyme]}</p>
             <p className="mt-3 text-xs text-muted">
-              Nine pathways, including 2C9. Pick an isoform, then add substrates, inhibitors, or inducers to the desk.
+              Nine pathways, including 2C9. Pick an enzyme, then add victims, blockers, or inducers to the desk.
             </p>
           </div>
         </div>

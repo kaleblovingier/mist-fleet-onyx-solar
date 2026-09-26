@@ -4,7 +4,7 @@ import { DRUG_BY_ID } from "@/lib/drugs/catalog";
 import { basisFor } from "@/lib/drugs/basis";
 import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
 import type { Finding, Severity } from "@/lib/drugs/types";
-import { SEVERITY_LABEL } from "@/lib/drugs/types";
+import { SEVERITY_HINT, SEVERITY_PLAIN } from "@/lib/drugs/types";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { severitySurface, severityTone } from "./severity";
@@ -60,17 +60,22 @@ export function FindingList({ findings }: { findings: Finding[] }) {
             <button
               key={f}
               type="button"
+              title={f === "all" ? "Show every severity" : SEVERITY_HINT[f]}
               onClick={() => setFilter(f)}
               className={cn(
                 "h-9 rounded-full px-3 text-xs font-medium",
                 filter === f ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
               )}
             >
-              {f === "all" ? "All" : SEVERITY_LABEL[f]}
+              {f === "all" ? "All" : SEVERITY_PLAIN[f]}
             </button>
           ))}
         </div>
       </div>
+      <p className="text-xs leading-relaxed text-muted">
+        Possible concerns in the selected items. Plain chips (Avoid together / Serious concern / Use care / Mild note) are this
+        checker’s categories — not a personal prediction of harm. Hover a chip for the longer hint; formal labels still appear on each card.
+      </p>
       <div className="flex flex-wrap gap-1">
         {KIND_FILTERS.map((k) => (
           <button
@@ -130,12 +135,13 @@ function FindingCard({ finding }: { finding: Finding }) {
         aria-expanded={open}
       >
         <span
+          title={SEVERITY_HINT[finding.severity]}
           className={cn(
-            "mt-0.5 inline-flex min-w-24 shrink-0 items-center justify-center rounded-sm px-2 py-1 font-mono text-[10px] font-medium uppercase tracking-wider",
+            "mt-0.5 inline-flex min-w-28 shrink-0 items-center justify-center rounded-sm px-2 py-1 text-[10px] font-medium tracking-wide",
             severitySurface(finding.severity),
           )}
         >
-          {SEVERITY_LABEL[finding.severity]}
+          {SEVERITY_PLAIN[finding.severity]}
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-medium text-fg">{finding.headline}</span>
