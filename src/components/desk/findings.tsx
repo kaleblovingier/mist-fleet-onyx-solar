@@ -13,9 +13,9 @@ const SEVERITY_FILTERS: Array<Severity | "all"> = ["all", "contraindicated", "ma
 type KindFilter = "all" | "pk" | "pd" | "geno" | "clinic" | "food";
 const KIND_FILTERS: { id: KindFilter; label: string }[] = [
   { id: "all", label: "All kinds" },
-  { id: "pk", label: "PK" },
-  { id: "pd", label: "PD" },
-  { id: "geno", label: "Phenotype" },
+  { id: "pk", label: "Clearance" },
+  { id: "pd", label: "Same-effect" },
+  { id: "geno", label: "Genetics" },
   { id: "clinic", label: "Clinic" },
   { id: "food", label: "Food" },
 ];
@@ -60,7 +60,7 @@ export function FindingList({ findings }: { findings: Finding[] }) {
         </div>
       </div>
       <p className="text-xs leading-relaxed text-muted">
-        Possible concerns in the selected items. Severity labels describe this checker’s categories, not a personal prediction of harm.
+        Possible concerns on this tray. Labels like “Avoid together” or “Strong concern” are this checker’s teaching categories — not a personal prediction of harm, and not a substitute for the PI.
       </p>
       <div className="flex flex-wrap gap-1">
         {KIND_FILTERS.map((k) => (
@@ -79,7 +79,7 @@ export function FindingList({ findings }: { findings: Finding[] }) {
       </div>
       {visible.length === 0 ? (
         <p className="rounded-lg bg-surface px-4 py-6 text-sm text-muted shadow-[var(--shadow-border)]">
-          No findings at this severity.
+          Nothing at this concern level. Try “All” or another filter.
         </p>
       ) : (
         <ol className="space-y-2">
@@ -109,7 +109,7 @@ function FindingCard({ finding }: { finding: Finding }) {
       >
         <span
           className={cn(
-            "mt-0.5 inline-flex min-w-24 shrink-0 items-center justify-center rounded-sm px-2 py-1 font-mono text-[10px] font-medium uppercase tracking-wider",
+            "mt-0.5 inline-flex min-w-28 shrink-0 items-center justify-center rounded-sm px-2 py-1 text-[10px] font-medium tracking-wide",
             severitySurface(finding.severity),
           )}
         >

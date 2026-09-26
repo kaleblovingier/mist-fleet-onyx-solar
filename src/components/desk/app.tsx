@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { Copy, Check, RotateCcw, Download, Share2 } from "lucide-react";
 import { DRUG_BY_ID, DRUGS } from "@/lib/drugs/catalog";
 import { analyze } from "@/lib/drugs/engine";
@@ -6,6 +6,7 @@ import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
 import { parseDoses } from "@/lib/drugs/dosing";
 import { applyHost, FIRST_PASS_NMDA } from "@/lib/drugs/host";
 import { treesFor } from "@/lib/drugs/metabolites";
+import { METABOLITE_PAYWALL_BLURB } from "@/lib/drugs/metabolite-plain";
 import {
   SAMPLE_LANES,
   SAMPLE_REGIMENS,
@@ -13,6 +14,14 @@ import {
   samplesInLane,
   type SampleLane,
 } from "@/lib/drugs/samples";
+import {
+  PACKS,
+  applyPermalink,
+  buildCaseUrl,
+  buildPackUrl,
+  parsePermalink,
+  type PackId,
+} from "@/lib/drugs/permalinks";
 import { CLASS_TILES, PLATES, plateForDrug, plateForSample } from "@/lib/drugs/visuals";
 import {
   ALCOHOL_LABEL,
@@ -26,7 +35,7 @@ import {
 } from "@/lib/drugs/types";
 import { useDesk, usePlan, type LoadExtras } from "@/lib/drugs/store";
 import { PLAN_BY_ID } from "@/lib/billing/plans";
-import { tweetFor } from "@/lib/billing/commerce";
+import { OPERATOR, SITE, tweetFor } from "@/lib/billing/commerce";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -71,6 +80,9 @@ export function DeskApp() {
   const setView = useDesk((s) => s.setView);
   const selectedRaw = useDesk((s) => s.selected);
   const [hydrated, setHydrated] = useState(false);
+  const [activePackId, setActivePackId] = useState<PackId | null>(null);
+  const [activeCaseId, setActiveCaseId] = useState<string | null>(null);
+  const permalinkApplied = useRef(false);
   useEffect(() => {
     let live = true;
     const done = () => {
@@ -88,9 +100,27 @@ export function DeskApp() {
   const clear = useDesk((s) => s.clear);
   const load = useDesk((s) => s.load);
   useEffect(() => {
-    if (!hydrated) return;
-    const url = new URL(window.location.href);
-    const sampleId = url.searchParams.get("sample");
+    if (!hydrated || permalinkApplied.current) return;
+    permalinkApplied.current = true;
+    const resolved = applyPermalink(load, window.location.search);
+    if (resolved.kind === "none") return;
+    setActiveCaseId(resolved.caseId);
+    setActivePackId(resolved.packId);
+    if (resolved.kind === "lab") {
+      useDesk.getState().setView("study");
+    }
+    // Keep query string so shared ?case= / ?pack= / ?lab= links stay copyable.
+  }, [hydrated, load]);
+
+  // Rounds (and other surfaces) may set ?pack= / ?case= after boot — resync strip state.
+  useEffect(() => {
+    if (!hydrated || view !== "desk") return;
+    const resolved = parsePermalink(window.location.search);
+    setActivePackId(resolved.packId);
+    if (resolved.caseId) setActiveCaseId(resolved.caseId);
+  }, [hydrated, view]);
+
+  function loadSample(sampleId: string, packId: PackId | null = activePackId) {
     const sample = SAMPLE_REGIMENS.find((item) => item.id === sampleId);
     if (!sample) return;
     load(sample.drugIds, {
@@ -101,9 +131,20 @@ export function DeskApp() {
       alcohol: sample.alcohol,
       doses: sample.doses,
     });
+    setActiveCaseId(sample.id);
+    setActivePackId(packId);
+    const url = new URL(window.location.href);
+    url.searchParams.set("case", sample.id);
     url.searchParams.delete("sample");
+    if (packId) url.searchParams.set("pack", packId);
+    else url.searchParams.delete("pack");
+    // Preserve flip if present for share fidelity; do not invent it.
     window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
-  }, [hydrated, load]);
+  }
+
+  function loadPackCase(packId: PackId, caseId: string) {
+    loadSample(caseId, packId);
+  }
   const phenotypes = useDesk((s) => s.phenotypes);
   const smoking = useDesk((s) => s.smoking);
   const ketamineRoute = useDesk((s) => s.ketamineRoute);
@@ -182,18 +223,8 @@ export function DeskApp() {
             </div>
             </div>
             {hydrated && !pro ? (
-              <Button
-                size="sm"
-                className="sm:hidden"
-                onClick={() =>
-                  openCheckout(
-                    "lab",
-                    "Founding lifetime ($79 once) unlocks host factors, the enzyme atlas, and export.",
-                    "life",
-                  )
-                }
-              >
-                Founding · $79
+              <Button size="sm" className="sm:hidden" onClick={() => openCheckout("lab", "Founding is $79 once: pay → get key → Redeem on this desk.", "life")}>
+                Unlock
               </Button>
             ) : null}
           </div>
@@ -226,18 +257,8 @@ export function DeskApp() {
               ))}
             </nav>
             {hydrated && !pro ? (
-              <Button
-                size="sm"
-                className="hidden sm:inline-flex"
-                onClick={() =>
-                  openCheckout(
-                    "lab",
-                    "Founding lifetime ($79 once) unlocks host factors, the enzyme atlas, and export.",
-                    "life",
-                  )
-                }
-              >
-                Founding · $79
+              <Button size="sm" className="hidden sm:inline-flex" onClick={() => openCheckout("lab", "Founding is $79 once: pay → get key → Redeem on this desk.", "life")}>
+                Unlock
               </Button>
             ) : null}
           </div>
@@ -335,11 +356,34 @@ export function DeskApp() {
                       </button>
                     );
                   })}
-                  <Button variant="ghost" size="sm" onClick={clear} className="text-muted">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted"
+                    onClick={() => {
+                      clear();
+                      setActiveCaseId(null);
+                      setActivePackId(null);
+                      const url = new URL(window.location.href);
+                      url.searchParams.delete("case");
+                      url.searchParams.delete("sample");
+                      url.searchParams.delete("pack");
+                      url.searchParams.delete("flip");
+                      window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
+                    }}
+                  >
                     <RotateCcw className="size-3.5" />
                     Clear
                   </Button>
                 </div>
+              ) : null}
+
+              {activePackId ? (
+                <PackStrip
+                  packId={activePackId}
+                  activeCaseId={activeCaseId}
+                  onSelect={(caseId) => loadPackCase(activePackId, caseId)}
+                />
               ) : null}
 
               {selected.length > 0 ? <WindowExtras /> : null}
@@ -354,7 +398,11 @@ export function DeskApp() {
               ) : null}
 
               {selected.length === 0 ? (
-                <EmptyState onLoad={load} ready={hydrated} />
+                <EmptyState
+                  onLoad={load}
+                  onLoadSample={(id) => loadSample(id, null)}
+                  ready={hydrated}
+                />
               ) : selected.length === 1 ? (
                 <>
                   <SingleDrug id={selected[0]} />
@@ -365,13 +413,13 @@ export function DeskApp() {
                   <Dossier ids={selected} host={host} />
                   {report.findings.length > 0 ? (
                     <>
-                      <RiskBanner report={report} selected={selected} host={host} plan={plan} />
+                      <RiskBanner report={report} selected={selected} host={host} plan={plan} caseId={activeCaseId} packId={activePackId} />
                       {pro ? (
                         <StackMeters stacks={report.stacks} />
                       ) : report.stacks.some((s) => s.score > 0) ? (
                         <Paywall
-                          title="Stack-load meters need founding"
-                          blurb="Serotonin, CNS, QT, pressor, and NMDA meters unlock with founding ($79 lifetime) or Pro."
+                          title="Effect stacks are Pro"
+                          blurb="Serotonin mood, sedation, heart rhythm, blood pressure, and NMDA meters come with the host license."
                         >
                           <StackMeters stacks={report.stacks} />
                         </Paywall>
@@ -396,8 +444,8 @@ export function DeskApp() {
                     <MetaboliteCard ids={selected} />
                   ) : treesFor(selected).length > 0 ? (
                     <Paywall
-                      title="Metabolite maps need founding"
-                      blurb="Norketamine, 11-OH-THC, morphine, dextrorphan — the parent is only half the story. Included in founding ($79 lifetime)."
+                      title="Metabolite maps are Pro"
+                      blurb={METABOLITE_PAYWALL_BLURB}
                     >
                       <MetaboliteCard ids={selected} />
                     </Paywall>
@@ -406,7 +454,7 @@ export function DeskApp() {
                 </>
               ) : (
                 <>
-                  <RiskBanner report={report} selected={selected} host={host} plan={plan} />
+                  <RiskBanner report={report} selected={selected} host={host} plan={plan} caseId={activeCaseId} packId={activePackId} />
                   <WindowBriefing ids={selected} host={host} report={report} />
                   <PrescribingStrip ids={selected} />
                   <ClinicPanel ids={selected} host={host} />
@@ -429,8 +477,8 @@ export function DeskApp() {
                     <StackMeters stacks={report.stacks} />
                   ) : report.stacks.some((s) => s.score > 0) ? (
                     <Paywall
-                      title="Stack-load meters need founding"
-                      blurb="Serotonin, CNS, QT, pressor, and NMDA meters unlock with founding ($79 lifetime) or Pro."
+                      title="Effect stacks are Pro"
+                      blurb="Serotonin mood, sedation, heart rhythm, blood pressure, and NMDA meters come with the host license."
                     >
                       <StackMeters stacks={report.stacks} />
                     </Paywall>
@@ -449,8 +497,8 @@ export function DeskApp() {
                     <MetaboliteCard ids={selected} />
                   ) : treesFor(selected).length > 0 ? (
                     <Paywall
-                      title="Metabolite maps need founding"
-                      blurb="Norketamine, 11-OH-THC, morphine, dextrorphan — the parent is only half the story. Included in founding ($79 lifetime)."
+                      title="Metabolite maps are Pro"
+                      blurb={METABOLITE_PAYWALL_BLURB}
                     >
                       <MetaboliteCard ids={selected} />
                     </Paywall>
@@ -511,9 +559,11 @@ export function DeskApp() {
 
 function EmptyState({
   onLoad,
+  onLoadSample,
   ready,
 }: {
   onLoad: (ids: string[], extras?: LoadExtras) => void;
+  onLoadSample: (sampleId: string) => void;
   ready: boolean;
 }) {
   const [lane, setLane] = useState<SampleLane | "all">("all");
@@ -653,24 +703,15 @@ function EmptyState({
         </div>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2">
           {shown.map((s) => (
-            <li key={s.id}>
+            <li key={s.id} className="relative">
               <button
                 type="button"
                 disabled={!ready}
-                onClick={() =>
-                  onLoad(s.drugIds, {
-                    phenotypes: s.phenotypes,
-                    smoking: s.smoking,
-                    ketamineRoute: s.ketamineRoute,
-                    cannabisRoute: s.cannabisRoute,
-                    alcohol: s.alcohol,
-                    doses: s.doses,
-                  })
-                }
+                onClick={() => onLoadSample(s.id)}
                 className="flex h-full w-full overflow-hidden rounded-lg bg-bg text-left shadow-[var(--shadow-border)] transition-transform duration-150 hover:-translate-y-px disabled:opacity-60"
               >
                 <Plate src={plateForSample(s)} alt="" className="h-full w-20 shrink-0 min-h-24" />
-                <span className="flex min-w-0 flex-1 flex-col justify-center px-4 py-3">
+                <span className="flex min-w-0 flex-1 flex-col justify-center px-4 py-3 pr-12">
                   <span className="flex items-center gap-2 text-sm font-medium text-fg">
                     {s.title}
                     {plan === "free" && sampleNeedsPro(s) ? (
@@ -680,6 +721,7 @@ function EmptyState({
                   <span className="mt-1 text-xs text-muted">{s.blurb}</span>
                 </span>
               </button>
+              <CopyCaseLink sampleId={s.id} className="absolute right-2 top-2" />
             </li>
           ))}
         </ul>
@@ -770,13 +812,17 @@ function RiskBanner({
   selected,
   host,
   plan,
+  caseId,
+  packId,
 }: {
   report: ReturnType<typeof analyze>;
   selected: string[];
   host: HostContext;
   plan: ReturnType<typeof usePlan>;
+  caseId: string | null;
+  packId: PackId | null;
 }) {
-  const [copied, setCopied] = useState<"full" | "share" | null>(null);
+  const [copied, setCopied] = useState<"full" | "share" | "link" | null>(null);
   const openCheckout = useDesk((s) => s.openCheckout);
   const license = useDesk((s) => s.license);
   const highest = report.highest;
@@ -785,7 +831,7 @@ function RiskBanner({
   ).join(", ");
   const names = selected.map((id) => DRUG_BY_ID[id]?.name).filter(Boolean).join(" + ");
 
-  async function write(kind: "full" | "share", text: string) {
+  async function write(kind: "full" | "share" | "link", text: string) {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(kind);
@@ -848,12 +894,28 @@ function RiskBanner({
             {selected.length} drug{selected.length === 1 ? "" : "s"}
           </div>
           <div className="text-xs text-muted">
-            {report.counts.contraindicated} contra · {report.counts.major} major ·{" "}
-            {report.counts.moderate} moderate · {report.counts.minor} minor
+            {report.counts.contraindicated} avoid · {report.counts.major} strong ·{" "}
+            {report.counts.moderate} care · {report.counts.minor} mild
           </div>
         </div>
       </div>
       <div className="flex flex-wrap gap-2">
+      {caseId ? (
+        <Button
+          variant="secondary"
+          size="sm"
+          className="h-10 min-w-24 shrink-0"
+          onClick={() =>
+            void write(
+              "link",
+              packId ? buildPackUrl(packId, { caseId }) : buildCaseUrl(caseId),
+            )
+          }
+        >
+          {copied === "link" ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+          {copied === "link" ? "Copied" : "Copy link"}
+        </Button>
+      ) : null}
       <Button variant="secondary" size="sm" onClick={() => void shareLine()} className="h-10 min-w-24 shrink-0">
         {copied === "share" ? <Check className="size-3.5" /> : <Share2 className="size-3.5" />}
         {copied === "share" ? "Copied" : "Share"}
@@ -980,8 +1042,8 @@ function HowCard() {
         </li>
         <li>
           <span className="text-fg">Curve.</span> Grey is this route, normal metabolizer, no
-          perpetrators. Teal is this desk. q8h / q12h / q24h superimpose doses (Rac). Overlay IV vs
-          oral on first-pass victims. Not a plasma level. Five-drug AUCR stays free.
+          blockers. Teal is this desk. q8h / q12h / q24h show how doses stack (build-up / Rac). Overlay IV vs
+          oral on first-pass victims. Not a plasma level. Five-drug exposure (AUCR) stays free.
         </li>
         <li>
           <span className="text-fg">2D6.</span> Blockade of codeine or tamoxifen is lost
@@ -989,8 +1051,8 @@ function HowCard() {
         </li>
         <li>
           <span className="text-fg">Phenotype.</span> Flip CYP2D6 / 2C19 / 2C9 / 2B6 to poor or
-          ultrarapid — a PM scores like a strong inhibitor of that isoform. 2C9 PMs make warfarin
-          and edible THC hotter.
+          ultrarapid — a poor metabolizer scores like a strong inhibitor of that enzyme. Poor 2C9
+          metabolizers make warfarin and edible THC hotter.
         </li>
         <li>
           <span className="text-fg">Host.</span> Daily smoke induces CYP1A2. Chronic alcohol induces
@@ -1137,4 +1199,93 @@ function exportCsv(report: ReturnType<typeof analyze>, selected: string[]) {
 function csv(s: string) {
   const t = s.replace(/"/g, '""');
   return `"${t}"`;
+}
+
+
+function PackStrip({
+  packId,
+  activeCaseId,
+  onSelect,
+}: {
+  packId: PackId;
+  activeCaseId: string | null;
+  onSelect: (caseId: string) => void;
+}) {
+  const pack = PACKS[packId];
+  return (
+    <section className="rounded-xl bg-surface px-4 py-3 shadow-[var(--shadow-border)] sm:px-5">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">Teaching pack</p>
+          <h2 className="mt-1 font-serif text-lg tracking-tight text-fg">{pack.title}</h2>
+          <p className="mt-0.5 text-xs leading-relaxed text-muted">{pack.blurb}</p>
+        </div>
+        <CopyCaseLink
+          sampleId={activeCaseId ?? pack.caseIds[0]}
+          packId={packId}
+          label="Copy pack link"
+        />
+      </div>
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        {pack.caseIds.map((id) => {
+          const sample = SAMPLE_REGIMENS.find((s) => s.id === id);
+          const active = id === activeCaseId;
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => onSelect(id)}
+              className={cn(
+                "h-9 rounded-full px-3 text-xs font-medium transition-colors",
+                active ? "bg-accent text-accent-fg" : "bg-bg-sunken text-muted hover:text-fg",
+              )}
+              title={sample?.blurb}
+            >
+              {sample?.title ?? id}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function CopyCaseLink({
+  sampleId,
+  packId,
+  label = "Copy link",
+  className,
+}: {
+  sampleId: string;
+  packId?: PackId | null;
+  label?: string;
+  className?: string;
+}) {
+  const [copied, setCopied] = useState(false);
+  async function copy(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    const href = packId ? buildPackUrl(packId, { caseId: sampleId }) : buildCaseUrl(sampleId);
+    try {
+      await navigator.clipboard.writeText(href);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      /* clipboard may be blocked */
+    }
+  }
+  return (
+    <button
+      type="button"
+      onClick={(e) => void copy(e)}
+      className={cn(
+        "inline-flex h-8 items-center gap-1 rounded-full bg-accent-soft px-2.5 font-mono text-[10px] uppercase tracking-wide text-accent hover:bg-accent hover:text-accent-fg",
+        className,
+      )}
+      title={`Copy ${SITE.url} link`}
+    >
+      {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
+      {copied ? "Copied" : label}
+    </button>
+  );
 }
