@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import { DRUG_BY_ID } from "./catalog";
 import { rememberTray } from "./tray-history";
 import { maxDrugs, type Interval, type PlanId } from "@/lib/billing/plans";
+import { foundingGateCopy } from "@/lib/billing/founding-gate";
 import {
   DEFAULT_HOST,
   DEFAULT_PHENOTYPES,
@@ -203,18 +204,7 @@ export const useDesk = create<DeskState>()(
         return true;
       },
       setView: (view) => {
-        if (view === "atlas" && activePlan(get()) === "free") {
-          set({
-            view: "plans",
-            checkout: {
-              open: true,
-              plan: "pro",
-              interval: get().checkout.interval,
-              reason: "The enzyme atlas is a Pro surface.",
-            },
-          });
-          return;
-        }
+        // Free users may open atlas; DeskApp wraps EnzymeAtlas in the founding-gate Paywall coach.
         set({ view });
       },
       setAtlasEnzyme: (atlasEnzyme) => {
@@ -226,14 +216,14 @@ export const useDesk = create<DeskState>()(
       },
       setPhenotype: (enzyme, value) => {
         if (activePlan(get()) === "free") {
-          get().openCheckout("pro", "Metabolizer status is a Pro host factor.");
+          get().openCheckout("lab", foundingGateCopy("host").reason, "life");
           return;
         }
         set({ phenotypes: { ...get().phenotypes, [enzyme]: value } });
       },
       setSmoking: (smoking) => {
         if (activePlan(get()) === "free") {
-          get().openCheckout("pro", "Smoke induction is a Pro host factor.");
+          get().openCheckout("lab", foundingGateCopy("host").reason, "life");
           return;
         }
         set({ smoking });
@@ -244,35 +234,35 @@ export const useDesk = create<DeskState>()(
       },
       setCannabisRoute: (cannabisRoute) => {
         if (activePlan(get()) === "free") {
-          get().openCheckout("pro", "Edible vs smoked THC is Pro.");
+          get().openCheckout("lab", foundingGateCopy("host").reason, "life");
           return;
         }
         set({ cannabisRoute });
       },
       setAlcohol: (alcohol) => {
         if (activePlan(get()) === "free") {
-          get().openCheckout("pro", "Alcohol pattern (acute vs chronic 2E1) is Pro.");
+          get().openCheckout("lab", foundingGateCopy("host").reason, "life");
           return;
         }
         set({ alcohol });
       },
       setAge: (age) => {
         if (activePlan(get()) === "free") {
-          get().openCheckout("pro", "Geriatric / Beers host flag is Pro.");
+          get().openCheckout("lab", foundingGateCopy("host").reason, "life");
           return;
         }
         set({ age });
       },
       setKidney: (kidney) => {
         if (activePlan(get()) === "free") {
-          get().openCheckout("pro", "CKD host flag is Pro.");
+          get().openCheckout("lab", foundingGateCopy("host").reason, "life");
           return;
         }
         set({ kidney });
       },
       setPreg: (preg) => {
         if (activePlan(get()) === "free") {
-          get().openCheckout("pro", "Pregnancy / lactation host flag is Pro.");
+          get().openCheckout("lab", foundingGateCopy("host").reason, "life");
           return;
         }
         set({ preg });

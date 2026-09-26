@@ -6,7 +6,6 @@ import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
 import { parseDoses } from "@/lib/drugs/dosing";
 import { applyHost, FIRST_PASS_NMDA } from "@/lib/drugs/host";
 import { treesFor } from "@/lib/drugs/metabolites";
-import { METABOLITE_PAYWALL_BLURB } from "@/lib/drugs/metabolite-plain";
 import {
   SAMPLE_LANES,
   SAMPLE_REGIMENS,
@@ -55,6 +54,7 @@ import { KetamineRouteCard, PhenotypeCard } from "./phenotype";
 import { StackMeters } from "./stacks";
 import { MetaboliteCard } from "./metabolites";
 import { Paywall } from "./paywall";
+import { foundingGateCopy } from "@/lib/billing/founding-gate";
 import { CheckoutDrawer, PlansPage } from "./plans";
 import { Foundry } from "./foundry";
 import { RoundsPage } from "./rounds";
@@ -241,7 +241,7 @@ export function DeskApp() {
             </div>
             </div>
             {hydrated && !pro ? (
-              <Button size="sm" className="sm:hidden" onClick={() => openCheckout("lab", "Founding is $79 once: pay → get key → Redeem on this desk.", "life")}>
+              <Button size="sm" className="sm:hidden" onClick={() => openCheckout("lab", foundingGateCopy("host").reason, "life")}>
                 Unlock
               </Button>
             ) : null}
@@ -275,7 +275,7 @@ export function DeskApp() {
               ))}
             </nav>
             {hydrated && !pro ? (
-              <Button size="sm" className="hidden sm:inline-flex" onClick={() => openCheckout("lab", "Founding is $79 once: pay → get key → Redeem on this desk.", "life")}>
+              <Button size="sm" className="hidden sm:inline-flex" onClick={() => openCheckout("lab", foundingGateCopy("host").reason, "life")}>
                 Unlock
               </Button>
             ) : null}
@@ -338,7 +338,13 @@ export function DeskApp() {
         ) : view === "label" ? (
           <LabelPage />
         ) : view === "atlas" ? (
-          <EnzymeAtlas />
+          pro ? (
+            <EnzymeAtlas />
+          ) : (
+            <Paywall gate="atlas">
+              <EnzymeAtlas />
+            </Paywall>
+          )
         ) : view === "library" ? (
           <Formulary />
         ) : (
@@ -439,10 +445,7 @@ export function DeskApp() {
                       {pro ? (
                         <StackMeters stacks={report.stacks} />
                       ) : report.stacks.some((s) => s.score > 0) ? (
-                        <Paywall
-                          title="Effect stacks are Pro"
-                          blurb="Serotonin mood, sedation, heart rhythm, blood pressure, and NMDA meters come with the host license."
-                        >
+                        <Paywall gate="stacks">
                           <StackMeters stacks={report.stacks} />
                         </Paywall>
                       ) : null}
@@ -465,10 +468,7 @@ export function DeskApp() {
                   {pro ? (
                     <MetaboliteCard ids={selected} />
                   ) : treesFor(selected).length > 0 ? (
-                    <Paywall
-                      title="Metabolite maps are Pro"
-                      blurb={METABOLITE_PAYWALL_BLURB}
-                    >
+                    <Paywall gate="metabolites">
                       <MetaboliteCard ids={selected} />
                     </Paywall>
                   ) : null}
@@ -498,10 +498,7 @@ export function DeskApp() {
                   {pro ? (
                     <StackMeters stacks={report.stacks} />
                   ) : report.stacks.some((s) => s.score > 0) ? (
-                    <Paywall
-                      title="Effect stacks are Pro"
-                      blurb="Serotonin mood, sedation, heart rhythm, blood pressure, and NMDA meters come with the host license."
-                    >
+                    <Paywall gate="stacks">
                       <StackMeters stacks={report.stacks} />
                     </Paywall>
                   ) : null}
@@ -518,10 +515,7 @@ export function DeskApp() {
                   {pro ? (
                     <MetaboliteCard ids={selected} />
                   ) : treesFor(selected).length > 0 ? (
-                    <Paywall
-                      title="Metabolite maps are Pro"
-                      blurb={METABOLITE_PAYWALL_BLURB}
-                    >
+                    <Paywall gate="metabolites">
                       <MetaboliteCard ids={selected} />
                     </Paywall>
                   ) : null}
@@ -557,10 +551,7 @@ export function DeskApp() {
               ) : (
                 <>
                   <KetamineRouteCard />
-                  <Paywall
-                    title="Host factors unlock with founding"
-                    blurb="Phenotype, smoke, alcohol pattern, cannabis route, age, kidney, and pregnancy teaching cards. Ketamine route stays free for the oral demo; five-drug checks stay free."
-                  >
+                  <Paywall gate="host">
                     <PhenotypeCard hideKetamineRoute />
                   </Paywall>
                 </>
@@ -907,11 +898,7 @@ function RiskBanner({
 
   async function copySummary() {
     if (plan === "free") {
-      openCheckout(
-        "lab",
-        "The full collision report unlocks with founding ($79 lifetime) — host factors, atlas, and export included.",
-        "life",
-      );
+      openCheckout("lab", foundingGateCopy("report").reason, "life");
       return;
     }
     const lines = [
@@ -986,7 +973,7 @@ function RiskBanner({
       </Button>
       <Button variant="secondary" size="sm" onClick={() => void copySummary()} className="h-10 min-w-24 shrink-0">
         {copied === "full" ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-        {copied === "full" ? "Copied" : plan === "free" ? "Report · Pro" : "Report"}
+        {copied === "full" ? "Copied" : plan === "free" ? "Report · Founding" : "Report"}
       </Button>
       {plan === "lab" ? (
         <Button
@@ -998,7 +985,17 @@ function RiskBanner({
           <Download className="size-3.5" />
           JSON
         </Button>
-      ) : null}
+      ) : (
+        <Button
+          variant="secondary"
+          size="sm"
+          className="h-10 shrink-0"
+          onClick={() => openCheckout("lab", foundingGateCopy("export").reason, "life")}
+        >
+          <Download className="size-3.5" />
+          JSON · Founding
+        </Button>
+      )}
       {plan === "lab" ? (
         <Button
           variant="secondary"
@@ -1009,7 +1006,17 @@ function RiskBanner({
           <Download className="size-3.5" />
           CSV
         </Button>
-      ) : null}
+      ) : (
+        <Button
+          variant="secondary"
+          size="sm"
+          className="h-10 shrink-0"
+          onClick={() => openCheckout("lab", foundingGateCopy("export").reason, "life")}
+        >
+          <Download className="size-3.5" />
+          CSV · Founding
+        </Button>
+      )}
       </div>
     </div>
   );
