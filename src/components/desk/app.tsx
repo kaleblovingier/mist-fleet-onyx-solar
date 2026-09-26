@@ -181,7 +181,7 @@ export function DeskApp() {
             </div>
             </div>
             {hydrated && !pro ? (
-              <Button size="sm" className="sm:hidden" onClick={() => openCheckout("lab", "Founding lifetime.", "life")}>
+              <Button size="sm" className="sm:hidden" onClick={() => openCheckout("lab", "Founding is $79 once: pay → get key → Redeem on this desk.", "life")}>
                 Unlock
               </Button>
             ) : null}
@@ -215,7 +215,7 @@ export function DeskApp() {
               ))}
             </nav>
             {hydrated && !pro ? (
-              <Button size="sm" className="hidden sm:inline-flex" onClick={() => openCheckout("lab", "Founding lifetime.", "life")}>
+              <Button size="sm" className="hidden sm:inline-flex" onClick={() => openCheckout("lab", "Founding is $79 once: pay → get key → Redeem on this desk.", "life")}>
                 Unlock
               </Button>
             ) : null}
