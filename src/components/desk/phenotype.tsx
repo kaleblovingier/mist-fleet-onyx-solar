@@ -110,8 +110,8 @@ export function PhenotypeCard({ hideKetamineRoute = false }: { hideKetamineRoute
         ) : null}
       </div>
       <p className="mt-1 text-[11px] leading-relaxed text-muted">
-        Poor ≈ a strong inhibitor. Smoke induces 1A2. Chronic alcohol induces 2E1. Geriatric, CKD, and
-        pregnancy score Beers / renal / teratogen cards.
+        A poor metabolizer acts like a strong inhibitor of that enzyme. Smoke induces 1A2. Chronic
+        alcohol induces 2E1. Older age, CKD, and pregnancy score Beers / renal / teratogen cards.
       </p>
       <ul className="mt-3 space-y-3">
         {PHENOTYPE_ENZYMES.map((enzyme) => (
@@ -129,14 +129,15 @@ export function PhenotypeCard({ hideKetamineRoute = false }: { hideKetamineRoute
                     key={m}
                     type="button"
                     aria-pressed={on}
-                    title={freq ? `${METABOLIZER_LABEL[m]} · ${freq}` : METABOLIZER_LABEL[m]}
+                    title={freq ? `${m} · ${METABOLIZER_LABEL[m]} · ${freq}` : `${m} · ${METABOLIZER_LABEL[m]}`}
                     onClick={() => setPhenotype(enzyme, m)}
                     className={cn(
-                      "h-10 rounded-sm font-mono text-[11px] font-medium",
+                      "flex h-11 flex-col items-center justify-center rounded-sm px-0.5 text-[10px] font-medium leading-tight",
                       on ? "bg-ink text-bg" : "bg-bg-sunken text-muted hover:text-fg",
                     )}
                   >
-                    {m}
+                    <span>{METABOLIZER_LABEL[m]}</span>
+                    <span className="font-mono text-[9px] opacity-70">{m}</span>
                   </button>
                 );
               })}

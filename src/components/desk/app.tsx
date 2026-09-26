@@ -1030,8 +1030,8 @@ function HowCard() {
         </li>
         <li>
           <span className="text-fg">Curve.</span> Grey is this route, normal metabolizer, no
-          perpetrators. Teal is this desk. q8h / q12h / q24h superimpose doses (Rac). Overlay IV vs
-          oral on first-pass victims. Not a plasma level. Five-drug AUCR stays free.
+          blockers. Teal is this desk. q8h / q12h / q24h show how doses stack (build-up / Rac). Overlay IV vs
+          oral on first-pass victims. Not a plasma level. Five-drug exposure (AUCR) stays free.
         </li>
         <li>
           <span className="text-fg">2D6.</span> Blockade of codeine or tamoxifen is lost
@@ -1039,8 +1039,8 @@ function HowCard() {
         </li>
         <li>
           <span className="text-fg">Phenotype.</span> Flip CYP2D6 / 2C19 / 2C9 / 2B6 to poor or
-          ultrarapid — a PM scores like a strong inhibitor of that isoform. 2C9 PMs make warfarin
-          and edible THC hotter.
+          ultrarapid — a poor metabolizer scores like a strong inhibitor of that enzyme. Poor 2C9
+          metabolizers make warfarin and edible THC hotter.
         </li>
         <li>
           <span className="text-fg">Host.</span> Daily smoke induces CYP1A2. Chronic alcohol induces
