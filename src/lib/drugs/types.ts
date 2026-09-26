@@ -247,9 +247,9 @@ export const SEVERITY_RANK: Record<Severity | "none", number> = {
 };
 
 export const SEVERITY_LABEL: Record<Severity | "none", string> = {
-  contraindicated: "Contraindicated",
-  major: "Major",
-  moderate: "Moderate",
-  minor: "Minor",
-  none: "Unmapped",
+  contraindicated: "Avoid together",
+  major: "Strong concern",
+  moderate: "Use care",
+  minor: "Mild note",
+  none: "Not mapped",
 };
