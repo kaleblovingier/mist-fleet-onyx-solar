@@ -13,9 +13,9 @@ const SEVERITY_FILTERS: Array<Severity | "all"> = ["all", "contraindicated", "ma
 type KindFilter = "all" | "pk" | "pd" | "geno" | "clinic" | "food";
 const KIND_FILTERS: { id: KindFilter; label: string }[] = [
   { id: "all", label: "All kinds" },
-  { id: "pk", label: "PK" },
-  { id: "pd", label: "PD" },
-  { id: "geno", label: "Phenotype" },
+  { id: "pk", label: "Levels / timing" },
+  { id: "pd", label: "Same-system effects" },
+  { id: "geno", label: "Metabolizer" },
   { id: "clinic", label: "Clinic" },
   { id: "food", label: "Food" },
 ];
@@ -78,9 +78,27 @@ export function FindingList({ findings }: { findings: Finding[] }) {
         ))}
       </div>
       {visible.length === 0 ? (
-        <p className="rounded-lg bg-surface px-4 py-6 text-sm text-muted shadow-[var(--shadow-border)]">
-          No findings at this severity.
-        </p>
+        <div
+          role="status"
+          className="rounded-lg border border-accent/15 bg-accent-soft/30 px-4 py-5 shadow-[var(--shadow-border)]"
+        >
+          <p className="text-sm font-medium text-fg">Nothing in this filter</p>
+          <p className="mt-1 text-sm leading-relaxed text-muted">
+            {findings.length} finding{findings.length === 1 ? "" : "s"} on the desk — none match this severity or kind. Clear a chip to see them again. Filtering does not change the map.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              className="h-9 rounded-full bg-ink px-3 text-xs font-medium text-bg"
+              onClick={() => {
+                setFilter("all");
+                setKind("all");
+              }}
+            >
+              Show all findings
+            </button>
+          </div>
+        </div>
       ) : (
         <ol className="space-y-2">
           {visible.map((f) => (
