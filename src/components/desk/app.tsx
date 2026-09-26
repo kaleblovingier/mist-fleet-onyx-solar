@@ -3,6 +3,7 @@ import { Copy, Check, RotateCcw, Download, Share2 } from "lucide-react";
 import { DRUG_BY_ID, DRUGS } from "@/lib/drugs/catalog";
 import { analyze } from "@/lib/drugs/engine";
 import { plainLanguageSummary } from "@/lib/drugs/interaction-summary";
+import { plainWordsReport } from "@/lib/drugs/quick-chips";
 import { parseDoses } from "@/lib/drugs/dosing";
 import { applyHost, FIRST_PASS_NMDA } from "@/lib/drugs/host";
 import { treesFor } from "@/lib/drugs/metabolites";
@@ -902,7 +903,7 @@ function RiskBanner({
   caseId: string | null;
   packId: PackId | null;
 }) {
-  const [copied, setCopied] = useState<"full" | "share" | "link" | null>(null);
+  const [copied, setCopied] = useState<"full" | "share" | "plain" | null>(null);
   const openCheckout = useDesk((s) => s.openCheckout);
   const license = useDesk((s) => s.license);
   const highest = report.highest;
@@ -911,7 +912,7 @@ function RiskBanner({
   ).join(", ");
   const names = selected.map((id) => DRUG_BY_ID[id]?.name).filter(Boolean).join(" + ");
 
-  async function write(kind: "full" | "share" | "link", text: string) {
+  async function write(kind: "full" | "share" | "plain", text: string) {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(kind);
@@ -961,6 +962,21 @@ function RiskBanner({
       text += "\nEducational only — not CDS / not personal advice.";
     }
     await write("share", text);
+  }
+
+  async function copyPlain() {
+    await write(
+      "plain",
+      plainWordsReport(
+        names,
+        report.findings.map((f) => ({
+          severity: SEVERITY_LABEL[f.severity],
+          headline: f.headline,
+          plain: plainLanguageSummary(f),
+        })),
+        SEVERITY_LABEL[highest],
+      ),
+    );
   }
 
   return (
