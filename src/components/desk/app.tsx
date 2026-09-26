@@ -425,8 +425,8 @@ export function DeskApp() {
                       <FindingList findings={report.findings} />
                     </>
                   ) : (
-                    <p className="text-sm text-muted">
-                      Add a second drug, flip smoke, alcohol, or a non-normal metabolizer to check interactions.
+                    <p className="text-sm leading-relaxed text-muted">
+                      One item is on the desk. Add a second medicine or substance, or flip smoke, alcohol, or a non-normal metabolizer, to surface mapped findings.
                     </p>
                   )}
                   <PkExplorer drugs={hostDrugs} host={host} />
